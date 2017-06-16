@@ -39,17 +39,19 @@ describe("Motion", () => {
     });
 
     describe("Rotate", () => {
-        expect(stringFrom(rotate({
-            board: tetrisBoard(`
+        it("rotates the active squares to the right", () => {
+            expect(stringFrom(rotate({
+                board: tetrisBoard(`
                 ------
                 ---*--
                 -***--
                 ------`)
-        })))
-            .toEqual(stringFrom(tetrisBoard(`
-            ------
-            -*----
-            -*----
-            -**---`)));
+            })))
+                .toEqual(stringFrom(tetrisBoard(`
+                ------
+                -*----
+                -*----
+                -**---`)));
+        });
     });
 });
