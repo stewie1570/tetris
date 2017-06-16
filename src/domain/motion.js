@@ -2,13 +2,12 @@ import { active, empty, inactive } from '../core/constants'
 import _ from 'lodash'
 
 export var move = ({ board, to }) => {
-    var availablePositions = _(board)
-        .flatMap((row, y) => row.map((square, x) => ({ ...square, x, y })))
-        .filter(empty)
-        .value();
+    var flatBoard = _(board)
+        .flatMap((row, y) => row.map((square, x) => ({ ...square, x, y })));
+    
+    var availablePositions = flatBoard.filter(empty).value();
 
-    var requestedSquares = _(board)
-        .flatMap((row, y) => row.map((square, x) => ({ ...square, x, y })))
+    var requestedSquares = flatBoard
         .filter(active)
         .map(square => ({
             x: square.x + (to.x || 0),
@@ -16,7 +15,9 @@ export var move = ({ board, to }) => {
         }))
         .value();
 
-    var requestedPositionsAreAvailable = requestedSquares.every(({ x, y }) => _(availablePositions).some(square => square.x === x && square.y === y));
+    var requestedPositionsAreAvailable = requestedSquares.every(({ x, y }) =>
+        _(availablePositions)
+            .some(square => square.x === x && square.y === y));
 
     return requestedPositionsAreAvailable
         ? board.map((row, y) => row.map((square, x) =>
