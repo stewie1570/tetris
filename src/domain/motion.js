@@ -1,5 +1,5 @@
-import _ from 'lodash'
 import { active, empty, inactive } from '../core/constants'
+import _ from 'lodash'
 
 export var move = ({ board, to }) => {
     var availablePositions = _(board)
