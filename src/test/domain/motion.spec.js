@@ -38,18 +38,18 @@ describe("Motion", () => {
         });
     });
 
-    // describe("Rotate", () => {
-    //     expect(stringFrom(rotate({
-    //         board: tetrisBoard(`
-    //                 ------
-    //                 ---*--
-    //                 --**--
-    //                 ------`)
-    //     })))
-    //         .toEqual(stringFrom(tetrisBoard(`
-    //                 ------
-    //                 --*---
-    //                 --**--
-    //                 ------`)));
-    // });
+    describe("Rotate", () => {
+        expect(stringFrom(rotate({
+            board: tetrisBoard(`
+                ------
+                ---*--
+                -***--
+                ------`)
+        })))
+            .toEqual(stringFrom(tetrisBoard(`
+            ------
+            -*----
+            -*----
+            -**---`)));
+    });
 });
