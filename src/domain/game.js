@@ -17,9 +17,8 @@ export class Game {
         }
         else {
             var newBoard = move({ board: this.board, to: { y: 1 } });
-            var inactiveBoard = this._inactiveBoard();
 
-            this.board = this.board === newBoard ? inactiveBoard : newBoard;
+            this.board = this.board === newBoard ? this._inactiveBoard() : newBoard;
         }
     }
 
