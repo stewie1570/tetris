@@ -25,4 +25,8 @@ describe("Serialization", () => {
 --**-
 ##---`);
     });
+
+    it("should return empty string when serializing non-array", () => {
+        expect(stringFrom(null)).toEqual("");
+    })
 })

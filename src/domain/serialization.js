@@ -14,8 +14,10 @@ export var tetrisBoard = str => str
     .map(row => squaresFrom({ row }));
 
 export var stringFrom = board =>
-    "\n" + board.map(row => row.map(square => square === active ? '*'
-        : square === inactive ? '#'
-            : '-')
-        .join(''))
-        .join('\n');
+    (!board || !board.length)
+        ? ""
+        : ("\n" + board.map(row => row.map(square => square === active ? '*'
+            : square === inactive ? '#'
+                : '-')
+            .join(''))
+            .join('\n'));
