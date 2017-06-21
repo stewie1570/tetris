@@ -50,34 +50,52 @@ describe("Game", () => {
             ];
 
             expect(stringFrom(game.iterate({ board, shapeProvider }).board)).toEqual(stringFrom(tetrisBoard(`
+                **----
+                -*----
+                ------
+                --##--
+                ---#--`)));
+        });
+
+        describe("Full Row", () => {
+            it("moves rows above it down", () => {
+                var board = tetrisBoard(`
+                    ------
+                    ---###
+                    ######
+                    ######
+                    ---#--`);
+                var shapeProvider = () => [
+                    [true, true],
+                    [false, true]
+                ];
+
+                var result = game.iterate({ board, shapeProvider });
+
+                expect(stringFrom(result.board)).toEqual(stringFrom(tetrisBoard(`
                     **----
                     -*----
                     ------
-                    --##--
+                    ---###
                     ---#--`)));
+            });
+
+            it("moves rows above it down even when the last row is full", () => {
+                var board = tetrisBoard(`
+                    ------
+                    ---###
+                    ######`);
+                var shapeProvider = () => [
+                    [true, true],
+                    [false, true]
+                ];
+
+                expect(stringFrom(game.iterate({ board, shapeProvider }).board)).toEqual(stringFrom(tetrisBoard(`
+                    **----
+                    -*----
+                    ---###`)));
+            });
         });
-
-        // describe("Full Row", () => {
-        //     it("deletes the full row, moves rows above it down and increments the score", () => {
-        //         var board = tetrisBoard(`
-        //             ------
-        //             ---###
-        //             ######
-        //             ######
-        //             ---#--`);
-        //         var shapeProvider = () => [
-        //             [true, true],
-        //             [false, true]
-        //         ];
-
-        //         expect(stringFrom(game.iterate({ board, shapeProvider }).board)).toEqual(stringFrom(tetrisBoard(`
-        //             **----
-        //             -*----
-        //             ------
-        //             ---###
-        //             ---#--`)));
-        //     });
-        // });
 
         describe("Game Over", () => {
             it("is false when a new shape can be placed", () => {
