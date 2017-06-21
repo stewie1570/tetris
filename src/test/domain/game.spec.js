@@ -58,7 +58,7 @@ describe("Game", () => {
         });
 
         describe("Full Row", () => {
-            it("moves rows above it down", () => {
+            it("moves rows above it down and increments the score", () => {
                 var board = tetrisBoard(`
                     ------
                     ---###
@@ -70,7 +70,7 @@ describe("Game", () => {
                     [false, true]
                 ];
 
-                var result = game.iterate({ board, shapeProvider });
+                var result = game.iterate({ board, shapeProvider, score: 4 });
 
                 expect(stringFrom(result.board)).toEqual(stringFrom(tetrisBoard(`
                     **----
@@ -78,6 +78,7 @@ describe("Game", () => {
                     ------
                     ---###
                     ---#--`)));
+                expect(result.score).toBe(6);
             });
 
             it("moves rows above it down even when the last row is full", () => {
