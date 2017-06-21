@@ -1,16 +1,14 @@
 import { tetrisBoard, stringFrom } from '../../domain/serialization'
-import { Game } from '../../domain/game'
+import { iterate } from '../../domain/game'
 
 describe("Game", () => {
-    var game = new Game();
-
     describe("Iteration", () => {
         it("iterate should move active squares down", () => {
             var board = tetrisBoard(`
                 --**--
                 ------`);
 
-            expect(stringFrom(game.iterate({ board }).board)).toEqual(stringFrom(tetrisBoard(`
+            expect(stringFrom(iterate({ board }).board)).toEqual(stringFrom(tetrisBoard(`
                 ------
                 --**--`)));
         });
@@ -20,7 +18,7 @@ describe("Game", () => {
                 ------
                 --**--`);
 
-            expect(stringFrom(game.iterate({ board }).board)).toEqual(stringFrom(tetrisBoard(`
+            expect(stringFrom(iterate({ board }).board)).toEqual(stringFrom(tetrisBoard(`
                 ------
                 --##--`)));
         });
@@ -31,7 +29,7 @@ describe("Game", () => {
                 --**--
                 ---#--`);
 
-            expect(stringFrom(game.iterate({ board }).board)).toEqual(stringFrom(tetrisBoard(`
+            expect(stringFrom(iterate({ board }).board)).toEqual(stringFrom(tetrisBoard(`
                 ------
                 --##--
                 ---#--`)));
@@ -49,7 +47,7 @@ describe("Game", () => {
                 [false, true]
             ];
 
-            expect(stringFrom(game.iterate({ board, shapeProvider }).board)).toEqual(stringFrom(tetrisBoard(`
+            expect(stringFrom(iterate({ board, shapeProvider }).board)).toEqual(stringFrom(tetrisBoard(`
                 **----
                 -*----
                 ------
@@ -70,7 +68,7 @@ describe("Game", () => {
                     [false, true]
                 ];
 
-                var result = game.iterate({ board, shapeProvider, score: 4 });
+                var result = iterate({ board, shapeProvider, score: 4 });
 
                 expect(stringFrom(result.board)).toEqual(stringFrom(tetrisBoard(`
                     **----
@@ -91,7 +89,7 @@ describe("Game", () => {
                     [false, true]
                 ];
 
-                expect(stringFrom(game.iterate({ board, shapeProvider }).board)).toEqual(stringFrom(tetrisBoard(`
+                expect(stringFrom(iterate({ board, shapeProvider }).board)).toEqual(stringFrom(tetrisBoard(`
                     **----
                     -*----
                     ---###`)));
@@ -111,7 +109,7 @@ describe("Game", () => {
                     [false, true]
                 ];
 
-                expect(game.iterate({ board, shapeProvider }).isOver).toBe(false);
+                expect(iterate({ board, shapeProvider }).isOver).toBe(false);
             });
 
             it("is true when a new shape can't be placed", () => {
@@ -123,7 +121,7 @@ describe("Game", () => {
                     [false, true]
                 ];
 
-                var result = game.iterate({ board, shapeProvider });
+                var result = iterate({ board, shapeProvider });
 
                 expect(result.isOver).toBe(true);
                 expect(stringFrom(result.board)).toEqual(stringFrom(tetrisBoard(`
