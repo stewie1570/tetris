@@ -16,23 +16,23 @@ export class Game {
 
         var newShapeIteration = () => {
             var newShape = _(shapeProvider()).flatMap((row, y) => row.map((value, x) => ({ x, y, value })));
-            
+
             return {
                 board: board.map((row, y) => row.map((square, x) => _(newShape).some({ x, y, value: true }) ? active : square)),
                 isOver: board.some((row, y) => row.some((square, x) => square !== empty && _(newShape).some({ x, y, value: true })))
             };
         }
 
-        var isInactive = this._isInactive({ board });
+        var isActive = this._isActive({ board });
 
-        return isInactive ? newShapeIteration() : activeIteration();
+        return isActive ? activeIteration() : newShapeIteration();
     }
 
     _inactivedBoardFrom({ board }) {
         return board.map(row => row.map(square => square === active ? inactive : square));
     }
 
-    _isInactive({ board }) {
-        return _(board).every(row => row.every(square => square === inactive || square === empty));
+    _isActive({ board }) {
+        return _(board).some(row => row.some(square => square === active));
     }
 }
