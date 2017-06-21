@@ -32,13 +32,13 @@ export function iterate({ board, shapeProvider, score }) {
                 })
                 : { board, score };
         };
-        var noFullRows = noFullRows({ board, score });
+        var noFullRowsResult = noFullRows({ board, score });
         var boardWithNewShape = board => board.map((row, y) => row.map((square, x) => _(newShape).some({ x, y, value: true }) ? active : square));
 
         return {
-            board: boardWithNewShape(noFullRows.board),
-            isOver: noFullRows.board.some((row, y) => row.some((square, x) => square !== empty && _(newShape).some({ x, y, value: true }))),
-            score: noFullRows.score
+            board: boardWithNewShape(noFullRowsResult.board),
+            isOver: noFullRowsResult.board.some((row, y) => row.some((square, x) => square !== empty && _(newShape).some({ x, y, value: true }))),
+            score: noFullRowsResult.score
         };
     }
 
