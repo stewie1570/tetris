@@ -2,110 +2,90 @@ import { tetrisBoard, stringFrom } from '../../domain/serialization'
 import { Game } from '../../domain/game'
 
 describe("Game", () => {
+    var game = new Game();
+
     describe("Iteration", () => {
         it("iterate should move active squares down", () => {
-            var game = new Game({
-                board: tetrisBoard(`
+            var board = tetrisBoard(`
                 --**--
-                ------`)
-            });
+                ------`);
 
-            game.iterate();
-
-            expect(stringFrom(game.board)).toEqual(stringFrom(tetrisBoard(`
+            expect(stringFrom(game.iterate({ board }).board)).toEqual(stringFrom(tetrisBoard(`
                 ------
                 --**--`)));
         });
 
         it("iterate should inactive board when active squares are at the bottom", () => {
-            var game = new Game({
-                board: tetrisBoard(`
+            var board = tetrisBoard(`
                 ------
-                --**--`)
-            });
+                --**--`);
 
-            game.iterate();
-
-            expect(stringFrom(game.board)).toEqual(stringFrom(tetrisBoard(`
+            expect(stringFrom(game.iterate({ board }).board)).toEqual(stringFrom(tetrisBoard(`
                 ------
                 --##--`)));
         });
 
         it("iterate should inactive board when active squares can't move down", () => {
-            var game = new Game({
-                board: tetrisBoard(`
+            var board = tetrisBoard(`
                 ------
                 --**--
-                ---#--`)
-            });
+                ---#--`);
 
-            game.iterate();
-
-            expect(stringFrom(game.board)).toEqual(stringFrom(tetrisBoard(`
+            expect(stringFrom(game.iterate({ board }).board)).toEqual(stringFrom(tetrisBoard(`
                 ------
                 --##--
                 ---#--`)));
         });
 
         it("iterate should send a new shape when board is inactive", () => {
-            var game = new Game({
-                board: tetrisBoard(`
+            var board = tetrisBoard(`
                     ------
                     ------
                     ------
                     --##--
-                    ---#--`),
-                shapeProvider: () => [
-                    [true, true],
-                    [false, true]
-                ]
-            });
+                    ---#--`);
+            var shapeProvider = () => [
+                [true, true],
+                [false, true]
+            ];
 
-            game.iterate();
-
-            expect(stringFrom(game.board)).toEqual(stringFrom(tetrisBoard(`
-                **----
-                -*----
-                ------
-                --##--
-                ---#--`)));
+            expect(stringFrom(game.iterate({ board, shapeProvider }).board)).toEqual(stringFrom(tetrisBoard(`
+                    **----
+                    -*----
+                    ------
+                    --##--
+                    ---#--`)));
         });
 
         describe("Game Over", () => {
             it("is false when a new shape can be placed", () => {
-                var game = new Game({
-                    board: tetrisBoard(`
+                var board = tetrisBoard(`
                         ------
                         ------
                         ------
                         --##--
-                        ---#--`),
-                    shapeProvider: () => [
-                        [true, true],
-                        [false, true]
-                    ]
-                });
+                        ---#--`);
+                var shapeProvider = () => [
+                    [true, true],
+                    [false, true]
+                ];
 
-                game.iterate();
-
-                expect(game.isOver).toBe(false);
+                expect(game.iterate({ board, shapeProvider }).isOver).toBe(false);
             });
 
             it("is true when a new shape can't be placed", () => {
-                var game = new Game({
-                    board: tetrisBoard(`
-                        ####--
-                        ---#--`),
-                    shapeProvider: () => [
-                        [true, true],
-                        [false, true]
-                    ]
-                });
+                var board = tetrisBoard(`
+                            ####--
+                            ---#--`);
+                var shapeProvider = () => [
+                    [true, true],
+                    [false, true]
+                ];
 
-                game.iterate();
+                var result = game.iterate({ board, shapeProvider });
 
-                expect(game.isOver).toBe(true);
-                expect(stringFrom(game.board)).toEqual(stringFrom(tetrisBoard(`
+                expect(result.isOver).toBe(true);
+                expect(stringFrom(result.board)).toEqual(stringFrom(tetrisBoard(`
                     **##--
                     -*-#--`)));
             });
