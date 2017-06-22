@@ -42,7 +42,5 @@ export function iterate({ board, shapeProvider, score }) {
         };
     }
 
-    var isActive = isActive({ board });
-
-    return isActive ? activeIteration() : newShapeIteration();
+    return isActive({ board }) ? activeIteration() : newShapeIteration();
 }
