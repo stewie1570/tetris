@@ -33,7 +33,7 @@ describe("Motion", () => {
             expect(stringFrom(move({
                 board: tetrisBoard(`
                     --**##`),
-                to: { x: 1, }
+                to: { x: 1 }
             })))
                 .toEqual(stringFrom(tetrisBoard(`
                     --**##`)));
@@ -41,7 +41,7 @@ describe("Motion", () => {
     });
 
     describe("Rotate", () => {
-        it("rotates the active squares to the right", () => {
+        it("rotates the active horozontal shape to the right to become vertical", () => {
             expect(stringFrom(rotate({
                 board: tetrisBoard(`
                 ------
@@ -54,6 +54,21 @@ describe("Motion", () => {
                 -*----
                 -*----
                 -**---`)));
+        });
+
+        it("rotates the active vertical shape to the right to become horozontal", () => {
+            expect(stringFrom(rotate({
+                board: tetrisBoard(`
+                ------
+                -*----
+                -*----
+                -**---`)
+            })))
+                .toEqual(stringFrom(tetrisBoard(`
+                ------
+                -***--
+                -*----
+                ------`)));
         });
     });
 });
