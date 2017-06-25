@@ -7,12 +7,14 @@ describe("Motion", () => {
             expect(stringFrom(move({
                 board: tetrisBoard(`
                     --**--
+                    --**--
                     ------`),
-                to: { y: 1, x: -2 }
+                to: { y: 1, x: -1 }
             })))
                 .toEqual(stringFrom(tetrisBoard(`
                     ------
-                    **----`)));
+                    -**---
+                    -**---`)));
         });
 
         it("should not move active squares outside of the board", () => {

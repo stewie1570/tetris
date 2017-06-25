@@ -5,7 +5,7 @@ export var move = ({ board, to }) => {
     var flatBoard = _(board)
         .flatMap((row, y) => row.map((square, x) => ({ ...square, x, y })));
 
-    var availablePositions = flatBoard.filter(empty).value();
+    var availablePositions = flatBoard.filter(({ type }) => type !== inactive.type).value();
 
     var requestedSquares = flatBoard
         .filter(active)
@@ -16,16 +16,13 @@ export var move = ({ board, to }) => {
         .value();
 
     var requestedPositionsAreAvailable = requestedSquares.every(({ x, y }) =>
-        _(availablePositions)
-            .some(square => square.x === x && square.y === y));
+        _(availablePositions).some(square => square.x === x && square.y === y));
 
     return requestedPositionsAreAvailable
         ? board.map((row, y) => row.map((square, x) =>
-            square === active
-                ? empty
-                : requestedSquares.some(requestedSquare => requestedSquare.x === x && requestedSquare.y === y)
-                    ? active
-                    : square))
+            requestedSquares.some(requestedSquare => requestedSquare.x === x && requestedSquare.y === y)
+                ? active
+                : square === active ? empty : square))
         : board;
 }
 
