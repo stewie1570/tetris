@@ -52,8 +52,8 @@ class App extends Component {
         var board = this.state.board;
         var newState = keyCode === keys.left ? { board: move({ board, to: { x: -1 } }) }
             : keyCode === keys.right ? { board: move({ board, to: { x: 1 } }), rightBoard: "wft???" }
-                : keyCode === keys.down ? { board: move({ board, to: { y: 1 } }) }
-                    : { board: rotate({ board }) };
+            : keyCode === keys.down ? { board: move({ board, to: { y: 1 } }) }
+            : { board: rotate({ board }) };
 
         this.setState(newState);
     }
