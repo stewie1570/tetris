@@ -29,12 +29,12 @@ var shapes = [
     ],
     [
         [true, false],
-        [true, false]
+        [true, false],
         [true, true]
     ],
     [
         [false, true],
-        [false, true]
+        [false, true],
         [true, true]
     ]
 ];
@@ -47,9 +47,6 @@ class App extends Component {
 
         this.state = {
             board: tetrisBoard(`
-                -**-------
-                --*-------
-                --*-------
                 ----------
                 ----------
                 ----------
