@@ -36,6 +36,16 @@ var shapes = [
         [false, true],
         [false, true],
         [true, true]
+    ],
+    [
+        [false, true],
+        [true, true],
+        [true, false]
+    ],
+    [
+        [true, false],
+        [true, true],
+        [false, true]
     ]
 ];
 
@@ -99,6 +109,7 @@ class App extends Component {
     render() {
         return (
             <div className="App">
+                <h1>{`Score: ${this.state.score}`}</h1>
                 <TetrisBoard board={this.state.board} />
             </div>
         );
