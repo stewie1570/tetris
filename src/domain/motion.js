@@ -55,10 +55,16 @@ export var rotate = ({ board }) => {
         .map(row => _(row).orderBy(({ x }) => x).map(({ type }) => squareFrom({ type })).value())
         .value();
 
-    var newBoard = board.map((row, y) => row.map((square, x) =>
+    var canRotate = rotatedShape.every((row, y) => row.every((square, x) =>
+        (square !== active || board[y + y1][x + x1] !== inactive)
+        // && (y + y1) < board.length
+        // && (x + x1) < board[0].length
+        ));
+
+    var newBoard = () => board.map((row, y) => row.map((square, x) =>
         (x >= x1 && x < x1 + newWidth && y >= y1 && y < y1 + newHeight)
             ? rotatedShape[y - y1][x - x1]
             : square === active ? empty : square));
 
-    return newBoard;
+    return canRotate ? newBoard() : board;
 };

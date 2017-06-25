@@ -70,5 +70,35 @@ describe("Motion", () => {
                 -*----
                 ------`)));
         });
+
+        it("can't rotate on top of inactive squares", () => {
+            expect(stringFrom(rotate({
+                board: tetrisBoard(`
+                ------
+                ---*--
+                -***--
+                -###--`)
+            })))
+                .toEqual(stringFrom(tetrisBoard(`
+                ------
+                ---*--
+                -***--
+                -###--`)));
+        });
+
+        // it("can't rotate on active squares off the board", () => {
+        //     expect(stringFrom(rotate({
+        //         board: tetrisBoard(`
+        //         ------
+        //         ----*-
+        //         ----*-
+        //         ----**`)
+        //     })))
+        //         .toEqual(stringFrom(tetrisBoard(`
+        //         ------
+        //         ----*-
+        //         ----*-
+        //         ----**`)));
+        // });
     });
 });
