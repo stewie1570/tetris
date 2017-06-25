@@ -1,11 +1,15 @@
 import { active, empty, inactive, squareFrom } from '../core/constants'
 import _ from 'lodash'
 
-export var move = ({ board, to }) => {
-    var flatBoard = _(board)
-        .flatMap((row, y) => row.map((square, x) => ({ ...square, x, y })));
+var flatBoardFrom = ({ board }) => _(board)
+    .flatMap((row, y) => row.map((square, x) => ({ ...square, x, y })));
 
-    var availablePositions = flatBoard.filter(({ type }) => type !== inactive.type).value();
+var availablePositionsFrom = ({ flatBoard }) => flatBoard.filter(({ type }) => type !== inactive.type).value();
+
+export var move = ({ board, to }) => {
+    var flatBoard = flatBoardFrom({ board });
+
+    var availablePositions = availablePositionsFrom({ flatBoard });
 
     var requestedSquares = flatBoard
         .filter(active)
@@ -50,20 +54,23 @@ export var rotate = ({ board }) => {
     var rotatedFlatShape = flatShape
         .map(({ x, y, ...square }) => ({ ...square, x: origHeight - y, y: x }));
 
-    var rotatedShape = _(rotatedFlatShape)
+    var availablePositions = availablePositionsFrom({ flatBoard: flatBoardFrom({ board }) });
+
+    var translatedRotatedFlatShape = rotatedFlatShape
+        .map(square => ({ ...square, x: square.x + (x1 - 1), y: square.y + y1 }));
+
+    var canRotate = translatedRotatedFlatShape
+        .every(({ x, y }) => availablePositions
+            .some(availableSquare => availableSquare.x === x && availableSquare.y === y));
+
+    var rotatedShape = () => _(rotatedFlatShape)
         .groupBy(({ y }) => y)
         .map(row => _(row).orderBy(({ x }) => x).map(({ type }) => squareFrom({ type })).value())
         .value();
 
-    var canRotate = rotatedShape.every((row, y) => row.every((square, x) =>
-        (square !== active || board[y + y1][x + x1] !== inactive)
-        // && (y + y1) < board.length
-        // && (x + x1) < board[0].length
-        ));
-
     var newBoard = () => board.map((row, y) => row.map((square, x) =>
         (x >= x1 && x < x1 + newWidth && y >= y1 && y < y1 + newHeight)
-            ? rotatedShape[y - y1][x - x1]
+            ? rotatedShape()[y - y1][x - x1]
             : square === active ? empty : square));
 
     return canRotate ? newBoard() : board;

@@ -41,7 +41,6 @@ class App extends Component {
     }
 
     componentWillMount() {
-        console.log('registering keypress handler');
         document.addEventListener("keydown", this.keyPress.bind(this), false);
     }
 
@@ -55,8 +54,6 @@ class App extends Component {
             : keyCode === keys.right ? { board: move({ board, to: { x: 1 } }), rightBoard: "wft???" }
                 : keyCode === keys.down ? { board: move({ board, to: { y: 1 } }) }
                     : { board: rotate({ board }) };
-
-        console.log(move({ board, to: { x: 1 } }));
 
         this.setState(newState);
     }

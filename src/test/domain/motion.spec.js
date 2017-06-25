@@ -71,7 +71,23 @@ describe("Motion", () => {
                 ------`)));
         });
 
-        it("can't rotate on top of inactive squares", () => {
+        it("rotates the active vertical shape to the right to become horozontal against the wall", () => {
+            expect(stringFrom(rotate({
+                board: tetrisBoard(`
+                ------
+                ---*--
+                ---*--
+                ---**-`)
+            })))
+                .toEqual(stringFrom(tetrisBoard(`
+                ------
+                ---***
+                ---*--
+                ------`)));
+        });
+        
+
+        it("can't rotate to vertical on top of inactive squares", () => {
             expect(stringFrom(rotate({
                 board: tetrisBoard(`
                 ------
@@ -86,19 +102,34 @@ describe("Motion", () => {
                 -###--`)));
         });
 
-        // it("can't rotate on active squares off the board", () => {
-        //     expect(stringFrom(rotate({
-        //         board: tetrisBoard(`
-        //         ------
-        //         ----*-
-        //         ----*-
-        //         ----**`)
-        //     })))
-        //         .toEqual(stringFrom(tetrisBoard(`
-        //         ------
-        //         ----*-
-        //         ----*-
-        //         ----**`)));
-        // });
+        it("can't rotate to horizontal on top of inactive squares", () => {
+            expect(stringFrom(rotate({
+                board: tetrisBoard(`
+                ------
+                ---*##
+                ---*--
+                ---**-`)
+            })))
+                .toEqual(stringFrom(tetrisBoard(`
+                ------
+                ---*##
+                ---*--
+                ---**-`)));
+        });
+
+        it("can't rotate on active squares off the board", () => {
+            expect(stringFrom(rotate({
+                board: tetrisBoard(`
+                ------
+                ------
+                ---*--
+                -***--`)
+            })))
+                .toEqual(stringFrom(tetrisBoard(`
+                ------
+                ------
+                ---*--
+                -***--`)));
+        });
     });
 });
