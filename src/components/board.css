@@ -1,0 +1,16 @@
+.square {
+    width: 10px;
+    height: 10px;
+}
+
+.empty{
+    background-color: grey;
+}
+
+.active{
+    background-color: red;
+}
+
+.inactive{
+    background-color: blue;
+}

@@ -1,18 +1,70 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { TetrisBoard } from './components/board'
+import { tetrisBoard } from './domain/serialization'
+import { move, rotate } from './domain/motion'
 import './App.css';
 
+var keys = {
+    left: 37,
+    right: 39,
+    down: 40,
+    up: 38
+}
+
 class App extends Component {
+    constructor() {
+        super();
+
+        this.state = {
+            board: tetrisBoard(`
+            -*--------
+            ----------
+            ----------
+            ----------
+            ----------
+            ----------
+            ----------
+            ----------
+            ----------
+            ----------
+            ----------
+            ----------
+            ----------
+            ----------
+            ----------
+            ----------
+            ----------
+            ----------
+            -----##---
+        `)
+        };
+    }
+
+    componentWillMount() {
+        console.log('registering keypress handler');
+        document.addEventListener("keydown", this.keyPress.bind(this), false);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("keydown");
+    }
+
+    keyPress({ keyCode }) {
+        var board = this.state.board;
+        var newState = keyCode === keys.left ? { board: move({ board, to: { x: -1 } }) }
+            : keyCode === keys.right ? { board: move({ board, to: { x: 1 } }), rightBoard: "wft???" }
+                : keyCode === keys.down ? { board: move({ board, to: { y: 1 } }) }
+                    : { board: rotate({ board }) };
+
+        console.log(move({ board, to: { x: 1 } }));
+
+        this.setState(newState);
+    }
+
     render() {
         return (
             <div className="App">
-                <div className="App-header">
-                    <img src={logo} className="App-logo" alt="logo" />
-                    <h2>Welcome to React</h2>
-                </div>
-                <p className="App-intro">
-                    To get started, edit <code>src/App.js</code> and save to reload.
-                </p>
+                <TetrisBoard board={this.state.board} />
             </div>
         );
     }
