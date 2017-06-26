@@ -3,7 +3,21 @@ import { move, rotate } from '../../domain/motion'
 
 describe("Motion", () => {
     describe("Move", () => {
-        it("should move active squares", () => {
+        it("should move active squares verically", () => {
+            expect(stringFrom(move({
+                board: tetrisBoard(`
+                    --**--
+                    --**--
+                    ------`),
+                to: { y: 1 }
+            })))
+                .toEqual(stringFrom(tetrisBoard(`
+                    ------
+                    --**--
+                    --**--`)));
+        });
+
+        it("should move active squares horozontally", () => {
             expect(stringFrom(move({
                 board: tetrisBoard(`
                     --**--
@@ -17,6 +31,20 @@ describe("Motion", () => {
                     -**---`)));
         });
 
+        it("should move active squares both verically and horozontally", () => {
+            expect(stringFrom(move({
+                board: tetrisBoard(`
+                    --**--
+                    --**--
+                    ------`),
+                to: { x: -1 }
+            })))
+                .toEqual(stringFrom(tetrisBoard(`
+                    -**---
+                    -**---
+                    ------`)));
+        });
+
         it("should not move active squares outside of the board", () => {
             var board = tetrisBoard(`
                 ------
@@ -28,6 +56,14 @@ describe("Motion", () => {
             var board = tetrisBoard(`
                 --**##`);
             expect(move({ board, to: { x: 1 } })).toBe(board);
+        });
+
+        it("should not move active squares when x and y are zero", () => {
+            var board = tetrisBoard(`
+                --**--
+                --**--
+                ------`);
+            expect(move({ board, to: { y: 0, x: 0 } })).toBe(board);
         });
     });
 

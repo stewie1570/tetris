@@ -19,10 +19,12 @@ export var move = ({ board, to }) => {
         }))
         .value();
 
-    var requestedPositionsAreAvailable = requestedSquares.every(({ x, y }) =>
+    var requestedPositionsAreAvailable = () => requestedSquares.every(({ x, y }) =>
         _(availablePositions).some(square => square.x === x && square.y === y));
 
-    return requestedPositionsAreAvailable
+    var squaresWereRequestedToMove = to.x || to.y;
+
+    return squaresWereRequestedToMove && requestedPositionsAreAvailable()
         ? board.map((row, y) => row.map((square, x) =>
             requestedSquares.some(requestedSquare => requestedSquare.x === x && requestedSquare.y === y)
                 ? active
