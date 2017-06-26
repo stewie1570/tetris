@@ -113,7 +113,6 @@ describe("Motion", () => {
                 ------`)));
         });
 
-
         it("can't rotate to vertical on top of inactive squares", () => {
             var board = tetrisBoard(`
                 ------
