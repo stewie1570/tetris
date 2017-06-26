@@ -9,8 +9,6 @@ var availablePositionsFrom = ({ flatBoard }) => flatBoard.filter(({ type }) => t
 export var move = ({ board, to }) => {
     var flatBoard = flatBoardFrom({ board });
 
-    var availablePositions = availablePositionsFrom({ flatBoard });
-
     var requestedSquares = flatBoard
         .filter(active)
         .map(square => ({
@@ -20,7 +18,7 @@ export var move = ({ board, to }) => {
         .value();
 
     var requestedPositionsAreAvailable = () => requestedSquares.every(({ x, y }) =>
-        _(availablePositions).some(square => square.x === x && square.y === y));
+        _(availablePositionsFrom({ flatBoard })).some(square => square.x === x && square.y === y));
 
     var squaresWereRequestedToMove = to.x || to.y;
 
