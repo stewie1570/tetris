@@ -41,7 +41,7 @@ describe("Motion", () => {
     });
 
     describe("Rotate", () => {
-        it("rotates the active horozontal shape to the right to become vertical", () => {
+        it("should rotate the active horozontal shape to the right to become vertical", () => {
             expect(stringFrom(rotate({
                 board: tetrisBoard(`
                 ------
@@ -56,7 +56,7 @@ describe("Motion", () => {
                 -**---`)));
         });
 
-        it("rotates the active vertical shape to the right to become horozontal", () => {
+        it("should rotate the active vertical shape to the right to become horozontal", () => {
             expect(stringFrom(rotate({
                 board: tetrisBoard(`
                 ------
@@ -71,7 +71,7 @@ describe("Motion", () => {
                 ------`)));
         });
 
-        it("rotates the active vertical shape to the right to become horozontal against the wall", () => {
+        it("should rotate the active vertical shape to the right to become horozontal against the wall", () => {
             expect(stringFrom(rotate({
                 board: tetrisBoard(`
                 ------
