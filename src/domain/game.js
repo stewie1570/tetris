@@ -22,7 +22,8 @@ export function iterate({ board, shapeProvider, score }) {
         var isFull = row => row.every(square => square === inactive);
         var emptyRowFor = ({ y }) => _.range(0, board[y].length).map(() => empty);
         var noFullRows = ({ board, score }) => {
-            var firstFullRowY = board.findIndex(isFull)
+            var firstFullRowY = _(board).findIndex(isFull);
+            
             return firstFullRowY >= 0
                 ? noFullRows({
                     board: [emptyRowFor({ y: 0 })]
