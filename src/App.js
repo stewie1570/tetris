@@ -13,7 +13,7 @@ var keys = {
 }
 
 var randomNumberGenerator = {
-    between: ({ min, max }) => Math.floor(Math.random() * max) + min
+    between: ({ min, max }) => Math.floor(Math.random() * (max + 1)) + min
 }
 
 var shapes = [
@@ -46,6 +46,10 @@ var shapes = [
         [true, false],
         [true, true],
         [false, true]
+    ],
+    [
+        [false, true, false],
+        [true, true, true]
     ]
 ];
 
