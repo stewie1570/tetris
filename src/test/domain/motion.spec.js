@@ -18,25 +18,16 @@ describe("Motion", () => {
         });
 
         it("should not move active squares outside of the board", () => {
-            expect(stringFrom(move({
-                board: tetrisBoard(`
-                    ------
-                    --**--`),
-                to: { y: 1 }
-            })))
-                .toEqual(stringFrom(tetrisBoard(`
-                    ------
-                    --**--`)));
+            var board = tetrisBoard(`
+                ------
+                --**--`);
+            expect(move({ board, to: { y: 1 } })).toBe(board);
         });
 
         it("should not move active squares on top of inactive squares", () => {
-            expect(stringFrom(move({
-                board: tetrisBoard(`
-                    --**##`),
-                to: { x: 1 }
-            })))
-                .toEqual(stringFrom(tetrisBoard(`
-                    --**##`)));
+            var board = tetrisBoard(`
+                --**##`);
+            expect(move({ board, to: { x: 1 } })).toBe(board);
         });
     });
 
@@ -85,51 +76,33 @@ describe("Motion", () => {
                 ---*--
                 ------`)));
         });
-        
+
 
         it("can't rotate to vertical on top of inactive squares", () => {
-            expect(stringFrom(rotate({
-                board: tetrisBoard(`
+            var board = tetrisBoard(`
                 ------
                 ---*--
                 -***--
-                -###--`)
-            })))
-                .toEqual(stringFrom(tetrisBoard(`
-                ------
-                ---*--
-                -***--
-                -###--`)));
+                -###--`);
+            expect(rotate({ board })).toBe(board);
         });
 
         it("can't rotate to horizontal on top of inactive squares", () => {
-            expect(stringFrom(rotate({
-                board: tetrisBoard(`
+            var board = tetrisBoard(`
                 ------
                 ---*##
                 ---*--
-                ---**-`)
-            })))
-                .toEqual(stringFrom(tetrisBoard(`
-                ------
-                ---*##
-                ---*--
-                ---**-`)));
+                ---**-`);
+            expect(rotate({ board })).toBe(board);
         });
 
         it("can't rotate on active squares off the board", () => {
-            expect(stringFrom(rotate({
-                board: tetrisBoard(`
+            var board = tetrisBoard(`
                 ------
                 ------
                 ---*--
-                -***--`)
-            })))
-                .toEqual(stringFrom(tetrisBoard(`
-                ------
-                ------
-                ---*--
-                -***--`)));
+                -***--`);
+            expect(rotate({ board })).toBe(board);
         });
     });
 });
