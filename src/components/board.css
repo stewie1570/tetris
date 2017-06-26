@@ -4,13 +4,13 @@
 }
 
 .empty{
-    background-color: grey;
+    background-color: #333;
 }
 
 .active{
-    background-color: red;
+    background-color: #00ff00;
 }
 
 .inactive{
-    background-color: blue;
+    background-color: #22f;
 }
