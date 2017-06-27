@@ -100,7 +100,7 @@ class App extends Component {
         var { board, score } = this.state;
         var gameState = iterate({ board, score, shapeProvider });
 
-        this.setState(gameState.isOver ? { board: emptyBoard, score: 0 } : gameState);
+        this.setState(gameState.isOver ? initialState : gameState);
     }
 
     keyPress({ keyCode }) {
