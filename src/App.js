@@ -54,29 +54,30 @@ var shapes = [
 ];
 
 var shapeProvider = () => shapes[randomNumberGenerator.between({ min: 0, max: shapes.length - 1 })];
+var emptyBoard = tetrisBoard(`
+    ----------
+    ----------
+    ----------
+    ----------
+    ----------
+    ----------
+    ----------
+    ----------
+    ----------
+    ----------
+    ----------
+    ----------
+    ----------
+    ----------
+    ----------
+    ----------`);
 
 class App extends Component {
     constructor() {
         super();
 
         this.state = {
-            board: tetrisBoard(`
-                ----------
-                ----------
-                ----------
-                ----------
-                ----------
-                ----------
-                ----------
-                ----------
-                ----------
-                ----------
-                ----------
-                ----------
-                ----------
-                ----------
-                ----------
-                ----------`),
+            board: emptyBoard,
             score: 0
         };
     }
@@ -95,8 +96,9 @@ class App extends Component {
         this.timer = setTimeout(this.resetTimer.bind(this), 1000);
 
         var { board, score } = this.state;
+        var gameState = iterate({ board, score, shapeProvider });
 
-        this.setState(iterate({ board, score, shapeProvider }));
+        this.setState(gameState.isOver ? { board: emptyBoard, score: 0 } : gameState);
     }
 
     keyPress({ keyCode }) {
@@ -113,7 +115,9 @@ class App extends Component {
         return (
             <div className="App">
                 <h1>{`Score: ${this.state.score}`}</h1>
-                <TetrisBoard board={this.state.board} />
+                <center>
+                    <TetrisBoard board={this.state.board} />
+                </center>
             </div>
         );
     }
