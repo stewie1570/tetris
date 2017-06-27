@@ -72,14 +72,16 @@ var emptyBoard = tetrisBoard(`
     ----------
     ----------`);
 
+var initialState = {
+    board: emptyBoard,
+    score: 0
+};
+
 class App extends Component {
     constructor() {
         super();
 
-        this.state = {
-            board: emptyBoard,
-            score: 0
-        };
+        this.state = initialState;
     }
 
     componentWillMount() {
