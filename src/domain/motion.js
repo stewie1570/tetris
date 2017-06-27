@@ -1,8 +1,6 @@
 import { active, empty, inactive, squareFrom } from '../core/constants'
+import { flatBoardFrom } from './board'
 import _ from 'lodash'
-
-var flatBoardFrom = ({ board }) => _(board)
-    .flatMap((row, y) => row.map((square, x) => ({ ...square, x, y })));
 
 var availablePositionsFrom = ({ flatBoard }) => flatBoard.filter(({ type }) => type !== inactive.type).value();
 

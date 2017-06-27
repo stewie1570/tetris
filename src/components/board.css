@@ -3,8 +3,12 @@
     height: 10px;
 }
 
-.empty{
-    background-color: #333;
+.active-empty{
+    background-color: #111;
+}
+
+.inactive-empty{
+    background-color: #222;
 }
 
 .active{
