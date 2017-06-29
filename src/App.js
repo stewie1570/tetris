@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import { TetrisBoard } from './components/board'
 import { tetrisBoard } from './domain/serialization'
 import { move, rotate } from './domain/motion'
-import { iterate } from './domain/game'
+import { iterate, iterateUntilInactive } from './domain/game'
 import './App.css';
 
 var keys = {
     left: 37,
     right: 39,
     down: 40,
-    up: 38
+    up: 38,
+    space: 32
 }
 
 var randomNumberGenerator = {
@@ -104,11 +105,12 @@ class App extends Component {
     }
 
     keyPress({ keyCode }) {
-        var board = this.state.board;
+        var { board, score } = this.state;
         var newState = keyCode === keys.left ? { board: move({ board, to: { x: -1 } }) }
             : keyCode === keys.right ? { board: move({ board, to: { x: 1 } }) }
-                : keyCode === keys.down ? { board: move({ board, to: { y: 1 } }) }
-                    : { board: rotate({ board }) };
+            : keyCode === keys.down ? { board: move({ board, to: { y: 1 } }) }
+            : keyCode === keys.space ? iterateUntilInactive({ board, shapeProvider, score })
+            : { board: rotate({ board }) };
 
         this.setState(newState);
     }

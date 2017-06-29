@@ -2,10 +2,16 @@ import { move } from './motion'
 import { active, empty, inactive } from '../core/constants'
 import _ from 'lodash'
 
+var isActive = ({ board }) => _(board).some(row => row.some(square => square === active));
+
+export function iterateUntilInactive({ board, shapeProvider }) {
+    return isActive({ board })
+        ? iterateUntilInactive(iterate({ board, shapeProvider }))
+        : { board }
+}
+
 export function iterate({ board, shapeProvider, score }) {
     var inactivedBoardFrom = ({ board }) => board.map(row => row.map(square => square === active ? inactive : square));
-
-    var isActive = ({ board }) => _(board).some(row => row.some(square => square === active));
 
     var activeIteration = () => {
         var interatedBoard = move({ board, to: { y: 1 } });
@@ -23,7 +29,7 @@ export function iterate({ board, shapeProvider, score }) {
         var emptyRowFor = ({ y }) => _.range(0, board[y].length).map(() => empty);
         var noFullRows = ({ board, score }) => {
             var firstFullRowY = _(board).findIndex(isFull);
-            
+
             return firstFullRowY >= 0
                 ? noFullRows({
                     board: [emptyRowFor({ y: 0 })]

@@ -1,5 +1,5 @@
 import { tetrisBoard, stringFrom } from '../../domain/serialization'
-import { iterate } from '../../domain/game'
+import { iterate, iterateUntilInactive } from '../../domain/game'
 
 describe("Game", () => {
     describe("Iteration", () => {
@@ -53,6 +53,30 @@ describe("Game", () => {
                 ------
                 --##--
                 ---#--`)));
+        });
+
+        describe("Iterate Until In Active", () => {
+            it("iterates the board until the active squares become inactive", () => {
+                var board = tetrisBoard(`
+                    **----
+                    -*----
+                    ------
+                    ---###
+                    ---#--`);
+                var shapeProvider = () => [
+                    [true, true],
+                    [false, true]
+                ];
+
+                var result = iterateUntilInactive({ board, shapeProvider });
+
+                expect(stringFrom(result.board)).toEqual(stringFrom(tetrisBoard(`
+                    ------
+                    ------
+                    ------
+                    ##-###
+                    -#-#--`)));
+            });
         });
 
         describe("Full Row", () => {
