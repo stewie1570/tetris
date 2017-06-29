@@ -4,25 +4,25 @@ import _ from 'lodash'
 
 var isActive = ({ board }) => _(board).some(row => row.some(square => square === active));
 
+var inactivedBoardFrom = ({ board }) => board.map(row => row.map(square => square === active ? inactive : square));
+
+var activeIteration = ({ board }) => {
+    var interatedBoard = move({ board, to: { y: 1 } });
+
+    return {
+        board: board === interatedBoard
+            ? inactivedBoardFrom({ board })
+            : interatedBoard
+    };
+}
+
 export function iterateUntilInactive({ board, shapeProvider }) {
     return isActive({ board })
-        ? iterateUntilInactive(iterate({ board, shapeProvider }))
+        ? iterateUntilInactive(activeIteration({ board, shapeProvider }))
         : { board }
 }
 
 export function iterate({ board, shapeProvider, score }) {
-    var inactivedBoardFrom = ({ board }) => board.map(row => row.map(square => square === active ? inactive : square));
-
-    var activeIteration = () => {
-        var interatedBoard = move({ board, to: { y: 1 } });
-
-        return {
-            board: board === interatedBoard
-                ? inactivedBoardFrom({ board })
-                : interatedBoard
-        };
-    }
-
     var newShapeIteration = () => {
         var newShape = _(shapeProvider()).flatMap((row, y) => row.map((value, x) => ({ x, y, value })));
         var isFull = row => row.every(square => square === inactive);
@@ -49,5 +49,5 @@ export function iterate({ board, shapeProvider, score }) {
         };
     }
 
-    return isActive({ board }) ? activeIteration() : newShapeIteration();
+    return isActive({ board }) ? activeIteration({ board }) : newShapeIteration();
 }
