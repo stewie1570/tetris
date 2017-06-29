@@ -24,7 +24,7 @@ export function iterateUntilInactive({ board }) {
 
 export function iterate({ board, shapeProvider, score }) {
     var newShapeIteration = () => {
-        var newShape = _(shapeProvider()).flatMap((row, y) => row.map((value, x) => ({ x, y, value })));
+        var newShape = _(shapeProvider()).flatMap((row, y) => row.map((value, x) => ({ x, y, value }))).value();
         var isFull = row => row.every(square => square === inactive);
         var emptyRowFor = ({ y }) => _.range(0, board[y].length).map(() => empty);
         var noFullRows = ({ board, score }) => {
