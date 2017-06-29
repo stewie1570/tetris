@@ -63,14 +63,8 @@ describe("Game", () => {
                     ------
                     ---###
                     ---#--`);
-                var shapeProvider = () => [
-                    [true, true],
-                    [false, true]
-                ];
 
-                var result = iterateUntilInactive({ board, shapeProvider });
-
-                expect(stringFrom(result.board)).toEqual(stringFrom(tetrisBoard(`
+                expect(stringFrom(iterateUntilInactive({ board }).board)).toEqual(stringFrom(tetrisBoard(`
                     ------
                     ------
                     ------
