@@ -55,7 +55,7 @@ describe("Game", () => {
                 ---#--`)));
         });
 
-        describe("Iterate Until In Active", () => {
+        describe("Iterate Until Inactive", () => {
             it("iterates the board until the active squares become inactive", () => {
                 var board = tetrisBoard(`
                     **----
