@@ -105,11 +105,11 @@ class App extends Component {
     }
 
     keyPress({ keyCode }) {
-        var { board, score } = this.state;
+        var { board } = this.state;
         var newState = keyCode === keys.left ? { board: move({ board, to: { x: -1 } }) }
             : keyCode === keys.right ? { board: move({ board, to: { x: 1 } }) }
             : keyCode === keys.down ? { board: move({ board, to: { y: 1 } }) }
-            : keyCode === keys.space ? iterateUntilInactive({ board, shapeProvider, score })
+            : keyCode === keys.space ? iterateUntilInactive({ board })
             : { board: rotate({ board }) };
 
         this.setState(newState);
