@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { TetrisBoard } from './components/board'
 import { tetrisBoard } from './domain/serialization'
 import { move, rotate } from './domain/motion'
-import { iterate, iterateUntilInactive } from './domain/game'
+import { iterate, iterateUntilInactive } from './domain/iteration'
 import './App.css';
 
 var keys = {

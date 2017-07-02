@@ -1,5 +1,5 @@
 import { tetrisBoard, stringFrom } from '../../domain/serialization'
-import { iterate, iterateUntilInactive } from '../../domain/game'
+import { iterate, iterateUntilInactive } from '../../domain/iteration'
 
 describe("Game", () => {
     describe("Iteration", () => {
