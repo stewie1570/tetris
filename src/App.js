@@ -106,13 +106,13 @@ class App extends Component {
 
     keyPress({ keyCode }) {
         var { board } = this.state;
-        var newState = keyCode === keys.left ? { board: move({ board, to: { x: -1 } }) }
-            : keyCode === keys.right ? { board: move({ board, to: { x: 1 } }) }
-            : keyCode === keys.down ? { board: move({ board, to: { y: 1 } }) }
-            : keyCode === keys.space ? { board: iterateUntilInactive({ board }) }
-            : { board: rotate({ board }) };
+        var newBoard = keyCode === keys.left ? move({ board, to: { x: -1 } })
+            : keyCode === keys.right ? move({ board, to: { x: 1 } })
+            : keyCode === keys.down ? move({ board, to: { y: 1 } })
+            : keyCode === keys.space ? iterateUntilInactive({ board })
+            : keyCode === keys.up ? rotate({ board }) : board;
 
-        this.setState(newState);
+        this.setState({ board: newBoard });
     }
 
     render() {
