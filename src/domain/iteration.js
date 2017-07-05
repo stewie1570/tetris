@@ -18,7 +18,7 @@ var activeIteration = ({ board }) => {
 
 export var iterateUntilInactive = ({ board }) => isActive({ board })
     ? iterateUntilInactive(activeIteration({ board }))
-    : { board };
+    : board;
 
 export function iterate({ board, shapeProvider, score }) {
     var newShapeIteration = () => {

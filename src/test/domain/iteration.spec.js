@@ -64,7 +64,7 @@ describe("Iteration", () => {
                 ---###
                 ---#--`);
 
-            expect(stringFrom(iterateUntilInactive({ board }).board)).toEqual(stringFrom(tetrisBoard(`
+            expect(stringFrom(iterateUntilInactive({ board }))).toEqual(stringFrom(tetrisBoard(`
                 ------
                 ------
                 ------
