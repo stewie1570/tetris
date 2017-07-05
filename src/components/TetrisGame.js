@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TetrisBoard } from './board'
+import { TetrisBoard } from './TetrisBoard'
 import { tetrisBoard } from '../domain/serialization'
 import { move, rotate } from '../domain/motion'
 import { iterate, iterateUntilInactive } from '../domain/iteration'
