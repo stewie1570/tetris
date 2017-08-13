@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && copy .\\build\\static\\js\\main.*.js .\\Tetris\\Scripts\\app.js && copy .\\build\\static\\css\\main.*.css .\\Tetris\\Content\\app.css",
     "tdd": "react-scripts test --env=jsdom",
     "test": "react-scripts test --env=jsdom --coverage",
     "eject": "react-scripts eject"
