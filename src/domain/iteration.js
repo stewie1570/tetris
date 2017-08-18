@@ -7,12 +7,12 @@ var isActive = ({ board }) => _(board).some(row => row.some(square => square ===
 var inactivedBoardFrom = ({ board }) => board.map(row => row.map(square => square === active ? inactive : square));
 
 var activeIteration = ({ board }) => {
-    var interatedBoard = move({ board, to: { y: 1 } });
+    var iteratedBoard = move({ board, to: { y: 1 } });
 
     return {
-        board: board === interatedBoard
+        board: board === iteratedBoard
             ? inactivedBoardFrom({ board })
-            : interatedBoard
+            : iteratedBoard
     };
 }
 
