@@ -6,6 +6,6 @@ namespace Tetris.Interfaces
 {
     public interface ILeaderBoardProvider
     {
-        Task<List<User>> GetUsers();
+        Task<List<User>> GetUsers(int minScore, int maxScore);
     }
 }
