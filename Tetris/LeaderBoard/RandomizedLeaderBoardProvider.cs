@@ -18,7 +18,6 @@ namespace Tetris.LeaderBoard
     {
         private Func<Task<string[]>> getNames;
         private IRandonNumberGenerator randomNumberGenerator;
-        public List<User> CurrentUsers { get; set; } = new List<User>();
 
         public RandomizedLeaderBoardProvider(
             IRandonNumberGenerator randomNumberGenerator,
@@ -32,7 +31,6 @@ namespace Tetris.LeaderBoard
         {
             return GetRandomUserList(
                 config: new RandomUserProviderConfiguration { MinScore = minScore, MaxScore = maxScore },
-                currentList: CurrentUsers,
                 names: (await getNames()).ToList());
         }
 
@@ -40,8 +38,8 @@ namespace Tetris.LeaderBoard
 
         private List<User> GetRandomUserList(
             RandomUserProviderConfiguration config,
-            List<User> currentList,
-            List<string> names)
+            List<string> names,
+            List<User> currentList = null)
         {
             Func<List<User>> newUserList = () =>
             {
@@ -49,7 +47,7 @@ namespace Tetris.LeaderBoard
 
                 return GetRandomUserList(
                     config,
-                    currentList: currentList
+                    currentList: (currentList ?? new List<User>())
                         .Concat(NewUserFrom(config, names, randomNumber))
                         .ToList(),
                     names: names
