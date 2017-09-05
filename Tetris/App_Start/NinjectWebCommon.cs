@@ -12,6 +12,9 @@ namespace Tetris.App_Start
     using Ninject.Web.Common;
     using Domain;
     using System.Collections.Generic;
+    using Interfaces;
+    using LeaderBoard;
+    using System.Threading.Tasks;
 
     public static class NinjectWebCommon 
     {
@@ -70,10 +73,18 @@ namespace Tetris.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<Func<List<User>>>().ToMethod(ctx => () => new List<User>
-            {
-                new User { Username = "Stewie" }
-            });
+            kernel.Bind<IRandonNumberGenerator>().To<RandomNumberGenerator>();
+            kernel.Bind<ILeaderBoardProvider>().ToMethod(ctx => new RandomizedLeaderBoardProvider(
+                randomNumberGenerator: kernel.Get<IRandonNumberGenerator>(),
+                getNames: () => Task.FromResult(BotUsernames.Get())));
+            kernel
+                .Bind<Task<List<User>>>()
+                .ToMethod(ctx => kernel.Get<ILeaderBoardProvider>().GetUsers(minScore: 5, maxScore: 200))
+                .InSingletonScope();
+            kernel
+                .Bind<Func<Task<List<User>>>>()
+                .ToMethod(ctx => () => kernel.Get<Task<List<User>>>())
+                .InSingletonScope();
         }        
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Tetris.Domain;
 
@@ -8,18 +9,21 @@ namespace Tetris.Controllers.Api
 {
     public class UsersController : ApiController
     {
-        List<User> users;
+        Task<List<User>> getUsers;
 
-        public UsersController(Func<List<User>> getUsers)
+        public UsersController(Func<Task<List<User>>> getUsers)
         {
-            this.users = getUsers();
+            this.getUsers = getUsers();
         }
 
         [Route("api/users")]
         [HttpGet]
-        public IEnumerable<dynamic> GetUsers()
+        public async Task<IEnumerable<dynamic>> GetUsers()
         {
-            return users.Select(user => new { user.Username, user.Score });
+            return (await getUsers)
+                .OrderByDescending(user => user.Score)
+                .Take(20)
+                .Select(user => new { user.Username, user.Score });
         }
     }
 }
