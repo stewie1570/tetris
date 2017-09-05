@@ -32,24 +32,20 @@ namespace Tetris.LeaderBoard
 
         public async Task<List<User>> GetUsers()
         {
-            return GetRandomUserList(config, names: (await getNames()).ToList());
+            return GetRandomUserList(names: (await getNames()).ToList());
         }
 
         #region Helpers
 
-        private List<User> GetRandomUserList(
-            RandomUserProviderConfiguration config,
-            List<string> names,
-            List<User> currentList = null)
+        private List<User> GetRandomUserList(List<string> names, List<User> currentList = null)
         {
             Func<List<User>> newUserList = () =>
             {
                 int randomNumber = randomNumberGenerator.Get(min: 0, max: names.Count - 1);
 
                 return GetRandomUserList(
-                    config,
                     currentList: (currentList ?? new List<User>())
-                        .Concat(NewUserFrom(config, names, randomNumber))
+                        .Concat(NewUserFrom(names, randomNumber))
                         .ToList(),
                     names: names
                         .Where((name, index) => index != randomNumber)
@@ -59,7 +55,7 @@ namespace Tetris.LeaderBoard
             return names.Count == 0 ? currentList : newUserList();
         }
 
-        private User NewUserFrom(RandomUserProviderConfiguration config, List<string> names, int randomNumber)
+        private User NewUserFrom(List<string> names, int randomNumber)
         {
             return new User
             {
