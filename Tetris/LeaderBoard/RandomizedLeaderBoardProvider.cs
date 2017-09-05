@@ -16,22 +16,23 @@ namespace Tetris.LeaderBoard
 
     public class RandomizedLeaderBoardProvider : ILeaderBoardProvider
     {
-        private Func<Task<string[]>> getNames;
-        private IRandonNumberGenerator randomNumberGenerator;
+        Func<Task<string[]>> getNames;
+        IRandonNumberGenerator randomNumberGenerator;
+        RandomUserProviderConfiguration config;
 
         public RandomizedLeaderBoardProvider(
             IRandonNumberGenerator randomNumberGenerator,
+            RandomUserProviderConfiguration config,
             Func<Task<string[]>> getNames)
         {
             this.randomNumberGenerator = randomNumberGenerator;
+            this.config = config;
             this.getNames = getNames;
         }
 
-        public async Task<List<User>> GetUsers(int minScore, int maxScore)
+        public async Task<List<User>> GetUsers()
         {
-            return GetRandomUserList(
-                config: new RandomUserProviderConfiguration { MinScore = minScore, MaxScore = maxScore },
-                names: (await getNames()).ToList());
+            return GetRandomUserList(config, names: (await getNames()).ToList());
         }
 
         #region Helpers

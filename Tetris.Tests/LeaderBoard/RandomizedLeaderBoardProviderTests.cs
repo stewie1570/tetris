@@ -15,15 +15,17 @@ namespace Tetris.Tests.LeaderBoard
         ILeaderBoardProvider randomizedLeaderBoardProvider;
         IRandonNumberGenerator randomNumberGenerator;
         string[] names;
+        RandomUserProviderConfiguration config;
         
 
         [TestInitialize]
         public void Setup()
         {
             randomNumberGenerator = Substitute.For<IRandonNumberGenerator>();
-
+            config = new RandomUserProviderConfiguration();
             randomizedLeaderBoardProvider = new RandomizedLeaderBoardProvider(
                 randomNumberGenerator,
+                config: config,
                 getNames: () => Task.FromResult(names));
         }
 
@@ -40,13 +42,15 @@ namespace Tetris.Tests.LeaderBoard
             randomNumberGenerator
                 .Get(min: Arg.Is(0), max: Arg.Any<int>())
                 .Returns(ci => ci.Args()[1]);
+            config.MinScore = 100;
+            config.MaxScore = 200;
             randomNumberGenerator
-                .Get(min: 100, max: 200)
+                .Get(min: config.MinScore, max: config.MaxScore)
                 .Returns(150);
 
             //Act
             //Assert
-            (await randomizedLeaderBoardProvider.GetUsers(minScore: 100, maxScore: 200))
+            (await randomizedLeaderBoardProvider.GetUsers())
                 .ShouldBeEquivalentTo(new List<User>
                 {
                     new User { Username = "Max", IsBot = true, Score = 150 },
