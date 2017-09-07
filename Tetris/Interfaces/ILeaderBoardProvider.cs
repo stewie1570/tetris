@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Tetris.Domain;
+﻿using System.Threading.Tasks;
 
 namespace Tetris.Interfaces
 {
     public interface ILeaderBoardProvider
     {
-        Task<List<User>> GetUsers(int count);
+        Task<Domain.LeaderBoard> GetLeaderBoard(int userCount);
     }
 }

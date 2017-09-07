@@ -79,12 +79,12 @@ namespace Tetris.App_Start
                 config: new RandomUserProviderConfiguration { MinScore = 5, MaxScore = 200 },
                 getNames: () => Task.FromResult(BotUsernames.Get())));
             kernel
-                .Bind<Task<List<User>>>()
-                .ToMethod(ctx => kernel.Get<ILeaderBoardProvider>().GetUsers(count: 20))
+                .Bind<Task<LeaderBoard>>()
+                .ToMethod(ctx => kernel.Get<ILeaderBoardProvider>().GetLeaderBoard(userCount: 20))
                 .InSingletonScope();
             kernel
-                .Bind<Func<Task<List<User>>>>()
-                .ToMethod(ctx => () => kernel.Get<Task<List<User>>>())
+                .Bind<Func<Task<LeaderBoard>>>()
+                .ToMethod(ctx => () => kernel.Get<Task<LeaderBoard>>())
                 .InSingletonScope();
         }        
     }

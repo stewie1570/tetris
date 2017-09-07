@@ -49,8 +49,10 @@ namespace Tetris.Tests.LeaderBoard
                 .Returns(ci => randomScore > 150 ? 146 : randomScore++);
 
             //Act
+            var leaderBoard = await randomizedLeaderBoardProvider.GetLeaderBoard(userCount: 3);
+            
             //Assert
-            (await randomizedLeaderBoardProvider.GetUsers(count: 3))
+            leaderBoard.Users
                 .ShouldBeEquivalentTo(new List<User>
                 {
                     new User { Username = "Stewart", IsBot = true, Score = 150 },

@@ -9,18 +9,18 @@ namespace Tetris.Controllers.Api
 {
     public class UsersController : ApiController
     {
-        Task<List<User>> getUsers;
+        Task<Domain.LeaderBoard> getLeaderBoard;
 
-        public UsersController(Func<Task<List<User>>> getUsers)
+        public UsersController(Func<Task<Domain.LeaderBoard>> getLeaderBoard)
         {
-            this.getUsers = getUsers();
+            this.getLeaderBoard = getLeaderBoard();
         }
 
         [Route("api/users")]
         [HttpGet]
         public async Task<IEnumerable<dynamic>> GetUsers()
         {
-            return (await getUsers).Select(user => new { user.Username, user.Score });
+            return (await getLeaderBoard).Users.Select(user => new { user.Username, user.Score });
         }
     }
 }

@@ -201,6 +201,7 @@
     <Compile Include="Controllers\Api\UsersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Core\Extensions.cs" />
+    <Compile Include="Domain\LeaderBoard.cs" />
     <Compile Include="Domain\User.cs" />
     <Compile Include="Domain\BotUsernames.cs" />
     <Compile Include="Global.asax.cs">

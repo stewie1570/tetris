@@ -29,9 +29,11 @@ namespace Tetris.LeaderBoard
             this.getNames = getNames;
         }
 
-        public async Task<List<User>> GetUsers(int count)
+        public async Task<Domain.LeaderBoard> GetLeaderBoard(int count)
         {
-            return (await getNames())
+            return new Domain.LeaderBoard
+            {
+                Users = (await getNames())
                 .Select(name => new User
                 {
                     IsBot = true,
@@ -40,7 +42,8 @@ namespace Tetris.LeaderBoard
                 })
                 .OrderByDescending(user => user.Score)
                 .Take(count)
-                .ToList();
+                .ToList()
+            };
         }
     }
 }
