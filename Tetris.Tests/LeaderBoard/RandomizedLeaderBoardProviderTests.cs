@@ -39,14 +39,12 @@ namespace Tetris.Tests.LeaderBoard
                 "Jon",
                 "Max"
             };
-            randomNumberGenerator
-                .Get(min: Arg.Is(0), max: Arg.Any<int>())
-                .Returns(ci => ci.Args()[1]);
+            int randomScore = 148;
             config.MinScore = 100;
             config.MaxScore = 200;
             randomNumberGenerator
                 .Get(min: config.MinScore, max: config.MaxScore)
-                .Returns(150);
+                .Returns(ci => randomScore++);
 
             //Act
             //Assert
@@ -54,8 +52,8 @@ namespace Tetris.Tests.LeaderBoard
                 .ShouldBeEquivalentTo(new List<User>
                 {
                     new User { Username = "Max", IsBot = true, Score = 150 },
-                    new User { Username = "Jon", IsBot = true, Score = 150  },
-                    new User { Username = "Stewart", IsBot = true, Score = 150 }
+                    new User { Username = "Jon", IsBot = true, Score = 149  },
+                    new User { Username = "Stewart", IsBot = true, Score = 148 }
                 }, ops => ops.WithStrictOrdering());
         }
     }

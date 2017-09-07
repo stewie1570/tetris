@@ -20,10 +20,7 @@ namespace Tetris.Controllers.Api
         [HttpGet]
         public async Task<IEnumerable<dynamic>> GetUsers()
         {
-            return (await getUsers)
-                .OrderByDescending(user => user.Score)
-                .Take(20)
-                .Select(user => new { user.Username, user.Score });
+            return (await getUsers).Select(user => new { user.Username, user.Score });
         }
     }
 }
