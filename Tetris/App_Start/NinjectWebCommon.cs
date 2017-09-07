@@ -80,7 +80,7 @@ namespace Tetris.App_Start
                 getNames: () => Task.FromResult(BotUsernames.Get())));
             kernel
                 .Bind<Task<List<User>>>()
-                .ToMethod(ctx => kernel.Get<ILeaderBoardProvider>().GetUsers())
+                .ToMethod(ctx => kernel.Get<ILeaderBoardProvider>().GetUsers(count: 20))
                 .InSingletonScope();
             kernel
                 .Bind<Func<Task<List<User>>>>()

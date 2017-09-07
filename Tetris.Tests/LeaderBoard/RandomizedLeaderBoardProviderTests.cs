@@ -35,25 +35,27 @@ namespace Tetris.Tests.LeaderBoard
             //Arrange
             names = new string[]
             {
-                "Stewart",
-                "Jon",
-                "Max"
+                "Jane",     //147
+                "Jon",      //148
+                "Max",      //149
+                "Stewart",  //150
+                "John"      //146
             };
-            int randomScore = 148;
+            int randomScore = 147;
             config.MinScore = 100;
             config.MaxScore = 200;
             randomNumberGenerator
                 .Get(min: config.MinScore, max: config.MaxScore)
-                .Returns(ci => randomScore++);
+                .Returns(ci => randomScore > 150 ? 146 : randomScore++);
 
             //Act
             //Assert
-            (await randomizedLeaderBoardProvider.GetUsers())
+            (await randomizedLeaderBoardProvider.GetUsers(count: 3))
                 .ShouldBeEquivalentTo(new List<User>
                 {
-                    new User { Username = "Max", IsBot = true, Score = 150 },
-                    new User { Username = "Jon", IsBot = true, Score = 149  },
-                    new User { Username = "Stewart", IsBot = true, Score = 148 }
+                    new User { Username = "Stewart", IsBot = true, Score = 150 },
+                    new User { Username = "Max", IsBot = true, Score = 149  },
+                    new User { Username = "Jon", IsBot = true, Score = 148 }
                 }, ops => ops.WithStrictOrdering());
         }
     }

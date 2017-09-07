@@ -29,7 +29,7 @@ namespace Tetris.LeaderBoard
             this.getNames = getNames;
         }
 
-        public async Task<List<User>> GetUsers()
+        public async Task<List<User>> GetUsers(int count)
         {
             return (await getNames())
                 .Select(name => new User
@@ -39,6 +39,7 @@ namespace Tetris.LeaderBoard
                     Username = name
                 })
                 .OrderByDescending(user => user.Score)
+                .Take(count)
                 .ToList();
         }
     }
