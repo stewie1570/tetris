@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Tetris.Domain;
-using Tetris.Interfaces;
+using Tetris.Domain.Interfaces;
+using Tetris.Domain.Models;
 
-namespace Tetris.LeaderBoard
+namespace Tetris.Domain.LeaderBoard
 {
     public class RandomUserProviderConfiguration
     {
@@ -28,9 +28,9 @@ namespace Tetris.LeaderBoard
             this.getNames = getNames;
         }
 
-        public async Task<Domain.LeaderBoard> GetLeaderBoard(int count)
+        public async Task<Models.LeaderBoard> GetLeaderBoard()
         {
-            return new Domain.LeaderBoard
+            return new Models.LeaderBoard
             {
                 UserScores = (await getNames())
                     .Select(name => new UserScore
@@ -39,8 +39,6 @@ namespace Tetris.LeaderBoard
                         Score = randomNumberGenerator.Get(config.MinScore, config.MaxScore),
                         Username = name
                     })
-                    .OrderByDescending(user => user.Score)
-                    .Take(count)
                     .ToList()
             };
         }

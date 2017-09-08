@@ -1,4 +1,4 @@
-﻿namespace Tetris.Interfaces
+﻿namespace Tetris.Domain.Interfaces
 {
     public interface IRandonNumberGenerator
     {

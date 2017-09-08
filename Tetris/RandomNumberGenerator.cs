@@ -1,5 +1,5 @@
 ﻿using System;
-using Tetris.Interfaces;
+using Tetris.Domain.Interfaces;
 
 namespace Tetris
 {

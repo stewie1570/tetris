@@ -1,4 +1,4 @@
-﻿namespace Tetris.Domain
+﻿namespace Tetris.Domain.Models
 {
     public class UserScore
     {

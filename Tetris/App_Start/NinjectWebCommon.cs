@@ -3,18 +3,15 @@
 
 namespace Tetris.App_Start
 {
-    using System;
-    using System.Web;
-
+    using Domain.Interfaces;
+    using Domain.LeaderBoard;
+    using Domain.Models;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-
     using Ninject;
     using Ninject.Web.Common;
-    using Domain;
-    using System.Collections.Generic;
-    using Interfaces;
-    using LeaderBoard;
+    using System;
     using System.Threading.Tasks;
+    using System.Web;
 
     public static class NinjectWebCommon 
     {
@@ -81,7 +78,7 @@ namespace Tetris.App_Start
             kernel.Bind<ILeaderBoardUpdater>().To<InMemoryLeaderBoardUpdater>();
             kernel
                 .Bind<Task<LeaderBoard>>()
-                .ToMethod(ctx => kernel.Get<ILeaderBoardProvider>().GetLeaderBoard(userCount: 20))
+                .ToMethod(ctx => kernel.Get<ILeaderBoardProvider>().GetLeaderBoard())
                 .InSingletonScope();
             kernel
                 .Bind<Func<Task<LeaderBoard>>>()

@@ -1,4 +1,4 @@
-﻿namespace Tetris.Domain
+﻿namespace Tetris
 {
     public static class BotUsernames
     {

@@ -96,9 +96,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\ExtensionsTests.cs" />
-    <Compile Include="LeaderBoard\RandomizedLeaderBoardProviderTests.cs" />
-    <Compile Include="LeaderBoard\LeaderBoardUpdaterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

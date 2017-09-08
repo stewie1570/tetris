@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Tetris.Domain;
+using Tetris.Domain.Models;
 
-namespace Tetris.Interfaces
+namespace Tetris.Domain.Interfaces
 {
     public interface ILeaderBoardUpdater
     {

@@ -2,22 +2,22 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tetris.Domain;
-using Tetris.Interfaces;
-using Tetris.LeaderBoard;
+using Tetris.Domain.Interfaces;
+using Tetris.Domain.LeaderBoard;
+using Tetris.Domain.Models;
 
-namespace Tetris.Tests.LeaderBoard
+namespace Tetris.Domain.Tests
 {
     [TestClass]
     public class LeaderBoardUpdaterTests
     {
         ILeaderBoardUpdater leaderBoardUpdater;
-        Domain.LeaderBoard leaderBoard;
+        Models.LeaderBoard leaderBoard;
 
         [TestInitialize]
         public void Setup()
         {
-            leaderBoard = new Domain.LeaderBoard();
+            leaderBoard = new Models.LeaderBoard();
             leaderBoardUpdater = new InMemoryLeaderBoardUpdater(Task.FromResult(leaderBoard));
         }
 

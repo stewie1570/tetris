@@ -3,11 +3,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tetris.Domain;
-using Tetris.Interfaces;
-using Tetris.LeaderBoard;
+using Tetris.Domain.Interfaces;
+using Tetris.Domain.LeaderBoard;
+using Tetris.Domain.Models;
 
-namespace Tetris.Tests.LeaderBoard
+namespace Tetris.Domain.Tests
 {
     [TestClass]
     public class RandomizedLeaderBoardProviderTests
@@ -16,7 +16,6 @@ namespace Tetris.Tests.LeaderBoard
         IRandonNumberGenerator randomNumberGenerator;
         string[] names;
         RandomUserProviderConfiguration config;
-        
 
         [TestInitialize]
         public void Setup()
@@ -35,30 +34,26 @@ namespace Tetris.Tests.LeaderBoard
             //Arrange
             names = new string[]
             {
-                "Jane",     //147
-                "Jon",      //148
-                "Max",      //149
                 "Stewart",  //150
-                "John"      //146
+                "John"      //151
             };
-            int randomScore = 147;
+            int randomScore = 150;
             config.MinScore = 100;
             config.MaxScore = 200;
             randomNumberGenerator
                 .Get(min: config.MinScore, max: config.MaxScore)
-                .Returns(ci => randomScore > 150 ? 146 : randomScore++);
+                .Returns(ci => randomScore++);
 
             //Act
-            var leaderBoard = await randomizedLeaderBoardProvider.GetLeaderBoard(userCount: 3);
+            var leaderBoard = await randomizedLeaderBoardProvider.GetLeaderBoard();
             
             //Assert
             leaderBoard.UserScores
                 .ShouldBeEquivalentTo(new List<UserScore>
                 {
                     new UserScore { Username = "Stewart", IsBot = true, Score = 150 },
-                    new UserScore { Username = "Max", IsBot = true, Score = 149  },
-                    new UserScore { Username = "Jon", IsBot = true, Score = 148 }
-                }, ops => ops.WithStrictOrdering());
+                    new UserScore { Username = "John", IsBot = true, Score = 151 }
+                });
         }
     }
 }

@@ -200,18 +200,10 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Api\UserScoresController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Core\Extensions.cs" />
-    <Compile Include="Domain\LeaderBoard.cs" />
-    <Compile Include="Domain\UserScore.cs" />
-    <Compile Include="Domain\BotUsernames.cs" />
+    <Compile Include="BotUsernames.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\ILeaderBoardProvider.cs" />
-    <Compile Include="Interfaces\ILeaderBoardUpdater.cs" />
-    <Compile Include="Interfaces\IRandonNumberGenerator.cs" />
-    <Compile Include="LeaderBoard\InMemoryLeaderBoardUpdater.cs" />
-    <Compile Include="LeaderBoard\RandomizedLeaderBoardProvider.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\UserScore.cs" />
@@ -247,6 +239,16 @@
       <SubType>Designer</SubType>
     </Content>
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tetris.Core\Tetris.Core.csproj">
+      <Project>{6ee324b4-6463-4c4d-a66f-889569e75de6}</Project>
+      <Name>Tetris.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tetris.Domain\Tetris.Domain.csproj">
+      <Project>{47e9d981-5f97-4c8d-814f-e0911a421b16}</Project>
+      <Name>Tetris.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

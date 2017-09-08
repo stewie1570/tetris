@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Tetris.Domain
+namespace Tetris.Domain.Models
 {
     public class LeaderBoard
     {

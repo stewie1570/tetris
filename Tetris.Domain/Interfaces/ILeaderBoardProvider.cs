@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Tetris.Interfaces
+namespace Tetris.Domain.Interfaces
 {
     public interface ILeaderBoardProvider
     {
-        Task<Domain.LeaderBoard> GetLeaderBoard(int userCount);
+        Task<Models.LeaderBoard> GetLeaderBoard();
     }
 }
