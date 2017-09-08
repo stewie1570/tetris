@@ -202,13 +202,15 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Core\Extensions.cs" />
     <Compile Include="Domain\LeaderBoard.cs" />
-    <Compile Include="Domain\User.cs" />
+    <Compile Include="Domain\UserScore.cs" />
     <Compile Include="Domain\BotUsernames.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\ILeaderBoardProvider.cs" />
+    <Compile Include="Interfaces\ILeaderBoardUpdater.cs" />
     <Compile Include="Interfaces\IRandonNumberGenerator.cs" />
+    <Compile Include="LeaderBoard\InMemoryLeaderBoardUpdater.cs" />
     <Compile Include="LeaderBoard\RandomizedLeaderBoardProvider.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />

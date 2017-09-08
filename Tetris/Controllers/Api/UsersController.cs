@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Tetris.Domain;
 
 namespace Tetris.Controllers.Api
 {
@@ -20,7 +19,7 @@ namespace Tetris.Controllers.Api
         [HttpGet]
         public async Task<IEnumerable<dynamic>> GetUsers()
         {
-            return (await getLeaderBoard).Users.Select(user => new { user.Username, user.Score });
+            return (await getLeaderBoard).UserScores.Select(user => new { user.Username, user.Score });
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tetris.Domain;
@@ -33,16 +32,16 @@ namespace Tetris.LeaderBoard
         {
             return new Domain.LeaderBoard
             {
-                Users = (await getNames())
-                .Select(name => new User
-                {
-                    IsBot = true,
-                    Score = randomNumberGenerator.Get(config.MinScore, config.MaxScore),
-                    Username = name
-                })
-                .OrderByDescending(user => user.Score)
-                .Take(count)
-                .ToList()
+                UserScores = (await getNames())
+                    .Select(name => new UserScore
+                    {
+                        IsBot = true,
+                        Score = randomNumberGenerator.Get(config.MinScore, config.MaxScore),
+                        Username = name
+                    })
+                    .OrderByDescending(user => user.Score)
+                    .Take(count)
+                    .ToList()
             };
         }
     }

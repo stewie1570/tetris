@@ -52,12 +52,12 @@ namespace Tetris.Tests.LeaderBoard
             var leaderBoard = await randomizedLeaderBoardProvider.GetLeaderBoard(userCount: 3);
             
             //Assert
-            leaderBoard.Users
-                .ShouldBeEquivalentTo(new List<User>
+            leaderBoard.UserScores
+                .ShouldBeEquivalentTo(new List<UserScore>
                 {
-                    new User { Username = "Stewart", IsBot = true, Score = 150 },
-                    new User { Username = "Max", IsBot = true, Score = 149  },
-                    new User { Username = "Jon", IsBot = true, Score = 148 }
+                    new UserScore { Username = "Stewart", IsBot = true, Score = 150 },
+                    new UserScore { Username = "Max", IsBot = true, Score = 149  },
+                    new UserScore { Username = "Jon", IsBot = true, Score = 148 }
                 }, ops => ops.WithStrictOrdering());
         }
     }
