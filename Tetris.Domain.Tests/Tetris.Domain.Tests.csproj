@@ -64,9 +64,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="LeaderBoardUpdaterTests.cs" />
+    <Compile Include="LeaderBoard\LeaderBoardUpdaterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RandomizedLeaderBoardProviderTests.cs" />
+    <Compile Include="LeaderBoard\RandomizedLeaderBoardProviderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tetris.Domain\Tetris.Domain.csproj">

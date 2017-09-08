@@ -6,7 +6,7 @@ using Tetris.Domain.Interfaces;
 using Tetris.Domain.LeaderBoard;
 using Tetris.Domain.Models;
 
-namespace Tetris.Domain.Tests
+namespace Tetris.Domain.Tests.LeaderBoard
 {
     [TestClass]
     public class LeaderBoardUpdaterTests
