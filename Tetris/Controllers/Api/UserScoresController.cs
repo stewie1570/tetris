@@ -1,42 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Tetris.Domain.Interfaces;
+using Tetris.Interfaces;
 using Tetris.Models;
 
 namespace Tetris.Controllers.Api
 {
     public class UserScoresController : ApiController
     {
-        Task<Domain.Models.LeaderBoard> getLeaderBoard;
-        ILeaderBoardUpdater leaderBoardUpdater;
+        IUserScoresInteractor userScoreInteractor;
 
-        public UserScoresController(
-            Func<Task<Domain.Models.LeaderBoard>> getLeaderBoard,
-            ILeaderBoardUpdater leaderBoardUpdater)
+        public UserScoresController(IUserScoresInteractor userScoreInteractor)
         {
-            this.getLeaderBoard = getLeaderBoard();
-            this.leaderBoardUpdater = leaderBoardUpdater;
+            this.userScoreInteractor = userScoreInteractor;
         }
 
         [Route("api/userScores")]
         [HttpGet]
-        public async Task<IEnumerable<dynamic>> GetUserScores()
+        public async Task<IEnumerable<Models.UserScore>> GetUserScores()
         {
-            return (await getLeaderBoard).UserScores.Select(user => new { user.Username, user.Score });
+            return await userScoreInteractor.GetUserScores(count: 20);
         }
 
         [Route("api/userScores")]
         [HttpPost]
         public async Task AddUserScore(UserScore userScore)
         {
-            await leaderBoardUpdater.AddUserScore(new Domain.Models.UserScore
-            {
-                Score = userScore.Score,
-                Username = userScore.UserName
-            });
+            await userScoreInteractor.Add(userScore);
         }
     }
 }

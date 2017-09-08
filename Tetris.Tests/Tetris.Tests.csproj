@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Interactors\UserScoresControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
@@ -105,6 +106,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Tetris.Domain\Tetris.Domain.csproj">
+      <Project>{47E9D981-5F97-4C8D-814F-E0911A421B16}</Project>
+      <Name>Tetris.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tetris\Tetris.csproj">
       <Project>{4319A310-F309-4437-8B0B-A82AA07DA6DF}</Project>
       <Name>Tetris</Name>

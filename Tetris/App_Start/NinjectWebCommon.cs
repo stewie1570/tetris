@@ -6,6 +6,8 @@ namespace Tetris.App_Start
     using Domain.Interfaces;
     using Domain.LeaderBoard;
     using Domain.Models;
+    using Interactors;
+    using Interfaces;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
     using Ninject;
     using Ninject.Web.Common;
@@ -80,10 +82,11 @@ namespace Tetris.App_Start
                 .Bind<Task<LeaderBoard>>()
                 .ToMethod(ctx => kernel.Get<ILeaderBoardProvider>().GetLeaderBoard())
                 .InSingletonScope();
-            kernel
-                .Bind<Func<Task<LeaderBoard>>>()
-                .ToMethod(ctx => () => kernel.Get<Task<LeaderBoard>>())
-                .InSingletonScope();
+            kernel.Bind<IUserScoresInteractor>().To<UserScoresInteractor>();
+            //kernel
+            //    .Bind<Func<Task<LeaderBoard>>>()
+            //    .ToMethod(ctx => () => kernel.Get<Task<LeaderBoard>>())
+            //    .InSingletonScope();
         }        
     }
 }
