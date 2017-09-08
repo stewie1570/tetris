@@ -55,7 +55,7 @@ namespace Tetris.Tests.Interactors
             //Arrange
             UserScore receivedUserScore = null;
             leaderBoardUpdater
-                .When(updater => updater.AddUserScore(Arg.Any<UserScore>()))
+                .When(updater => updater.Add(Arg.Any<UserScore>()))
                 .Do(ci => receivedUserScore = ci.Arg<UserScore>());
 
             //Act

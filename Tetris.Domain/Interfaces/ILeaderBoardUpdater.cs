@@ -5,6 +5,6 @@ namespace Tetris.Domain.Interfaces
 {
     public interface ILeaderBoardUpdater
     {
-        Task AddUserScore(UserScore userScore);
+        Task Add(UserScore userScore);
     }
 }

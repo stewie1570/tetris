@@ -32,7 +32,7 @@ namespace Tetris.Domain.Tests
             };
 
             //Act
-            await leaderBoardUpdater.AddUserScore(userScore);
+            await leaderBoardUpdater.Add(userScore);
 
             //Assert
             leaderBoard.UserScores.ShouldBeEquivalentTo(new List<UserScore>

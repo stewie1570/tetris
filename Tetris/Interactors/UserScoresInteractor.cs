@@ -22,7 +22,7 @@ namespace Tetris.Interactors
 
         public async Task Add(Models.UserScore userScore)
         {
-            await leaderBoardUpdater.AddUserScore(new Domain.Models.UserScore
+            await leaderBoardUpdater.Add(new UserScore
             {
                 Score = userScore.Score,
                 Username = userScore.UserName

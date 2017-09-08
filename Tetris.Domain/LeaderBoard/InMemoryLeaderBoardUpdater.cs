@@ -15,7 +15,7 @@ namespace Tetris.Domain.LeaderBoard
             this.getLeaderBoard = getLeaderBoard;
         }
 
-        public async Task AddUserScore(UserScore userScore)
+        public async Task Add(UserScore userScore)
         {
             var leaderBoard = await getLeaderBoard;
 

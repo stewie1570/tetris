@@ -83,10 +83,6 @@ namespace Tetris.App_Start
                 .ToMethod(ctx => kernel.Get<ILeaderBoardProvider>().GetLeaderBoard())
                 .InSingletonScope();
             kernel.Bind<IUserScoresInteractor>().To<UserScoresInteractor>();
-            //kernel
-            //    .Bind<Func<Task<LeaderBoard>>>()
-            //    .ToMethod(ctx => () => kernel.Get<Task<LeaderBoard>>())
-            //    .InSingletonScope();
         }        
     }
 }
