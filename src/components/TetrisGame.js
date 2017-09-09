@@ -112,14 +112,18 @@ export class TetrisGame extends Component {
     }
 
     keyPress({ keyCode }) {
-        var { board } = this.state;
-        var newBoard = keyCode === keys.left ? move({ board, to: { x: -1 } })
-            : keyCode === keys.right ? move({ board, to: { x: 1 } })
-            : keyCode === keys.down ? move({ board, to: { y: 1 } })
-            : keyCode === keys.space ? iterateUntilInactive({ board })
-            : keyCode === keys.up ? rotate({ board }) : board;
+        var processKeyCommand = ({ keyCode }) => {
+            var { board } = this.state;
+            var newBoard = keyCode === keys.left ? move({ board, to: { x: -1 } })
+                : keyCode === keys.right ? move({ board, to: { x: 1 } })
+                : keyCode === keys.down ? move({ board, to: { y: 1 } })
+                : keyCode === keys.space ? iterateUntilInactive({ board })
+                : keyCode === keys.up ? rotate({ board }) : board;
 
-        this.setState({ board: newBoard });
+            this.setState({ board: newBoard });
+        };
+
+        return document.hasFocus() && !this.props.paused && processKeyCommand({ keyCode });
     }
 
     render() {

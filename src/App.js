@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { CommandButton } from './components/command-button'
 import { TetrisGame } from './components/TetrisGame'
 import './App.css';
 
@@ -15,21 +16,21 @@ class App extends Component {
                 <div className="App well">
                     {this.state.oldScore !== undefined && <h2>{`Prev Score: ${this.state.oldScore}`}</h2>}
                     <h1>{`Score: ${this.state.currentScore}`}</h1>
-                    <center>
+                    <center id="game">
                         <TetrisGame
                             onScoreChange={currentScore => this.setState({ currentScore })}
                             onGameOver={oldScore => this.setState({ oldScore, currentScore: 0 })}
                             paused={this.state.paused} />
                     </center>
                     <div className="controls">
-                        <button
+                        <CommandButton
                             className="btn btn-primary"
-                            onClick={() => this.setState({ paused: !this.state.paused })}>
+                            onClick={({ target }) => this.setState({ paused: !this.state.paused }) || target.blur()}>
                             {this.state.paused ? "Continue" : "Pause"}
-                        </button>
+                        </CommandButton>
                     </div>
                 </div>
-            </center>
+            </center >
         );
     }
 }
