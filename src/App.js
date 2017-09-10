@@ -14,8 +14,9 @@ class App extends Component {
         return (
             <center>
                 <div className="App well">
-                    {this.state.oldScore !== undefined && <h2>{`Prev Score: ${this.state.oldScore}`}</h2>}
-                    <h1>{`Score: ${this.state.currentScore}`}</h1>
+                    <p>
+                        {`Score: ${this.state.currentScore}` + (this.state.oldScore ? ` (Previous: ${this.state.oldScore})` : '')}
+                    </p>
                     <center id="game">
                         <TetrisGame
                             onScoreChange={currentScore => this.setState({ currentScore })}
