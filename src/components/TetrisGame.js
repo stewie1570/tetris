@@ -80,9 +80,13 @@ export class TetrisGame extends Component {
 
     componentWillMount() {
         document.addEventListener("keydown", this.keyPress.bind(this), false);
-        document.addEventListener("mousedown",
-            ({ clientX, clientY, target }) =>
-                !isControl({ target }) && this.keyPress({keyCode: clickToKeyPress({x: clientX, y: clientY})}),
+        document.addEventListener("touchstart",
+            ({ changedTouches, target }) =>
+                !isControl({ target }) && this.keyPress({keyCode: clickToKeyPress({
+                    x: changedTouches[0].pageX,
+                    y: changedTouches[0].pageY
+                }
+            )}),
             false);
         this.resetTimer();
     }
