@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
 import { TetrisBoard } from './TetrisBoard'
 import { tetrisBoard } from '../domain/serialization'
+import { clickToKeyPress, isControl } from '../domain/mobile-click-to-keypress'
 import { move, rotate } from '../domain/motion'
 import { iterate, iterateUntilInactive } from '../domain/iteration'
-
-var keys = {
-    left: 37,
-    right: 39,
-    down: 40,
-    up: 38,
-    space: 32
-}
+import { keys } from '../core/constants'
 
 var randomNumberGenerator = {
     between: ({ min, max }) => Math.floor(Math.random() * (max + 1)) + min
@@ -86,11 +80,16 @@ export class TetrisGame extends Component {
 
     componentWillMount() {
         document.addEventListener("keydown", this.keyPress.bind(this), false);
+        document.addEventListener("mousedown",
+            ({ clientX, clientY, target }) =>
+                !isControl({ target }) && this.keyPress({keyCode: clickToKeyPress({x: clientX, y: clientY})}),
+            false);
         this.resetTimer();
     }
 
     componentWillUnmount() {
         document.removeEventListener("keydown");
+        document.removeEventListener("mousedown");
     }
 
     resetTimer() {
@@ -116,9 +115,9 @@ export class TetrisGame extends Component {
             var { board } = this.state;
             var newBoard = keyCode === keys.left ? move({ board, to: { x: -1 } })
                 : keyCode === keys.right ? move({ board, to: { x: 1 } })
-                : keyCode === keys.down ? move({ board, to: { y: 1 } })
-                : keyCode === keys.space ? iterateUntilInactive({ board })
-                : keyCode === keys.up ? rotate({ board }) : board;
+                    : keyCode === keys.down ? move({ board, to: { y: 1 } })
+                        : keyCode === keys.space ? iterateUntilInactive({ board })
+                            : keyCode === keys.up ? rotate({ board }) : board;
 
             this.setState({ board: newBoard });
         };
