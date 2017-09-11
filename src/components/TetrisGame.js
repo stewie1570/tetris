@@ -82,11 +82,13 @@ export class TetrisGame extends Component {
         document.addEventListener("keydown", this.keyPress.bind(this), false);
         document.addEventListener("touchstart",
             ({ changedTouches, target }) =>
-                !isControl({ target }) && this.keyPress({keyCode: clickToKeyPress({
-                    x: changedTouches[0].pageX,
-                    y: changedTouches[0].pageY
-                }
-            )}),
+                !isControl({ target }) && this.keyPress({
+                    keyCode: clickToKeyPress({
+                        x: changedTouches[0].pageX,
+                        y: changedTouches[0].pageY
+                    }
+                    )
+                }),
             false);
         this.resetTimer();
     }
@@ -119,9 +121,9 @@ export class TetrisGame extends Component {
             var { board } = this.state;
             var newBoard = keyCode === keys.left ? move({ board, to: { x: -1 } })
                 : keyCode === keys.right ? move({ board, to: { x: 1 } })
-                    : keyCode === keys.down ? move({ board, to: { y: 1 } })
-                        : keyCode === keys.space ? iterateUntilInactive({ board })
-                            : keyCode === keys.up ? rotate({ board }) : board;
+                : keyCode === keys.down ? move({ board, to: { y: 1 } })
+                : keyCode === keys.space ? iterateUntilInactive({ board })
+                : keyCode === keys.up ? rotate({ board }) : board;
 
             this.setState({ board: newBoard });
         };
