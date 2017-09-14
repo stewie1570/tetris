@@ -95,7 +95,7 @@ export class TetrisGame extends Component {
 
     componentWillUnmount() {
         document.removeEventListener("keydown");
-        document.removeEventListener("mousedown");
+        document.removeEventListener("touchstart");
     }
 
     resetTimer() {
