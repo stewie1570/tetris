@@ -13,3 +13,5 @@ export var keys = {
     up: 38,
     space: 32
 };
+
+export var loading = "loading";
