@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { CommandButton } from './components/command-button'
-import { TetrisGame } from './components/TetrisGame'
+import { TetrisGame } from './components/tetris-game'
 import './App.css';
 
 class App extends Component {

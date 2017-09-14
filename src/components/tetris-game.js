@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TetrisBoard } from './TetrisBoard'
+import { TetrisBoard } from './tetris-board'
 import { tetrisBoard } from '../domain/serialization'
 import { clickToKeyPress, isControl } from '../domain/mobile-click-to-keypress'
 import { move, rotate } from '../domain/motion'
