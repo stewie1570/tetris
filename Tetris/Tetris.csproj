@@ -201,6 +201,7 @@
     <Compile Include="Controllers\Api\UserScoresController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="BotUsernames.cs" />
+    <Compile Include="ErrorHandling\HandleErrorFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

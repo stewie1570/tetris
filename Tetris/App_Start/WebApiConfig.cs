@@ -1,6 +1,10 @@
 ﻿using Newtonsoft.Json.Serialization;
+using System;
+using System.Net;
 using System.Net.Http.Formatting;
 using System.Web.Http;
+using Tetris.Core.Exceptions;
+using Tetris.ErrorHandling;
 
 namespace Tetris
 {
@@ -22,6 +26,20 @@ namespace Tetris
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Filters.Add(new HandleErrorFilter
+            {
+                ExceptionType = typeof(Exception),
+                StatusCode = HttpStatusCode.InternalServerError,
+                Message = "Generalized exception message"
+            });
+
+            config.Filters.Add(new HandleErrorFilter
+            {
+                ExceptionType = typeof(ValidationException),
+                StatusCode = HttpStatusCode.BadRequest
+            });
+
         }
     }
 }
