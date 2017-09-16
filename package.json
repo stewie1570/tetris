@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap-css-only": "^3.3.7",
+    "jquery": "^3.2.1",
     "lodash": "^4.17.4",
     "react": "^15.6.1",
     "react-dom": "^15.6.1"
@@ -14,6 +15,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build && copy .\\build\\static\\js\\main.*.js .\\Tetris\\Scripts\\app.js && copy .\\build\\static\\css\\main.*.css .\\Tetris\\Content\\app.css",
+    "builddev": "react-scripts build && del .\\Tetris\\Scripts\\*.*.map && copy .\\build\\static\\js\\main.*.js .\\Tetris\\Scripts\\app.js && copy .\\build\\static\\js\\main.*.js.map .\\Tetris\\Scripts\\main.*.map && copy .\\build\\static\\css\\main.*.css .\\Tetris\\Content\\app.css",
     "tdd": "react-scripts test --env=jsdom",
     "test": "react-scripts test --env=jsdom --coverage",
     "eject": "react-scripts eject"

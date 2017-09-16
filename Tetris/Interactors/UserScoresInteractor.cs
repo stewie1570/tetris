@@ -25,7 +25,7 @@ namespace Tetris.Interactors
             await leaderBoardUpdater.Add(new UserScore
             {
                 Score = userScore.Score,
-                Username = userScore.UserName
+                Username = userScore.Username
             });
         }
 
@@ -37,7 +37,7 @@ namespace Tetris.Interactors
                 .Take(count)
                 .Select(userScore => new Models.UserScore
                 {
-                    UserName = userScore.Username,
+                    Username = userScore.Username,
                     Score = userScore.Score
                 })
                 .ToList();

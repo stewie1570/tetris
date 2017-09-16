@@ -43,9 +43,9 @@ namespace Tetris.Tests.Interactors
             //Assert
             (await userScoresInteractor.GetUserScores(count: 3)).ShouldBeEquivalentTo(new List<Models.UserScore>
             {
-                new Models.UserScore { UserName = "Stewie", Score = 102 },
-                new Models.UserScore { UserName = "John", Score = 100 },
-                new Models.UserScore { UserName = "Max", Score = 99 }
+                new Models.UserScore { Username = "Stewie", Score = 102 },
+                new Models.UserScore { Username = "John", Score = 100 },
+                new Models.UserScore { Username = "Max", Score = 99 }
             }, ops => ops.WithStrictOrdering());
         }
 
@@ -59,7 +59,7 @@ namespace Tetris.Tests.Interactors
                 .Do(ci => receivedUserScore = ci.Arg<UserScore>());
 
             //Act
-            await userScoresInteractor.Add(new Models.UserScore { UserName = "Stewie", Score = 200 });
+            await userScoresInteractor.Add(new Models.UserScore { Username = "Stewie", Score = 200 });
 
             //Assert
             receivedUserScore.ShouldBeEquivalentTo(new UserScore

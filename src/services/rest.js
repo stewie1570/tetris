@@ -1,3 +1,5 @@
+import { ajax } from 'jquery'
+
 export var Rest = {
-    get: url => fetch(url)
+    get: url => ajax({ url, cache: false, type: "GET" })
 }

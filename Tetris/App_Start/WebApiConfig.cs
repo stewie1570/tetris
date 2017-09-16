@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Formatting;
+﻿using Newtonsoft.Json.Serialization;
+using System.Net.Http.Formatting;
 using System.Web.Http;
 
 namespace Tetris
@@ -10,6 +11,8 @@ namespace Tetris
             // Web API configuration and services
             GlobalConfiguration.Configuration.Formatters.Clear();
             GlobalConfiguration.Configuration.Formatters.Add(new JsonMediaTypeFormatter());
+            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            config.Formatters.JsonFormatter.UseDataContractJsonSerializer = false;
 
             // Web API routes
             config.MapHttpAttributeRoutes();
