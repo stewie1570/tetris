@@ -28,6 +28,6 @@ export class AppController {
     async pause({ isPaused }) {
         return isPaused
             ? this.setState({ paused: false, scoreBoard: null })
-            : this.setState({ paused: true, scoreBoard: loading }) || this.reloadLeaderBoard();
+            : this.setState({ paused: true, scoreBoard: loading }) || await this.reloadLeaderBoard();
     }
 }
