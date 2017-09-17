@@ -22,21 +22,23 @@ export class Dialog extends React.Component {
     }
 
     render() {
-        return <div style={{ display: this.state.visible ? 'block' : 'none' }} className="dialog">
-            <div className="dialog-shade" />
-            <div
-                className="dialog-container well">
-                <div className="dialog-hide-container">
-                    <span
-                        className="dialog-hide-text"
-                        onClick={this.exit.bind(this)}>
-                        X
+        return this.state.visible
+            ? <div className="dialog">
+                <div className="dialog-shade" />
+                <div
+                    className="dialog-container well">
+                    <div className="dialog-hide-container">
+                        <span
+                            className="dialog-hide-text"
+                            onClick={this.exit.bind(this)}>
+                            X
                     </span>
-                </div>
-                <div className="dialog-content">
-                    {this.props.children}
+                    </div>
+                    <div className="dialog-content">
+                        {this.props.children}
+                    </div>
                 </div>
             </div>
-        </div>;
+            : <div />
     }
 }

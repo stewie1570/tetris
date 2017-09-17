@@ -29,10 +29,12 @@ export class PromptDialog extends React.Component {
             <div className="centered">
                 {this.state.message}
                 <br />
-                <TextInput
-                    value={this.state.userInput}
-                    onChange={userInput => this.setState({ userInput })} />
-                <br />
+                <form onSubmit={event => event.preventDefault() || this.okButton.onClick()}>
+                    <TextInput
+                        value={this.state.userInput}
+                        autofocus={true}
+                        onChange={userInput => this.setState({ userInput })} />
+                </form>
                 <CommandButton
                     className="btn btn-primary space-top-right"
                     onClick={() => this.userRespondedWith(null)}>
@@ -40,7 +42,8 @@ export class PromptDialog extends React.Component {
                 </CommandButton>
                 <CommandButton
                     className="btn btn-primary space-top-right"
-                    onClick={() => this.userRespondedWith(this.state.userInput)}>
+                    onClick={() => this.userRespondedWith(this.state.userInput)}
+                    ref={ref => this.okButton = ref}>
                     Ok
                 </CommandButton>
             </div>
