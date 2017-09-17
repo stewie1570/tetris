@@ -3,7 +3,7 @@ import { leaderBoardRestService } from './leader-board'
 var wait = () => new Promise(resolve => setTimeout(resolve, 1000));
 
 var leaderBoardServiceStub = {
-    get: () => wait().then(() => [
+    get: () => console.log("Reloading leader board...") || wait().then(() => [
         { username: "Stewie", score: 123 },
         { username: "John", score: 100 },
         { username: "Stewie", score: 123 },

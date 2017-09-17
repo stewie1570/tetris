@@ -8,10 +8,16 @@ describe("App Controller", () => {
         it("should post the users score", async () => {
             //Arrange
             var receivedScorePost = null;
+            var updatedScoreBoard = [{ username: "stewie", score: 123 }];
+            var receivedState = null;
 
             //Act
             await new AppController({
-                leaderBoardService: { postScore: scorePost => receivedScorePost = scorePost }
+                leaderBoardService: {
+                    postScore: scorePost => { receivedScorePost = scorePost; return Promise.resolve(); },
+                    get: () => Promise.resolve(receivedScorePost ? updatedScoreBoard : null)
+                },
+                setState: state => receivedState = state
             }).postScore({ username: "stewie", score: 100 });
 
             //Assert
@@ -19,6 +25,7 @@ describe("App Controller", () => {
                 username: "stewie",
                 score: 100
             });
+            expect(receivedState).toEqual({ scoreBoard: updatedScoreBoard });
         });
 
         it("should not post the users score when there is no user name", async () => {
