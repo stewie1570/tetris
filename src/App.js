@@ -64,7 +64,7 @@ class App extends Component {
                                     runningText="Posting Your Score..."
                                     onClick={({ target }) => target.blur() || this
                                         .prompt
-                                        .ask({ message: "What is your user name?" })
+                                        .ask({ message: "What user name would you like?" })
                                         .then(username => this
                                             .controller
                                             .postScore({
