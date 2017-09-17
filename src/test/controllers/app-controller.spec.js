@@ -4,6 +4,57 @@ import { AppController } from '../../controllers/app-controller'
 const noOp = () => undefined;
 
 describe("App Controller", () => {
+    describe("Post Score", () => {
+        it("should post the users score", async () => {
+            //Arrange
+            var receivedScorePost = null;
+
+            //Act
+            await new AppController({
+                leaderBoardService: { postScore: scorePost => receivedScorePost = scorePost }
+            }).postScore({ username: "stewie", score: 100 });
+
+            //Assert
+            expect(receivedScorePost).toEqual({
+                username: "stewie",
+                score: 100
+            });
+        });
+
+        it("should not post the users score when there is no user name", async () => {
+            //Arrange
+            var receivedScorePost = null;
+
+            //Act
+            await new AppController({
+                leaderBoardService: { postScore: scorePost => receivedScorePost = scorePost }
+            }).postScore({ username: "", score: 100 });
+
+            //Assert
+            expect(receivedScorePost).toBe(null);
+        });
+
+        it("should bubble errors thrown from the service", async () => {
+            //Arrange
+            var receivedScorePost = null;
+            var expectedError = new Error();
+            var thrownError = null;
+
+            //Act
+            try {
+                await new AppController({
+                    leaderBoardService: { postScore: () => Promise.reject(expectedError) }
+                }).postScore({ username: "stewie", score: 100 });
+            }
+            catch (error) {
+                thrownError = error;
+            }
+
+            //Assert
+            expect(thrownError).toBe(expectedError);
+        });
+    });
+
     describe("Pause", () => {
         it("should pause the game", () => {
             //Arrange

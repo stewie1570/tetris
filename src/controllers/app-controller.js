@@ -6,6 +6,10 @@ export class AppController {
         this.leaderBoardService = props.leaderBoardService;
     }
 
+    async postScore({ username, score }) {
+        return username && await this.leaderBoardService.postScore({ username, score });
+    }
+
     async pause({ isPaused }) {
         var loadLeaderBoard = async () => {
             try {
