@@ -55,7 +55,7 @@ class App extends Component {
                     <div className="controls">
                         <CommandButton
                             className="btn btn-primary"
-                            runningText={this.state.paused ? "Continue" : "Pause"}
+                            runningText="Loading Score Board..."
                             onClick={({ target }) => target.blur() || this.controller.pause({ isPaused: this.state.paused })}>
                             {this.state.paused ? "Continue" : "Pause"}
                         </CommandButton>
