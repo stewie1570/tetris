@@ -27,12 +27,6 @@ namespace Tetris
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            config.Filters.Add(new HandleErrorFilter
-            {
-                ExceptionType = typeof(Exception),
-                StatusCode = HttpStatusCode.InternalServerError,
-                Message = "Generalized exception message"
-            });
 
             config.Filters.Add(new HandleErrorFilter
             {
@@ -40,6 +34,12 @@ namespace Tetris
                 StatusCode = HttpStatusCode.BadRequest
             });
 
+            config.Filters.Add(new HandleErrorFilter
+            {
+                ExceptionType = typeof(Exception),
+                StatusCode = HttpStatusCode.InternalServerError,
+                Message = "I'm sorry, an un-expected error has occurred."
+            });
         }
     }
 }

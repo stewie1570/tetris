@@ -13,7 +13,7 @@ namespace Tetris.ErrorHandling
 
         public override void OnException(HttpActionExecutedContext context)
         {
-            if (context.Exception.GetType().IsAssignableFrom(ExceptionType))
+            if (ExceptionType.IsAssignableFrom(context.Exception.GetType()))
             {
                 context.Response = new HttpResponseMessage
                 {
