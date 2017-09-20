@@ -75,7 +75,7 @@ namespace Tetris.App_Start
             kernel.Bind<IRandonNumberGenerator>().To<RandomNumberGenerator>();
             kernel.Bind<ILeaderBoardProvider>().ToMethod(ctx => new RandomizedLeaderBoardProvider(
                 randomNumberGenerator: kernel.Get<IRandonNumberGenerator>(),
-                config: new RandomUserProviderConfiguration { MinScore = 0, MaxScore = 100 },
+                config: new RandomUserProviderConfiguration { MinScore = 0, MaxScore = 120 },
                 getNames: () => Task.FromResult(BotUsernames.Get())));
             kernel.Bind<ILeaderBoardUpdater>().To<InMemoryLeaderBoardUpdater>();
             kernel
