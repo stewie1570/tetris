@@ -43,18 +43,40 @@ namespace Tetris.Domain.Tests.LeaderBoard
         public async Task DoesNotAddScoreForUserThatExistsWithSameOrHigherScore()
         {
             //Arrange
-            var userScore = new UserScore { Score = 10, Username = "Stewie " };
-            await leaderBoardUpdater.Add(userScore);
+            leaderBoard.UserScores = new List<UserScore> { new UserScore { Score = 10, Username = "stewie" } };
 
             //Act
             //Assert
-            ((Func<Task>)(async () => await leaderBoardUpdater.Add(new UserScore { Score = 10, Username = "stewie" })))
+            ((Func<Task>)(async () => await leaderBoardUpdater.Add(new UserScore { Score = 10, Username = "Stewie" })))
                 .ShouldThrow<ValidationException>()
                 .WithMessage("Stewie already has a score equal to or greater than 10.");
 
             leaderBoard.UserScores.ShouldBeEquivalentTo(new List<UserScore>
             {
-                new UserScore { Score = 10, Username = "Stewie" }
+                new UserScore { Score = 10, Username = "stewie" }
+            });
+        }
+
+        [TestMethod]
+        public async Task ReplacesOldLowerScoreWithNewHigherScore()
+        {
+            //Arrange
+            leaderBoard.UserScores = new List<UserScore>
+            {
+                new UserScore { Score = 9, Username = "John" },
+                new UserScore { Score = 10, Username = "Stewie" },
+                new UserScore { Score = 12, Username = "Max" }
+            };
+
+            //Act
+            //Assert
+            await leaderBoardUpdater.Add(new UserScore { Score = 18, Username = "stewie" });
+
+            leaderBoard.UserScores.ShouldBeEquivalentTo(new List<UserScore>
+            {
+                new UserScore { Score = 9, Username = "John" },
+                new UserScore { Score = 18, Username = "stewie" },
+                new UserScore { Score = 12, Username = "Max" }
             });
         }
     }

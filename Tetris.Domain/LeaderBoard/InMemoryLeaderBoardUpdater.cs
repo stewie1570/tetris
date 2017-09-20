@@ -34,8 +34,8 @@ namespace Tetris.Domain.LeaderBoard
             if(firstRepeat != null)
                 throw new ValidationException($"{firstRepeat.Username} already has a score equal to or greater than {userScore.Score}.");
 
-            leaderBoard.UserScores = leaderBoard
-                .UserScores
+            leaderBoard.UserScores = (leaderBoard.UserScores ?? new List<UserScore>())
+                .Where(currentUserScore => currentUserScore.Username.ToLower() != trimmedUserScore.Username.ToLower())
                 .Concat(trimmedUserScore)
                 .ToList();
         }
