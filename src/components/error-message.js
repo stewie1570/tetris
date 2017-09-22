@@ -9,7 +9,15 @@ export class ErrorMessage extends React.Component {
     }
 
     componentWillMount() {
-        window.onerror = errorMessage => this.setState({ visible: true, errorMessage })
+        window.onerror = errorMessage => this.setState({ visible: true, errorMessage });
+        var windowClick = ({target}) => !this.errorContainer.contains(target) && this.hide();
+        window.addEventListener("click", windowClick);
+        window.addEventListener("touchstart", windowClick);
+    }
+
+    componentWillUnmount(){
+        window.removeEventListener("click");
+        window.removeEventListener("touchstart");
     }
 
     hide() {
@@ -19,6 +27,7 @@ export class ErrorMessage extends React.Component {
     render() {
         return <div
             className="error-container"
+            ref={ref => this.errorContainer = ref}
             style={{ display: this.state.visible ? 'block' : 'none' }}>
             <div className="hide-container">
                 <span
