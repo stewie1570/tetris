@@ -10,12 +10,12 @@ export class ErrorMessage extends React.Component {
 
     componentWillMount() {
         window.onerror = errorMessage => this.setState({ visible: true, errorMessage });
-        var windowClick = ({target}) => !this.errorContainer.contains(target) && this.hide();
+        var windowClick = ({ target }) => !this.errorContainer.contains(target) && this.hide();
         window.addEventListener("click", windowClick);
         window.addEventListener("touchstart", windowClick);
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         window.removeEventListener("click");
         window.removeEventListener("touchstart");
     }
