@@ -3,8 +3,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 <body>
-    @Styles.Render("~/Content/app.css")
+    @Styles.Render($"~/Content/app.css?{ApplicationInstanceIdProvider.Current}")
     <div id="root" />
-    @Scripts.Render("~/Scripts/app.js")
+    @Scripts.Render($"~/Scripts/app.js?{ApplicationInstanceIdProvider.Current}")
 </body>
 </html>
