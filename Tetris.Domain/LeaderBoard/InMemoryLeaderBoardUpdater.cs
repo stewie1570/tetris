@@ -10,6 +10,7 @@ namespace Tetris.Domain.LeaderBoard
 {
     public class InMemoryLeaderBoardUpdater : ILeaderBoardUpdater
     {
+        private const int maxUsernameLength = 20;
         private Task<Models.LeaderBoard> getLeaderBoard;
 
         public InMemoryLeaderBoardUpdater(Task<Models.LeaderBoard> getLeaderBoard)
@@ -19,11 +20,11 @@ namespace Tetris.Domain.LeaderBoard
 
         public async Task Add(UserScore userScore)
         {
-            var trimmedUserScore = new UserScore
-            {
-                Username = userScore.Username.Trim(),
-                Score = userScore.Score
-            };
+            var trimmedUserScore = new UserScore { Username = userScore.Username.Trim(), Score = userScore.Score };
+
+            if (trimmedUserScore.Username.Length > maxUsernameLength)
+                throw new ValidationException($"Username length must not be over {maxUsernameLength}.");
+
             var leaderBoard = await getLeaderBoard;
 
             var firstRepeat = (leaderBoard.UserScores ?? new List<UserScore>())
