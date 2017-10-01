@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { TetrisBoard } from './tetris-board'
 import { tetrisBoard } from '../domain/serialization'
-import { clickToKeyPress, isControl } from '../domain/mobile-click-to-keypress'
 import { move, rotate } from '../domain/motion'
 import { iterate, iterateUntilInactive } from '../domain/iteration'
 import { keys } from '../core/constants'
@@ -81,22 +80,11 @@ export class TetrisGame extends Component {
 
     componentWillMount() {
         document.addEventListener("keydown", this.keyPress.bind(this), false);
-        document.addEventListener("touchstart",
-            ({ changedTouches, target }) =>
-                !isControl({ target }) && this.keyPress({
-                    keyCode: clickToKeyPress({
-                        x: changedTouches[0].pageX,
-                        y: changedTouches[0].pageY
-                    }
-                    )
-                }),
-            false);
         this.resetTimer();
     }
 
     componentWillUnmount() {
         document.removeEventListener("keydown");
-        document.removeEventListener("touchstart");
     }
 
     resetTimer() {
