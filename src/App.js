@@ -12,7 +12,13 @@ class App extends Component {
     constructor() {
         super();
 
-        this.state = { currentScore: 0, oldScore: undefined, paused: false };
+        this.state = {
+            currentScore: 0,
+            oldScore: undefined,
+            paused: false,
+            mobile: false
+        };
+
         this.controller = new AppController({
             setState: this.setState.bind(this),
             leaderBoardService
@@ -25,7 +31,7 @@ class App extends Component {
         return (
             <div>
                 <center>
-                    <div className="app well">
+                    <div className="well app">
                         <p>
                             {`Score: ${this.state.currentScore}` + (this.state.oldScore ? ` (Previous: ${this.state.oldScore})` : '')}
                         </p>
@@ -33,7 +39,8 @@ class App extends Component {
                             <TetrisGame
                                 onScoreChange={currentScore => this.setState({ currentScore })}
                                 onGameOver={oldScore => this.setState({ oldScore, currentScore: 0 })}
-                                paused={this.state.paused} />
+                                paused={this.state.paused}
+                                mobile={this.state.mobile} />
                             {
                                 this.state.scoreBoard && <div
                                     className="leader-board"
@@ -62,19 +69,19 @@ class App extends Component {
                                 allowScorePost && <div className="post-my-score">
                                     Would you like to post your score?
                                 <CommandButton
-                                        className="btn btn-primary post-my-score-button"
-                                        runningText="Posting Your Score..."
-                                        onClick={({ target }) => target.blur() || this
-                                            .prompt
-                                            .ask({ message: "What user name would you like?" })
-                                            .then(username => this
-                                                .controller
-                                                .postScore({
-                                                    username,
-                                                    score: this.state.currentScore
-                                                }))
-                                        }>
-                                        Post My Score ({this.state.currentScore})
+                                    className="btn btn-primary post-my-score-button"
+                                    runningText="Posting Your Score..."
+                                    onClick={({ target }) => target.blur() || this
+                                        .prompt
+                                        .ask({ message: "What user name would you like?" })
+                                        .then(username => this
+                                            .controller
+                                            .postScore({
+                                                username,
+                                                score: this.state.currentScore
+                                            }))
+                                    }>
+                                    Post My Score ({this.state.currentScore})
                                 </CommandButton>
                                 </div>
                             }
@@ -86,6 +93,14 @@ class App extends Component {
                                 onClick={({ target }) => target.blur() || this.controller.pause({ isPaused: this.state.paused })}>
                                 {this.state.paused ? "Continue" : "Pause"}
                             </CommandButton>
+                            {this.state.paused || <div>
+                                <p />
+                                <CommandButton
+                                    className="btn btn-primary"
+                                    onClick={({ target }) => target.blur() || this.setState({ mobile: !this.state.mobile })}>
+                                    {this.state.mobile ? "No Mobile Controls" : "Mobile Controls"}
+                                </CommandButton>
+                            </div>}
                         </div>
                     </div>
                     <PromptDialog ref={ref => this.prompt = ref} />

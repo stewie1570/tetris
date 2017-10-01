@@ -5,6 +5,7 @@ import { clickToKeyPress, isControl } from '../domain/mobile-click-to-keypress'
 import { move, rotate } from '../domain/motion'
 import { iterate, iterateUntilInactive } from '../domain/iteration'
 import { keys } from '../core/constants'
+import { MobileControls } from './mobile-controls'
 
 var randomNumberGenerator = {
     between: ({ min, max }) => Math.floor(Math.random() * (max + 1)) + min
@@ -132,6 +133,9 @@ export class TetrisGame extends Component {
     }
 
     render() {
-        return (<TetrisBoard board={this.state.board} />);
+        return <div>
+            {!this.props.paused && this.props.mobile && <MobileControls onClick={keyCode => this.keyPress({keyCode})} />}
+            <TetrisBoard board={this.state.board} />
+        </div>;
     }
 }
