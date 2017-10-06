@@ -93,14 +93,15 @@ class App extends Component {
                                 onClick={({ target }) => target.blur() || this.controller.pause({ isPaused: this.state.paused })}>
                                 {this.state.paused ? "Continue" : "Pause"}
                             </CommandButton>
-                            {this.state.paused || <div>
+                            <div>
                                 <p />
                                 <CommandButton
                                     className="btn btn-primary"
-                                    onClick={({ target }) => target.blur() || this.setState({ mobile: !this.state.mobile })}>
+                                    onClick={({ target }) => target.blur() || this.setState({ mobile: !this.state.mobile })}
+                                    disabled={this.state.paused}>
                                     {this.state.mobile ? "No Mobile Controls" : "Mobile Controls"}
                                 </CommandButton>
-                            </div>}
+                            </div>
                         </div>
                     </div>
                     <PromptDialog ref={ref => this.prompt = ref} />

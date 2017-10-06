@@ -24,11 +24,11 @@ export class CommandButton extends React.Component {
     }
 
     render() {
-        const { runningText, ...otherProps } = this.props;
+        const { runningText, disabled, ...otherProps } = this.props;
 
         return <button {...otherProps}
             onClick={this.onClick.bind(this)}
-            disabled={this.state.running}>
+            disabled={disabled || this.state.running}>
             {this.state.running ? runningText : this.props.children}
         </button>;
     }

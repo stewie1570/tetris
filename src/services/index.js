@@ -20,6 +20,7 @@ var leaderBoardServiceStub = {
     postScore: ({ username, score }) => console.log(`User ${username} posted score: ${score}`) || wait()
 };
 
-var isDev = window.location && window.location.port && window.location.port.toString() === "3000";
+var port = window.location && window.location.port && window.location.port.toString();
+var isDev = port === "3000" || port === "8080";
 
 export var leaderBoardService = isDev ? leaderBoardServiceStub : leaderBoardRestService;
