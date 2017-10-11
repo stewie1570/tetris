@@ -57,10 +57,7 @@ namespace Tetris.Domain.Tests.LeaderBoard
                 .ShouldThrow<ValidationException>()
                 .WithMessage("Stewie already has a score equal to or greater than 10.");
 
-            leaderBoard.UserScores.ShouldBeEquivalentTo(new List<UserScore>
-            {
-                new UserScore { Score = 10, Username = "stewie" }
-            });
+            scoreBoardStorage.Received(0).Add(Arg.Any<UserScore>());
         }
 
         [TestMethod]
@@ -75,10 +72,7 @@ namespace Tetris.Domain.Tests.LeaderBoard
                 .ShouldThrow<ValidationException>()
                 .WithMessage("Username length must not be over 20.");
 
-            leaderBoard.UserScores.ShouldBeEquivalentTo(new List<UserScore>
-            {
-                new UserScore { Score = 10, Username = "stewie" }
-            });
+            scoreBoardStorage.Received(0).Add(Arg.Any<UserScore>());
         }
     }
 }
