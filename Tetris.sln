@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetris.Domain.Tests", "Tetr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetris.Core.Tests", "Tetris.Core.Tests\Tetris.Core.Tests.csproj", "{3BF9AF7E-45A6-4130-B7BA-EB0346D6A196}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetris.Storage", "Tetris.Storage\Tetris.Storage.csproj", "{9D46BEBD-EB43-4247-8946-6CD219171D43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetris.Storage.Tests", "Tetris.Storage.Tests\Tetris.Storage.Tests.csproj", "{E3D98FA6-CF68-48D8-A655-02A70077C7C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{3BF9AF7E-45A6-4130-B7BA-EB0346D6A196}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BF9AF7E-45A6-4130-B7BA-EB0346D6A196}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BF9AF7E-45A6-4130-B7BA-EB0346D6A196}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D46BEBD-EB43-4247-8946-6CD219171D43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D46BEBD-EB43-4247-8946-6CD219171D43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D46BEBD-EB43-4247-8946-6CD219171D43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D46BEBD-EB43-4247-8946-6CD219171D43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3D98FA6-CF68-48D8-A655-02A70077C7C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3D98FA6-CF68-48D8-A655-02A70077C7C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3D98FA6-CF68-48D8-A655-02A70077C7C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3D98FA6-CF68-48D8-A655-02A70077C7C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

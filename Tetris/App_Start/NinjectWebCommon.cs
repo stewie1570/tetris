@@ -14,6 +14,7 @@ namespace Tetris.App_Start
     using System;
     using System.Threading.Tasks;
     using System.Web;
+    using Storage;
 
     public static class NinjectWebCommon 
     {
@@ -73,6 +74,7 @@ namespace Tetris.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<IRandonNumberGenerator>().To<RandomNumberGenerator>();
+            kernel.Bind<IScoreBoardStorage>().To<InMemoryScoreBoard>();
             kernel.Bind<ILeaderBoardProvider>().ToMethod(ctx => new RandomizedLeaderBoardProvider(
                 randomNumberGenerator: kernel.Get<IRandonNumberGenerator>(),
                 config: new RandomUserProviderConfiguration { MinScore = 0, MaxScore = 120 },

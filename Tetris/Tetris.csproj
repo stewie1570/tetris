@@ -253,6 +253,10 @@
       <Project>{47e9d981-5f97-4c8d-814f-e0911a421b16}</Project>
       <Name>Tetris.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Tetris.Storage\Tetris.Storage.csproj">
+      <Project>{9D46BEBD-EB43-4247-8946-6CD219171D43}</Project>
+      <Name>Tetris.Storage</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

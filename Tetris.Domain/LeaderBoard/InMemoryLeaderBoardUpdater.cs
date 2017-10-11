@@ -12,9 +12,13 @@ namespace Tetris.Domain.LeaderBoard
     {
         private const int maxUsernameLength = 20;
         private Task<Models.LeaderBoard> getLeaderBoard;
+        private IScoreBoardStorage scoreBoardStorage;
 
-        public InMemoryLeaderBoardUpdater(Task<Models.LeaderBoard> getLeaderBoard)
+        public InMemoryLeaderBoardUpdater(
+            IScoreBoardStorage scoreBoardStorage,
+            Task<Models.LeaderBoard> getLeaderBoard)
         {
+            this.scoreBoardStorage = scoreBoardStorage;
             this.getLeaderBoard = getLeaderBoard;
         }
 
@@ -35,10 +39,7 @@ namespace Tetris.Domain.LeaderBoard
             if(firstRepeat != null)
                 throw new ValidationException($"{firstRepeat.Username} already has a score equal to or greater than {userScore.Score}.");
 
-            leaderBoard.UserScores = (leaderBoard.UserScores ?? new List<UserScore>())
-                .Where(currentUserScore => currentUserScore.Username.ToLower() != trimmedUserScore.Username.ToLower())
-                .Concat(trimmedUserScore)
-                .ToList();
+            await scoreBoardStorage.Add(trimmedUserScore);
         }
     }
 }

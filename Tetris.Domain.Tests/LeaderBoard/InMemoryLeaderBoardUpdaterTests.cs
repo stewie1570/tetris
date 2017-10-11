@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,13 +15,17 @@ namespace Tetris.Domain.Tests.LeaderBoard
     public class InMemoryLeaderBoardUpdaterTests
     {
         ILeaderBoardUpdater leaderBoardUpdater;
+        IScoreBoardStorage scoreBoardStorage;
         Models.LeaderBoard leaderBoard;
 
         [TestInitialize]
         public void Setup()
         {
             leaderBoard = new Models.LeaderBoard();
-            leaderBoardUpdater = new InMemoryLeaderBoardUpdater(Task.FromResult(leaderBoard));
+            scoreBoardStorage = Substitute.For<IScoreBoardStorage>();
+            leaderBoardUpdater = new InMemoryLeaderBoardUpdater(
+                scoreBoardStorage,
+                getLeaderBoard: Task.FromResult(leaderBoard));
         }
 
         [TestMethod]
@@ -28,15 +33,16 @@ namespace Tetris.Domain.Tests.LeaderBoard
         {
             //Arrange
             var userScore = new UserScore { Score = 10, Username = "Stewie                                         " };
+            UserScore receivedUserScore = null;
+            scoreBoardStorage
+                .When(storage => storage.Add(Arg.Any<UserScore>()))
+                .Do(ci => receivedUserScore = ci.Arg<UserScore>());
 
             //Act
             await leaderBoardUpdater.Add(userScore);
 
             //Assert
-            leaderBoard.UserScores.ShouldBeEquivalentTo(new List<UserScore>
-            {
-                 new UserScore { Score = 10, Username = "Stewie" }
-            });
+            receivedUserScore.ShouldBeEquivalentTo(new UserScore { Score = 10, Username = "Stewie" });
         }
 
         [TestMethod]
@@ -72,29 +78,6 @@ namespace Tetris.Domain.Tests.LeaderBoard
             leaderBoard.UserScores.ShouldBeEquivalentTo(new List<UserScore>
             {
                 new UserScore { Score = 10, Username = "stewie" }
-            });
-        }
-
-        [TestMethod]
-        public async Task ReplacesOldLowerScoreWithNewHigherScore()
-        {
-            //Arrange
-            leaderBoard.UserScores = new List<UserScore>
-            {
-                new UserScore { Score = 9, Username = "John" },
-                new UserScore { Score = 10, Username = "Stewie" },
-                new UserScore { Score = 12, Username = "Max" }
-            };
-
-            //Act
-            //Assert
-            await leaderBoardUpdater.Add(new UserScore { Score = 18, Username = "stewie" });
-
-            leaderBoard.UserScores.ShouldBeEquivalentTo(new List<UserScore>
-            {
-                new UserScore { Score = 9, Username = "John" },
-                new UserScore { Score = 18, Username = "stewie" },
-                new UserScore { Score = 12, Username = "Max" }
             });
         }
     }
