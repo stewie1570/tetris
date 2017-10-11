@@ -8,13 +8,13 @@ using Tetris.Domain.Models;
 
 namespace Tetris.Domain.LeaderBoard
 {
-    public class InMemoryLeaderBoardUpdater : ILeaderBoardUpdater
+    public class LeaderBoardUpdater : ILeaderBoardUpdater
     {
         private const int maxUsernameLength = 20;
         private Task<Models.LeaderBoard> getLeaderBoard;
         private IScoreBoardStorage scoreBoardStorage;
 
-        public InMemoryLeaderBoardUpdater(
+        public LeaderBoardUpdater(
             IScoreBoardStorage scoreBoardStorage,
             Task<Models.LeaderBoard> getLeaderBoard)
         {

@@ -12,7 +12,7 @@ using Tetris.Domain.Models;
 namespace Tetris.Domain.Tests.LeaderBoard
 {
     [TestClass]
-    public class InMemoryLeaderBoardUpdaterTests
+    public class LeaderBoardUpdaterTests
     {
         ILeaderBoardUpdater leaderBoardUpdater;
         IScoreBoardStorage scoreBoardStorage;
@@ -23,7 +23,7 @@ namespace Tetris.Domain.Tests.LeaderBoard
         {
             leaderBoard = new Models.LeaderBoard();
             scoreBoardStorage = Substitute.For<IScoreBoardStorage>();
-            leaderBoardUpdater = new InMemoryLeaderBoardUpdater(
+            leaderBoardUpdater = new LeaderBoardUpdater(
                 scoreBoardStorage,
                 getLeaderBoard: Task.FromResult(leaderBoard));
         }

@@ -45,7 +45,7 @@
     <Compile Include="Interfaces\IRandonNumberGenerator.cs" />
     <Compile Include="Interfaces\IScoreBoardStorage.cs" />
     <Compile Include="Models\LeaderBoard.cs" />
-    <Compile Include="LeaderBoard\InMemoryLeaderBoardUpdater.cs" />
+    <Compile Include="LeaderBoard\LeaderBoardUpdater.cs" />
     <Compile Include="LeaderBoard\RandomizedLeaderBoardProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\UserScore.cs" />
