@@ -26,7 +26,8 @@ class App extends Component {
     }
 
     render() {
-        var allowScorePost = this.state.paused && !!this.state.currentScore;
+        var postableScore = this.state.currentScore || this.state.oldScore
+        var allowScorePost = this.state.paused && !!postableScore;
 
         return (
             <div>
@@ -78,10 +79,10 @@ class App extends Component {
                                             .controller
                                             .postScore({
                                                 username,
-                                                score: this.state.currentScore
+                                                score: postableScore
                                             }))
                                     }>
-                                    Post My Score ({this.state.currentScore})
+                                    Post My Score ({postableScore})
                                 </CommandButton>
                                 </div>
                             }
