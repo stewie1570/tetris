@@ -70,19 +70,22 @@ class App extends Component {
                                 allowScorePost && <div className="post-my-score">
                                     Would you like to post your score?
                                 <CommandButton
-                                    className="btn btn-primary post-my-score-button"
-                                    runningText="Posting Your Score..."
-                                    onClick={({ target }) => target.blur() || this
-                                        .prompt
-                                        .ask({ message: "What user name would you like?" })
-                                        .then(username => this
-                                            .controller
-                                            .postScore({
-                                                username,
-                                                score: postableScore
-                                            }))
-                                    }>
-                                    Post My Score ({postableScore})
+                                        className="btn btn-primary post-my-score-button"
+                                        runningText="Posting Your Score..."
+                                        onClick={({ target }) => target.blur() || this
+                                            .prompt
+                                            .ask({ message: "What user name would you like?" })
+                                            .then(username => this
+                                                .controller
+                                                .postScore({
+                                                    username,
+                                                    score: postableScore
+                                                }))
+                                        }>
+                                        <span className="glyphicon glyphicon-send">
+                                            &nbsp;
+                                        </span>
+                                        Post My Score ({postableScore})
                                 </CommandButton>
                                 </div>
                             }
@@ -92,7 +95,10 @@ class App extends Component {
                                 className="btn btn-primary"
                                 runningText="Loading Score Board..."
                                 onClick={({ target }) => target.blur() || this.controller.pause({ isPaused: this.state.paused })}>
-                                {this.state.paused ? "Continue" : "Pause"}
+                                <span className={`glyphicon glyphicon-${this.state.paused ? "play" : "pause"}`}>
+                                    &nbsp;
+                                </span>
+                                <span>{this.state.paused ? "Continue" : "Pause"}</span>
                             </CommandButton>
                             <div>
                                 <p />

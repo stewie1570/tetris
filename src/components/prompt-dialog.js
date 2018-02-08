@@ -38,12 +38,18 @@ export class PromptDialog extends React.Component {
                 <CommandButton
                     className="btn btn-primary space-top-right"
                     onClick={() => this.userRespondedWith(null)}>
+                    <span className="glyphicon glyphicon-remove">
+                        &nbsp;
+                    </span>
                     Cancel
                 </CommandButton>
                 <CommandButton
                     className="btn btn-primary space-top-right"
                     onClick={() => this.userRespondedWith(this.state.userInput)}
                     ref={ref => this.okButton = ref}>
+                    <span className="glyphicon glyphicon-ok">
+                        &nbsp;
+                    </span>
                     Ok
                 </CommandButton>
             </div>
