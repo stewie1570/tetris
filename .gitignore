@@ -23,6 +23,7 @@ yarn-error.log*
 ## Client-side build output
 /Tetris/Scripts/*
 /Tetris/Content/*
+/Tetris/static/*
 !/Tetris/Scripts/.gitkeep
 !/Tetris/Content/.gitkeep
 
