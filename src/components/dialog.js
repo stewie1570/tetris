@@ -8,18 +8,14 @@ export class Dialog extends React.Component {
         this.state = { visible: props.visible };
     }
 
-    hide() {
-        this.setState({ visible: false });
-    }
+    hide = () => this.setState({ visible: false });
 
-    exit() {
+    exit = () => {
         this.props.onExit && this.props.onExit();
         this.hide();
     }
 
-    show() {
-        this.setState({ visible: true });
-    }
+    show = () => this.setState({ visible: true });
 
     render() {
         return this.state.visible
@@ -30,7 +26,7 @@ export class Dialog extends React.Component {
                     <div className="dialog-hide-container">
                         <span
                             className="dialog-hide-text"
-                            onClick={this.exit.bind(this)}>
+                            onClick={this.exit}>
                             X
                     </span>
                     </div>

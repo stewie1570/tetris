@@ -20,9 +20,7 @@ export class ErrorMessage extends React.Component {
         window.removeEventListener("touchstart");
     }
 
-    hide() {
-        this.setState({ visible: false });
-    }
+    hide = () => this.setState({ visible: false });
 
     render() {
         return <div
@@ -32,7 +30,7 @@ export class ErrorMessage extends React.Component {
             <div className="hide-container">
                 <span
                     className="hide-text"
-                    onClick={this.hide.bind(this)}>
+                    onClick={this.hide}>
                     X
                 </span>
             </div>

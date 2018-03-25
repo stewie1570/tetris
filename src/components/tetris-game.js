@@ -79,7 +79,7 @@ export class TetrisGame extends Component {
     }
 
     componentWillMount() {
-        document.addEventListener("keydown", this.keyPress.bind(this), false);
+        document.addEventListener("keydown", this.keyPress, false);
         this.resetTimer();
     }
 
@@ -87,9 +87,9 @@ export class TetrisGame extends Component {
         document.removeEventListener("keydown");
     }
 
-    resetTimer() {
+    resetTimer = () => {
         this.timer && clearTimeout(this.timer);
-        this.timer = setTimeout(this.resetTimer.bind(this), 1000);
+        this.timer = setTimeout(this.resetTimer, 1000);
 
         if (!this.props.paused) {
             var { board, score } = this.state;
@@ -105,7 +105,7 @@ export class TetrisGame extends Component {
         }
     }
 
-    keyPress({ keyCode }) {
+    keyPress = ({ keyCode }) => {
         var processKeyCommand = ({ keyCode }) => {
             var { board } = this.state;
             var newBoard = keyCode === keys.left ? move({ board, to: { x: -1 } })

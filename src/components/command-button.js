@@ -6,7 +6,7 @@ export class CommandButton extends React.Component {
         this.state = { running: false };
     }
 
-    onClick(source) {
+    onClick = source => {
         this.setState({ running: true });
         var notRunning = () => this.setState({ running: false });
         try {
@@ -27,7 +27,7 @@ export class CommandButton extends React.Component {
         const { runningText, disabled, ...otherProps } = this.props;
 
         return <button {...otherProps}
-            onClick={this.onClick.bind(this)}
+            onClick={this.onClick}
             disabled={disabled || this.state.running}>
             {this.state.running ? runningText : this.props.children}
         </button>;
