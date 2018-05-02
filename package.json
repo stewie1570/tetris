@@ -10,7 +10,7 @@
     "react-dom": "^15.6.2"
   },
   "devDependencies": {
-    "react-scripts": "1.0.7"
+    "react-scripts": "1.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
