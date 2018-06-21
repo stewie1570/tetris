@@ -19,19 +19,18 @@ export class Dialog extends React.Component {
 
     render() {
         return this.state.visible
-            ? <div className="dialog">
+            ? <div className="modal" style={{ display: "block" }} role="dialog">
                 <div className="dialog-shade" />
-                <div
-                    className="dialog-container well">
-                    <div className="dialog-hide-container">
-                        <span
-                            className="dialog-hide-text"
-                            onClick={this.exit}>
-                            X
-                    </span>
-                    </div>
-                    <div className="dialog-content">
-                        {this.props.children}
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <button type="button" onClick={this.exit} className="close" aria-label="Close">
+                                <span>&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            {this.props.children}
+                        </div>
                     </div>
                 </div>
             </div>
