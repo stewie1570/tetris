@@ -3,6 +3,7 @@ import { ErrorMessage } from './components/error-message'
 import { CommandButton } from './components/command-button'
 import { TetrisGame } from './components/tetris-game'
 import { PromptDialog } from './components/prompt-dialog'
+import { AggregateUserNameProvider } from './domain/aggregate-username-provider'
 import { AppController } from './controllers/app-controller'
 import { leaderBoardService } from './services'
 import { loading } from './core/constants'
@@ -18,6 +19,21 @@ class App extends Component {
             paused: false,
             mobile: false
         };
+
+        this.userNameProvider = async () => await new AggregateUserNameProvider({
+            underlyingProviders: [
+                () => this.state.username,
+                async () => {
+                    const username = await this
+                        .prompt
+                        .ask({ message: <div>What user name would you like?<br /></div> });
+                    
+                        this.setState({ username });
+
+                    return username;
+                }
+            ]
+        }).get();
 
         this.controller = new AppController({
             setState: this.setState.bind(this),
@@ -72,15 +88,12 @@ class App extends Component {
                                 <CommandButton
                                         className="btn btn-primary post-my-score-button"
                                         runningText="Posting Your Score..."
-                                        onClick={({ target }) => target.blur() || this
-                                            .prompt
-                                            .ask({ message: <div>What user name would you like?<br /></div> })
-                                            .then(username => this
-                                                .controller
-                                                .postScore({
-                                                    username,
-                                                    score: postableScore
-                                                }))
+                                        onClick={async ({ target }) => target.blur() || this
+                                            .controller
+                                            .postScore({
+                                                username: await this.userNameProvider(),
+                                                score: postableScore
+                                            })
                                         }>
                                         <span className="glyphicon glyphicon-send">
                                             &nbsp;
