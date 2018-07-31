@@ -9,15 +9,12 @@ import { leaderBoardService } from './services'
 import { loading } from './core/constants'
 import './App.css';
 
-class App extends Component {
+class SinglePlayerGame extends Component {
     constructor() {
         super();
 
         this.state = {
-            currentScore: 0,
-            oldScore: undefined,
-            paused: false,
-            mobile: false
+            game: {}
         };
 
         this.userNameProvider = async () => await new AggregateUserNameProvider({
@@ -27,8 +24,8 @@ class App extends Component {
                     const username = await this
                         .prompt
                         .ask({ message: <div>What user name would you like?<br /></div> });
-                    
-                        this.setState({ username });
+
+                    this.setState({ username });
 
                     return username;
                 }
@@ -42,7 +39,7 @@ class App extends Component {
     }
 
     render() {
-        var postableScore = this.state.currentScore || this.state.oldScore
+        var postableScore = this.state.game.score || this.state.game.oldScore
         var allowScorePost = this.state.paused && !!postableScore;
 
         return (
@@ -50,14 +47,13 @@ class App extends Component {
                 <center>
                     <div className="well app">
                         <p>
-                            {`Score: ${this.state.currentScore}` + (this.state.oldScore ? ` (Previous: ${this.state.oldScore})` : '')}
+                            {`Score: ${this.state.game.score}` + (this.state.game.oldScore ? ` (Previous: ${this.state.game.oldScore})` : '')}
                         </p>
                         <div className="game">
                             <TetrisGame
-                                onScoreChange={currentScore => this.setState({ currentScore })}
-                                onGameOver={oldScore => this.setState({ oldScore, currentScore: 0 })}
+                                {...this.state.game}
                                 paused={this.state.paused}
-                                mobile={this.state.mobile} />
+                                onChange={game => this.setState({ game })} />
                             {
                                 this.state.scoreBoard && <div
                                     className="leader-board"
@@ -117,9 +113,10 @@ class App extends Component {
                                 <p />
                                 <CommandButton
                                     className="btn btn-primary"
-                                    onClick={({ target }) => target.blur() || this.setState({ mobile: !this.state.mobile })}
+                                    onClick={({ target }) => target.blur()
+                                        || this.setState(({ game }) => ({ game: { ...game, mobile: !game.mobile } }))}
                                     disabled={this.state.paused}>
-                                    {this.state.mobile ? "No Mobile Controls" : "Mobile Controls"}
+                                    {this.state.game.mobile ? "No Mobile Controls" : "Mobile Controls"}
                                 </CommandButton>
                             </div>
                         </div>
@@ -132,4 +129,4 @@ class App extends Component {
     }
 }
 
-export default App;
+export default SinglePlayerGame;
