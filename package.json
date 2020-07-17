@@ -6,22 +6,21 @@
     "bootstrap-css-only": "^3.3.7",
     "jquery": "^3.3.1",
     "lodash": "^4.17.10",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1"
+    "react": "16.12.0",
+    "react-dom": "16.12.0"
   },
   "devDependencies": {
     "react-scripts": "1.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && npm run copyJSBuild && npm run copyCSSBuild && npm run copyMedia",
-    "builddev": "react-scripts build && npm run copyJSBuild && npm run copySourceMaps && npm run copyCSSBuild && npm run copyMedia",
-    "copyJSBuild": "copy .\\build\\static\\js\\main.*.js .\\Tetris\\Scripts\\app.js",
-    "copyCSSBuild": "copy .\\build\\static\\css\\main.*.css .\\Tetris\\Content\\app.css",
-    "copySourceMaps": "del .\\Tetris\\Scripts\\*.*.map && copy .\\build\\static\\js\\main.*.js.map .\\Tetris\\Scripts\\main.*.map",
-    "copyMedia": "xcopy .\\build\\static\\media\\*.* .\\Tetris\\static\\media\\*.* /Y",
-    "tdd": "react-scripts test --env=jsdom",
-    "test": "react-scripts test --env=jsdom --coverage",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
