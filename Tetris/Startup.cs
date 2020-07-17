@@ -1,14 +1,102 @@
-﻿using Microsoft.Owin;
-using Owin;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using Tetris.Domain.Interfaces;
+using Tetris.Domain.LeaderBoard;
+using Tetris.Domain.Models;
+using Tetris.Interactors;
+using Tetris.Interfaces;
+using Tetris.Storage;
 
-[assembly: OwinStartupAttribute(typeof(Tetris.Startup))]
 namespace Tetris
 {
-    public partial class Startup
+    public class Startup
     {
-        public void Configuration(IAppBuilder app)
+        public Startup(IConfiguration configuration)
         {
-            ConfigureAuth(app);
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+
+            services.AddControllersWithViews();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+            });
+
+            // In production, the React files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "build";
+            });
+
+            services.AddScoped<IRandonNumberGenerator, RandomNumberGenerator>();
+            services.AddScoped<IScoreBoardStorage, InMemoryScoreBoard>();
+            services.AddScoped<ILeaderBoardProvider>(ctx => new RandomizedLeaderBoardProvider(
+                randomNumberGenerator: ctx.GetService<IRandonNumberGenerator>(),
+                config: new RandomUserProviderConfiguration { MinScore = 0, MaxScore = 120 },
+                getNames: () => Task.FromResult(BotUsernames.Get())));
+            services.AddScoped<ILeaderBoardUpdater, LeaderBoardUpdater>();
+            services.AddSingleton<Task<LeaderBoard>>(ctx => new RandomizedLeaderBoardProvider(
+                randomNumberGenerator: new RandomNumberGenerator(),
+                config: new RandomUserProviderConfiguration { MinScore = 0, MaxScore = 120 },
+                getNames: () => Task.FromResult(BotUsernames.Get())).GetLeaderBoard());
+            services.AddScoped<IUserScoresInteractor, UserScoresInteractor>();
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller}/{action=Index}/{id?}");
+            });
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = ".";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
+            });
         }
     }
 }

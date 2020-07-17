@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,18 +6,17 @@ using Tetris.Domain.Interfaces;
 using Tetris.Domain.Models;
 using Tetris.Interactors;
 using Tetris.Interfaces;
+using Xunit;
 
 namespace Tetris.Tests.Interactors
 {
-    [TestClass]
     public class UserScoresControllerTests
     {
         IUserScoresInteractor userScoresInteractor;
         ILeaderBoardUpdater leaderBoardUpdater;
         LeaderBoard leaderBoard;
 
-        [TestInitialize]
-        public void Setup()
+        public UserScoresControllerTests()
         {
             leaderBoard = new LeaderBoard();
             leaderBoardUpdater = Substitute.For<ILeaderBoardUpdater>();
@@ -27,7 +25,7 @@ namespace Tetris.Tests.Interactors
                 getLeaderBoard: Task.FromResult(leaderBoard));
         }
 
-        [TestMethod]
+        [Fact]
         public async Task GetuserScores()
         {
             //Arrange
@@ -41,7 +39,7 @@ namespace Tetris.Tests.Interactors
 
             //Act
             //Assert
-            (await userScoresInteractor.GetUserScores(count: 3)).ShouldBeEquivalentTo(new List<Models.UserScore>
+            (await userScoresInteractor.GetUserScores(count: 3)).Should().BeEquivalentTo(new List<Models.UserScore>
             {
                 new Models.UserScore { Username = "Stewie", Score = 102 },
                 new Models.UserScore { Username = "John", Score = 100 },
@@ -49,7 +47,7 @@ namespace Tetris.Tests.Interactors
             }, ops => ops.WithStrictOrdering());
         }
 
-        [TestMethod]
+        [Fact]
         public async Task AddUserScore()
         {
             //Arrange
@@ -62,7 +60,7 @@ namespace Tetris.Tests.Interactors
             await userScoresInteractor.Add(new Models.UserScore { Username = "Stewie", Score = 200 });
 
             //Assert
-            receivedUserScore.ShouldBeEquivalentTo(new UserScore
+            receivedUserScore.Should().BeEquivalentTo(new UserScore
             {
                 Username = "Stewie",
                 Score = 200

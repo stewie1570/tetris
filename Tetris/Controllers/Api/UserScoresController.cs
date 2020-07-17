@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
 using Tetris.Interfaces;
 using Tetris.Models;
 
 namespace Tetris.Controllers.Api
 {
-    public class UserScoresController : ApiController
+    public class UserScoresController : Controller
     {
         IUserScoresInteractor userScoreInteractor;
 

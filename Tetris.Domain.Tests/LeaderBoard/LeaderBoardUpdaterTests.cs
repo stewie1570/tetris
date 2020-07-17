@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -8,18 +7,17 @@ using Tetris.Core.Exceptions;
 using Tetris.Domain.Interfaces;
 using Tetris.Domain.LeaderBoard;
 using Tetris.Domain.Models;
+using Xunit;
 
 namespace Tetris.Domain.Tests.LeaderBoard
 {
-    [TestClass]
     public class LeaderBoardUpdaterTests
     {
         ILeaderBoardUpdater leaderBoardUpdater;
         IScoreBoardStorage scoreBoardStorage;
         Models.LeaderBoard leaderBoard;
 
-        [TestInitialize]
-        public void Setup()
+        public LeaderBoardUpdaterTests()
         {
             leaderBoard = new Models.LeaderBoard();
             scoreBoardStorage = Substitute.For<IScoreBoardStorage>();
@@ -28,7 +26,7 @@ namespace Tetris.Domain.Tests.LeaderBoard
                 getLeaderBoard: Task.FromResult(leaderBoard));
         }
 
-        [TestMethod]
+        [Fact]
         public async Task AddsTrimmedNewUserRecord()
         {
             //Arrange
@@ -42,10 +40,10 @@ namespace Tetris.Domain.Tests.LeaderBoard
             await leaderBoardUpdater.Add(userScore);
 
             //Assert
-            receivedUserScore.ShouldBeEquivalentTo(new UserScore { Score = 10, Username = "Stewie" });
+            receivedUserScore.Should().BeEquivalentTo(new UserScore { Score = 10, Username = "Stewie" });
         }
 
-        [TestMethod]
+        [Fact]
         public async Task DoesNotAddScoreForUserThatExistsWithSameOrHigherScore()
         {
             //Arrange
@@ -53,14 +51,15 @@ namespace Tetris.Domain.Tests.LeaderBoard
 
             //Act
             //Assert
-            ((Func<Task>)(async () => await leaderBoardUpdater.Add(new UserScore { Score = 10, Username = "Stewie" })))
-                .ShouldThrow<ValidationException>()
+            (await ((Func<Task>)(async () => await leaderBoardUpdater.Add(new UserScore { Score = 10, Username = "Stewie" })))
+                .Should()
+                .ThrowAsync<ValidationException>())
                 .WithMessage("Stewie already has a score equal to or greater than 10.");
 
             scoreBoardStorage.Received(0).Add(Arg.Any<UserScore>());
         }
 
-        [TestMethod]
+        [Fact]
         public async Task DoesNotAddScoreForUsernamesThatAreTooLong()
         {
             //Arrange
@@ -68,8 +67,9 @@ namespace Tetris.Domain.Tests.LeaderBoard
 
             //Act
             //Assert
-            ((Func<Task>)(async () => await leaderBoardUpdater.Add(new UserScore { Score = 10, Username = "some really really long user name here" })))
-                .ShouldThrow<ValidationException>()
+            (await ((Func<Task>)(async () => await leaderBoardUpdater.Add(new UserScore { Score = 10, Username = "some really really long user name here" })))
+                .Should()
+                .ThrowAsync<ValidationException>())
                 .WithMessage("Username length must not be over 20.");
 
             scoreBoardStorage.Received(0).Add(Arg.Any<UserScore>());

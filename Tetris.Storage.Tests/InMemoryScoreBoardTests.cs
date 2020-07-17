@@ -1,26 +1,24 @@
-﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Tetris.Domain.Interfaces;
 using Tetris.Domain.Models;
+using Xunit;
 
 namespace Tetris.Storage.Tests
 {
-    [TestClass]
     public class InMemoryScoreBoardTests
     {
         IScoreBoardStorage scoreBoardStorage;
         LeaderBoard theLeaderBoard;
 
-        [TestInitialize]
-        public void Setup()
+        public InMemoryScoreBoardTests()
         {
             theLeaderBoard = new LeaderBoard();
             scoreBoardStorage = new InMemoryScoreBoard(getLeaderBoard: Task.FromResult(theLeaderBoard));
         }
 
-        [TestMethod]
+        [Fact]
         public async Task ShouldAddTheUserScore()
         {
             //Arrange
@@ -30,13 +28,13 @@ namespace Tetris.Storage.Tests
             await scoreBoardStorage.Add(userScore);
 
             //Assert
-            theLeaderBoard.UserScores.ShouldBeEquivalentTo(new List<UserScore>
+            theLeaderBoard.UserScores.Should().BeEquivalentTo(new List<UserScore>
             {
                 userScore
             });
         }
 
-        [TestMethod]
+        [Fact]
         public async Task ShouldUpdateExistingScore()
         {
             //Arrange
@@ -51,7 +49,7 @@ namespace Tetris.Storage.Tests
             await scoreBoardStorage.Add(new UserScore { Username = "Stewie", Score = 50 });
 
             //Assert
-            theLeaderBoard.UserScores.ShouldBeEquivalentTo(new List<UserScore>
+            theLeaderBoard.UserScores.Should().BeEquivalentTo(new List<UserScore>
             {
                 new UserScore { Username = "John", Score = 100 },
                 new UserScore { Username = "Stewie", Score = 50 },

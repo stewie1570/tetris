@@ -1,15 +1,14 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tetris.Domain.Interfaces;
 using Tetris.Domain.LeaderBoard;
 using Tetris.Domain.Models;
+using Xunit;
 
 namespace Tetris.Domain.Tests.LeaderBoard
 {
-    [TestClass]
     public class RandomizedLeaderBoardProviderTests
     {
         ILeaderBoardProvider randomizedLeaderBoardProvider;
@@ -17,8 +16,7 @@ namespace Tetris.Domain.Tests.LeaderBoard
         string[] names;
         RandomUserProviderConfiguration config;
 
-        [TestInitialize]
-        public void Setup()
+        public RandomizedLeaderBoardProviderTests()
         {
             randomNumberGenerator = Substitute.For<IRandonNumberGenerator>();
             config = new RandomUserProviderConfiguration();
@@ -28,7 +26,7 @@ namespace Tetris.Domain.Tests.LeaderBoard
                 getNames: () => Task.FromResult(names));
         }
 
-        [TestMethod]
+        [Fact]
         public async Task ShouldReturnRandomizedListOfBotUsers()
         {
             //Arrange
@@ -46,10 +44,10 @@ namespace Tetris.Domain.Tests.LeaderBoard
 
             //Act
             var leaderBoard = await randomizedLeaderBoardProvider.GetLeaderBoard();
-            
+
             //Assert
             leaderBoard.UserScores
-                .ShouldBeEquivalentTo(new List<UserScore>
+                .Should().BeEquivalentTo(new List<UserScore>
                 {
                     new UserScore { Username = "Stewart", IsBot = true, Score = 150 },
                     new UserScore { Username = "John", IsBot = true, Score = 151 }
