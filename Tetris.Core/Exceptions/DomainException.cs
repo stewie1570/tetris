@@ -1,6 +1,6 @@
 using System;
 
-namespace Tetris.Exceptions
+namespace Tetris.Core.Exceptions
 {
     public class DomainException : Exception
     {

@@ -9,9 +9,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Tetris.Exceptions;
+using Tetris.Core.Exceptions;
 
-namespace Tetris {
+namespace Tetris
+{
     public static class CustomExceptionHandler
     {
         private class ProblemDetailsWithErrors : ProblemDetails

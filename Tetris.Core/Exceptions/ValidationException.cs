@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Tetris.Core.Exceptions
+﻿namespace Tetris.Core.Exceptions
 {
-    public class ValidationException : Exception
+    public class ValidationException : DomainException
     {
         public ValidationException(string message) : base(message) { }
     }
