@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Tetris.Core;
 using Tetris.Core.Exceptions;
 using Tetris.Domain.Interfaces;
 using Tetris.Domain.Models;

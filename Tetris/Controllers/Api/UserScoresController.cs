@@ -24,7 +24,7 @@ namespace Tetris.Controllers.Api
 
         [Route("api/userScores")]
         [HttpPost]
-        public async Task AddUserScore(UserScore userScore)
+        public async Task AddUserScore([FromBody] UserScore userScore)
         {
             await userScoreInteractor.Add(userScore);
         }
