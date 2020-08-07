@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using StackExchange.Redis;
 using Tetris.Domain.Interfaces;
 using Tetris.Domain.LeaderBoard;
 using Tetris.Domain.Models;
@@ -43,17 +44,12 @@ namespace Tetris
             });
 
             services.AddScoped<IRandonNumberGenerator, RandomNumberGenerator>();
-            services.AddScoped<IScoreBoardStorage, InMemoryScoreBoard>();
-            services.AddScoped<ILeaderBoardProvider>(ctx => new RandomizedLeaderBoardProvider(
-                randomNumberGenerator: ctx.GetService<IRandonNumberGenerator>(),
-                config: new RandomUserProviderConfiguration { MinScore = 0, MaxScore = 120 },
-                getNames: () => Task.FromResult(BotUsernames.Get())));
+            services.AddScoped<IScoreBoardStorage, RedisScoreBoardStorage>();
+            services.AddScoped<ILeaderBoardProvider, RedisLeaderBoardProvider>();
             services.AddScoped<ILeaderBoardUpdater, LeaderBoardUpdater>();
-            services.AddSingleton<Task<LeaderBoard>>(ctx => new RandomizedLeaderBoardProvider(
-                randomNumberGenerator: new RandomNumberGenerator(),
-                config: new RandomUserProviderConfiguration { MinScore = 0, MaxScore = 120 },
-                getNames: () => Task.FromResult(BotUsernames.Get())).GetLeaderBoard());
+            services.AddScoped<Task<LeaderBoard>>(sp => sp.GetService<ILeaderBoardProvider>().GetLeaderBoard());
             services.AddScoped<IUserScoresInteractor, UserScoresInteractor>();
+            services.AddScoped<Task<ConnectionMultiplexer>>(sp => ConnectionMultiplexer.ConnectAsync("redis-13180.c62.us-east-1-4.ec2.cloud.redislabs.com:13180,password=M3bvoCfkpINPJRDZJP57KUBOAc4JAjnB"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
