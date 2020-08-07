@@ -13,7 +13,7 @@ namespace Tetris.Storage.Tests
         [Fact]
         public async Task StoresTheScore()
         {
-            var getRedis = ConnectionMultiplexer.ConnectAsync("redis-13180.c62.us-east-1-4.ec2.cloud.redislabs.com:13180,password=M3bvoCfkpINPJRDZJP57KUBOAc4JAjnB");
+            var getRedis = ConnectionMultiplexer.ConnectAsync(TestConfigContainer.GetConfig()["RedisConnectionString"]);
             IDatabase db = (await getRedis).GetDatabase();
 
             await Task.WhenAll((await getRedis)

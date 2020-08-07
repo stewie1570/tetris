@@ -49,7 +49,7 @@ namespace Tetris
             services.AddScoped<ILeaderBoardUpdater, LeaderBoardUpdater>();
             services.AddScoped<Task<LeaderBoard>>(sp => sp.GetService<ILeaderBoardProvider>().GetLeaderBoard());
             services.AddScoped<IUserScoresInteractor, UserScoresInteractor>();
-            services.AddScoped<Task<ConnectionMultiplexer>>(sp => ConnectionMultiplexer.ConnectAsync("redis-13180.c62.us-east-1-4.ec2.cloud.redislabs.com:13180,password=M3bvoCfkpINPJRDZJP57KUBOAc4JAjnB"));
+            services.AddScoped<Task<ConnectionMultiplexer>>(sp => ConnectionMultiplexer.ConnectAsync(Configuration["RedisConnectionString"]));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
