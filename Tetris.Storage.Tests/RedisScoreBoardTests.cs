@@ -16,40 +16,29 @@ namespace Tetris.Storage.Tests
             var getRedis = ConnectionMultiplexer.ConnectAsync(TestConfigContainer.GetConfig()["RedisConnectionString"]);
             IDatabase db = (await getRedis).GetDatabase();
 
-            await Task.WhenAll((await getRedis)
-                .GetEndPoints(configuredOnly: false)
-                .Select(async endpoint =>
-                {
-                    var server = (await getRedis).GetServer(endpoint);
-                    await foreach (var key in server.KeysAsync())
-                    {
-                        await db.KeyDeleteAsync(key);
-                    }
-                }));
+            var userScores = new List<UserScore>{
+                new UserScore { Username = "user 21", Score = 10 },
+                new UserScore { Username = "user 4", Score = 3 },
+                new UserScore { Username = "user 1", Score = 1 },
+                new UserScore { Username = "user 10", Score = 5 },
+                new UserScore { Username = "user 2", Score = 2 }
+            };
+
+            await Task.WhenAll(userScores.Select(score => db.KeyDeleteAsync(score.Username)));
 
             var leaderBoardProvider = new RedisLeaderBoardProvider(getRedis);
             var scoreBoard = new RedisScoreBoardStorage(getRedis);
             (await leaderBoardProvider.GetLeaderBoard())
                 .UserScores
                 .Should()
-                .BeEmpty();
+                .NotContain(userScores);
 
-            await scoreBoard.Add(new UserScore { Username = "user 21", Score = 10 });
-            await scoreBoard.Add(new UserScore { Username = "user 4", Score = 3 });
-            await scoreBoard.Add(new UserScore { Username = "user 1", Score = 1 });
-            await scoreBoard.Add(new UserScore { Username = "user 10", Score = 5 });
-            await scoreBoard.Add(new UserScore { Username = "user 2", Score = 2 });
+            await Task.WhenAll(userScores.Select(score => scoreBoard.Add(score)));
 
-            (await leaderBoardProvider.GetLeaderBoard())
-                .UserScores
+            var recordedScores = (await leaderBoardProvider.GetLeaderBoard()).UserScores;
+            userScores.ForEach(score => recordedScores
                 .Should()
-                .BeEquivalentTo(new List<UserScore>{
-                    new UserScore{ Username = "user 21", Score = 10},
-                    new UserScore{ Username = "user 10", Score = 5},
-                    new UserScore{ Username = "user 4", Score = 3},
-                    new UserScore{ Username = "user 2", Score = 2},
-                    new UserScore{ Username = "user 1", Score = 1}
-                });
+                .ContainEquivalentOf(score));
         }
     }
 }
