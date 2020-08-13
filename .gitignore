@@ -1,8 +1,5 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
-/Tetris.Storage.Tests/appsettings.json
-/Tetris/appsettings.json
-
 # dependencies
 /node_modules
 
@@ -272,4 +269,5 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-
+Tetris/appsettings.json
+Tetris.Storage.Tests/appsettings.json
