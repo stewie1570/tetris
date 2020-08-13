@@ -56,7 +56,7 @@ namespace Tetris.Domain.Tests.LeaderBoard
                 .ThrowAsync<ValidationException>())
                 .WithMessage("Stewie already has a score equal to or greater than 10.");
 
-            scoreBoardStorage.Received(0).Add(Arg.Any<UserScore>());
+            await scoreBoardStorage.Received(0).Add(Arg.Any<UserScore>());
         }
 
         [Fact]
@@ -72,7 +72,7 @@ namespace Tetris.Domain.Tests.LeaderBoard
                 .ThrowAsync<ValidationException>())
                 .WithMessage("Username length must not be over 20.");
 
-            scoreBoardStorage.Received(0).Add(Arg.Any<UserScore>());
+            await scoreBoardStorage.Received(0).Add(Arg.Any<UserScore>());
         }
     }
 }
