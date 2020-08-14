@@ -10,10 +10,16 @@ namespace Tetris.Storage.Tests
 {
     public class RedisScoreBoardTests
     {
+        private Task<ConnectionMultiplexer> getRedis;
+
+        public RedisScoreBoardTests()
+        {
+            getRedis = ConnectionMultiplexer.ConnectAsync(TestConfigContainer.GetConfig()["RedisConnectionString"]);
+        }
+
         [Fact]
         public async Task StoresTheScore()
         {
-            var getRedis = ConnectionMultiplexer.ConnectAsync(TestConfigContainer.GetConfig()["RedisConnectionString"]);
             IDatabase db = (await getRedis).GetDatabase();
 
             var userScores = new List<UserScore>{
@@ -39,6 +45,15 @@ namespace Tetris.Storage.Tests
             userScores.ForEach(score => recordedScores
                 .Should()
                 .ContainEquivalentOf(score));
+        }
+
+        // [Fact]
+        public async Task LoadTest()
+        {
+            foreach (var i in Enumerable.Range(0, 100))
+            {
+                await StoresTheScore();
+            }
         }
     }
 }
