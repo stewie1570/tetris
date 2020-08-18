@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using StackExchange.Redis;
+using Tetris.Core;
 using Tetris.Domain.Models;
 using Xunit;
 
@@ -15,7 +16,9 @@ namespace Tetris.Storage.Tests
 
         public RedisScoreBoardTests()
         {
-            getRedis = ConnectionMultiplexer.ConnectAsync(TestConfigContainer.GetConfig()["RedisConnectionString"]);
+            getRedis = ConnectionMultiplexer.ConnectAsync(
+                TestConfigContainer.GetConfig()["RedisConnectionString"]
+                );
         }
 
         [Theory]
@@ -31,10 +34,11 @@ namespace Tetris.Storage.Tests
                 new UserScore { Username = $"user {start + 3}", Score = 5 },
                 new UserScore { Username = $"user {start + 4}", Score = 2 }
             };
-            var leaderBoardProvider = new RedisLeaderBoardProvider(getRedis) { MaxScores = 1000 };
+            var leaderBoardProvider = new RedisLeaderBoardProvider(getRedis) { MaxScores = 10000 };
             var scoreBoard = new RedisScoreBoardStorage(getRedis);
 
-            await Task.WhenAll(userScores.Select(score => db.KeyDeleteAsync(score.Username)));
+            await Task.WhenAll(userScores
+                .Select(userScore => db.SortedSetRemoveAsync("user", userScore.Username)));
             (await leaderBoardProvider.GetLeaderBoard())
                 .UserScores
                 .Should()
@@ -45,21 +49,27 @@ namespace Tetris.Storage.Tests
             userScores.ForEach(score => recordedScores
                 .Should()
                 .ContainEquivalentOf(score));
-
-            await Task.WhenAll(userScores.Select(score => db.KeyDeleteAsync(score.Username)));
-            (await leaderBoardProvider.GetLeaderBoard())
-                .UserScores
-                .Should()
-                .NotContain(userScores);
+            await Task.WhenAll(userScores
+                .Select(userScore => db.SortedSetRemoveAsync("user", userScore.Username)));
         }
 
         [Fact]
         public async Task LoadTest()
         {
-            foreach (var i in Enumerable.Range(0, 100))
-            {
-                await StoresTheScore(start: i * 10);
-            }
+            const int count = 5000;
+            var db = (await getRedis).GetDatabase();
+            var usernames = Enumerable
+                .Range(start: 0, count: count + 5)
+                .Select(i => $"user {i}")
+                .ToList();
+
+            await Task.WhenAll(usernames
+                .Select(username => db.SortedSetRemoveAsync("user", username)));
+
+            await ConcurrentTask.WhenAll(Enumerable
+                .Range(start: 1, count: count)
+                .Select(i => (Func<Task>)(() => StoresTheScore(start: i * 10))),
+                maxConcurrency: 100);
         }
     }
 }
