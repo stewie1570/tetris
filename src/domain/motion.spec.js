@@ -1,5 +1,5 @@
-import { tetrisBoard, stringFrom } from '../../domain/serialization'
-import { move, rotate } from '../../domain/motion'
+import { tetrisBoard, stringFrom } from './serialization'
+import { move, rotate } from './motion'
 
 describe("Motion", () => {
     describe("Move", () => {

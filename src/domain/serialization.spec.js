@@ -1,5 +1,5 @@
-import { tetrisBoard, stringFrom } from '../../domain/serialization'
-import { active, empty, inactive } from '../../core/constants'
+import { tetrisBoard, stringFrom } from './serialization'
+import { active, empty, inactive } from '../core/constants'
 
 describe("Serialization", () => {
     it("should convert a string to tetris board", () => {

@@ -1,1 +1,0 @@
-export const willResolve = value => new Promise((resolve, reject) => setTimeout(() => resolve(value), 0));

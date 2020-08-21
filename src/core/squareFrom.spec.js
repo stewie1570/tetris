@@ -1,4 +1,4 @@
-import { squareFrom, active, empty, inactive } from '../../core/constants'
+import { squareFrom, active, empty, inactive } from './constants'
 
 describe("Square From Type", () => {
     it("Returns the proper square", () => {

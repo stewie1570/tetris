@@ -1,5 +1,5 @@
-import { tetrisBoard, stringFrom } from '../../domain/serialization'
-import { activeColumnRangeFrom } from '../../domain/board'
+import { tetrisBoard, stringFrom } from './serialization'
+import { activeColumnRangeFrom } from './board'
 
 describe("Board", () => {
     describe("Active Columns", () => {

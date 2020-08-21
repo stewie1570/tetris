@@ -1,5 +1,5 @@
-import { loading } from '../../core/constants'
-import { AppController } from '../../controllers/app-controller'
+import { loading } from '../core/constants'
+import { AppController } from './app-controller'
 
 const noOp = () => undefined;
 
