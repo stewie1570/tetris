@@ -1,25 +1,17 @@
-import { ajax } from "jquery";
+import axios from "axios";
 
-var errorHandled = (request) =>
-  request.fail((msg) => {
-    throw new Error(
-      msg.status === 0
-        ? "Unable to communicate with server."
-        : (msg.responseJSON || { title: undefined }).title ||
-          msg.statusText ||
-          msg
-    );
-  });
+const errorHandled = async (request) => {
+  try {
+    return (await request)?.data;
+  } catch (caughtError) {
+    const error = caughtError?.response?.data;
+    const message =
+      error?.title || caughtError?.message || "An unknown error occurred.";
+    window.onerror(message);
+  }
+};
 
 export var Rest = {
-  get: (url) => errorHandled(ajax({ url, cache: false, type: "GET" })),
-  post: ({ url, data }) =>
-    errorHandled(
-      ajax({
-        url,
-        data: JSON.stringify(data),
-        type: "POST",
-        contentType: "application/json",
-      })
-    ),
+  get: (url) => errorHandled(axios.get(url)),
+  post: ({ url, data }) => errorHandled(axios.post(url, data)),
 };
