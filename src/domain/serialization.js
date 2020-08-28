@@ -1,6 +1,6 @@
 import { active, empty, inactive } from '../core/constants'
 
-var squaresFrom = ({ row }) => row
+const squaresFrom = ({ row }) => row
     .split('')
     .filter(char => char !== " ")
     .map(square =>
@@ -8,12 +8,12 @@ var squaresFrom = ({ row }) => row
             : square === "#" ? inactive
                 : empty);
 
-export var tetrisBoard = str => str
+export const tetrisBoardFrom = str => str
     .split("\n")
     .filter(row => row.length > 0)
     .map(row => squaresFrom({ row }));
 
-export var stringFrom = board =>
+export const stringFrom = board =>
     (!board || !board.length)
         ? ""
         : ("\n" + board.map(row => row.map(square => square === active ? '*'

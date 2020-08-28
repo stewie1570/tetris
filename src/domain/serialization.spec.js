@@ -1,9 +1,9 @@
-import { tetrisBoard, stringFrom } from './serialization'
+import { tetrisBoardFrom, stringFrom } from './serialization'
 import { active, empty, inactive } from '../core/constants'
 
 describe("Serialization", () => {
     it("should convert a string to tetris board", () => {
-        expect(tetrisBoard(`
+        expect(tetrisBoardFrom(`
             --*--
             --**-
             ##---`))

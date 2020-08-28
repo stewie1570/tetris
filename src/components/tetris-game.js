@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { TetrisBoard } from "./tetris-board";
-import { tetrisBoard } from "../domain/serialization";
+import { tetrisBoardFrom } from "../domain/serialization";
 import { move, rotate } from "../domain/motion";
 import { iterate, iterateUntilInactive } from "../domain/iteration";
 import { keys } from "../core/constants";
@@ -38,7 +38,7 @@ export const shapes = [
   ],
 ];
 
-const emptyBoard = tetrisBoard(`
+const emptyBoard = tetrisBoardFrom(`
     ----------
     ----------
     ----------

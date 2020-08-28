@@ -22,7 +22,7 @@ export function TetrisBoard({ board }) {
                 <div
                   className={`${squareClassNameFrom({ square, x })} square`}
                   data-testid={
-                    square === empty ? " " : square === active ? "*" : "#"
+                    square === empty ? "-" : square === active ? "*" : "#"
                   }
                 ></div>
               </td>
