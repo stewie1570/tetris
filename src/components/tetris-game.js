@@ -76,7 +76,7 @@ export class TetrisGame extends Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener("keydown");
+    document.removeEventListener("keydown", this.keyPress);
   }
 
   cycle = () => {
