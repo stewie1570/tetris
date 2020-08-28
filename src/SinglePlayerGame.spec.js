@@ -3,7 +3,6 @@ import SinglePlayerGame from "./SinglePlayerGame";
 import { render, screen, fireEvent, within } from "@testing-library/react";
 import { shapes } from "./components/tetris-game";
 import { keys } from "./core/constants";
-import { stringFrom, tetrisBoardFrom } from "./domain/serialization";
 
 const lineShape = shapes[1];
 
@@ -27,8 +26,7 @@ test("game play", async () => {
   });
 
   expect(await getSerializedBoard()).toBe(
-    stringFrom(
-      tetrisBoardFrom(`
+    `
       ----------
       ----------
       ****------
@@ -44,8 +42,7 @@ test("game play", async () => {
       ----------
       ----------
       ----------
-      ----------`)
-    )
+      ----------`.replace(/ /gi, "")
   );
 });
 
