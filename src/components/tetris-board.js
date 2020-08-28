@@ -21,9 +21,8 @@ export function TetrisBoard({ board }) {
               <td key={`${x},${y}`}>
                 <div
                   className={`${squareClassNameFrom({ square, x })} square`}
-                  data-testid={
-                    square === empty ? "-" : square === active ? "*" : "#"
-                  }
+                  data-testid="space"
+                  title={square === empty ? "-" : square === active ? "*" : "#"}
                 ></div>
               </td>
             ))}

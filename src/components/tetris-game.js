@@ -122,9 +122,7 @@ export class TetrisGame extends Component {
       this.props.onChange({ ...game, board: newBoard });
     };
 
-    return (
-      document.hasFocus() && !game.paused && processKeyCommand({ keyCode })
-    );
+    return !game.paused && processKeyCommand({ keyCode });
   };
 
   render() {
