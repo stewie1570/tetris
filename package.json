@@ -5,10 +5,10 @@
   "main": "src/index.js",
   "dependencies": {
     "axios": "^0.20.0",
-    "bootstrap-css-only": "^3.3.7",
+    "bootstrap-css-only": "3.3.7",
     "lodash": "^4.17.20",
-    "react": "16.12.0",
-    "react-dom": "16.12.0"
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "devDependencies": {
     "react-scripts": "^3.4.3"
