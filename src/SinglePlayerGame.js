@@ -29,6 +29,7 @@ class SinglePlayerGame extends Component {
                   <br />
                 </div>
               ),
+              inputName: "username",
             });
 
             this.setState({ username });
