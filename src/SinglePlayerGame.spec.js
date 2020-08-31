@@ -6,7 +6,71 @@ import { keys } from "./core/constants";
 
 const lineShape = shapes[1];
 
-test("game play", async () => {
+test("score a point", () => {
+  const { iterate, container } = getIterableBoard();
+
+  screen.getByText("Score: 0");
+
+  scorePointOnEmptyBoard({ iterate, container });
+
+  screen.getByText("Score: 1");
+  expect(getSerializedBoard()).toBe(
+    `
+      *---------
+      *---------
+      *---------
+      *---------
+      ----------
+      ----------
+      ----------
+      ----------
+      ----------
+      ----------
+      ----------
+      ----------
+      ----------
+      --------##
+      --------##
+      --------##`.replace(/ /gi, "")
+  );
+});
+
+function scorePointOnEmptyBoard({ iterate, container }) {
+  iterate();
+  fireEvent.keyDown(container, { keyCode: keys.up });
+  fireEvent.keyDown(container, { keyCode: keys.space });
+  iterate();
+  fireEvent.keyDown(container, { keyCode: keys.up });
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.space });
+  iterate();
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.space });
+  iterate();
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.right });
+  fireEvent.keyDown(container, { keyCode: keys.space });
+  iterate();
+}
+
+function getIterableBoard() {
   let iterate = undefined;
   const { container } = render(
     <SinglePlayerGame
@@ -17,39 +81,14 @@ test("game play", async () => {
     />
   );
 
-  iterate();
-  iterate();
-  iterate();
-  fireEvent.keyDown(container, {
-    key: "ArrowUp",
-    keyCode: keys.up,
-  });
+  return { iterate, container };
+}
 
-  expect(await getSerializedBoard()).toBe(
-    `
-      ----------
-      ----------
-      ****------
-      ----------
-      ----------
-      ----------
-      ----------
-      ----------
-      ----------
-      ----------
-      ----------
-      ----------
-      ----------
-      ----------
-      ----------
-      ----------`.replace(/ /gi, "")
-  );
-});
-
-async function getSerializedBoard() {
+function getSerializedBoard() {
   return (
     "\n" +
-    (await screen.findAllByTestId("row"))
+    screen
+      .getAllByTestId("row")
       .map((row) =>
         within(row)
           .getAllByTestId("space")
