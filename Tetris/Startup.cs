@@ -88,7 +88,7 @@ namespace Tetris
 
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "../";
+                spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())
                 {
