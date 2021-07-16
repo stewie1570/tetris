@@ -40,7 +40,7 @@ namespace Tetris
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "../build";
+                configuration.RootPath = "ClientApp/build";
             });
 
             services.AddScoped<IRandonNumberGenerator, RandomNumberGenerator>();
