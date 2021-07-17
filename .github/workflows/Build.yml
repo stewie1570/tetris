@@ -22,8 +22,9 @@ jobs:
     - name: Build
       run: |
         dotnet build
-    - name: Test Frontend
-      run: |
-        cd Tetris/ClientApp
-        yarn
-        yarn test
+        # dotnet test
+    # - name: Test Frontend
+    #   run: |
+    #     cd Tetris/ClientApp
+    #     yarn
+    #     yarn test
