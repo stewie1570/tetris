@@ -22,7 +22,6 @@ jobs:
     - name: Build
       run: |
         dotnet build
-        dotnet test
     - name: Test Frontend
       run: |
         cd Tetris/ClientApp
