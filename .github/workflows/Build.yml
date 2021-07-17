@@ -20,8 +20,9 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build
-      run: dotnet test
+      run: |
+        dotnet build
+        dotnet test
     - name: Test Frontend
       run: |
         cd Tetris/ClientApp
