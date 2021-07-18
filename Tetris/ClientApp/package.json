@@ -20,7 +20,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom --watchAll=false --coverage  --collectCoverageFrom=src/**/*.* --env jest-environment-jsdom-fourteen",
+    "test": "react-scripts test --env=jsdom --watchAll=false --coverage --colors  --collectCoverageFrom=src/**/*.* --env jest-environment-jsdom-fourteen",
     "tdd": "react-scripts test --env=jsdom --env jest-environment-jsdom-fourteen",
     "eject": "react-scripts eject"
   },
