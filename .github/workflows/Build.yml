@@ -22,6 +22,8 @@ jobs:
     - name: Build
       run: |
         dotnet build
+    - name: Test Backend
+      run: |
         dotnet test Tetris.Core.Tests/Tetris.Core.Tests.csproj
         dotnet test Tetris.Domain.Tests/Tetris.Domain.Tests.csproj
         dotnet test Tetris.Tests/Tetris.Tests.csproj
