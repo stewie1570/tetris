@@ -9,10 +9,22 @@ import {
 } from "@testing-library/react";
 import { shapes } from "./components/tetris-game";
 import { keys } from "./core/constants";
-import { rest } from "msw";
-import { setupServer } from "msw/node";
-
+import { server } from './setupTests';
+import { rest } from 'msw';
 const lineShape = shapes[1];
+
+beforeEach(() => {
+  server.use(
+    rest.get("/api/userScores", async (req, res, ctx) => {
+      return res(ctx.json(scorePosts));
+    }),
+    rest.post("/api/userScores", async (req, res, ctx) => {
+      scorePosts.push(req.body);
+    }));
+});
+beforeEach(() => {
+  scorePosts = [];
+});
 
 test("score a point", () => {
   const { iterate, container } = getIterableBoard();
@@ -130,18 +142,15 @@ function getSerializedBoard() {
 }
 
 let scorePosts = [];
-const server = setupServer(
-  rest.get("/api/userScores", async (req, res, ctx) => {
-    return res(ctx.json(scorePosts));
-  }),
-  rest.post("/api/userScores", async (req, res, ctx) => {
-    scorePosts.push(req.body);
-  })
-);
+// const server = setupServer(
+//   rest.get("/api/userScores", async (req, res, ctx) => {
+//     return res(ctx.json(scorePosts));
+//   }),
+//   rest.post("/api/userScores", async (req, res, ctx) => {
+//     scorePosts.push(req.body);
+//   })
+// );
 
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-beforeEach(() => {
-  scorePosts = [];
-});
-afterAll(() => server.close());
+// beforeAll(() => server.listen());
+// afterEach(() => server.resetHandlers());
+// afterAll(() => server.close());
