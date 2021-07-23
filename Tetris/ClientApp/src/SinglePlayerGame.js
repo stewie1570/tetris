@@ -64,7 +64,6 @@ class SinglePlayerGame extends Component {
                 {...this.state.game}
                 paused={this.state.paused}
                 onChange={(game) => this.setState({ game })}
-                gameIterator={this.props.gameIterator}
                 shapeProvider={this.props.shapeProvider}
               />
               {this.state.scoreBoard && (

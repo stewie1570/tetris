@@ -11,10 +11,11 @@ const randomNumberGenerator = {
 const shapeProvider = () =>
   shapes[randomNumberGenerator.between({ min: 0, max: shapes.length - 1 })];
 
+setInterval(() => {
+  window.dispatchEvent(new CustomEvent("iterate-game"));
+}, 1000);
+
 ReactDOM.render(
-  <SinglePlayerGame
-    gameIterator={setInterval.bind(window)}
-    shapeProvider={shapeProvider}
-  />,
+  <SinglePlayerGame shapeProvider={shapeProvider} />,
   document.getElementById("root")
 );

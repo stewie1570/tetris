@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { TetrisBoard } from "./tetris-board";
 import { tetrisBoardFrom } from "../domain/serialization";
 import { move, rotate } from "../domain/motion";
@@ -56,9 +56,9 @@ const emptyBoard = tetrisBoardFrom(`
     ----------
     ----------`);
 
-export class TetrisGame extends Component {
-  getGameState() {
-    const { onChange, ...otherProps } = this.props;
+export const TetrisGame = props => {
+  const getGameState = () => {
+    const { onChange, ...otherProps } = props;
 
     return {
       board: emptyBoard,
@@ -70,39 +70,40 @@ export class TetrisGame extends Component {
     };
   }
 
-  componentWillMount() {
-    document.addEventListener("keydown", this.keyPress, false);
-    this.interval = this.props.gameIterator(this.cycle.bind(this), 1000);
-  }
+  useEffect(() => {
+    window.addEventListener("keydown", keyPress, false);
+    window.addEventListener("iterate-game", cycle, false);
 
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.keyPress);
-  }
+    return () => {
+      window.removeEventListener("keydown", keyPress, false);
+      window.removeEventListener("iterate-game", cycle, false);
+    }
+  }, [props]);
 
-  cycle = () => {
-    const game = this.getGameState();
+  const cycle = () => {
+    const game = getGameState();
 
     if (!game.paused) {
       var { board, score } = game;
       const iteratedGame = iterate({
         board,
         score,
-        shapeProvider: this.props.shapeProvider,
+        shapeProvider: props.shapeProvider,
       });
 
       iteratedGame.isOver
-        ? this.props.onChange({
-            ...game,
-            board: emptyBoard,
-            score: 0,
-            oldScore: game.score,
-          })
-        : this.props.onChange({ ...game, ...iteratedGame });
+        ? props.onChange({
+          ...game,
+          board: emptyBoard,
+          score: 0,
+          oldScore: game.score,
+        })
+        : props.onChange({ ...game, ...iteratedGame });
     }
   };
 
-  keyPress = ({ keyCode }) => {
-    const game = this.getGameState();
+  const keyPress = ({ keyCode }) => {
+    const game = getGameState();
 
     var processKeyCommand = ({ keyCode }) => {
       var { board } = game;
@@ -110,31 +111,29 @@ export class TetrisGame extends Component {
         keyCode === keys.left
           ? move({ board, to: { x: -1 } })
           : keyCode === keys.right
-          ? move({ board, to: { x: 1 } })
-          : keyCode === keys.down
-          ? move({ board, to: { y: 1 } })
-          : keyCode === keys.space
-          ? iterateUntilInactive({ board })
-          : keyCode === keys.up
-          ? rotate({ board })
-          : board;
+            ? move({ board, to: { x: 1 } })
+            : keyCode === keys.down
+              ? move({ board, to: { y: 1 } })
+              : keyCode === keys.space
+                ? iterateUntilInactive({ board })
+                : keyCode === keys.up
+                  ? rotate({ board })
+                  : board;
 
-      this.props.onChange({ ...game, board: newBoard });
+      props.onChange({ ...game, board: newBoard });
     };
 
     return !game.paused && processKeyCommand({ keyCode });
   };
 
-  render() {
-    const game = this.getGameState();
+  const game = getGameState();
 
-    return (
-      <div>
-        {!game.paused && game.mobile && (
-          <MobileControls onClick={(keyCode) => this.keyPress({ keyCode })} />
-        )}
-        <TetrisBoard board={game.board} />
-      </div>
-    );
-  }
+  return (
+    <div>
+      {!game.paused && game.mobile && (
+        <MobileControls onClick={(keyCode) => keyPress({ keyCode })} />
+      )}
+      <TetrisBoard board={game.board} />
+    </div>
+  );
 }

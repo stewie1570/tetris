@@ -14,12 +14,12 @@ import { setupServer } from "msw/node";
 
 const lineShape = shapes[1];
 
-test("score a point", () => {
+test("score a point", async () => {
   const { iterate, container } = getIterableBoard();
 
   screen.getByText("Score: 0");
 
-  scorePointOnEmptyBoard({ iterate, container });
+  await scorePointOnEmptyBoard({ iterate, container });
 
   screen.getByText("Score: 1");
   expect(getSerializedBoard()).toBe(
@@ -46,7 +46,7 @@ test("score a point", () => {
 test("score a point and post score", async () => {
   const { iterate, container } = getIterableBoard();
 
-  scorePointOnEmptyBoard({ iterate, container });
+  await scorePointOnEmptyBoard({ iterate, container });
 
   screen.getByText(/Pause/).click();
   screen.getByText(/Post My Score/).click();
@@ -65,53 +65,85 @@ test("score a point and post score", async () => {
   );
 });
 
-function scorePointOnEmptyBoard({ iterate, container }) {
+const wait = () => new Promise(resolve => setTimeout(resolve, 1));
+
+async function scorePointOnEmptyBoard({ iterate, container }) {
+  await wait();
   iterate();
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.up });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.space });
+  await wait()
   iterate();
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.up });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.space });
+  await wait()
   iterate();
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.space });
+  await wait()
   iterate();
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.right });
+  await wait()
   fireEvent.keyDown(container, { keyCode: keys.space });
+  await wait()
   iterate();
+  await wait()
 }
 
 function getIterableBoard() {
-  let iterate = undefined;
   const { container } = render(
-    <SinglePlayerGame
-      gameIterator={(callback, timeOut) => {
-        iterate = callback;
-      }}
-      shapeProvider={() => lineShape}
-    />
+    <SinglePlayerGame shapeProvider={() => lineShape} />
   );
 
-  return { iterate, container };
+  return {
+    iterate: () => window.dispatchEvent(new CustomEvent("iterate-game")),
+    container
+  };
 }
 
 function getSerializedBoard() {
