@@ -6,11 +6,12 @@ import {
   fireEvent,
   within,
   waitFor,
+  act,
 } from "@testing-library/react";
 import { shapes } from "./components/tetris-game";
 import { keys } from "./core/constants";
 import { rest } from "msw";
-import { setupServer } from "msw/node";
+import { server } from "./setupTests";
 
 const lineShape = shapes[1];
 
@@ -19,7 +20,9 @@ test("score a point", async () => {
 
   screen.getByText("Score: 0");
 
-  await scorePointOnEmptyBoard({ iterate, container });
+  await act(async () => {
+    await scorePointOnEmptyBoard({ iterate, container });
+  });
 
   screen.getByText("Score: 1");
   expect(getSerializedBoard()).toBe(
@@ -44,9 +47,19 @@ test("score a point", async () => {
 });
 
 test("score a point and post score", async () => {
+  server.use(
+    rest.get("/api/userScores", async (req, res, ctx) => {
+      return res(ctx.json(scorePosts));
+    }),
+    rest.post("/api/userScores", async (req, res, ctx) => {
+      scorePosts.push(req.body);
+    })
+  );
   const { iterate, container } = getIterableBoard();
 
-  await scorePointOnEmptyBoard({ iterate, container });
+  await act(async () => {
+    await scorePointOnEmptyBoard({ iterate, container });
+  });
 
   screen.getByText(/Pause/).click();
   screen.getByText(/Post My Score/).click();
@@ -65,74 +78,106 @@ test("score a point and post score", async () => {
   );
 });
 
+test("score a point and cancels posting a score", async () => {
+  server.use(
+    rest.get("/api/userScores", async (req, res, ctx) => {
+      return res(ctx.json(scorePosts));
+    }),
+    rest.post("/api/userScores", async (req, res, ctx) => {
+      scorePosts.push(req.body);
+    })
+  );
+  const { iterate, container } = getIterableBoard();
+
+  await act(async () => {
+    await scorePointOnEmptyBoard({ iterate, container });
+  });
+
+  screen.getByText(/Pause/).click();
+  screen.getByText(/Post My Score/).click();
+
+  var userNameTextInput = await within(
+    screen.getByRole("dialog")
+  ).findByLabelText(/What user name would you like/);
+  fireEvent.change(userNameTextInput, {
+    target: { value: "Stewie" },
+  });
+
+  screen.getByText(/Cancel/).click();
+
+  await waitFor(() =>
+    expect(scorePosts).toEqual([])
+  );
+});
+
 const wait = () => new Promise(resolve => setTimeout(resolve, 1));
 
 async function scorePointOnEmptyBoard({ iterate, container }) {
   await wait();
   iterate();
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.up });
   await wait()
   fireEvent.keyDown(container, { keyCode: keys.space });
-  await wait()
+  await wait();
   iterate();
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.up });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.space });
-  await wait()
+  await wait();
   iterate();
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.space });
-  await wait()
+  await wait();
   iterate();
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.space });
-  await wait()
+  await wait();
   iterate();
-  await wait()
+  await wait();
 }
 
 function getIterableBoard() {
@@ -162,15 +207,6 @@ function getSerializedBoard() {
 }
 
 let scorePosts = [];
-const server = setupServer(
-  rest.get("/api/userScores", async (req, res, ctx) => {
-    return res(ctx.json(scorePosts));
-  }),
-  rest.post("/api/userScores", async (req, res, ctx) => {
-    scorePosts.push(req.body);
-  })
-);
-
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 beforeEach(() => {
