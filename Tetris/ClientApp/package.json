@@ -4,9 +4,9 @@
   "private": true,
   "main": "src/index.js",
   "dependencies": {
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "bootstrap-css-only": "3.3.7",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "react": "16.13.1",
     "react-dom": "16.13.1"
   },
@@ -20,7 +20,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom --watchAll=false --coverage  --collectCoverageFrom=src/**/*.* --env jest-environment-jsdom-fourteen",
+    "test": "react-scripts test --env=jsdom --watchAll=false --coverage --colors  --collectCoverageFrom=src/**/*.* --env jest-environment-jsdom-fourteen",
     "tdd": "react-scripts test --env=jsdom --env jest-environment-jsdom-fourteen",
     "eject": "react-scripts eject"
   },
