@@ -4,8 +4,8 @@ import "./board.css";
 import { active, empty } from "../core/constants";
 
 export function TetrisBoard({ board }) {
-  var activeColumnRange = activeColumnRangeFrom({ board });
-  var squareClassNameFrom = ({ square, x }) =>
+  const activeColumnRange = activeColumnRangeFrom({ board });
+  const squareClassNameFrom = ({ square, x }) =>
     square === empty
       ? x >= activeColumnRange.x1 && x <= activeColumnRange.x2
         ? "active-empty"
