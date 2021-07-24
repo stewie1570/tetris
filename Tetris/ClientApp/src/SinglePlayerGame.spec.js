@@ -7,6 +7,7 @@ import {
   within,
   waitFor,
   act,
+  waitForElementToBeRemoved,
 } from "@testing-library/react";
 import { shapes } from "./components/tetris-game";
 import { keys } from "./core/constants";
@@ -104,6 +105,8 @@ test("score a point and cancels posting a score", async () => {
   });
 
   screen.getByText(/Cancel/).click();
+
+  await waitForElementToBeRemoved(() => screen.getByText("Posting Your Score..."));
 
   await waitFor(() =>
     expect(scorePosts).toEqual([])

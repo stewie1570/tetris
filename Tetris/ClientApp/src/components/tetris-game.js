@@ -38,7 +38,7 @@ export const shapes = [
   ],
 ];
 
-const emptyBoard = tetrisBoardFrom(`
+export const emptyBoard = tetrisBoardFrom(`
     ----------
     ----------
     ----------
