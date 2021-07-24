@@ -74,9 +74,9 @@ test("score a point and post score", async () => {
 
   screen.getByText(/Ok/).click();
 
-  await waitFor(() =>
-    expect(scorePosts).toEqual([{ username: "Stewie", score: 1 }])
-  );
+  await waitForElementToBeRemoved(() => screen.getByText("Posting Your Score..."));
+
+  expect(scorePosts).toEqual([{ username: "Stewie", score: 1 }]);
 });
 
 test("score a point and cancels posting a score", async () => {
