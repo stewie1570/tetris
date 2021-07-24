@@ -48,28 +48,29 @@ export const PromptDialog = ({ visible, input, setInput, resolve, message }) => 
         </div>
         <div className="modal-body">
           <div className="centered">
-            <form onSubmit={(event) => event.preventDefault()} name="dialog-form">
+            <form onSubmit={event => event.preventDefault()} name="dialog-form">
               <label>
                 {message}
                 <br />
                 <TextInput value={input} autofocus={true} onChange={setInput} />
               </label>
+              <br />
+              <CommandButton
+                className="btn btn-primary space-top-right"
+                onClick={() => resolve(undefined)}
+              >
+                <span className="glyphicon glyphicon-remove">&nbsp;</span>
+                Cancel
+              </CommandButton>
+              <CommandButton
+                className="btn btn-primary space-top"
+                onClick={() => resolve(input)}
+                type="submit"
+              >
+                <span className="glyphicon glyphicon-ok">&nbsp;</span>
+                Ok
+              </CommandButton>
             </form>
-            <CommandButton
-              className="btn btn-primary space-top-right"
-              onClick={() => resolve(undefined)}
-            >
-              <span className="glyphicon glyphicon-remove">&nbsp;</span>
-              Cancel
-            </CommandButton>
-            <CommandButton
-              className="btn btn-primary space-top"
-              onClick={() => resolve(input)}
-              type="submit"
-            >
-              <span className="glyphicon glyphicon-ok">&nbsp;</span>
-              Ok
-            </CommandButton>
           </div>
         </div>
       </div>
