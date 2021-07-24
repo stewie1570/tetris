@@ -1,70 +1,79 @@
 import "./prompt-dialog.css";
-import { Dialog } from "./dialog";
-import React from "react";
+import React, { useRef } from "react";
 import { CommandButton } from "./command-button";
 import { TextInput } from "./text-input";
 
-export class PromptDialog extends React.Component {
-  constructor(props) {
-    super(props);
+export const usePrompt = () => {
+  const [visible, setVisible] = React.useState(false);
+  const [input, setInput] = React.useState("");
+  const [message, setMessage] = React.useState(null);
+  const resolver = useRef(null);
+  const promise = useRef(null);
 
-    this.state = { message: "", userInput: "" };
-  }
+  return {
+    prompt: (message) => {
+      promise.current = new Promise((resolve) => { resolver.current = resolve; });
+      setVisible(true);
+      setMessage(message);
+      return promise.current;
+    },
+    promptDialogProps: {
+      input,
+      setInput,
+      visible,
+      message,
+      resolve: (value) => {
+        setVisible(false);
+        resolver.current(value);
+      }
+    }
+  };
+}
 
-  ask({ message, inputName }) {
-    this.setState({ message, userInput: "", inputName });
-    this.dialog.show();
-    this.promise = new Promise((resolve) => (this.resolve = resolve));
+export const PromptDialog = ({ visible, input, setInput, resolve, message }) => {
 
-    return this.promise;
-  }
-
-  userRespondedWith(userInput) {
-    this.dialog.hide();
-    this.resolve(userInput);
-  }
-
-  render() {
-    return (
-      <Dialog
-        ref={(ref) => (this.dialog = ref)}
-        onExit={() => this.resolve(null)}
-      >
-        <div className="centered">
-          <form
-            onSubmit={(event) =>
-              event.preventDefault() || this.okButton.onClick()
-            }
-            name="dialog-form"
+  return visible && <div className="modal" style={{ display: "block" }} role="dialog">
+    <div className="dialog-shade" />
+    <div className="modal-dialog" role="document">
+      <div className="modal-content">
+        <div className="modal-header">
+          <button
+            type="button"
+            onClick={() => resolve(undefined)}
+            className="close"
+            aria-label="Close"
           >
-            <label>
-              {this.state.message}
-              <br />
-              <TextInput
-                value={this.state.userInput}
-                autofocus={true}
-                name={this.state.inputName}
-                onChange={(userInput) => this.setState({ userInput })}
-              />
-            </label>
-          </form>
-          <CommandButton
-            className="btn btn-primary space-top-right"
-            onClick={() => this.userRespondedWith(null)}
-          >
-            <span className="glyphicon glyphicon-remove">&nbsp;</span>
-            Cancel
-          </CommandButton>
-          <CommandButton
-            className="btn btn-primary space-top"
-            onClick={() => this.userRespondedWith(this.state.userInput)}
-            ref={(ref) => (this.okButton = ref)}
-          >
-            <span className="glyphicon glyphicon-ok">&nbsp;</span>
-            Ok
-          </CommandButton>
+            <span>&times;</span>
+          </button>
         </div>
-      </Dialog>
-    );
-  }
+        <div className="modal-body">
+          <div className="centered">
+            <form onSubmit={event => event.preventDefault()} name="dialog-form">
+              <label>
+                {message}
+                <br />
+                <TextInput value={input} autofocus={true} onChange={setInput} />
+              </label>
+              <br />
+              <CommandButton
+                className="btn btn-primary space-top-right"
+                onClick={() => resolve(undefined)}
+              >
+                <span className="glyphicon glyphicon-remove">&nbsp;</span>
+                Cancel
+              </CommandButton>
+              <CommandButton
+                className="btn btn-primary space-top"
+                onClick={() => resolve(input)}
+                type="submit"
+              >
+                <span className="glyphicon glyphicon-ok">&nbsp;</span>
+                Ok
+              </CommandButton>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>;
 }
