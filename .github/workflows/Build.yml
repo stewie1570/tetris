@@ -34,4 +34,4 @@ jobs:
         yarn test
     - name: Analyze Client App Size
       run: |
-        npm run analyze
+        yarn analyze
