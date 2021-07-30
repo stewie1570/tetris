@@ -32,3 +32,6 @@ jobs:
         cd Tetris/ClientApp
         yarn
         yarn test
+    - name: Analyze Client App Size
+      run: |
+        npm run analyze
