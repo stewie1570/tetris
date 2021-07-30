@@ -56,18 +56,15 @@ export const emptyBoard = tetrisBoardFrom(`
     ----------
     ----------`);
 
-export const TetrisGame = props => {
-  const getGameState = () => {
-    const { onChange, ...otherProps } = props;
-
-    return {
-      board: emptyBoard,
-      score: 0,
-      oldScore: undefined,
-      paused: false,
-      mobile: false,
-      ...otherProps,
-    };
+export const TetrisGame = ({ game: gameState, onChange, shapeProvider }) => {
+  const { board, mobile, oldScore, paused, score } = gameState;
+  const game = {
+    board: emptyBoard,
+    score: 0,
+    oldScore: undefined,
+    paused: false,
+    mobile: false,
+    ...{ board, score, oldScore, paused, mobile }
   }
 
   useEffect(() => {
@@ -78,33 +75,29 @@ export const TetrisGame = props => {
       window.removeEventListener("keydown", keyPress, false);
       window.removeEventListener("iterate-game", cycle, false);
     }
-  }, [props]);
+  }, [game, onChange, shapeProvider]);
 
   const cycle = () => {
-    const game = getGameState();
-
     if (!game.paused) {
       var { board, score } = game;
       const iteratedGame = iterate({
         board,
         score,
-        shapeProvider: props.shapeProvider,
+        shapeProvider,
       });
 
       iteratedGame.isOver
-        ? props.onChange({
+        ? onChange({
           ...game,
           board: emptyBoard,
           score: 0,
           oldScore: game.score,
         })
-        : props.onChange({ ...game, ...iteratedGame });
+        : onChange({ ...game, ...iteratedGame });
     }
   };
 
   const keyPress = ({ keyCode }) => {
-    const game = getGameState();
-
     var processKeyCommand = ({ keyCode }) => {
       var { board } = game;
       var newBoard =
@@ -120,13 +113,11 @@ export const TetrisGame = props => {
                   ? rotate({ board })
                   : board;
 
-      props.onChange({ ...game, board: newBoard });
+      onChange({ ...game, board: newBoard });
     };
 
     return !game.paused && processKeyCommand({ keyCode });
   };
-
-  const game = getGameState();
 
   return (
     <div>

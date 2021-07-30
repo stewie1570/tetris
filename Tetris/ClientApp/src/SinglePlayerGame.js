@@ -58,8 +58,7 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
           </p>
           <div className="game">
             <TetrisGame
-              {...game}
-              paused={game.paused}
+              game={game}
               onChange={(gameStateUpdates) => setGame(oldGameState => ({ ...oldGameState, ...gameStateUpdates }))}
               shapeProvider={shapeProvider}
             />
