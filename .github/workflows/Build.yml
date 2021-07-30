@@ -32,3 +32,8 @@ jobs:
         cd Tetris/ClientApp
         yarn
         yarn test
+    - name: Analyze Client App Size
+      run: |
+        cd Tetris/ClientApp
+        yarn build
+        yarn analyze

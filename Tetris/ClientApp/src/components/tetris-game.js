@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { TetrisBoard } from "./tetris-board";
 import { tetrisBoardFrom } from "../domain/serialization";
 import { move, rotate } from "../domain/motion";
@@ -67,17 +67,7 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider }) => {
     ...{ board, score, oldScore, paused, mobile }
   }
 
-  useEffect(() => {
-    window.addEventListener("keydown", keyPress, false);
-    window.addEventListener("iterate-game", cycle, false);
-
-    return () => {
-      window.removeEventListener("keydown", keyPress, false);
-      window.removeEventListener("iterate-game", cycle, false);
-    }
-  }, [game, onChange, shapeProvider]);
-
-  const cycle = () => {
+  const cycle = useCallback(() => {
     if (!game.paused) {
       var { board, score } = game;
       const iteratedGame = iterate({
@@ -95,9 +85,9 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider }) => {
         })
         : onChange({ ...game, ...iteratedGame });
     }
-  };
+  }, [game, onChange, shapeProvider]);
 
-  const keyPress = ({ keyCode }) => {
+  const keyPress = useCallback(({ keyCode }) => {
     var processKeyCommand = ({ keyCode }) => {
       var { board } = game;
       var newBoard =
@@ -117,7 +107,17 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider }) => {
     };
 
     return !game.paused && processKeyCommand({ keyCode });
-  };
+  }, [game, onChange]);
+
+  useEffect(() => {
+    window.addEventListener("keydown", keyPress, false);
+    window.addEventListener("iterate-game", cycle, false);
+
+    return () => {
+      window.removeEventListener("keydown", keyPress, false);
+      window.removeEventListener("iterate-game", cycle, false);
+    }
+  }, [cycle, keyPress]);
 
   return (
     <div>

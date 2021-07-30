@@ -123,7 +123,7 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
               <p />
               <CommandButton
                 className="btn btn-primary"
-                onClick={({ target }) => target.blur() || setGame(game => ({ ...game, mobile: !game.mobile }))}
+                onClick={() => setGame(game => ({ ...game, mobile: !game.mobile }))}
                 disabled={game.paused}
               >
                 {game.mobile

@@ -63,10 +63,10 @@ test("score a point and post score", async () => {
   });
 
   screen.getByText(/Pause/).click();
-  screen.getByText(/Post My Score/).click();
+  (await screen.findByText(/Post My Score/)).click();
 
   var userNameTextInput = await within(
-    screen.getByRole("dialog")
+    await screen.findByRole("dialog")
   ).findByLabelText(/What user name would you like/);
   fireEvent.change(userNameTextInput, {
     target: { value: "Stewie" },
@@ -95,10 +95,10 @@ test("score a point and cancels posting a score", async () => {
   });
 
   screen.getByText(/Pause/).click();
-  screen.getByText(/Post My Score/).click();
+  (await screen.findByText(/Post My Score/)).click();
 
   var userNameTextInput = await within(
-    screen.getByRole("dialog")
+    await screen.findByRole("dialog")
   ).findByLabelText(/What user name would you like/);
   fireEvent.change(userNameTextInput, {
     target: { value: "Stewie" },
