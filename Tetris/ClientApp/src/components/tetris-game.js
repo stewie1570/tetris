@@ -78,6 +78,8 @@ export const TetrisGame = props => {
       window.removeEventListener("keydown", keyPress, false);
       window.removeEventListener("iterate-game", cycle, false);
     }
+    // TODO: remove this when we have a better way to handle state
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props]);
 
   const cycle = () => {
