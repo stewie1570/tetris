@@ -1,11 +1,12 @@
 import React from "react";
 import { ErrorMessage } from "./components/error-message";
-import { CommandButton } from "./components/command-button";
 import { TetrisGame, emptyBoard } from "./components/tetris-game";
 import { PromptDialog, usePrompt } from "./components/prompt-dialog";
 import { leaderBoardService } from "./services";
 import { loading } from "./core/constants";
 import "./App.css";
+import { ScoreBoard } from "./ScoreBoard";
+import { GameControls } from "./GameControls";
 
 export const SinglePlayerGame = ({ shapeProvider }) => {
   const [game, setGame] = React.useState({
@@ -20,7 +21,6 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
   const { prompt, promptDialogProps } = usePrompt();
 
   var postableScore = game.score || game.oldScore;
-  var allowScorePost = game.paused && Boolean(postableScore);
 
   const postScore = async () => {
     const name = username || await prompt("What user name would you like?");
@@ -62,76 +62,15 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
               onChange={(gameStateUpdates) => setGame(oldGameState => ({ ...oldGameState, ...gameStateUpdates }))}
               shapeProvider={shapeProvider}
             />
-            {game.scoreBoard && (
-              <div
-                className="leader-board"
-                style={{ height: allowScorePost ? "80%" : "100%" }}
-              >
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Score</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {game.scoreBoard === loading ? (
-                      <tr>
-                        <td>
-                          <b>Loading...</b>
-                        </td>
-                      </tr>
-                    ) : (
-                      game.scoreBoard.map(userScore => (
-                        <tr key={userScore.username}>
-                          <td>{userScore.username}</td>
-                          <td>{userScore.score}</td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            )}
-            {allowScorePost && (
-              <div className="post-my-score">
-                Would you like to post your score?
-                <CommandButton
-                  className="btn btn-primary post-my-score-button"
-                  runningText="Posting Your Score..."
-                  onClick={postScore}>
-                  <span className="glyphicon glyphicon-send">&nbsp;</span>
-                  Post My Score ({postableScore})
-                </CommandButton>
-              </div>
-            )}
+            <ScoreBoard
+              game={game}
+              onPostScore={postScore}
+              postableScore={postableScore} />
           </div>
-          <div className="controls">
-            <CommandButton
-              className="btn btn-primary"
-              runningText="Loading Score Board..."
-              onClick={pause}>
-              <span
-                className={`glyphicon glyphicon-${game.paused ? "play" : "pause"
-                  }`}
-              >
-                &nbsp;
-              </span>
-              <span>{game.paused ? "Continue" : "Pause"}</span>
-            </CommandButton>
-            <div>
-              <p />
-              <CommandButton
-                className="btn btn-primary"
-                onClick={() => setGame(game => ({ ...game, mobile: !game.mobile }))}
-                disabled={game.paused}
-              >
-                {game.mobile
-                  ? "No Mobile Controls"
-                  : "Mobile Controls"}
-              </CommandButton>
-            </div>
-          </div>
+          <GameControls
+            game={game}
+            onPause={pause}
+            onToggleMobile={() => setGame(game => ({ ...game, mobile: !game.mobile }))} />
         </div>
       </center>
       <PromptDialog {...promptDialogProps} />
