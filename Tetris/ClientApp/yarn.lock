@@ -6754,6 +6754,11 @@ lazy-cache@^1.0.3:
   resolved "https://registry.yarnpkg.com/lazy-cache/-/lazy-cache-1.0.4.tgz#a1d78fc3a50474cb80845d3b3b6e1da49a446e8e"
   integrity sha1-odePw6UEdMuAhF07O24dpJpEbo4=
 
+leaf-validator@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/leaf-validator/-/leaf-validator-7.0.0.tgz#63b2d5f0757371f7118176c5b9b4a93e2057276b"
+  integrity sha512-4CJg1UH1xZDmo/GjoWTHnckLtJDORg7Rj3EFfOTDGxdF8Eug5haWzV5peQKP1m/OX8/dm4oEosp4cSPT7aKPqw==
+
 left-pad@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/left-pad/-/left-pad-1.3.0.tgz#5b8a3a7765dfe001261dde915589e782f8c94d1e"

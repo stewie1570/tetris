@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { TetrisBoard } from "./tetris-board";
 import { tetrisBoardFrom } from "../domain/serialization";
 import { move, rotate } from "../domain/motion";
@@ -56,57 +56,38 @@ export const emptyBoard = tetrisBoardFrom(`
     ----------
     ----------`);
 
-export const TetrisGame = props => {
-  const getGameState = () => {
-    const { onChange, ...otherProps } = props;
-
-    return {
-      board: emptyBoard,
-      score: 0,
-      oldScore: undefined,
-      paused: false,
-      mobile: false,
-      ...otherProps,
-    };
+export const TetrisGame = ({ game: gameState, onChange, shapeProvider }) => {
+  const { board, mobile, oldScore, paused, score } = gameState;
+  const game = {
+    board: emptyBoard,
+    score: 0,
+    oldScore: undefined,
+    paused: false,
+    mobile: false,
+    ...{ board, score, oldScore, paused, mobile }
   }
 
-  useEffect(() => {
-    window.addEventListener("keydown", keyPress, false);
-    window.addEventListener("iterate-game", cycle, false);
-
-    return () => {
-      window.removeEventListener("keydown", keyPress, false);
-      window.removeEventListener("iterate-game", cycle, false);
-    }
-    // TODO: remove this when we have a better way to handle state
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props]);
-
-  const cycle = () => {
-    const game = getGameState();
-
+  const cycle = useCallback(() => {
     if (!game.paused) {
       var { board, score } = game;
       const iteratedGame = iterate({
         board,
         score,
-        shapeProvider: props.shapeProvider,
+        shapeProvider,
       });
 
       iteratedGame.isOver
-        ? props.onChange({
+        ? onChange({
           ...game,
           board: emptyBoard,
           score: 0,
           oldScore: game.score,
         })
-        : props.onChange({ ...game, ...iteratedGame });
+        : onChange({ ...game, ...iteratedGame });
     }
-  };
+  }, [game, onChange, shapeProvider]);
 
-  const keyPress = ({ keyCode }) => {
-    const game = getGameState();
-
+  const keyPress = useCallback(({ keyCode }) => {
     var processKeyCommand = ({ keyCode }) => {
       var { board } = game;
       var newBoard =
@@ -122,13 +103,21 @@ export const TetrisGame = props => {
                   ? rotate({ board })
                   : board;
 
-      props.onChange({ ...game, board: newBoard });
+      onChange({ ...game, board: newBoard });
     };
 
     return !game.paused && processKeyCommand({ keyCode });
-  };
+  }, [game, onChange]);
 
-  const game = getGameState();
+  useEffect(() => {
+    window.addEventListener("keydown", keyPress, false);
+    window.addEventListener("iterate-game", cycle, false);
+
+    return () => {
+      window.removeEventListener("keydown", keyPress, false);
+      window.removeEventListener("iterate-game", cycle, false);
+    }
+  }, [cycle, keyPress]);
 
   return (
     <div>

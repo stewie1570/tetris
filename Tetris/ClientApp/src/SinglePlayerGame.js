@@ -58,8 +58,7 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
           </p>
           <div className="game">
             <TetrisGame
-              {...game}
-              paused={game.paused}
+              game={game}
               onChange={(gameStateUpdates) => setGame(oldGameState => ({ ...oldGameState, ...gameStateUpdates }))}
               shapeProvider={shapeProvider}
             />
@@ -124,7 +123,7 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
               <p />
               <CommandButton
                 className="btn btn-primary"
-                onClick={({ target }) => target.blur() || setGame(game => ({ ...game, mobile: !game.mobile }))}
+                onClick={() => setGame(game => ({ ...game, mobile: !game.mobile }))}
                 disabled={game.paused}
               >
                 {game.mobile

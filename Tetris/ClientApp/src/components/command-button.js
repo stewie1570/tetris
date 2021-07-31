@@ -1,36 +1,18 @@
-import React from 'react'
+import React, { forwardRef } from 'react';
+import { useLoadingState } from 'leaf-validator'
 
-export class CommandButton extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { running: false };
+export const CommandButton = forwardRef(({ onClick, runningText, disabled, type, children, ...otherProps }, ref) => {
+    const [isRunning, showRunningWhile] = useLoadingState();
+
+    const click = async source => {
+        await onClick && !isRunning && showRunningWhile(onClick(source))
     }
 
-    onClick = source => {
-        this.setState({ running: true });
-        var notRunning = () => this.setState({ running: false });
-        try {
-            var clickResult = this.props.onClick && this.props.onClick(source);
-
-            return (clickResult
-                && clickResult.then
-                && clickResult.then(notRunning, notRunning))
-                || notRunning();
-        }
-        catch (ex) {
-            notRunning();
-            throw ex;
-        }
-    }
-
-    render() {
-        const { runningText, disabled, type, ...otherProps } = this.props;
-
-        return <button {...otherProps}
-            onClick={this.onClick}
-            disabled={disabled || this.state.running}
-            type={type || "button"}>
-            {this.state.running ? runningText : this.props.children}
-        </button>;
-    }
-};
+    return <button {...otherProps}
+        ref={ref}
+        onClick={click}
+        disabled={disabled || isRunning}
+        type={type || "button"}>
+        {isRunning && runningText ? runningText : children}
+    </button>;
+});
