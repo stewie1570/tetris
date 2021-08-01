@@ -46,20 +46,20 @@ describe("Motion", () => {
         });
 
         it("should not move active squares outside of the board", () => {
-            var board = tetrisBoardFrom(`
+            const board = tetrisBoardFrom(`
                 ------
                 --**--`);
             expect(move({ board, to: { y: 1 } })).toBe(board);
         });
 
         it("should not move active squares on top of inactive squares", () => {
-            var board = tetrisBoardFrom(`
+            const board = tetrisBoardFrom(`
                 --**##`);
             expect(move({ board, to: { x: 1 } })).toBe(board);
         });
 
         it("should not move active squares when x and y are zero", () => {
-            var board = tetrisBoardFrom(`
+            const board = tetrisBoardFrom(`
                 --**--
                 --**--
                 ------`);
@@ -114,7 +114,7 @@ describe("Motion", () => {
         });
 
         it("can't rotate to vertical on top of inactive squares", () => {
-            var board = tetrisBoardFrom(`
+            const board = tetrisBoardFrom(`
                 ------
                 ---*--
                 -***--
@@ -123,7 +123,7 @@ describe("Motion", () => {
         });
 
         it("can't rotate to horizontal on top of inactive squares", () => {
-            var board = tetrisBoardFrom(`
+            const board = tetrisBoardFrom(`
                 ------
                 ---*##
                 ---*--
@@ -132,7 +132,7 @@ describe("Motion", () => {
         });
 
         it("can't rotate on active squares off the board", () => {
-            var board = tetrisBoardFrom(`
+            const board = tetrisBoardFrom(`
                 ------
                 ------
                 ---*--

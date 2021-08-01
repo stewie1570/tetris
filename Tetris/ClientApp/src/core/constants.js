@@ -1,12 +1,12 @@
-export var empty = { type: "empty" };
-export var active = { type: "active" };
-export var inactive = { type: "inactive" };
+export const empty = { type: "empty" };
+export const active = { type: "active" };
+export const inactive = { type: "inactive" };
 
-export var squareFrom = ({type}) => type === "active" ? active
+export const squareFrom = ({type}) => type === "active" ? active
     : type === "inactive" ? inactive
     : empty;
 
-export var keys = {
+export const keys = {
     left: 37,
     right: 39,
     down: 40,
@@ -14,4 +14,4 @@ export var keys = {
     space: 32
 };
 
-export var loading = "loading";
+export const loading = "loading";

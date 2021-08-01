@@ -4,7 +4,7 @@ import { iterate, iterateUntilInactive } from './iteration'
 
 describe("Iteration", () => {
     it("iterate should move active squares down", () => {
-        var board = tetrisBoardFrom(`
+        const board = tetrisBoardFrom(`
             --**--
             ------`);
 
@@ -14,7 +14,7 @@ describe("Iteration", () => {
     });
 
     it("iterate should inactive board when active squares are at the bottom", () => {
-        var board = tetrisBoardFrom(`
+        const board = tetrisBoardFrom(`
             ------
             --**--`);
 
@@ -24,7 +24,7 @@ describe("Iteration", () => {
     });
 
     it("iterate should inactive board when active squares can't move down", () => {
-        var board = tetrisBoardFrom(`
+        const board = tetrisBoardFrom(`
             ------
             --**--
             ---#--`);
@@ -36,13 +36,13 @@ describe("Iteration", () => {
     });
 
     it("iterate should send a new shape when board is inactive", () => {
-        var board = tetrisBoardFrom(`
+        const board = tetrisBoardFrom(`
             ------
             ------
             ------
             --##--
             ---#--`);
-        var shapeProvider = () => [
+        const shapeProvider = () => [
             [true, true],
             [false, true]
         ];
@@ -57,7 +57,7 @@ describe("Iteration", () => {
 
     describe("Iterate Until Inactive", () => {
         it("iterates the board until the active squares become inactive", () => {
-            var board = tetrisBoardFrom(`
+            const board = tetrisBoardFrom(`
                 **----
                 -*----
                 ------
@@ -75,18 +75,18 @@ describe("Iteration", () => {
 
     describe("Full Row", () => {
         it("moves rows above it down and increments the score", () => {
-            var board = tetrisBoardFrom(`
+            const board = tetrisBoardFrom(`
                 ------
                 ---###
                 ######
                 ######
                 ---#--`);
-            var shapeProvider = () => [
+            const shapeProvider = () => [
                 [true, true],
                 [false, true]
             ];
 
-            var result = iterate({ board, shapeProvider, score: 4 });
+            const result = iterate({ board, shapeProvider, score: 4 });
 
             expect(stringFrom(result.board)).toEqual(stringFrom(tetrisBoardFrom(`
                 **----
@@ -98,11 +98,11 @@ describe("Iteration", () => {
         });
 
         it("moves rows above it down even when the last row is full", () => {
-            var board = tetrisBoardFrom(`
+            const board = tetrisBoardFrom(`
                 ------
                 ---###
                 ######`);
-            var shapeProvider = () => [
+            const shapeProvider = () => [
                 [true, true],
                 [false, true]
             ];
@@ -116,13 +116,13 @@ describe("Iteration", () => {
 
     describe("Game Over", () => {
         it("is false when a new shape can be placed", () => {
-            var board = tetrisBoardFrom(`
+            const board = tetrisBoardFrom(`
                 ------
                 ------
                 ------
                 --##--
                 ---#--`);
-            var shapeProvider = () => [
+            const shapeProvider = () => [
                 [true, true],
                 [false, true]
             ];
@@ -131,15 +131,15 @@ describe("Iteration", () => {
         });
 
         it("is true when a new shape can't be placed", () => {
-            var board = tetrisBoardFrom(`
+            const board = tetrisBoardFrom(`
                 ####--
                 ---#--`);
-            var shapeProvider = () => [
+            const shapeProvider = () => [
                 [true, true],
                 [false, true]
             ];
 
-            var result = iterate({ board, shapeProvider });
+            const result = iterate({ board, shapeProvider });
 
             expect(result.isOver).toBe(true);
             expect(stringFrom(result.board)).toEqual(stringFrom(tetrisBoardFrom(`

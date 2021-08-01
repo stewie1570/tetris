@@ -66,7 +66,7 @@ test("score a point and post score", async () => {
   screen.getByText(/Pause/).click();
   (await screen.findByText(/Post My Score/)).click();
 
-  var userNameTextInput = await within(
+  const userNameTextInput = await within(
     await screen.findByRole("dialog")
   ).findByLabelText(/What user name would you like/);
   fireEvent.change(userNameTextInput, {
@@ -98,7 +98,7 @@ test("score a point and cancels posting a score", async () => {
   screen.getByText(/Pause/).click();
   (await screen.findByText(/Post My Score/)).click();
 
-  var userNameTextInput = await within(
+  const userNameTextInput = await within(
     await screen.findByRole("dialog")
   ).findByLabelText(/What user name would you like/);
   fireEvent.change(userNameTextInput, {

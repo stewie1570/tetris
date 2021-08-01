@@ -11,7 +11,7 @@ const errorHandled = async (request) => {
   }
 };
 
-export var Rest = {
+export const Rest = {
   get: (url) => errorHandled(axios.get(url)),
   post: ({ url, data }) => errorHandled(axios.post(url, data)),
 };
