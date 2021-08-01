@@ -23,9 +23,9 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
   const postableScore = game.score || game.oldScore;
 
   const postScore = async () => {
-    const name = username || await prompt("What user name would you like?");
+    const name = ((username || await prompt("What user name would you like?")) || "").trim();
 
-    name && await leaderBoardService.postScore({
+    name.length && await leaderBoardService.postScore({
       username: name,
       score: postableScore
     });
