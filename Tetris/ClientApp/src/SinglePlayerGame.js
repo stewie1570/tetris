@@ -25,14 +25,13 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
   const postScore = async () => {
     const name = ((username || await prompt("What user name would you like?")) || "").trim();
 
-    name.length && await leaderBoardService.postScore({
-      username: name,
-      score: postableScore
-    });
-
-    await reloadScoreBoard()
-
-    setUsername(name);
+    name.length && await leaderBoardService
+      .postScore({
+        username: name,
+        score: postableScore
+      })
+      .then(reloadScoreBoard)
+      .then(() => setUsername(name));
   }
 
   const reloadScoreBoard = async () => {
