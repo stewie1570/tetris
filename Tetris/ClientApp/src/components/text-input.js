@@ -10,7 +10,7 @@ export class TextInput extends React.Component {
     focus = () => this.textBox.focus();
 
     render() {
-        var { autofocus, ...otherProps } = this.props;
+        const { autofocus, ...otherProps } = this.props;
 
         return <input
             {...otherProps}

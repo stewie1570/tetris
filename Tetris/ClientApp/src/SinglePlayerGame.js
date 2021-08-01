@@ -20,12 +20,12 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
   const [username, setUsername] = React.useState();
   const { prompt, promptDialogProps } = usePrompt();
 
-  var postableScore = game.score || game.oldScore;
+  const postableScore = game.score || game.oldScore;
 
   const postScore = async () => {
-    const name = username || await prompt("What user name would you like?");
+    const name = ((username || await prompt("What user name would you like?")) || "").trim();
 
-    name && await leaderBoardService.postScore({
+    name.length && await leaderBoardService.postScore({
       username: name,
       score: postableScore
     });

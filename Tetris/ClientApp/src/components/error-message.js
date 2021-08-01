@@ -11,7 +11,7 @@ export class ErrorMessage extends React.Component {
   windowClick = ({ target }) =>
     !this.errorContainer.contains(target) && this.hide();
 
-  componentWillMount() {
+  componentDidMount() {
     window.onerror = (errorMessage) =>
       this.setState({ visible: true, errorMessage });
     window.addEventListener("click", this.windowClick);

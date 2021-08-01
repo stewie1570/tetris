@@ -1,11 +1,11 @@
 import { active } from '../core/constants'
 import _ from 'lodash'
 
-export var flatBoardFrom = ({ board }) => _(board)
+export const flatBoardFrom = ({ board }) => _(board)
     .flatMap((row, y) => row.map((square, x) => ({ ...square, x, y })));
 
-export var activeColumnRangeFrom = ({ board }) => {
-    var activeXs = flatBoardFrom({ board })
+export const activeColumnRangeFrom = ({ board }) => {
+    const activeXs = flatBoardFrom({ board })
         .filter(({ type }) => type === active.type)
         .map(({ x }) => x);
 

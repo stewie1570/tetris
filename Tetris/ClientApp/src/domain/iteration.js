@@ -2,12 +2,12 @@ import { move } from './motion'
 import { active, empty, inactive } from '../core/constants'
 import _ from 'lodash'
 
-var isActive = ({ board }) => _(board).some(row => row.some(square => square === active));
+const isActive = ({ board }) => _(board).some(row => row.some(square => square === active));
 
-var inactivedBoardFrom = ({ board }) => board.map(row => row.map(square => square === active ? inactive : square));
+const inactivedBoardFrom = ({ board }) => board.map(row => row.map(square => square === active ? inactive : square));
 
-var activeIteration = ({ board }) => {
-    var iteratedBoard = move({ board, to: { y: 1 } });
+const activeIteration = ({ board }) => {
+    const iteratedBoard = move({ board, to: { y: 1 } });
 
     return {
         board: board === iteratedBoard
@@ -16,17 +16,17 @@ var activeIteration = ({ board }) => {
     };
 }
 
-export var iterateUntilInactive = ({ board }) => isActive({ board })
+export const iterateUntilInactive = ({ board }) => isActive({ board })
     ? iterateUntilInactive(activeIteration({ board }))
     : board;
 
 export function iterate({ board, shapeProvider, score }) {
-    var newShapeIteration = () => {
-        var newShape = _(shapeProvider()).flatMap((row, y) => row.map((value, x) => ({ x, y, value }))).value();
-        var isFull = row => row.every(square => square === inactive);
-        var emptyRowFor = ({ y }) => _.range(0, board[y].length).map(() => empty);
-        var noFullRows = ({ board, score }) => {
-            var firstFullRowY = _(board).findIndex(isFull);
+    const newShapeIteration = () => {
+        const newShape = _(shapeProvider()).flatMap((row, y) => row.map((value, x) => ({ x, y, value }))).value();
+        const isFull = row => row.every(square => square === inactive);
+        const emptyRowFor = ({ y }) => _.range(0, board[y].length).map(() => empty);
+        const noFullRows = ({ board, score }) => {
+            const firstFullRowY = _(board).findIndex(isFull);
 
             return firstFullRowY >= 0
                 ? noFullRows({
@@ -37,8 +37,8 @@ export function iterate({ board, shapeProvider, score }) {
                 })
                 : { board, score };
         };
-        var noFullRowsResult = noFullRows({ board, score });
-        var boardWithNewShape = board => board.map((row, y) => row.map((square, x) => _(newShape).some({ x, y, value: true }) ? active : square));
+        const noFullRowsResult = noFullRows({ board, score });
+        const boardWithNewShape = board => board.map((row, y) => row.map((square, x) => _(newShape).some({ x, y, value: true }) ? active : square));
 
         return {
             board: boardWithNewShape(noFullRowsResult.board),

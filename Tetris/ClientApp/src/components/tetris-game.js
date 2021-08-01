@@ -69,7 +69,7 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider }) => {
 
   const cycle = useCallback(() => {
     if (!game.paused) {
-      var { board, score } = game;
+      const { board, score } = game;
       const iteratedGame = iterate({
         board,
         score,
@@ -88,9 +88,9 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider }) => {
   }, [game, onChange, shapeProvider]);
 
   const keyPress = useCallback(({ keyCode }) => {
-    var processKeyCommand = ({ keyCode }) => {
-      var { board } = game;
-      var newBoard =
+    const processKeyCommand = ({ keyCode }) => {
+      const { board } = game;
+      const newBoard =
         keyCode === keys.left
           ? move({ board, to: { x: -1 } })
           : keyCode === keys.right

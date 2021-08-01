@@ -54,6 +54,7 @@ test("score a point and post score", async () => {
     }),
     rest.post("/api/userScores", async (req, res, ctx) => {
       scorePosts.push(req.body);
+      return res(ctx.status(200));
     })
   );
   const { iterate, container } = getIterableBoard();
@@ -65,7 +66,7 @@ test("score a point and post score", async () => {
   screen.getByText(/Pause/).click();
   (await screen.findByText(/Post My Score/)).click();
 
-  var userNameTextInput = await within(
+  const userNameTextInput = await within(
     await screen.findByRole("dialog")
   ).findByLabelText(/What user name would you like/);
   fireEvent.change(userNameTextInput, {
@@ -86,6 +87,7 @@ test("score a point and cancels posting a score", async () => {
     }),
     rest.post("/api/userScores", async (req, res, ctx) => {
       scorePosts.push(req.body);
+      return res(ctx.status(200));
     })
   );
   const { iterate, container } = getIterableBoard();
@@ -97,7 +99,7 @@ test("score a point and cancels posting a score", async () => {
   screen.getByText(/Pause/).click();
   (await screen.findByText(/Post My Score/)).click();
 
-  var userNameTextInput = await within(
+  const userNameTextInput = await within(
     await screen.findByRole("dialog")
   ).findByLabelText(/What user name would you like/);
   fireEvent.change(userNameTextInput, {
@@ -105,6 +107,41 @@ test("score a point and cancels posting a score", async () => {
   });
 
   screen.getByText(/Cancel/).click();
+
+  await waitForElementToBeRemoved(() => screen.getByText("Posting Your Score..."));
+
+  await waitFor(() =>
+    expect(scorePosts).toEqual([])
+  );
+});
+
+test("score a point and entering a blank username cancels posting the score", async () => {
+  server.use(
+    rest.get("/api/userScores", async (req, res, ctx) => {
+      return res(ctx.json(scorePosts));
+    }),
+    rest.post("/api/userScores", async (req, res, ctx) => {
+      scorePosts.push(req.body);
+      return res(ctx.status(200));
+    })
+  );
+  const { iterate, container } = getIterableBoard();
+
+  await act(async () => {
+    await scorePointOnEmptyBoard({ iterate, container });
+  });
+
+  screen.getByText(/Pause/).click();
+  (await screen.findByText(/Post My Score/)).click();
+
+  const userNameTextInput = await within(
+    await screen.findByRole("dialog")
+  ).findByLabelText(/What user name would you like/);
+  fireEvent.change(userNameTextInput, {
+    target: { value: " " },
+  });
+
+  screen.getByText(/Ok/).click();
 
   await waitForElementToBeRemoved(() => screen.getByText("Posting Your Score..."));
 
