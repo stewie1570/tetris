@@ -54,6 +54,7 @@ test("score a point and post score", async () => {
     }),
     rest.post("/api/userScores", async (req, res, ctx) => {
       scorePosts.push(req.body);
+      return res(ctx.status(200));
     })
   );
   const { iterate, container } = getIterableBoard();
