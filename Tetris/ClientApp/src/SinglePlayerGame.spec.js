@@ -75,7 +75,7 @@ test("score a point and post score", async () => {
 
   screen.getByText(/Ok/).click();
 
-  await waitForElementToBeRemoved(() => screen.getByText("Posting Your Score..."));
+  await waitForElementToBeRemoved(() => screen.getByText(/What user name would you like/));
 
   expect(scorePosts).toEqual([{ username: "Stewie", score: 1 }]);
 });
@@ -108,7 +108,7 @@ test("score a point and cancels posting a score", async () => {
 
   screen.getByText(/Cancel/).click();
 
-  await waitForElementToBeRemoved(() => screen.getByText("Posting Your Score..."));
+  await waitForElementToBeRemoved(() => screen.getByText(/What user name would you like/));
 
   await waitFor(() =>
     expect(scorePosts).toEqual([])
@@ -143,7 +143,7 @@ test("score a point and entering a blank username cancels posting the score", as
 
   screen.getByText(/Ok/).click();
 
-  await waitForElementToBeRemoved(() => screen.getByText("Posting Your Score..."));
+  await waitForElementToBeRemoved(() => screen.getByText(/What user name would you like/));
 
   await waitFor(() =>
     expect(scorePosts).toEqual([])

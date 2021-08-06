@@ -1,4 +1,4 @@
-import { render, within, screen, fireEvent } from '@testing-library/react';
+import { render, within, screen, fireEvent, waitForElementToBeRemoved } from '@testing-library/react';
 import React from 'react'
 import { CommandButton } from './command-button';
 import { usePrompt, StringInput, Dialog } from './dialog';
@@ -8,7 +8,7 @@ function TestApp() {
     const { prompt, dialogProps } = usePrompt();
 
     const editName = async () => {
-        const newName = await prompt(resolve => <StringInput onStringEntered={resolve}>
+        const newName = await prompt(resolve => <StringInput onSaveString={resolve}>
             What user name would you like
         </StringInput>);
 
@@ -35,5 +35,6 @@ test('should prompt user for input', async () => {
     });
 
     screen.getByText(/Ok/).click();
+    await waitForElementToBeRemoved(() => screen.getByText(/What user name would you like/));
     await screen.findByText("Name: Stewie");
 });

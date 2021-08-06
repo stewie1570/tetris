@@ -23,17 +23,23 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
   const postableScore = game.score || game.oldScore;
 
   const postScore = async () => {
-    const name = ((username || await prompt(resolve => <StringPrompt onStringEntered={resolve}>
-      What user name would you like?
-    </StringPrompt>)) || "").trim();
+    const updateUserName = async enteredName => {
+      const name = (username || enteredName || "").trim();
 
-    name.length && await leaderBoardService
-      .postScore({
-        username: name,
-        score: postableScore
-      })
-      .then(reloadScoreBoard)
-      .then(() => setUsername(name));
+      name.length && await leaderBoardService
+        .postScore({
+          username: name,
+          score: postableScore
+        })
+        .then(reloadScoreBoard)
+        .then(() => setUsername(name));
+    }
+
+    await prompt(exitModal => <StringPrompt
+      onSaveString={name => updateUserName(name).then(exitModal)}
+      runningText="Posting Your Score...">
+      What user name would you like?
+    </StringPrompt>);
   }
 
   const reloadScoreBoard = async () => {

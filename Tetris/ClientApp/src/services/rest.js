@@ -8,6 +8,7 @@ const errorHandled = async (request) => {
     const message =
       error?.title || caughtError?.message || "An unknown error occurred.";
     window.onerror(message);
+    throw caughtError;
   }
 };
 

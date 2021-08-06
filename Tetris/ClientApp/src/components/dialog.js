@@ -8,8 +8,8 @@ export const usePrompt = () => {
     const resolver = useRef(undefined);
     const dialogContent = useRef(undefined);
     const resolveDialog = value => {
-        setVisible(false);
         resolver.current(value);
+        setVisible(false);
     };
 
     return {
@@ -17,7 +17,7 @@ export const usePrompt = () => {
             const promise = new Promise(resolve => {
                 resolver.current = resolve;
             });
-            dialogContent.current = content(resolver.current);
+            dialogContent.current = content(resolveDialog);
             setVisible(true);
             return promise;
         },
@@ -56,7 +56,7 @@ export const Dialog = ({ isVisible, resolve, children }) => {
         </div>;
 };
 
-export function StringInput({ onStringEntered, children }) {
+export function StringInput({ onSaveString, children, runningText }) {
     const [value, setValue] = React.useState("");
 
     return <form onSubmit={event => event.preventDefault()} name="dialog-form">
@@ -68,14 +68,15 @@ export function StringInput({ onStringEntered, children }) {
         <br />
         <CommandButton
             className="btn btn-primary space-top-right"
-            onClick={() => onStringEntered(undefined)}
+            onClick={() => onSaveString(undefined)}
         >
             <span className="glyphicon glyphicon-remove">&nbsp;</span>
             Cancel
         </CommandButton>
         <CommandButton
             className="btn btn-primary space-top"
-            onClick={() => onStringEntered(value)}
+            onClick={() => onSaveString(value)}
+            runningText={runningText}
             type="submit"
         >
             <span className="glyphicon glyphicon-ok">&nbsp;</span>
