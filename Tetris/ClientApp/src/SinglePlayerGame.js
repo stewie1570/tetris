@@ -1,7 +1,7 @@
 import React from "react";
 import { ErrorMessage } from "./components/error-message";
 import { TetrisGame, emptyBoard } from "./components/tetris-game";
-import { PromptDialog, usePrompt } from "./components/prompt-dialog";
+import { StringInput as StringPrompt, Dialog, usePrompt } from './components/dialog';
 import { leaderBoardService } from "./services";
 import { loading } from "./core/constants";
 import "./App.css";
@@ -18,12 +18,14 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
     score: 0
   });
   const [username, setUsername] = React.useState();
-  const { prompt, promptDialogProps } = usePrompt();
+  const { dialogProps, prompt } = usePrompt();
 
   const postableScore = game.score || game.oldScore;
 
   const postScore = async () => {
-    const name = ((username || await prompt("What user name would you like?")) || "").trim();
+    const name = ((username || await prompt(resolve => <StringPrompt onStringEntered={resolve}>
+      What user name would you like?
+    </StringPrompt>)) || "").trim();
 
     name.length && await leaderBoardService
       .postScore({
@@ -72,7 +74,7 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
             onToggleMobile={() => setGame(game => ({ ...game, mobile: !game.mobile }))} />
         </div>
       </center>
-      <PromptDialog {...promptDialogProps} />
+      <Dialog {...dialogProps} />
       <ErrorMessage />
     </div>
   );
