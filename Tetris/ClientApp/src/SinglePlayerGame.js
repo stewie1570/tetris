@@ -3,10 +3,10 @@ import { ErrorMessage } from "./components/error-message";
 import { TetrisGame, emptyBoard } from "./components/tetris-game";
 import { StringInput as StringPrompt, Dialog, usePrompt } from './components/dialog';
 import { leaderBoardService } from "./services";
-import { loading } from "./core/constants";
 import "./App.css";
 import { ScoreBoard } from "./ScoreBoard";
 import { GameControls } from "./GameControls";
+import { useLoadingState } from 'leaf-validator';
 
 export const SinglePlayerGame = ({ shapeProvider }) => {
   const [game, setGame] = React.useState({
@@ -19,6 +19,7 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
   });
   const [username, setUsername] = React.useState();
   const { dialogProps, prompt } = usePrompt();
+  const [isLoadingScoreBoard, showLoadingScoreBoardWhile] = useLoadingState();
 
   const postableScore = game.score || game.oldScore;
 
@@ -43,13 +44,13 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
   }
 
   const reloadScoreBoard = async () => {
-    const scoreBoard = await leaderBoardService.get();
+    const scoreBoard = await showLoadingScoreBoardWhile(leaderBoardService.get());
     setGame(game => ({ ...game, scoreBoard }));
   };
 
   const pause = async () => {
     const paused = !game.paused;
-    setGame({ ...game, paused, scoreBoard: paused ? loading : undefined });
+    setGame({ ...game, paused, scoreBoard: paused ? game.scoreBoard : undefined });
     paused && await reloadScoreBoard();
   }
 
@@ -71,6 +72,7 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
             />
             <ScoreBoard
               game={game}
+              isLoading={isLoadingScoreBoard}
               onPostScore={postScore}
               postableScore={postableScore} />
           </div>
