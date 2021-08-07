@@ -1,12 +1,12 @@
 import React from "react";
 import { ErrorMessage } from "./components/error-message";
 import { TetrisGame, emptyBoard } from "./components/tetris-game";
-import { PromptDialog, usePrompt } from "./components/prompt-dialog";
+import { StringInput as StringPrompt, Dialog, usePrompt } from './components/dialog';
 import { leaderBoardService } from "./services";
-import { loading } from "./core/constants";
 import "./App.css";
 import { ScoreBoard } from "./ScoreBoard";
 import { GameControls } from "./GameControls";
+import { useLoadingState } from 'leaf-validator';
 
 export const SinglePlayerGame = ({ shapeProvider }) => {
   const [game, setGame] = React.useState({
@@ -18,30 +18,39 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
     score: 0
   });
   const [username, setUsername] = React.useState();
-  const { prompt, promptDialogProps } = usePrompt();
+  const { dialogProps, prompt } = usePrompt();
+  const [isLoadingScoreBoard, showLoadingScoreBoardWhile] = useLoadingState();
 
   const postableScore = game.score || game.oldScore;
 
   const postScore = async () => {
-    const name = ((username || await prompt("What user name would you like?")) || "").trim();
+    const updateUserName = async enteredName => {
+      const name = (username || enteredName || "").trim();
 
-    name.length && await leaderBoardService
-      .postScore({
-        username: name,
-        score: postableScore
-      })
-      .then(reloadScoreBoard)
-      .then(() => setUsername(name));
+      name.length && await leaderBoardService
+        .postScore({
+          username: name,
+          score: postableScore
+        })
+        .then(reloadScoreBoard)
+        .then(() => setUsername(name));
+    }
+
+    await prompt(exitModal => <StringPrompt
+      onSaveString={name => updateUserName(name).then(exitModal)}
+      runningText="Posting Your Score...">
+      What user name would you like?
+    </StringPrompt>);
   }
 
   const reloadScoreBoard = async () => {
-    const scoreBoard = await leaderBoardService.get();
+    const scoreBoard = await showLoadingScoreBoardWhile(leaderBoardService.get());
     setGame(game => ({ ...game, scoreBoard }));
   };
 
   const pause = async () => {
     const paused = !game.paused;
-    setGame({ ...game, paused, scoreBoard: paused ? loading : undefined });
+    setGame({ ...game, paused, scoreBoard: paused ? game.scoreBoard : undefined });
     paused && await reloadScoreBoard();
   }
 
@@ -63,6 +72,7 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
             />
             <ScoreBoard
               game={game}
+              isLoading={isLoadingScoreBoard}
               onPostScore={postScore}
               postableScore={postableScore} />
           </div>
@@ -72,7 +82,7 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
             onToggleMobile={() => setGame(game => ({ ...game, mobile: !game.mobile }))} />
         </div>
       </center>
-      <PromptDialog {...promptDialogProps} />
+      <Dialog {...dialogProps} />
       <ErrorMessage />
     </div>
   );
