@@ -6,10 +6,10 @@ import { leaderBoardService } from "./services";
 import "./App.css";
 import { ScoreBoard } from "./ScoreBoard";
 import { GameControls } from "./GameControls";
-import { useLoadingState } from 'leaf-validator';
+import { useLoadingState, useMountedOnlyState } from 'leaf-validator';
 
 export const SinglePlayerGame = ({ shapeProvider }) => {
-  const [game, setGame] = React.useState({
+  const [game, setGame] = useMountedOnlyState({
     board: emptyBoard,
     isOver: false,
     mobile: false,
@@ -17,41 +17,46 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
     paused: false,
     score: 0
   });
-  const [username, setUsername] = React.useState();
+  const [username, setUsername] = useMountedOnlyState();
   const { dialogProps, prompt } = usePrompt();
   const [isLoadingScoreBoard, showLoadingScoreBoardWhile] = useLoadingState();
 
   const postableScore = game.score || game.oldScore;
 
   const postScore = async () => {
-    const updateUserName = async enteredName => {
-      const name = (username || enteredName || "").trim();
 
-      name.length && await leaderBoardService
-        .postScore({
-          username: name,
-          score: postableScore
-        })
-        .then(reloadScoreBoard)
-        .then(() => setUsername(name));
-    }
+    const sendCurrentScore = name => leaderBoardService
+      .postScore({
+        username: name,
+        score: postableScore
+      })
+      .then(reloadScoreBoard);
 
-    await prompt(exitModal => <StringPrompt
-      onSaveString={name => updateUserName(name).then(exitModal)}
-      runningText="Posting Your Score...">
-      What user name would you like?
-    </StringPrompt>);
+    await (Boolean(username?.trim().length)
+      ? sendCurrentScore(username)
+      : prompt(exitModal => <StringPrompt
+        onSaveString={name => {
+          const trimmedName = name?.trim();
+          return Boolean(trimmedName?.length)
+            ? sendCurrentScore(trimmedName)
+              .then(() => setUsername(trimmedName))
+              .then(exitModal)
+            : exitModal();
+        }}
+        runningText="Posting Your Score...">
+        What user name would you like?
+      </StringPrompt>));
   }
 
   const reloadScoreBoard = async () => {
-    const scoreBoard = await showLoadingScoreBoardWhile(leaderBoardService.get());
+    const scoreBoard = await leaderBoardService.get();
     setGame(game => ({ ...game, scoreBoard }));
   };
 
   const pause = async () => {
     const paused = !game.paused;
     setGame({ ...game, paused, scoreBoard: paused ? game.scoreBoard : undefined });
-    paused && await reloadScoreBoard();
+    paused && await showLoadingScoreBoardWhile(reloadScoreBoard());
   }
 
   return (
@@ -72,6 +77,7 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
             />
             <ScoreBoard
               game={game}
+              username={username}
               isLoading={isLoadingScoreBoard}
               onPostScore={postScore}
               postableScore={postableScore} />
