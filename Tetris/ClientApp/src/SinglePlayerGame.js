@@ -77,6 +77,7 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
             />
             <ScoreBoard
               game={game}
+              username={username}
               isLoading={isLoadingScoreBoard}
               onPostScore={postScore}
               postableScore={postableScore} />

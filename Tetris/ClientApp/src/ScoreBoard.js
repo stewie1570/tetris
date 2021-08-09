@@ -1,7 +1,7 @@
 import React from "react";
 import { CommandButton } from "./components/command-button";
 
-export function ScoreBoard({ game, postableScore, onPostScore: postScore, isLoading }) {
+export function ScoreBoard({ game, postableScore, onPostScore: postScore, isLoading, username }) {
   const allowScorePost = game.paused && Boolean(postableScore);
 
   const board = (game.scoreBoard || isLoading) &&
@@ -42,7 +42,7 @@ export function ScoreBoard({ game, postableScore, onPostScore: postScore, isLoad
         Would you like to post your score?
         <CommandButton
           className="btn btn-primary post-my-score-button"
-          runningText="Posting your score..."
+          runningText={Boolean(username) ? "Posting your score..." : undefined}
           onClick={postScore}>
           <span className="glyphicon glyphicon-send">&nbsp;</span>
           Post My Score ({postableScore})
