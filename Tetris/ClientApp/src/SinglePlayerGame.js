@@ -35,11 +35,14 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
     await (Boolean(username?.trim().length)
       ? sendCurrentScore(username)
       : prompt(exitModal => <StringPrompt
-        onSaveString={name => Boolean(name?.trim().length)
-          ? sendCurrentScore(name.trim())
-            .then(() => setUsername(name.trim()))
-            .then(exitModal)
-          : exitModal()}
+        onSaveString={name => {
+          const trimmedName = name?.trim();
+          return Boolean(trimmedName?.length)
+            ? sendCurrentScore(trimmedName)
+              .then(() => setUsername(trimmedName))
+              .then(exitModal)
+            : exitModal();
+        }}
         runningText="Posting Your Score...">
         What user name would you like?
       </StringPrompt>));
