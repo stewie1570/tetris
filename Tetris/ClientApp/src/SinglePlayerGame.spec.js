@@ -80,6 +80,46 @@ test("score a point and post score", async () => {
   expect(scorePosts).toEqual([{ username: "Stewie", score: 1 }]);
 });
 
+test("score a point and post score twice", async () => {
+  server.use(
+    rest.get("/api/userScores", async (req, res, ctx) => {
+      return res(ctx.json([]));
+    }),
+    rest.post("/api/userScores", async (req, res, ctx) => {
+      scorePosts.push(req.body);
+      return res(ctx.status(200));
+    })
+  );
+  const { iterate, container } = getIterableBoard();
+
+  await act(async () => {
+    await scorePointOnEmptyBoard({ iterate, container });
+  });
+
+  screen.getByText(/Pause/).click();
+  (await screen.findByText(/Post My Score/)).click();
+
+  const userNameTextInput = await within(
+    await screen.findByRole("dialog")
+  ).findByLabelText(/What user name would you like/);
+  fireEvent.change(userNameTextInput, {
+    target: { value: "Stewie" },
+  });
+
+  screen.getByText(/Ok/).click();
+
+  await waitForElementToBeRemoved(() => screen.queryByText(/What user name would you like/));
+
+  (await screen.findByText(/Post My Score/)).click();
+  await screen.findByText("Posting your score...")
+  await waitForElementToBeRemoved(() => screen.queryByText("Posting your score..."));
+
+  expect(scorePosts).toEqual([
+    { username: "Stewie", score: 1 },
+    { username: "Stewie", score: 1 }
+  ]);
+});
+
 test("score a point and cancels posting a score", async () => {
   server.use(
     rest.get("/api/userScores", async (req, res, ctx) => {

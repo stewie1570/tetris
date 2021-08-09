@@ -42,6 +42,7 @@ export function ScoreBoard({ game, postableScore, onPostScore: postScore, isLoad
         Would you like to post your score?
         <CommandButton
           className="btn btn-primary post-my-score-button"
+          runningText="Posting your score..."
           onClick={postScore}>
           <span className="glyphicon glyphicon-send">&nbsp;</span>
           Post My Score ({postableScore})
