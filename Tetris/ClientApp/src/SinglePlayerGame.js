@@ -24,28 +24,27 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
   const postableScore = game.score || game.oldScore;
 
   const postScore = async () => {
-
-    const sendCurrentScore = name => leaderBoardService
+    const hasUserName = Boolean(username?.trim().length);
+    const sendCurrentScoreFor = name => leaderBoardService
       .postScore({
         username: name,
         score: postableScore
       })
       .then(reloadScoreBoard);
+    const promptUserNameAndSendScore = () => prompt(exitModal => <StringPrompt
+      onSaveString={name => {
+        const trimmedName = name?.trim();
+        return Boolean(trimmedName?.length)
+          ? sendCurrentScoreFor(trimmedName)
+            .then(() => setUsername(trimmedName))
+            .then(exitModal)
+          : exitModal();
+      } }
+      submittingText="Posting Your Score...">
+      What user name would you like?
+    </StringPrompt>);
 
-    await (Boolean(username?.trim().length)
-      ? sendCurrentScore(username)
-      : prompt(exitModal => <StringPrompt
-        onSaveString={name => {
-          const trimmedName = name?.trim();
-          return Boolean(trimmedName?.length)
-            ? sendCurrentScore(trimmedName)
-              .then(() => setUsername(trimmedName))
-              .then(exitModal)
-            : exitModal();
-        }}
-        runningText="Posting Your Score...">
-        What user name would you like?
-      </StringPrompt>));
+    await (hasUserName ? sendCurrentScoreFor(username) : promptUserNameAndSendScore());
   }
 
   const reloadScoreBoard = async () => {

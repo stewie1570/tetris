@@ -56,7 +56,7 @@ export const Dialog = ({ isVisible, resolve, children }) => {
         </div>;
 };
 
-export function StringInput({ onSaveString, children, runningText }) {
+export function StringInput({ onSaveString, children, submittingText }) {
     const [value, setValue] = React.useState("");
 
     return <form onSubmit={event => event.preventDefault()} name="dialog-form">
@@ -76,7 +76,7 @@ export function StringInput({ onSaveString, children, runningText }) {
         <CommandButton
             className="btn btn-primary space-top"
             onClick={() => onSaveString(value)}
-            runningText={runningText}
+            runningText={submittingText}
             type="submit"
         >
             <span className="glyphicon glyphicon-ok">&nbsp;</span>

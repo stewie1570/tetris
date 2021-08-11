@@ -90,18 +90,14 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider }) => {
   const keyPress = useCallback(({ keyCode }) => {
     const processKeyCommand = ({ keyCode }) => {
       const { board } = game;
-      const newBoard =
-        keyCode === keys.left
-          ? move({ board, to: { x: -1 } })
-          : keyCode === keys.right
-            ? move({ board, to: { x: 1 } })
-            : keyCode === keys.down
-              ? move({ board, to: { y: 1 } })
-              : keyCode === keys.space
-                ? iterateUntilInactive({ board })
-                : keyCode === keys.up
-                  ? rotate({ board })
-                  : board;
+      const moves = {
+        [keys.left]: () => move({ board, to: { x: -1 } }),
+        [keys.right]: () => move({ board, to: { x: 1 } }),
+        [keys.down]: () => move({ board, to: { y: 1 } }),
+        [keys.space]: () => iterateUntilInactive({ board }),
+        [keys.up]: () => rotate({ board }),
+      };
+      const newBoard = moves[keyCode]?.() ?? board;
 
       onChange({ ...game, board: newBoard });
     };
