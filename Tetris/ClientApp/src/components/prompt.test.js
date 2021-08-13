@@ -1,7 +1,7 @@
 import { render, within, screen, fireEvent, waitForElementToBeRemoved } from '@testing-library/react';
 import React from 'react'
-import { CommandButton } from './command-button';
-import { usePrompt, StringInput, Dialog } from './prompt';
+import { CommandButton } from './CommandButton';
+import { usePrompt, StringInput, Dialog } from './Prompt';
 
 function TestApp() {
     const [name, setName] = React.useState();

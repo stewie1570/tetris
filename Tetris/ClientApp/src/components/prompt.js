@@ -1,7 +1,7 @@
-import "./prompt.css";
+import "./Prompt.css";
 import React, { useRef } from 'react';
-import { CommandButton } from './command-button';
-import { TextInput } from './text-input';
+import { CommandButton } from './CommandButton';
+import { TextInput } from './TextInput';
 
 export const usePrompt = () => {
     const [isVisible, setVisible] = React.useState(false);

@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect } from "react";
-import { TetrisBoard } from "./tetris-board";
+import { TetrisBoard } from "./TetrisBoard";
 import { tetrisBoardFrom } from "../domain/serialization";
 import { move, rotate } from "../domain/motion";
 import { iterate, iterateUntilInactive } from "../domain/iteration";
 import { keys } from "../core/constants";
-import { MobileControls } from "./mobile-controls";
+import { MobileControls } from "./MobileControls";
 
 export const shapes = [
   [

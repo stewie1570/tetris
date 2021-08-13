@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import SinglePlayerGame from "./SinglePlayerGame";
 import "./index.css";
 import "bootstrap-css-only";
-import { shapes } from "./components/tetris-game";
+import { shapes } from "./components/TetrisGame";
 
 const randomNumberGenerator = {
   between: ({ min, max }) => Math.floor(Math.random() * (max + 1)) + min,
