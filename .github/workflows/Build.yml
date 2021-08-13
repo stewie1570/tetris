@@ -35,7 +35,7 @@ jobs:
     - name: Report Code Coverage
       uses: romeovs/lcov-reporter-action@v0.2.16
       with:
-        github-token: ${{ token }}
+        github-token: ${{ TOKEN }}
         lcov-file: Tetris/ClientApp/coverage/lcov.info
     - name: Analyze Client App Size
       run: |
