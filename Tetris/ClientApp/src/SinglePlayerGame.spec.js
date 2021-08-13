@@ -9,7 +9,7 @@ import {
   act,
   waitForElementToBeRemoved,
 } from "@testing-library/react";
-import { shapes } from "./components/tetris-game";
+import { shapes } from "./components/TetrisGame";
 import { keys } from "./core/constants";
 import { rest } from "msw";
 import { server } from "./setupTests";

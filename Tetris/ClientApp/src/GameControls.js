@@ -1,5 +1,5 @@
 import React from "react";
-import { CommandButton } from "./components/command-button";
+import { CommandButton } from "./components/CommandButton";
 
 export function GameControls({ onPause: togglePause, game, onToggleMobile: toggleMobile }) {
   return <div className="controls">

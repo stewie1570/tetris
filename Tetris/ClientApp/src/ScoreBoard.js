@@ -1,5 +1,5 @@
 import React from "react";
-import { CommandButton } from "./components/command-button";
+import { CommandButton } from "./components/CommandButton";
 
 export function ScoreBoard({ game, postableScore, onPostScore: postScore, isLoading, username }) {
   const allowScorePost = game.paused && Boolean(postableScore);
