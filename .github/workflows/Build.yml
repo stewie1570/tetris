@@ -36,7 +36,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: code-coverage-report
-        path: Tetris/ClientApp/coverage
+        path: Tetris/ClientApp/coverage/lcov-report/index.html
     - name: Analyze Client App Size
       run: |
         cd Tetris/ClientApp
