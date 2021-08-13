@@ -1,7 +1,7 @@
 import React from "react";
 import { ErrorMessage } from "./components/ErrorMessage";
 import { TetrisGame, emptyBoard } from "./components/TetrisGame";
-import { StringInput as StringPrompt, Dialog, usePrompt } from './components/Prompt';
+import { StringInput as StringPrompt, Dialog, usePrompt } from './components/NewPrompt';
 import { leaderBoardService } from "./services";
 import "./App.css";
 import { ScoreBoard } from "./ScoreBoard";
