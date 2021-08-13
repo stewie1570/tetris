@@ -1,22 +1,17 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
-export class TextInput extends React.Component {
-    update = (event) => this.props.onChange && this.props.onChange(event.target.value);
+export const TextInput = ({ value, onChange, autofocus, ...otherProps }) => {
+    const inputRef = useRef();
+    const update = (event) => onChange?.(event.target.value);
 
-    componentDidMount() {
-        this.props.autofocus && this.textBox.focus();
-    }
+    useEffect(() => {
+        autofocus && inputRef.current?.focus();
+    }, []);
 
-    focus = () => this.textBox.focus();
-
-    render() {
-        const { autofocus, ...otherProps } = this.props;
-
-        return <input
-            {...otherProps}
-            type="text"
-            value={this.props.value}
-            ref={ref => this.textBox = ref}
-            onChange={this.update} />;
-    }
+    return <input
+        {...otherProps}
+        type="text"
+        value={value}
+        ref={inputRef}
+        onChange={update} />;
 }

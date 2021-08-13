@@ -1,4 +1,4 @@
-import "./dialog.css";
+import "./prompt.css";
 import React, { useRef } from 'react';
 import { CommandButton } from './command-button';
 import { TextInput } from './text-input';
