@@ -1,4 +1,4 @@
-import "./NewPrompt.css";
+import "./Prompt.css";
 import React, { useRef } from 'react';
 import { CommandButton } from './CommandButton';
 import { TextInput } from './TextInput';

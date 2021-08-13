@@ -1,6 +1,6 @@
 import React from "react";
 import { activeColumnRangeFrom } from "../domain/board";
-import "./NewBoard.css";
+import "./Board.css";
 import { active, empty } from "../core/constants";
 
 export function TetrisBoard({ board }) {
