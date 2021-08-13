@@ -32,7 +32,7 @@ jobs:
         cd Tetris/ClientApp
         yarn
         yarn test
-    - name: Report Code Coverage
+    - name: Report Frontend Code Coverage
       uses: romeovs/lcov-reporter-action@v0.2.16
       with:
         github-token: ${{ secrets.TOKEN }}
