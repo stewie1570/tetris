@@ -56,7 +56,7 @@ export const Dialog = ({ isVisible, resolve, children }) => {
         </div>;
 };
 
-export function StringInput({ onSaveString, children, submittingText }) {
+export function StringInput({ onSaveString, children, filter, submittingText }) {
     const [value, setValue] = React.useState("");
 
     return <form onSubmit={event => event.preventDefault()} name="dialog-form">
@@ -75,7 +75,7 @@ export function StringInput({ onSaveString, children, submittingText }) {
         </CommandButton>
         <CommandButton
             className="btn btn-primary space-top"
-            onClick={() => onSaveString(value)}
+            onClick={() => onSaveString(filter ? filter(value) : value)}
             runningText={submittingText}
             type="submit"
         >

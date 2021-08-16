@@ -32,14 +32,12 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
       })
       .then(reloadScoreBoard);
     const promptUserNameAndSendScore = () => prompt(exitModal => <StringPrompt
-      onSaveString={name => {
-        const trimmedName = name?.trim();
-        return Boolean(trimmedName?.length)
-          ? sendCurrentScoreFor(trimmedName)
-            .then(() => setUsername(trimmedName))
-            .then(exitModal)
-          : exitModal();
-      } }
+      filter={value => (value ?? "").trim()}
+      onSaveString={name => Boolean(name?.length)
+        ? sendCurrentScoreFor(name)
+          .then(() => setUsername(name))
+          .then(exitModal)
+        : exitModal()}
       submittingText="Posting Your Score...">
       What user name would you like?
     </StringPrompt>);

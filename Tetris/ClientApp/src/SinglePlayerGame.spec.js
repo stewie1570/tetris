@@ -70,7 +70,7 @@ test("score a point and post score", async () => {
     await screen.findByRole("dialog")
   ).findByLabelText(/What user name would you like/);
   fireEvent.change(userNameTextInput, {
-    target: { value: "Stewie" },
+    target: { value: " Stewie  " },
   });
 
   screen.getByText(/Ok/).click();
