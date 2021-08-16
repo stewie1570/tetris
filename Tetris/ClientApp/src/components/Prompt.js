@@ -63,7 +63,7 @@ export function StringInput({ onSaveString, children, filter, submittingText }) 
         <label>
             {children}
             <br />
-            <TextInput value={value} autofocus={true} onChange={value => setValue(filter ? filter(value) : value)} />
+            <TextInput value={value} autofocus={true} onChange={setValue} />
         </label>
         <br />
         <CommandButton
@@ -75,7 +75,7 @@ export function StringInput({ onSaveString, children, filter, submittingText }) 
         </CommandButton>
         <CommandButton
             className="btn btn-primary space-top"
-            onClick={() => onSaveString(value)}
+            onClick={() => onSaveString(filter ? filter(value) : value)}
             runningText={submittingText}
             type="submit"
         >
