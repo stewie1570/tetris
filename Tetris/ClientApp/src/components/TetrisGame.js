@@ -97,9 +97,8 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider }) => {
         [keys.space]: () => iterateUntilInactive({ board }),
         [keys.up]: () => rotate({ board }),
       };
-      const newBoard = moves[keyCode]?.() ?? board;
-
-      onChange({ ...game, board: newBoard });
+      const selectedMove = moves[keyCode];
+      selectedMove && onChange({ ...game, board: selectedMove() });
     };
 
     return !game.paused && processKeyCommand({ keyCode });
