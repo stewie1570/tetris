@@ -69,7 +69,7 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
           <div className="game">
             <TetrisGame
               game={game}
-              onChange={(gameStateUpdates) => setGame(oldGameState => ({ ...oldGameState, ...gameStateUpdates }))}
+              onChange={setGame}
               shapeProvider={shapeProvider}
             />
             <ScoreBoard

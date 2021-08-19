@@ -77,13 +77,13 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider }) => {
       });
 
       iteratedGame.isOver
-        ? onChange({
+        ? onChange(game => ({
           ...game,
           board: emptyBoard,
           score: 0,
           oldScore: game.score,
-        })
-        : onChange({ ...game, ...iteratedGame });
+        }))
+        : onChange(game => ({ ...game, ...iteratedGame }));
     }
   }, [game, onChange, shapeProvider]);
 
@@ -98,7 +98,7 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider }) => {
         [keys.up]: () => rotate({ board }),
       };
       const selectedMove = moves[keyCode];
-      selectedMove && onChange({ ...game, board: selectedMove() });
+      selectedMove && onChange(game => ({ ...game, board: selectedMove() }));
     };
 
     return !game.paused && processKeyCommand({ keyCode });
