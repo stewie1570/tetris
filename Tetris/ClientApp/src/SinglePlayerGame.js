@@ -25,12 +25,14 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
 
   const postScore = async () => {
     const hasUserName = Boolean(username?.trim().length);
+
     const sendCurrentScoreFor = name => leaderBoardService
       .postScore({
         username: name,
         score: postableScore
       })
       .then(reloadScoreBoard);
+
     const promptUserNameAndSendScore = () => prompt(exitModal => <StringPrompt
       filter={value => (value ?? "").trim()}
       onSaveString={name => Boolean(name?.length)
