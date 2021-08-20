@@ -20,8 +20,8 @@
     "source-map-explorer": "^2.5.2"
   },
   "scripts": {
-    "analyze": "source-map-explorer 'build/static/js/main.*.js' --json",
-    "analyze-in-browser": "source-map-explorer 'build/static/js/main.*.js'",
+    "analyze": "source-map-explorer 'build/static/js/*.js' --json",
+    "analyze-in-browser": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom --watchAll=false --coverage --colors --runInBand --collectCoverageFrom=src/**/*.*",
