@@ -16,14 +16,8 @@ export function GameControls({ onPause: togglePause, game, onToggleMobile: toggl
     </CommandButton>
     <div>
       <p />
-      <CommandButton
-        className="btn btn-primary"
-        onClick={toggleMobile}
-        disabled={game.paused}
-      >
-        {game.mobile
-          ? "No Mobile Controls"
-          : "Mobile Controls"}
+      <CommandButton className="btn btn-primary" onClick={toggleMobile}>
+        {game.mobile ? "No Mobile Controls" : "Mobile Controls"}
       </CommandButton>
     </div>
   </div>;

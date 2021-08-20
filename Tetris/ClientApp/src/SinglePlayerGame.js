@@ -73,6 +73,7 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
               game={game}
               onChange={setGame}
               shapeProvider={shapeProvider}
+              onPause={pause}
             />
             <ScoreBoard
               game={game}

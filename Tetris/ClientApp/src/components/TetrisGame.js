@@ -56,7 +56,7 @@ export const emptyBoard = tetrisBoardFrom(`
     ----------
     ----------`);
 
-export const TetrisGame = ({ game: gameState, onChange, shapeProvider }) => {
+export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }) => {
   const { board, mobile, oldScore, paused, score } = gameState;
   const game = {
     board: emptyBoard,
@@ -117,7 +117,7 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider }) => {
   return (
     <div>
       {!game.paused && game.mobile && (
-        <MobileControls onClick={(keyCode) => keyPress({ keyCode })} />
+        <MobileControls onPause={onPause} onClick={(keyCode) => keyPress({ keyCode })} />
       )}
       <TetrisBoard board={game.board} />
     </div>
