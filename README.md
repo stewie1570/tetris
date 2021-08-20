@@ -8,3 +8,5 @@ Tetris
     - npm install
     - npm run builddev *or* npm run build
     - f5 to run the project
+
+Hosted at: https://dotnetcore-react-tetris.herokuapp.com/
