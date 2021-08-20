@@ -16,6 +16,15 @@
     opacity: 0.5;
 }
 
+.top-stacked-control{
+    position: fixed;
+    left: 10%;
+    top: 10%;
+    width: 80%;
+    height: 10%;
+    opacity: 0.5;
+}
+
 .right-control{
     position: fixed;
     top: 0px;
