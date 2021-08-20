@@ -11,10 +11,11 @@ export function ScoreBoard({ game, postableScore, onPostScore: postScore, isLoad
     >
       <table className="table">
         <thead>
-          <tr>
-            <th>Name</th>
-            <th>Score</th>
-          </tr>
+          {Boolean(game.scoreBoard?.length) && <tr>
+            <th colSpan="2" style={{ textAlign: "center" }}>
+              Top {game.scoreBoard?.length} scores
+            </th>
+          </tr>}
         </thead>
         <tbody>
           {isLoading ? (
