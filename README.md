@@ -10,3 +10,5 @@ Tetris
     - f5 to run the project
 
 Hosted at: https://dotnetcore-react-tetris.herokuapp.com/
+
+*(i'm using the free plan so the first request starts the server and is slow)*
