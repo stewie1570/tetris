@@ -29,7 +29,7 @@ namespace Tetris
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddResponseCompression();
             services.AddControllersWithViews();
 
             services.AddSwaggerGen(c =>
@@ -50,13 +50,12 @@ namespace Tetris
             services.AddScoped<Task<LeaderBoard>>(sp => sp.GetService<ILeaderBoardProvider>().GetLeaderBoard());
             services.AddScoped<IUserScoresInteractor, UserScoresInteractor>();
             services.AddSingleton<Task<ConnectionMultiplexer>>(sp => ConnectionMultiplexer.ConnectAsync(Configuration["RedisConnectionString"]));
-
-            services.AddResponseCompression();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseResponseCompression();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -97,8 +96,6 @@ namespace Tetris
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-
-            app.UseResponseCompression();
         }
     }
 }
