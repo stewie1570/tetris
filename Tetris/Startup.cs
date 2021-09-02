@@ -50,6 +50,8 @@ namespace Tetris
             services.AddScoped<Task<LeaderBoard>>(sp => sp.GetService<ILeaderBoardProvider>().GetLeaderBoard());
             services.AddScoped<IUserScoresInteractor, UserScoresInteractor>();
             services.AddSingleton<Task<ConnectionMultiplexer>>(sp => ConnectionMultiplexer.ConnectAsync(Configuration["RedisConnectionString"]));
+
+            services.AddResponseCompression();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -95,6 +97,8 @@ namespace Tetris
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+
+            app.UseResponseCompression();
         }
     }
 }
