@@ -1,4 +1,4 @@
-Tetris
+Tetris [![Build](https://github.com/stewie1570/tetris/actions/workflows/Build.yml/badge.svg)](https://github.com/stewie1570/tetris/actions/workflows/Build.yml)
 ======
 
  - Implemented as a ReactJS SPA with a .NET WebApi/MVC backend.
