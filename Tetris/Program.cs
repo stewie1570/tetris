@@ -1,6 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Tetris
 {
@@ -16,15 +21,6 @@ namespace Tetris
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseKestrel(options =>
-                    {
-                        options.ListenAnyIP(5001, listenOptions =>
-                        {
-                            // Use HTTP/3
-                            listenOptions.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
-                            listenOptions.UseHttps();
-                        });
-                    });
                 });
     }
 }
