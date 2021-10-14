@@ -25,7 +25,6 @@ namespace Tetris
                         options.ListenAnyIP(port, listenOptions =>
                         {
                             listenOptions.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
-                            listenOptions.UseHttps();
                         });
                     });
                 });
