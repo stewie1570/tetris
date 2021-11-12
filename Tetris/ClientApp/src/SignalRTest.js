@@ -9,6 +9,7 @@ export const SignalRTest = () => {
   useEffect(() => {
     const connection = new HubConnectionBuilder()
       .withUrl("/gameHub")
+      .withAutomaticReconnect()
       .build();
 
     connection.on("Hello", (hello) => {
