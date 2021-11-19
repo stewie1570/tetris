@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Tetris/bin/Debug/netcoreapp3.1/Tetris.dll",
+            "program": "${workspaceFolder}/Tetris/bin/Debug/net5.0/Tetris.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Tetris",
             "stopAtEntry": false,
