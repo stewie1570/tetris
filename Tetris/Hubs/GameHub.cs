@@ -14,8 +14,10 @@ namespace Tetris.Hubs
         public async Task Hello(GroupMessage<object> helloMessage)
         {
             string groupId = helloMessage.GroupId;
-            await Groups.AddToGroupAsync(Context.ConnectionId, groupId);
-            await Clients.OthersInGroup(groupId).SendAsync("hello", helloMessage.Message);
+            await Task.WhenAll(
+                Groups.AddToGroupAsync(Context.ConnectionId, groupId),
+                Clients.OthersInGroup(groupId).SendAsync("hello", helloMessage.Message)
+            );
         }
     }
 }
