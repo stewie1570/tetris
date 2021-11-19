@@ -7,7 +7,7 @@ export const MultiplayerGame = ({ gameHub, isConnected }) => {
 
     useEffect(() => {
         isConnected && setReceiveHandlers();
-        isConnected && gameHub.send.hello({ userId: "user1", groupId: organizerUserId });
+        isConnected && gameHub.send.hello({ groupId: organizerUserId, message: { userId: "user1" } });
 
         function setReceiveHandlers() {
             return gameHub.receive.setHandlers({

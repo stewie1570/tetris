@@ -3,6 +3,7 @@ import SinglePlayerGame from "./SinglePlayerGame";
 import { MultiplayerGame } from "./MultiplayerGame";
 import { Routes, Route, Link } from 'react-router-dom';
 import { GameHubContext } from "./SignalRGameHubContext";
+import { shapes } from './components/TetrisGame';
 
 const randomNumberGenerator = {
     between: ({ min, max }) => Math.floor(Math.random() * (max + 1)) + min,

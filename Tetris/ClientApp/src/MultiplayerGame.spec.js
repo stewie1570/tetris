@@ -56,7 +56,7 @@ test("joining a multiplayer game", async () => {
 
     await waitFor(() => {
         expect(testGameHub.context.sentMessages).toEqual([
-            { hello: { userId: "user1", groupId: "group1" } }
+            { hello: { groupId: "group1", message: { userId: "user1" } } }
         ]);
     })
 });
