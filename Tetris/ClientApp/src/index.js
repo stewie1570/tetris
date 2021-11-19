@@ -1,12 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import SinglePlayerGame from "./SinglePlayerGame";
+import { MultiplayerGame } from "./MultiplayerGame";
 import "./index.css";
 import "bootstrap-css-only";
 import { shapes } from "./components/TetrisGame";
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
-import { SignalRTest } from "./SignalRTest";
+import { GameHubContext, SignalRGameHubContext } from "./SignalRGameHubContext";
 
 const randomNumberGenerator = {
   between: ({ min, max }) => Math.floor(Math.random() * (max + 1)) + min,
@@ -27,7 +28,11 @@ ReactDOM.render(
         <SinglePlayerGame shapeProvider={shapeProvider} />
         <Link to={`/${userId}`}>Host Multiplayer Game</Link>
       </>} />
-      <Route path="/:organizerUserId" element={<SignalRTest />} />
+      <Route path="/:organizerUserId" element={<SignalRGameHubContext>
+        <GameHubContext.Consumer>
+          {({ gameHub, isConnected }) => <MultiplayerGame gameHub={gameHub} isConnected={isConnected} />}
+        </GameHubContext.Consumer>
+      </SignalRGameHubContext>} />
     </Routes>
   </BrowserRouter>,
   document.getElementById("root")
