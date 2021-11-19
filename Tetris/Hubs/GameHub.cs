@@ -7,7 +7,7 @@ namespace Tetris.Hubs
     {
         public async Task Hello(object helloMessage)
         {
-            await Clients.All.SendAsync("Hello", helloMessage);
+            await Clients.Others.SendAsync("Hello", helloMessage);
         }
     }
 }

@@ -1,12 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import { HubConnectionBuilder } from '@microsoft/signalr';
-import { Link, useParams } from 'react-router-dom';
 
 export const GameHubContext = React.createContext(null);
 
 export const SignalRGameHubContext = ({ children }) => {
   const [isConnected, setIsConnected] = React.useState(false);
-  const { organizerUserId } = useParams();
   const connection = useRef(null);
   const gameHub = useRef({
     send: {},

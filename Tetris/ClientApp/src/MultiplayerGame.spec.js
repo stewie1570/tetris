@@ -5,7 +5,9 @@ import {
     act,
     waitFor
 } from "@testing-library/react";
-import { MultiplayerGame } from "./MultiplayerGame";
+import { MemoryRouter } from "react-router";
+import { App } from "./App";
+import { GameHubContext } from "./SignalRGameHubContext";
 
 const createTestGameHub = () => {
     const context = {
@@ -29,28 +31,32 @@ const createTestGameHub = () => {
     return { context, gameHub };
 };
 
+function renderWith(testGameHub) {
+    render(<MemoryRouter initialEntries={["/group1"]}>
+        <GameHubContext.Provider value={{ gameHub: testGameHub.gameHub, isConnected: true }}>
+            <App />
+        </GameHubContext.Provider>
+    </MemoryRouter>);
+}
+
 test("hosting a multiplayer game", async () => {
     const testGameHub = createTestGameHub();
-    render(<MultiplayerGame gameHub={testGameHub.gameHub} isConnected />);
+    renderWith(testGameHub);
 
-    act(() => {
-        testGameHub.context.handlers.hello({ userId: "user1" });
-    });
+    act(() => testGameHub.context.handlers.hello({ userId: "user1" }));
     await screen.findByText("[Un-named player]");
 
-    act(() => {
-        testGameHub.context.handlers.status({ userId: "user1", name: "Stewart" });
-    });
+    act(() => testGameHub.context.handlers.status({ userId: "user1", name: "Stewart" }));
     await screen.findByText("Stewart");
 });
 
-test("joining and playing a multiplayer game", async () => {
+test("joining a multiplayer game", async () => {
     const testGameHub = createTestGameHub();
-    render(<MultiplayerGame gameHub={testGameHub.gameHub} isConnected />);
+    renderWith(testGameHub);
 
     await waitFor(() => {
         expect(testGameHub.context.sentMessages).toEqual([
-            { hello: { userId: "user1" } }
+            { hello: { userId: "user1", groupId: "group1" } }
         ]);
     })
 });
