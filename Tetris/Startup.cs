@@ -11,6 +11,7 @@ using StackExchange.Redis;
 using Tetris.Domain.Interfaces;
 using Tetris.Domain.LeaderBoard;
 using Tetris.Domain.Models;
+using Tetris.Hubs;
 using Tetris.Interactors;
 using Tetris.Interfaces;
 using Tetris.Storage;
@@ -29,6 +30,7 @@ namespace Tetris
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
             services.AddResponseCompression();
             services.AddControllersWithViews();
 
@@ -56,6 +58,11 @@ namespace Tetris
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseResponseCompression();
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<GameHub>("/gameHub");
+            });
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -77,8 +84,6 @@ namespace Tetris
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseCustomExceptionHandler(env, loggerFactory);
-
-            app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
