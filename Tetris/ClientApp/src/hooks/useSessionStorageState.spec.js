@@ -5,6 +5,7 @@ import { useSessionStorageState } from './useSessionStorageState';
 let storage = {};
 let getterCallCount = 0;
 beforeEach(() => {
+    getterCallCount = 0;
     Storage.prototype.setItem = (key, value) => storage[key] = value;
     Storage.prototype.getItem = key => {
         getterCallCount++;
