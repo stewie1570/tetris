@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useMountedOnlyState as useState } from 'leaf-validator'
 
 function getSessionStateFor(storageKey) {
@@ -7,7 +7,8 @@ function getSessionStateFor(storageKey) {
 }
 
 export function useSessionStorageState(storageKey) {
-    const [state, setState] = useState();
+    const initialState = useMemo(() => getSessionStateFor(storageKey), [storageKey]);
+    const [state, setState] = useState(initialState);
 
     useEffect(() => {
         function loadStorageIntoState() {
@@ -15,7 +16,6 @@ export function useSessionStorageState(storageKey) {
         }
 
         window.addEventListener('storage', loadStorageIntoState);
-        loadStorageIntoState();
 
         return () => {
             window.removeEventListener('storage', loadStorageIntoState);

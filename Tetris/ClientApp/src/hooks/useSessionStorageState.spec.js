@@ -3,9 +3,13 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { useSessionStorageState } from './useSessionStorageState';
 
 let storage = {};
+let getterCallCount = 0;
 beforeEach(() => {
     Storage.prototype.setItem = (key, value) => storage[key] = value;
-    Storage.prototype.getItem = key => storage[key];
+    Storage.prototype.getItem = key => {
+        getterCallCount++;
+        return storage[key];
+    }
 });
 afterEach(() => { storage = {}; });
 
@@ -50,6 +54,37 @@ function Hide({ children }) {
 beforeEach(() => {
     window.localStorage.clear();
 });
+
+test("has value ready for initial effect", () => {
+    storage["StorageKey"] = '"expected value"';
+    const TestApp = () => {
+        const [state, setState] = useSessionStorageState("StorageKey");
+        const [count, setCount] = useState(1);
+
+        useEffect(() => {
+            !state && setState("updated value");
+        }, []);
+
+        return <>
+            <div>{state || "no state"}</div>
+            <div>
+                <button onClick={() => setCount(count + 1)}>Increment</button>
+                Count: {count}
+            </div>
+        </>;
+    };
+
+    render(<TestApp />);
+    screen.getByText("expected value");
+    screen.getByText("Count: 1");
+    screen.getByText("Increment").click();
+    screen.getByText("Count: 2");
+    screen.getByText("Increment").click();
+    screen.getByText("Count: 3");
+    screen.getByText("Increment").click();
+    screen.getByText("Count: 4");
+    expect(getterCallCount).toBe(1);
+})
 
 test("can update state via value", () => {
     render(<SetStateViaValue />);
