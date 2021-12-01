@@ -31,31 +31,41 @@ const createTestGameHub = () => {
     return { context, gameHub };
 };
 
-function renderWith(testGameHub) {
-    render(<MemoryRouter initialEntries={["/group1"]}>
-        <GameHubContext.Provider value={{ gameHub: testGameHub.gameHub, isConnected: true }}>
-            <App />
+function renderWith({ gameHub, route, userIdGenerator }) {
+    render(<MemoryRouter initialEntries={[route ?? "/group1"]}>
+        <GameHubContext.Provider value={{ gameHub, isConnected: true }}>
+            <App userIdGenerator={userIdGenerator} />
         </GameHubContext.Provider>
     </MemoryRouter>);
 }
 
-test("hosting a multiplayer game", async () => {
-    const testGameHub = createTestGameHub();
-    renderWith(testGameHub);
+beforeEach(() => {
+    window.sessionStorage.clear();
+});
 
-    act(() => testGameHub.context.handlers.hello({ userId: "user1" }));
+test("hosting a multiplayer game", async () => {
+    const { gameHub, context } = createTestGameHub();
+    renderWith({ gameHub, route: "/organizer", userIdGenerator: () => "organizer" });
+
+    await waitFor(() => {
+        expect(context.sentMessages).toEqual([
+            { hello: { groupId: "organizer", message: { userId: "organizer" } } }
+        ]);
+    });
+
+    act(() => context.handlers.hello({ userId: "user1" }));
     await screen.findByText("[Un-named player]");
 
-    act(() => testGameHub.context.handlers.status({ userId: "user1", name: "Stewart" }));
+    act(() => context.handlers.status({ userId: "user1", name: "Stewart" }));
     await screen.findByText("Stewart");
 });
 
 test("joining a multiplayer game", async () => {
-    const testGameHub = createTestGameHub();
-    renderWith(testGameHub);
+    const { gameHub, context } = createTestGameHub();
+    renderWith({ gameHub, userIdGenerator: () => "user1" });
 
     await waitFor(() => {
-        expect(testGameHub.context.sentMessages).toEqual([
+        expect(context.sentMessages).toEqual([
             { hello: { groupId: "group1", message: { userId: "user1" } } }
         ]);
     })

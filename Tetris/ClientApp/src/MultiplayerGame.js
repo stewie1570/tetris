@@ -1,13 +1,20 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router";
 
-export const MultiplayerGame = ({ gameHub, isConnected }) => {
+export const MultiplayerGame = ({ gameHub, isConnected, userId: currentUserId }) => {
     const [otherPlayers, setOtherPlayers] = React.useState({});
     const { organizerUserId } = useParams();
 
     useEffect(() => {
-        isConnected && setReceiveHandlers();
-        isConnected && gameHub.send.hello({ groupId: organizerUserId, message: { userId: "user1" } });
+        const isConnectedWithUserId = currentUserId && isConnected;
+
+        isConnectedWithUserId && setReceiveHandlers();
+        isConnectedWithUserId && gameHub.send.hello({
+            groupId: organizerUserId,
+            message: {
+                userId: currentUserId
+            }
+        });
 
         function setReceiveHandlers() {
             return gameHub.receive.setHandlers({
@@ -19,7 +26,7 @@ export const MultiplayerGame = ({ gameHub, isConnected }) => {
                 },
             });
         }
-    }, [gameHub, isConnected]);
+    }, [gameHub, isConnected, currentUserId]);
 
     return <>
         Players:
