@@ -16,16 +16,11 @@ export const MultiplayerGame = () => {
     useEffect(() => {
         const isConnectedWithUserId = currentUserId && isConnected;
 
-        const processReceivedHello = ({ userId }) => {
-            setOtherPlayers(otherPlayers => {
-                const updatedPlayers = { ...otherPlayers, [userId]: {} };
-                return updatedPlayers;
-            });
-        };
-
         function setReceiveHandlers() {
             return gameHub.receive.setHandlers({
-                hello: processReceivedHello,
+                hello: ({ userId }) => {
+                    setOtherPlayers(otherPlayers => ({ ...otherPlayers, [userId]: {} }));
+                },
                 playersListUpdate: ({ players: updatedPlayersList }) => {
                     setOtherPlayers(otherPlayers => update(otherPlayers).with(updatedPlayersList));
                 },
