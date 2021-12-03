@@ -1,15 +1,17 @@
 import React, { useEffect, useRef } from "react";
 import { HubConnectionBuilder } from '@microsoft/signalr';
+import { useUserId } from './hooks/useUserId';
 
 export const GameHubContext = React.createContext(null);
 
-export const SignalRGameHubContext = ({ children }) => {
+export const SignalRGameHubContext = ({ userIdGenerator, children }) => {
   const [isConnected, setIsConnected] = React.useState(false);
   const connection = useRef(null);
   const gameHub = useRef({
     send: {},
     receive: {}
   });
+  const userId = useUserId(userIdGenerator);
 
   useEffect(() => {
     connection.current = new HubConnectionBuilder()
@@ -39,7 +41,7 @@ export const SignalRGameHubContext = ({ children }) => {
       });
   }, []);
 
-  return <GameHubContext.Provider value={{ gameHub: gameHub.current, isConnected }}>
+  return <GameHubContext.Provider value={{ gameHub: gameHub.current, isConnected, userId }}>
     {children}
   </GameHubContext.Provider>;
 };

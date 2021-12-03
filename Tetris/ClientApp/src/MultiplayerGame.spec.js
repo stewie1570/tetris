@@ -34,8 +34,8 @@ const createTestGameHub = () => {
 
 function renderWith({ gameHub, route, userIdGenerator }) {
     render(<MemoryRouter initialEntries={[route ?? "/group1"]}>
-        <GameHubContext.Provider value={{ gameHub, isConnected: true }}>
-            <App userIdGenerator={userIdGenerator} />
+        <GameHubContext.Provider value={{ gameHub, isConnected: true, userId: userIdGenerator() }}>
+            <App />
         </GameHubContext.Provider>
     </MemoryRouter>);
 }
