@@ -19,13 +19,17 @@ export const SignalRGameHubContext = ({ children }) => {
 
     gameHub.current.receive.setHandlers = handlers => Object
       .keys(handlers)
-      .forEach(key => connection.current.on(key, handlers[key]));
+      .forEach(key => {
+        connection.current.off(key);
+        connection.current.on(key, handlers[key]);
+      });
 
     connection
       .current
       .start()
       .then(() => {
         gameHub.current.send.hello = obj => connection.current.send("hello", obj);
+        gameHub.current.send.playersListUpdate = obj => connection.current.send("playersListUpdate", obj);
         gameHub.current.send.start = () => connection.current.send("start");
         gameHub.current.send.status = obj => connection.current.send("status", obj);
         gameHub.current.send.gameOver = () => connection.current.send("gameOver");

@@ -21,7 +21,16 @@ export const MultiplayerGame = ({ userId: currentUserId }) => {
         function setReceiveHandlers() {
             return gameHub.receive.setHandlers({
                 hello: ({ userId }) => {
-                    setOtherPlayers(otherPlayers => ({ ...otherPlayers, [userId]: {} }));
+                    setOtherPlayers(otherPlayers => {
+                        const updatedPlayers = { ...otherPlayers, [userId]: {} };
+                        gameHub.send.playersListUpdate({
+                            groupId: organizerUserId,
+                            message: {
+                                players: [currentUserId, ...Object.keys(updatedPlayers)]
+                            }
+                        })
+                        return updatedPlayers;
+                    });
                 },
                 status: ({ userId, ...updatedUser }) => {
                     setOtherPlayers(otherPlayers => ({ ...otherPlayers, [userId]: updatedUser }));

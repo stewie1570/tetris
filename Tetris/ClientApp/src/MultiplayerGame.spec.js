@@ -17,6 +17,7 @@ const createTestGameHub = () => {
     const gameHub = {
         send: {
             hello: (userId) => { context.sentMessages.push({ hello: userId }) },
+            playersListUpdate: (playersList) => { context.sentMessages.push({ playersListUpdate: playersList }) },
             status: status => { context.sentMessages.push({ status }) },
             start: () => { context.sentMessages.push({ start: null }) },
             gameOver: () => { context.sentMessages.push({ gameOver: null }) },
@@ -43,7 +44,7 @@ beforeEach(() => {
     window.sessionStorage.clear();
 });
 
-test("hosting a multiplayer game", async () => {
+test("Organizer: hosting a multiplayer game", async () => {
     const { gameHub, context } = createTestGameHub();
     renderWith({ gameHub, route: "/organizer", userIdGenerator: () => "organizer" });
 
@@ -55,12 +56,18 @@ test("hosting a multiplayer game", async () => {
 
     act(() => context.handlers.hello({ userId: "user1" }));
     await screen.findByText("[Un-named player]");
+    await waitFor(() => {
+        expect(context.sentMessages).toEqual([
+            { hello: { groupId: "organizer", message: { userId: "organizer" } } },
+            { playersListUpdate: { groupId: "organizer", message: { players: ["organizer", "user1"] } } }
+        ]);
+    });
 
     act(() => context.handlers.status({ userId: "user1", name: "Stewart" }));
     await screen.findByText("Stewart");
 });
 
-test("joining a multiplayer game", async () => {
+test("Player: joining a multiplayer game", async () => {
     const { gameHub, context } = createTestGameHub();
     renderWith({ gameHub, userIdGenerator: () => "user1" });
 
