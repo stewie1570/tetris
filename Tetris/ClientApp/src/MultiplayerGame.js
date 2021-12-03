@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router";
+import { update } from "./domain/players";
 import { GameHubContext } from "./SignalRGameHubContext";
 
 export const MultiplayerGame = () => {
@@ -31,6 +32,9 @@ export const MultiplayerGame = () => {
                         })
                         return updatedPlayers;
                     });
+                },
+                playersListUpdate: ({ players: updatedPlayersList }) => {
+                    setOtherPlayers(otherPlayers => update(otherPlayers).with(updatedPlayersList));
                 },
                 status: ({ userId, ...updatedUser }) => {
                     setOtherPlayers(otherPlayers => ({ ...otherPlayers, [userId]: updatedUser }));

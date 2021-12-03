@@ -21,11 +21,18 @@ namespace Tetris.Hubs
                 Groups.AddToGroupAsync(Context.ConnectionId, groupId),
                 isOrganizer
                     ? Groups.AddToGroupAsync(Context.ConnectionId, $"{groupId}-organizer")
-                    : Task.CompletedTask,
+                    : Groups.AddToGroupAsync(Context.ConnectionId, $"{groupId}-players"),
                 isOrganizer
                     ? Task.CompletedTask
                     : Clients.Group($"{groupId}-organizer").SendAsync("hello", (object)helloMessage.Message)
             );
+        }
+
+        public async Task PlayersListUpdate(GroupMessage playersListUpdateMessage)
+        {
+            await Clients
+                .Group($"{playersListUpdateMessage.GroupId}-players")
+                .SendAsync("playersListUpdate", playersListUpdateMessage.Message);
         }
     }
 }

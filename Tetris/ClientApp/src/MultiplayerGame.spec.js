@@ -75,5 +75,10 @@ test("Player: joining a multiplayer game", async () => {
         expect(context.sentMessages).toEqual([
             { hello: { groupId: "group1", message: { userId: "user1" } } }
         ]);
-    })
+    });
+
+    act(() => context.handlers.playersListUpdate({ players: ['organizer', 'user1'] }));
+    await waitFor(() => {
+        expect(screen.getAllByText("[Un-named player]").length).toBe(2);
+    });
 });
