@@ -11,28 +11,22 @@ export const MultiplayerGame = () => {
     useEffect(() => {
         const isConnectedWithUserId = currentUserId && isConnected;
 
-        isConnectedWithUserId && setReceiveHandlers();
-        isConnectedWithUserId && gameHub.send.hello({
-            groupId: organizerUserId,
-            message: {
-                userId: currentUserId
-            }
-        });
+        const processReceivedHello = ({ userId }) => {
+            setOtherPlayers(otherPlayers => {
+                const updatedPlayers = { ...otherPlayers, [userId]: {} };
+                gameHub.send.playersListUpdate({
+                    groupId: organizerUserId,
+                    message: {
+                        players: [currentUserId, ...Object.keys(updatedPlayers)]
+                    }
+                });
+                return updatedPlayers;
+            });
+        };
 
         function setReceiveHandlers() {
             return gameHub.receive.setHandlers({
-                hello: ({ userId }) => {
-                    setOtherPlayers(otherPlayers => {
-                        const updatedPlayers = { ...otherPlayers, [userId]: {} };
-                        gameHub.send.playersListUpdate({
-                            groupId: organizerUserId,
-                            message: {
-                                players: [currentUserId, ...Object.keys(updatedPlayers)]
-                            }
-                        })
-                        return updatedPlayers;
-                    });
-                },
+                hello: processReceivedHello,
                 playersListUpdate: ({ players: updatedPlayersList }) => {
                     setOtherPlayers(otherPlayers => update(otherPlayers).with(updatedPlayersList));
                 },
@@ -41,6 +35,14 @@ export const MultiplayerGame = () => {
                 },
             });
         }
+
+        isConnectedWithUserId && setReceiveHandlers();
+        isConnectedWithUserId && gameHub.send.hello({
+            groupId: organizerUserId,
+            message: {
+                userId: currentUserId
+            }
+        });
     }, [gameHub, isConnected, currentUserId]);
 
     return <>
