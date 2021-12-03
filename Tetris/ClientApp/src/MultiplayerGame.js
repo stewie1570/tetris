@@ -1,12 +1,17 @@
 import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router";
 import { update } from "./domain/players";
+import { Organizer } from "./Organizer";
+import { Player } from "./Player";
 import { GameHubContext } from "./SignalRGameHubContext";
 
+export const initialEmptyPlayersList = {};
+
 export const MultiplayerGame = () => {
-    const [otherPlayers, setOtherPlayers] = React.useState({});
+    const [otherPlayers, setOtherPlayers] = React.useState(initialEmptyPlayersList);
     const { organizerUserId } = useParams();
     const { gameHub, isConnected, userId: currentUserId } = useContext(GameHubContext);
+    const isOrganizer = organizerUserId === currentUserId;
 
     useEffect(() => {
         const isConnectedWithUserId = currentUserId && isConnected;
@@ -14,12 +19,6 @@ export const MultiplayerGame = () => {
         const processReceivedHello = ({ userId }) => {
             setOtherPlayers(otherPlayers => {
                 const updatedPlayers = { ...otherPlayers, [userId]: {} };
-                gameHub.send.playersListUpdate({
-                    groupId: organizerUserId,
-                    message: {
-                        players: [currentUserId, ...Object.keys(updatedPlayers)]
-                    }
-                });
                 return updatedPlayers;
             });
         };
@@ -45,7 +44,9 @@ export const MultiplayerGame = () => {
         });
     }, [gameHub, isConnected, currentUserId]);
 
-    return <>
+    const Game = isOrganizer ? Organizer : Player;
+
+    return <Game otherPlayers={otherPlayers}>
         Players:
         {
             Object
@@ -54,5 +55,6 @@ export const MultiplayerGame = () => {
                     {otherPlayers[userId].name ?? "[Un-named player]"}
                 </div>)
         }
-    </>;
+    </Game>;
 }
+
