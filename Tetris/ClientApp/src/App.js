@@ -2,10 +2,9 @@ import React, { useEffect } from "react";
 import SinglePlayerGame from "./SinglePlayerGame";
 import { MultiplayerGame } from "./MultiplayerGame";
 import { Routes, Route, Link } from 'react-router-dom';
-import { GameHubContext } from "./SignalRGameHubContext";
 import { shapes } from './components/TetrisGame';
 import { useSessionStorageState } from "./hooks/useSessionStorageState";
-
+import { SignalRGameHubContext } from "./SignalRGameHubContext";
 
 const randomNumberGenerator = {
     between: ({ min, max }) => Math.floor(Math.random() * (max + 1)) + min,
@@ -29,11 +28,6 @@ export const App = props => {
             <SinglePlayerGame shapeProvider={shapeProvider} />
             <Link to={`/${userId}`}>Host Multiplayer Game</Link>
         </>} />
-        <Route path="/:organizerUserId" element={<GameHubContext.Consumer>
-            {({ gameHub, isConnected }) => <MultiplayerGame
-                userId={userId}
-                gameHub={gameHub}
-                isConnected={isConnected} />}
-        </GameHubContext.Consumer>} />
+        <Route path="/:organizerUserId" element={<MultiplayerGame userId={userId} />} />
     </Routes>;
 };

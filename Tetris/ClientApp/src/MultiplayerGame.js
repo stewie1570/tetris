@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router";
+import { GameHubContext } from "./SignalRGameHubContext";
 
-export const MultiplayerGame = ({ gameHub, isConnected, userId: currentUserId }) => {
+export const MultiplayerGame = ({ userId: currentUserId }) => {
     const [otherPlayers, setOtherPlayers] = React.useState({});
     const { organizerUserId } = useParams();
+    const { gameHub, isConnected } = useContext(GameHubContext);
 
     useEffect(() => {
         const isConnectedWithUserId = currentUserId && isConnected;
