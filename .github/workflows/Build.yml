@@ -6,23 +6,9 @@ on:
   pull_request:
     branches: [ master ]
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.102
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: |
-        dotnet build
-  
+jobs:  
   test-backend:
     runs-on: ubuntu-latest
-    needs: [build]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
@@ -31,16 +17,15 @@ jobs:
       - name: Test Backend
         run: |
           dotnet restore
+          dotnet build
           dotnet test Tetris.Core.Tests/Tetris.Core.Tests.csproj --no-build --verbosity normal
           dotnet test Tetris.Domain.Tests/Tetris.Domain.Tests.csproj  --no-build --verbosity normal
           dotnet test Tetris.Tests/Tetris.Tests.csproj  --no-build --verbosity normal
 
   test-frontend:
     runs-on: ubuntu-latest
-    needs: [build]
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.0.102
       - name: Test Frontend
