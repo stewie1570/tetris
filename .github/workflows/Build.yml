@@ -30,6 +30,7 @@ jobs:
           dotnet-version: 5.0.102
       - name: Test Backend
         run: |
+          dotnet restore
           dotnet test Tetris.Core.Tests/Tetris.Core.Tests.csproj --no-build --verbosity normal
           dotnet test Tetris.Domain.Tests/Tetris.Domain.Tests.csproj  --no-build --verbosity normal
           dotnet test Tetris.Tests/Tetris.Tests.csproj  --no-build --verbosity normal
