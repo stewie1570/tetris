@@ -11,8 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+    - uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.102
     - name: Restore dependencies
@@ -25,6 +24,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build]
     steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.102
       - name: Test Backend
         run: |
           dotnet test Tetris.Core.Tests/Tetris.Core.Tests.csproj --no-build --verbosity normal
@@ -35,12 +38,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build]
     steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.102
       - name: Test Frontend
         run: |
           cd Tetris/ClientApp
           yarn
           yarn test
-          
+
   version:
     runs-on: ubuntu-latest
     needs: [test-frontend, test-backend]
