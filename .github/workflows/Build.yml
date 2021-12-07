@@ -26,8 +26,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          dotnet-version: 5.0.102
       - name: Test Frontend
         run: |
           cd Tetris/ClientApp
