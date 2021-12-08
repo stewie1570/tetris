@@ -4,7 +4,7 @@
   "private": true,
   "main": "src/index.js",
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "bootstrap-css-only": "3.3.7",
     "leaf-validator": "^7.0.0",
     "lodash": "^4.17.21",
