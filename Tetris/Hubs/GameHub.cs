@@ -19,12 +19,14 @@ namespace Tetris.Hubs
 
             await Task.WhenAll(
                 Groups.AddToGroupAsync(Context.ConnectionId, groupId),
-                isOrganizer
-                    ? Groups.AddToGroupAsync(Context.ConnectionId, $"{groupId}-organizer")
-                    : Groups.AddToGroupAsync(Context.ConnectionId, $"{groupId}-players"),
+                Groups.AddToGroupAsync(Context.ConnectionId, isOrganizer
+                    ? $"{groupId}-organizer"
+                    : $"{groupId}-players"),
                 isOrganizer
                     ? Task.CompletedTask
-                    : Clients.Group($"{groupId}-organizer").SendAsync("hello", (object)helloMessage.Message)
+                    : Clients
+                        .Group($"{groupId}-organizer")
+                        .SendAsync("hello", helloMessage.Message)
             );
         }
 
