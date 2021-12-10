@@ -39,7 +39,6 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
     setGame,
     username,
     setUsername,
-    dialogProps,
     prompt
   } = useContext(SinglePlayerGameContext);
   const [isLoadingScoreBoard, showLoadingScoreBoardWhile] = useLoadingState();
