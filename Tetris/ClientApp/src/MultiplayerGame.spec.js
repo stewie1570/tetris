@@ -58,10 +58,39 @@ test("Organizer: hosting a multiplayer game", async () => {
 
     act(() => context.handlers.hello({ userId: "user1" }));
     await screen.findByText("[Un-named player]");
+
+    act(() => context.handlers.status({ userId: "user1", name: "user one" }));
+    await screen.findByText("user one");
+
+    act(() => context.handlers.hello({ userId: "user2" }));
+    await screen.findByText("[Un-named player]");
+
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
             { hello: { groupId: "organizer", message: { userId: "organizer" } } },
-            { playersListUpdate: { groupId: "organizer", message: { players: ["organizer", "user1"] } } }
+            {
+                playersListUpdate: {
+                    groupId: "organizer",
+                    message: {
+                        players: [
+                            { userId: "organizer" },
+                            { userId: "user1" }
+                        ]
+                    }
+                }
+            },
+            {
+                playersListUpdate: {
+                    groupId: "organizer",
+                    message: {
+                        players: [
+                            { userId: "organizer" },
+                            { userId: "user1", name: "user one" },
+                            { userId: "user2" }
+                        ]
+                    }
+                }
+            }
         ]);
     });
 
@@ -106,8 +135,12 @@ test("Player: joining a multiplayer game", async () => {
         ]);
     });
 
-    act(() => context.handlers.playersListUpdate({ players: ['organizer', 'user1'] }));
-    await waitFor(() => {
-        expect(screen.getAllByText("[Un-named player]").length).toBe(2);
-    });
+    act(() => context.handlers.playersListUpdate({
+        players: [
+            { userId: 'organizer', name: "The Organizer" },
+            { userId: 'user1', name: "Player One" }
+        ]
+    }));
+    await screen.findByText("The Organizer");
+    await screen.findByText("Player One");
 });
