@@ -36,5 +36,17 @@ namespace Tetris.Hubs
                 .Group($"{playersListUpdateMessage.GroupId}-players")
                 .SendAsync("playersListUpdate", playersListUpdateMessage.Message);
         }
+
+        public async Task Status(GroupMessage statusMessage)
+        {
+            await Clients
+                .Group(statusMessage.GroupId)
+                .SendAsync("status", statusMessage.Message);
+        }
+
+        public async Task Start(GroupMessage statusMessage)
+        {
+            await Clients.Group(statusMessage.GroupId).SendAsync("start");
+        }
     }
 }

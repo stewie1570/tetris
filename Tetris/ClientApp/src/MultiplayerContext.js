@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from "react";
 import { HubConnectionBuilder } from '@microsoft/signalr';
 import { useUserId } from './hooks/useUserId';
 
-export const GameHubContext = React.createContext(null);
+export const MultiplayerContext = React.createContext(null);
 
-export const SignalRGameHubContext = ({ userIdGenerator, children }) => {
+export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
   const [isConnected, setIsConnected] = React.useState(false);
   const connection = useRef(null);
   const gameHub = useRef({
@@ -32,16 +32,18 @@ export const SignalRGameHubContext = ({ userIdGenerator, children }) => {
       .then(() => {
         gameHub.current.send.hello = obj => connection.current.send("hello", obj);
         gameHub.current.send.playersListUpdate = obj => connection.current.send("playersListUpdate", obj);
-        gameHub.current.send.start = () => connection.current.send("start");
+        gameHub.current.send.start = obj => connection.current.send("start", obj);
         gameHub.current.send.status = obj => connection.current.send("status", obj);
-        gameHub.current.send.gameOver = () => connection.current.send("gameOver");
+        gameHub.current.send.gameOver = obj => connection.current.send("gameOver", obj);
         gameHub.current.send.result = obj => connection.current.send("result", obj);
-        gameHub.current.send.noOrganizer = () => connection.current.send("noOrganizer");
+        gameHub.current.send.noOrganizer = obj => connection.current.send("noOrganizer", obj);
         setIsConnected(true);
       });
+
+    return () => connection.current.stop();
   }, []);
 
-  return <GameHubContext.Provider value={{ gameHub: gameHub.current, isConnected, userId }}>
+  return <MultiplayerContext.Provider value={{ gameHub: gameHub.current, isConnected, userId }}>
     {children}
-  </GameHubContext.Provider>;
+  </MultiplayerContext.Provider>;
 };

@@ -1,7 +1,11 @@
 export const update = players => ({
     with: updatedPlayerIds => [{}, ...updatedPlayerIds]
-        .reduce((currentPlayerList, updatedUserId) => ({
-            ...currentPlayerList,
-            [updatedUserId]: players[updatedUserId] ?? {}
-        }))
+        .reduce((currentPlayerList, updatedUser) => {
+            const { userId, ...updates } = updatedUser;
+
+            return {
+                ...currentPlayerList,
+                [userId]: { ...(players[userId] ?? {}), ...updates }
+            };
+        })
 });

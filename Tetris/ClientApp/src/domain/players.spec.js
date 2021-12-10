@@ -2,16 +2,22 @@ import { update } from './players';
 
 test("players list update will add and remove user IDs to player list object", () => {
     expect(update({
-        user1: { name: "User 1" },
+        user1: { name: "User 1", score: 0 },
         user2: { name: "User 2" }
-    }).with(['user1', 'user3'])).toEqual({
-        user1: { name: "User 1" },
-        user3: {}
+    }).with([
+        { userId: 'user1', name: 'User One' },
+        { userId: 'user3', name: 'User Three' }
+    ])).toEqual({
+        user1: { name: "User One", score: 0 },
+        user3: { name: "User Three" }
     });
 })
 
 test("players list update will add players to empty players list", () => {
-    expect(update({}).with(['user1', 'user3'])).toEqual({
+    expect(update({}).with([
+        { userId: 'user1' },
+        { userId: 'user3' }
+    ])).toEqual({
         user1: {},
         user3: {}
     });
