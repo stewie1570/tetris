@@ -7,7 +7,7 @@ import {
 } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import { App } from "./App";
-import { GameHubContext } from "./SignalRGameHubContext";
+import { MultiplayerContext } from "./MultiplayerContext";
 
 const createTestGameHub = () => {
     const context = {
@@ -34,9 +34,9 @@ const createTestGameHub = () => {
 
 function renderWith({ gameHub, route, userIdGenerator }) {
     render(<MemoryRouter initialEntries={[route ?? "/group1"]}>
-        <GameHubContext.Provider value={{ gameHub, isConnected: true, userId: userIdGenerator() }}>
+        <MultiplayerContext.Provider value={{ gameHub, isConnected: true, userId: userIdGenerator() }}>
             <App />
-        </GameHubContext.Provider>
+        </MultiplayerContext.Provider>
     </MemoryRouter>);
 }
 

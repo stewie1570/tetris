@@ -4,7 +4,7 @@ import "./index.css";
 import "bootstrap-css-only";
 import { BrowserRouter } from 'react-router-dom';
 import { App } from "./App";
-import { SignalRGameHubContext } from "./SignalRGameHubContext";
+import { MultiplayerContextProvider } from "./MultiplayerContext";
 
 setInterval(() => {
   window.dispatchEvent(new CustomEvent("iterate-game"));
@@ -12,9 +12,9 @@ setInterval(() => {
 
 ReactDOM.render(
   <BrowserRouter>
-    <SignalRGameHubContext>
+    <MultiplayerContextProvider>
       <App />
-    </SignalRGameHubContext>
+    </MultiplayerContextProvider>
   </BrowserRouter>,
   document.getElementById("root")
 );

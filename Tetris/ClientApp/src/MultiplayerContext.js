@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from "react";
 import { HubConnectionBuilder } from '@microsoft/signalr';
 import { useUserId } from './hooks/useUserId';
 
-export const GameHubContext = React.createContext(null);
+export const MultiplayerContext = React.createContext(null);
 
-export const SignalRGameHubContext = ({ userIdGenerator, children }) => {
+export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
   const [isConnected, setIsConnected] = React.useState(false);
   const connection = useRef(null);
   const gameHub = useRef({
@@ -39,9 +39,11 @@ export const SignalRGameHubContext = ({ userIdGenerator, children }) => {
         gameHub.current.send.noOrganizer = () => connection.current.send("noOrganizer");
         setIsConnected(true);
       });
+
+    return () => connection.current.stop();
   }, []);
 
-  return <GameHubContext.Provider value={{ gameHub: gameHub.current, isConnected, userId }}>
+  return <MultiplayerContext.Provider value={{ gameHub: gameHub.current, isConnected, userId }}>
     {children}
-  </GameHubContext.Provider>;
+  </MultiplayerContext.Provider>;
 };

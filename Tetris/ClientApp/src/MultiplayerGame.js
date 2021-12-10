@@ -3,14 +3,14 @@ import { useParams } from "react-router";
 import { update } from "./domain/players";
 import { Organizer } from "./Organizer";
 import { Player } from "./Player";
-import { GameHubContext } from "./SignalRGameHubContext";
+import { MultiplayerContext } from "./MultiplayerContext";
 
 export const initialEmptyPlayersList = {};
 
 export const MultiplayerGame = () => {
     const [otherPlayers, setOtherPlayers] = React.useState(initialEmptyPlayersList);
     const { organizerUserId } = useParams();
-    const { gameHub, isConnected, userId: currentUserId } = useContext(GameHubContext);
+    const { gameHub, isConnected, userId: currentUserId } = useContext(MultiplayerContext);
     const isOrganizer = organizerUserId === currentUserId;
 
     useEffect(() => {

@@ -1,10 +1,10 @@
 import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router";
-import { GameHubContext } from "./SignalRGameHubContext";
+import { MultiplayerContext } from "./MultiplayerContext";
 import { initialEmptyPlayersList } from "./MultiplayerGame";
 
 export const Organizer = ({ children, otherPlayers }) => {
-    const { gameHub, isConnected, userId: currentUserId } = useContext(GameHubContext);
+    const { gameHub, isConnected, userId: currentUserId } = useContext(MultiplayerContext);
     const { organizerUserId } = useParams();
 
     useEffect(() => {
