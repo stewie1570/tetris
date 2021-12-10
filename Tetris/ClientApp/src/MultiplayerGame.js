@@ -74,28 +74,26 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     const Game = isOrganizer ? Organizer : Player;
 
     return <Game otherPlayers={otherPlayers}>
-        {game.paused
-            ? <>
-                Players:
-                {
-                    Object
-                        .keys(otherPlayers)
-                        .map(userId => <div key={userId}>
-                            {otherPlayers[userId].name ?? "[Un-named player]"}
-                        </div>)
-                }
-                <div>
-                    <CommandButton onClick={promptUserName} className="btn btn-primary">
-                        Set user name
-                    </CommandButton>
-                </div>
-                <div>
-                    <CommandButton onClick={startGame} className="btn btn-primary">
-                        Start game
-                    </CommandButton>
-                </div>
-            </>
-            : <SinglePlayerGame shapeProvider={shapeProvider} />}
+        <SinglePlayerGame shapeProvider={shapeProvider}>
+            Players:
+            {
+                Object
+                    .keys(otherPlayers)
+                    .map(userId => <div key={userId}>
+                        {otherPlayers[userId].name ?? "[Un-named player]"}
+                    </div>)
+            }
+            <div>
+                <CommandButton onClick={promptUserName} className="btn btn-primary">
+                    Set user name
+                </CommandButton>
+            </div>
+            <div>
+                <CommandButton onClick={startGame} className="btn btn-primary">
+                    Start game
+                </CommandButton>
+            </div>
+        </SinglePlayerGame>
     </Game>;
 }
 

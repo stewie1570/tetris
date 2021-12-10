@@ -1,14 +1,17 @@
 import React from "react";
 import { CommandButton } from "./components/CommandButton";
 
-export function ScoreBoard({ game, postableScore, onPostScore: postScore, isLoading, username }) {
-  const allowScorePost = game.paused && Boolean(postableScore);
-
+export function ScoreBoard({
+  game,
+  postableScore,
+  onPostScore: postScore,
+  isLoading,
+  username,
+  allowScorePost,
+  ...otherProps
+}) {
   const board = (game.scoreBoard || isLoading) &&
-    <div
-      className="leader-board"
-      style={{ height: allowScorePost ? "80%" : "100%" }}
-    >
+    <div {...otherProps}>
       <table className="table">
         <thead>
           {Boolean(game.scoreBoard?.length) && <tr>

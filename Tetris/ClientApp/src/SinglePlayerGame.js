@@ -35,7 +35,7 @@ export const SinglePlayerGameContextProvider = ({ children }) => {
   </SinglePlayerGameContext.Provider>;
 };
 
-export const SinglePlayerGame = ({ shapeProvider }) => {
+export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers }) => {
   const {
     game,
     setGame,
@@ -46,6 +46,7 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
   const [isLoadingScoreBoard, showLoadingScoreBoardWhile] = useLoadingState();
 
   const postableScore = game.score || game.oldScore;
+  const allowScorePost = game.paused && Boolean(postableScore);
 
   const postScore = async () => {
     const hasUserName = Boolean(username?.trim().length);
@@ -79,7 +80,7 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
   const pause = async () => {
     const paused = !game.paused;
     setGame({ ...game, paused, scoreBoard: paused ? game.scoreBoard : undefined });
-    paused && await showLoadingScoreBoardWhile(reloadScoreBoard());
+    paused && !otherPlayers && await showLoadingScoreBoardWhile(reloadScoreBoard());
   }
 
   return (
@@ -99,17 +100,22 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
               shapeProvider={shapeProvider}
               onPause={pause}
             />
-            <ScoreBoard
-              game={game}
-              username={username}
-              isLoading={isLoadingScoreBoard}
-              onPostScore={postScore}
-              postableScore={postableScore} />
+            {game.paused && <div
+              className="leader-board"
+              style={{ height: allowScorePost ? "80%" : "100%" }}>
+              {otherPlayers || <ScoreBoard
+                allowScorePost={allowScorePost}
+                game={game}
+                username={username}
+                isLoading={isLoadingScoreBoard}
+                onPostScore={postScore}
+                postableScore={postableScore} />}
+            </div>}
           </div>
-          <GameControls
+          {!otherPlayers && <GameControls
             game={game}
             onPause={pause}
-            onToggleMobile={() => setGame(game => ({ ...game, mobile: !game.mobile }))} />
+            onToggleMobile={() => setGame(game => ({ ...game, mobile: !game.mobile }))} />}
         </div>
       </center>
     </div>
