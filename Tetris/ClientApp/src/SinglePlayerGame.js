@@ -9,15 +9,17 @@ import { useLoadingState, useMountedOnlyState } from 'leaf-validator';
 
 export const SinglePlayerGameContext = React.createContext();
 
+export const initialGameState = {
+  board: emptyBoard,
+  isOver: false,
+  mobile: false,
+  oldScore: 0,
+  paused: false,
+  score: 0
+};
+
 export const SinglePlayerGameContextProvider = ({ children }) => {
-  const [game, setGame] = useMountedOnlyState({
-    board: emptyBoard,
-    isOver: false,
-    mobile: false,
-    oldScore: 0,
-    paused: false,
-    score: 0
-  });
+  const [game, setGame] = useMountedOnlyState(initialGameState);
   const [username, setUsername] = useMountedOnlyState();
   const { dialogProps, prompt } = usePrompt();
 

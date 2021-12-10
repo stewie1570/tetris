@@ -5,12 +5,12 @@ import { Organizer } from "./Organizer";
 import { Player } from "./Player";
 import { MultiplayerContext } from "./MultiplayerContext";
 import { CommandButton } from "./components/CommandButton";
-import { SinglePlayerGameContext } from "./SinglePlayerGame";
+import SinglePlayerGame, { initialGameState, SinglePlayerGameContext } from "./SinglePlayerGame";
 import { StringInput } from "./components/Prompt";
 
 export const initialEmptyPlayersList = {};
 
-export const MultiplayerGame = () => {
+export const MultiplayerGame = ({ shapeProvider }) => {
     const [otherPlayers, setOtherPlayers] = React.useState(initialEmptyPlayersList);
     const { organizerUserId } = useParams();
     const { gameHub, isConnected, userId: currentUserId } = useContext(MultiplayerContext);
@@ -47,6 +47,7 @@ export const MultiplayerGame = () => {
             status: ({ userId, ...updatedUser }) => {
                 setOtherPlayers(otherPlayers => ({ ...otherPlayers, [userId]: updatedUser }));
             },
+            start: () => setGame(game => ({ ...game, paused: false })),
         });
         isConnectedWithUserId && gameHub.send.hello({
             groupId: organizerUserId,
@@ -54,6 +55,8 @@ export const MultiplayerGame = () => {
                 userId: currentUserId
             }
         });
+
+        setGame({ ...initialGameState, paused: true });
     }, [gameHub, isConnected, currentUserId]);
 
     const promptUserName = () => prompt(exitModal => <StringInput
@@ -66,22 +69,33 @@ export const MultiplayerGame = () => {
         What user name would you like?
     </StringInput>);
 
+    const startGame = () => gameHub.send.start({ groupId: organizerUserId });
+
     const Game = isOrganizer ? Organizer : Player;
 
     return <Game otherPlayers={otherPlayers}>
-        Players:
-        {
-            Object
-                .keys(otherPlayers)
-                .map(userId => <div key={userId}>
-                    {otherPlayers[userId].name ?? "[Un-named player]"}
-                </div>)
-        }
-        <div>
-            <CommandButton onClick={promptUserName} className="btn btn-primary">
-                Set user name
-            </CommandButton>
-        </div>
+        {game.paused
+            ? <>
+                Players:
+                {
+                    Object
+                        .keys(otherPlayers)
+                        .map(userId => <div key={userId}>
+                            {otherPlayers[userId].name ?? "[Un-named player]"}
+                        </div>)
+                }
+                <div>
+                    <CommandButton onClick={promptUserName} className="btn btn-primary">
+                        Set user name
+                    </CommandButton>
+                </div>
+                <div>
+                    <CommandButton onClick={startGame} className="btn btn-primary">
+                        Start game
+                    </CommandButton>
+                </div>
+            </>
+            : <SinglePlayerGame shapeProvider={shapeProvider} />}
     </Game>;
 }
 

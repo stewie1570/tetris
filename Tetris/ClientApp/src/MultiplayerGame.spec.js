@@ -21,7 +21,7 @@ const createTestGameHub = () => {
             hello: (userId) => { context.sentMessages.push({ hello: userId }) },
             playersListUpdate: (playersList) => { context.sentMessages.push({ playersListUpdate: playersList }) },
             status: status => { context.sentMessages.push({ status }) },
-            start: () => { context.sentMessages.push({ start: null }) },
+            start: groupMessage => { context.sentMessages.push({ start: groupMessage }) },
             gameOver: () => { context.sentMessages.push({ gameOver: null }) },
             result: (result) => { context.sentMessages.push({ result }) },
             noOrganizer: () => { context.sentMessages.push({ noOrganizer: null }) }
@@ -143,4 +143,26 @@ test("Player: joining a multiplayer game", async () => {
     }));
     await screen.findByText("The Organizer");
     await screen.findByText("Player One");
+});
+
+test("Player: starting a multiplayer game", async () => {
+    const { gameHub, context } = createTestGameHub();
+    renderWith({ gameHub, userIdGenerator: () => "user1" });
+
+    await waitFor(() => {
+        expect(context.sentMessages).toEqual([
+            { hello: { groupId: "group1", message: { userId: "user1" } } }
+        ]);
+    });
+
+    screen.getByText("Start game").click();
+    await waitFor(() => {
+        expect(context.sentMessages).toEqual([
+            { hello: { groupId: "group1", message: { userId: "user1" } } },
+            { start: { groupId: "group1" } }
+        ]);
+    });
+
+    act(() => context.handlers.start());
+    await screen.findByText("Score: 0");
 });

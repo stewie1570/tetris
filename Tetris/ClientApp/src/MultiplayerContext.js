@@ -32,11 +32,11 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
       .then(() => {
         gameHub.current.send.hello = obj => connection.current.send("hello", obj);
         gameHub.current.send.playersListUpdate = obj => connection.current.send("playersListUpdate", obj);
-        gameHub.current.send.start = () => connection.current.send("start");
+        gameHub.current.send.start = obj => connection.current.send("start", obj);
         gameHub.current.send.status = obj => connection.current.send("status", obj);
-        gameHub.current.send.gameOver = () => connection.current.send("gameOver");
+        gameHub.current.send.gameOver = obj => connection.current.send("gameOver", obj);
         gameHub.current.send.result = obj => connection.current.send("result", obj);
-        gameHub.current.send.noOrganizer = () => connection.current.send("noOrganizer");
+        gameHub.current.send.noOrganizer = obj => connection.current.send("noOrganizer", obj);
         setIsConnected(true);
       });
 

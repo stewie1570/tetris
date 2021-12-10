@@ -25,14 +25,19 @@ const GlobalUI = () => {
 
 export const App = ({ shapeProvider }) => {
     const { userId } = useContext(MultiplayerContext);
+    const selectedShapeProvider = shapeProvider ?? defaultShapeProvider;
 
     return <SinglePlayerGameContextProvider>
         <Routes>
-            <Route path="/" element={<>
-                <SinglePlayerGame shapeProvider={shapeProvider ?? defaultShapeProvider} />
-                <Link to={`/${userId}`}>Host Multiplayer Game</Link>
-            </>} />
-            <Route path="/:organizerUserId" element={<MultiplayerGame />} />
+            <Route
+                path="/"
+                element={<>
+                    <SinglePlayerGame shapeProvider={selectedShapeProvider} />
+                    <Link to={`/${userId}`}>Host Multiplayer Game</Link>
+                </>} />
+            <Route
+                path="/:organizerUserId"
+                element={<MultiplayerGame shapeProvider={selectedShapeProvider} />} />
         </Routes>
         <GlobalUI />
     </SinglePlayerGameContextProvider>;
