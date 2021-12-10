@@ -4,6 +4,9 @@ import { update } from "./domain/players";
 import { Organizer } from "./Organizer";
 import { Player } from "./Player";
 import { MultiplayerContext } from "./MultiplayerContext";
+import { CommandButton } from "./components/CommandButton";
+import { SinglePlayerGameContext } from "./SinglePlayerGame";
+import { StringInput } from "./components/Prompt";
 
 export const initialEmptyPlayersList = {};
 
@@ -11,7 +14,25 @@ export const MultiplayerGame = () => {
     const [otherPlayers, setOtherPlayers] = React.useState(initialEmptyPlayersList);
     const { organizerUserId } = useParams();
     const { gameHub, isConnected, userId: currentUserId } = useContext(MultiplayerContext);
+    const {
+        game,
+        setGame,
+        username,
+        setUsername,
+        prompt
+    } = useContext(SinglePlayerGameContext);
     const isOrganizer = organizerUserId === currentUserId;
+
+    useEffect(() => {
+        const updatedStatus = {
+            groupId: organizerUserId,
+            message: {
+                userId: currentUserId,
+                name: username,
+            }
+        };
+        username && gameHub.send.status(updatedStatus);
+    }, [username]);
 
     useEffect(() => {
         const isConnectedWithUserId = currentUserId && isConnected;
@@ -35,6 +56,16 @@ export const MultiplayerGame = () => {
         });
     }, [gameHub, isConnected, currentUserId]);
 
+    const promptUserName = () => prompt(exitModal => <StringInput
+        filter={value => (value ?? "").trim()}
+        onSaveString={name => {
+            setUsername(name);
+            exitModal();
+        }}
+        submittingText="Posting Your Score...">
+        What user name would you like?
+    </StringInput>);
+
     const Game = isOrganizer ? Organizer : Player;
 
     return <Game otherPlayers={otherPlayers}>
@@ -46,6 +77,11 @@ export const MultiplayerGame = () => {
                     {otherPlayers[userId].name ?? "[Un-named player]"}
                 </div>)
         }
+        <div>
+            <CommandButton onClick={promptUserName} className="btn btn-primary">
+                Set user name
+            </CommandButton>
+        </div>
     </Game>;
 }
 

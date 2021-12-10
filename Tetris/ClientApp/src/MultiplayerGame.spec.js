@@ -3,7 +3,9 @@ import {
     render,
     screen,
     act,
-    waitFor
+    waitFor,
+    within,
+    fireEvent
 } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import { App } from "./App";
@@ -65,6 +67,33 @@ test("Organizer: hosting a multiplayer game", async () => {
 
     act(() => context.handlers.status({ userId: "user1", name: "Stewart" }));
     await screen.findByText("Stewart");
+});
+
+test("Organizer: setting user name", async () => {
+    const { gameHub, context } = createTestGameHub();
+    renderWith({ gameHub, route: "/organizer", userIdGenerator: () => "organizer" });
+
+    await waitFor(() => {
+        expect(context.sentMessages).toEqual([
+            { hello: { groupId: "organizer", message: { userId: "organizer" } } }
+        ]);
+    });
+
+    screen.getByText("Set user name").click();
+    const userNameTextInput = await within(
+        await screen.findByRole("dialog")
+    ).findByLabelText(/What user name would you like/);
+    fireEvent.change(userNameTextInput, {
+        target: { value: " Stewie  " },
+    });
+    screen.getByText(/Ok/).click();
+
+    await waitFor(() => {
+        expect(context.sentMessages).toEqual([
+            { hello: { groupId: "organizer", message: { userId: "organizer" } } },
+            { status: { groupId: "organizer", message: { userId: "organizer", name: "Stewie" } } }
+        ]);
+    });
 });
 
 test("Player: joining a multiplayer game", async () => {
