@@ -1,14 +1,15 @@
-import React from "react";
-import { ErrorMessage } from "./components/ErrorMessage";
+import React, { useContext } from "react";
 import { TetrisGame, emptyBoard } from "./components/TetrisGame";
-import { StringInput as StringPrompt, Dialog, usePrompt } from './components/Prompt';
+import { StringInput as StringPrompt, usePrompt } from './components/Prompt';
 import { leaderBoardService } from "./services";
 import "./App.css";
 import { ScoreBoard } from "./ScoreBoard";
 import { GameControls } from "./GameControls";
 import { useLoadingState, useMountedOnlyState } from 'leaf-validator';
 
-export const SinglePlayerGame = ({ shapeProvider }) => {
+export const SinglePlayerGameContext = React.createContext();
+
+export const SinglePlayerGameContextProvider = ({ children }) => {
   const [game, setGame] = useMountedOnlyState({
     board: emptyBoard,
     isOver: false,
@@ -19,6 +20,28 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
   });
   const [username, setUsername] = useMountedOnlyState();
   const { dialogProps, prompt } = usePrompt();
+
+  return <SinglePlayerGameContext.Provider value={{
+    game,
+    setGame,
+    username,
+    setUsername,
+    dialogProps,
+    prompt
+  }}>
+    {children}
+  </SinglePlayerGameContext.Provider>;
+};
+
+export const SinglePlayerGame = ({ shapeProvider }) => {
+  const {
+    game,
+    setGame,
+    username,
+    setUsername,
+    dialogProps,
+    prompt
+  } = useContext(SinglePlayerGameContext);
   const [isLoadingScoreBoard, showLoadingScoreBoardWhile] = useLoadingState();
 
   const postableScore = game.score || game.oldScore;
@@ -88,8 +111,6 @@ export const SinglePlayerGame = ({ shapeProvider }) => {
             onToggleMobile={() => setGame(game => ({ ...game, mobile: !game.mobile }))} />
         </div>
       </center>
-      <Dialog {...dialogProps} />
-      <ErrorMessage />
     </div>
   );
 }
