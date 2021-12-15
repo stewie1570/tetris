@@ -69,21 +69,23 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }
 
   const cycle = useCallback(() => {
     if (!game.paused) {
-      const { board, score } = game;
-      const iteratedGame = iterate({
-        board,
-        score,
-        shapeProvider,
-      });
+      onChange(game => {
+        const { board, score } = game;
+        const iteratedGame = iterate({
+          board,
+          score,
+          shapeProvider,
+        });
 
-      iteratedGame.isOver
-        ? onChange(game => ({
-          ...game,
-          board: emptyBoard,
-          score: 0,
-          oldScore: game.score,
-        }))
-        : onChange(game => ({ ...game, ...iteratedGame }));
+        return iteratedGame.isOver
+          ? {
+            ...game,
+            board: emptyBoard,
+            score: 0,
+            oldScore: game.score,
+          }
+          : { ...game, ...iteratedGame };
+      });
     }
   }, [game, onChange, shapeProvider]);
 
