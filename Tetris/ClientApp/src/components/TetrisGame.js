@@ -87,7 +87,7 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }
           : { ...game, ...iteratedGame };
       });
     }
-  }, [game, onChange, shapeProvider]);
+  }, [game.paused, onChange, shapeProvider]);
 
   const keyPress = useCallback(({ keyCode }) => {
     const processKeyCommand = ({ keyCode }) => {
