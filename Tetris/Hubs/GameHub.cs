@@ -40,7 +40,7 @@ namespace Tetris.Hubs
         public async Task Status(GroupMessage statusMessage)
         {
             await Clients
-                .Group(statusMessage.GroupId)
+                .OthersInGroup(statusMessage.GroupId)
                 .SendAsync("status", statusMessage.Message);
         }
 

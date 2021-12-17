@@ -7,6 +7,9 @@ import { MultiplayerContext } from "./MultiplayerContext";
 import { CommandButton } from "./components/CommandButton";
 import SinglePlayerGame, { initialGameState, SinglePlayerGameContext } from "./SinglePlayerGame";
 import { StringInput } from "./components/Prompt";
+import { useAsyncEffect } from './hooks/useAsyncEffect';
+import { stringFrom, tetrisBoardFrom } from './domain/serialization';
+import { TetrisBoard } from "./components/TetrisBoard";
 
 export const initialEmptyPlayersList = {};
 
@@ -17,22 +20,10 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     const {
         game,
         setGame,
-        username,
         setUsername,
         prompt
     } = useContext(SinglePlayerGameContext);
     const isOrganizer = organizerUserId === currentUserId;
-
-    useEffect(() => {
-        const updatedStatus = {
-            groupId: organizerUserId,
-            message: {
-                userId: currentUserId,
-                name: username,
-            }
-        };
-        username && gameHub.send.status(updatedStatus);
-    }, [username]);
 
     useEffect(() => {
         const isConnectedWithUserId = currentUserId && isConnected;
@@ -44,8 +35,15 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             playersListUpdate: ({ players: updatedPlayersList }) => {
                 setOtherPlayers(otherPlayers => update(otherPlayers).with(updatedPlayersList));
             },
-            status: ({ userId, ...updatedUser }) => {
-                setOtherPlayers(otherPlayers => ({ ...otherPlayers, [userId]: updatedUser }));
+            status: ({ userId, ...userUpdates }) => {
+                setOtherPlayers(otherPlayers => ({
+                    ...otherPlayers,
+                    [userId]: {
+                        ...(otherPlayers[userId] ?? {}),
+                        ...userUpdates,
+                        board: userUpdates.board ? tetrisBoardFrom(userUpdates.board) : undefined
+                    }
+                }));
             },
             start: () => setGame(game => ({ ...game, paused: false })),
         });
@@ -59,13 +57,28 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         setGame({ ...initialGameState, paused: true });
     }, [gameHub, isConnected, currentUserId]);
 
+    useAsyncEffect(async () => isConnected && !game.paused && gameHub.send.status({
+        groupId: organizerUserId,
+        message: {
+            userId: currentUserId,
+            board: stringFrom(game.board)
+        }
+    }), [isConnected, game.paused, game.board]);
+
     const promptUserName = () => prompt(exitModal => <StringInput
         filter={value => (value ?? "").trim()}
-        onSaveString={name => {
+        onSaveString={async name => {
+            name && await gameHub.send.status({
+                groupId: organizerUserId,
+                message: {
+                    userId: currentUserId,
+                    name: name,
+                }
+            });
             setUsername(name);
             exitModal();
         }}
-        submittingText="Posting Your Score...">
+        submittingText="Setting user name...">
         What user name would you like?
     </StringInput>);
 
@@ -94,6 +107,14 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 </CommandButton>
             </div>
         </SinglePlayerGame>
+        <div>
+            {Object
+                .keys(otherPlayers)
+                .filter(userId => userId !== currentUserId && otherPlayers[userId].board)
+                .map(userId => <div key={userId}>
+                    {otherPlayers[userId].board && <TetrisBoard board={otherPlayers[userId].board} />}
+                </div>)}
+        </div>
     </Game>;
 }
 

@@ -4,6 +4,15 @@ import { useUserId } from './hooks/useUserId';
 
 export const MultiplayerContext = React.createContext(null);
 
+const signals = [
+  'hello',
+  'playersListUpdate',
+  'status',
+  'start',
+  'gameUpdate',
+  'gameOver'
+];
+
 export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
   const [isConnected, setIsConnected] = React.useState(false);
   const connection = useRef(null);
@@ -30,13 +39,9 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
       .current
       .start()
       .then(() => {
-        gameHub.current.send.hello = obj => connection.current.send("hello", obj);
-        gameHub.current.send.playersListUpdate = obj => connection.current.send("playersListUpdate", obj);
-        gameHub.current.send.start = obj => connection.current.send("start", obj);
-        gameHub.current.send.status = obj => connection.current.send("status", obj);
-        gameHub.current.send.gameOver = obj => connection.current.send("gameOver", obj);
-        gameHub.current.send.result = obj => connection.current.send("result", obj);
-        gameHub.current.send.noOrganizer = obj => connection.current.send("noOrganizer", obj);
+        signals.forEach(signal => {
+          gameHub.current.send[signal] = obj => connection.current.invoke(signal, obj);
+        });
         setIsConnected(true);
       });
 
