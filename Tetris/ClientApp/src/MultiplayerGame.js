@@ -24,17 +24,6 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     const isOrganizer = organizerUserId === currentUserId;
 
     useEffect(() => {
-        const updatedStatus = {
-            groupId: organizerUserId,
-            message: {
-                userId: currentUserId,
-                name: username,
-            }
-        };
-        username && gameHub.send.status(updatedStatus);
-    }, [username]);
-
-    useEffect(() => {
         const isConnectedWithUserId = currentUserId && isConnected;
 
         isConnectedWithUserId && gameHub.receive.setHandlers({
@@ -61,11 +50,18 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
     const promptUserName = () => prompt(exitModal => <StringInput
         filter={value => (value ?? "").trim()}
-        onSaveString={name => {
+        onSaveString={async name => {
+            name && await gameHub.send.status({
+                groupId: organizerUserId,
+                message: {
+                    userId: currentUserId,
+                    name: name,
+                }
+            });
             setUsername(name);
             exitModal();
         }}
-        submittingText="Posting Your Score...">
+        submittingText="Setting user name...">
         What user name would you like?
     </StringInput>);
 
