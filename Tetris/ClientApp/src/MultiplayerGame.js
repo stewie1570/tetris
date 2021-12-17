@@ -7,6 +7,8 @@ import { MultiplayerContext } from "./MultiplayerContext";
 import { CommandButton } from "./components/CommandButton";
 import SinglePlayerGame, { initialGameState, SinglePlayerGameContext } from "./SinglePlayerGame";
 import { StringInput } from "./components/Prompt";
+import { useAsyncEffect } from './hooks/useAsyncEffect';
+import { stringFrom } from './domain/serialization';
 
 export const initialEmptyPlayersList = {};
 
@@ -46,6 +48,14 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
         setGame({ ...initialGameState, paused: true });
     }, [gameHub, isConnected, currentUserId]);
+
+    useAsyncEffect(async () => isConnected && !game.paused && gameHub.send.status({
+        groupId: organizerUserId,
+        message: {
+            userId: currentUserId,
+            board: stringFrom(game.board)
+        }
+    }), [isConnected, game.paused, game.board]);
 
     const promptUserName = () => prompt(exitModal => <StringInput
         filter={value => (value ?? "").trim()}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     render,
     screen,
@@ -11,6 +11,17 @@ import {
 import { MemoryRouter } from "react-router";
 import { App } from "./App";
 import { MultiplayerContext } from "./MultiplayerContext";
+import { stringFrom } from "./domain/serialization";
+import { emptyBoard } from "./components/TetrisGame";
+
+const signals = [
+    "hello",
+    "playersListUpdate",
+    "status",
+    "start",
+    "gameUpdate",
+    "gameOver"
+];
 
 const createTestGameHub = () => {
     const context = {
@@ -19,13 +30,13 @@ const createTestGameHub = () => {
     };
     const gameHub = {
         send: {
-            hello: (userId) => { context.sentMessages.push({ hello: userId }) },
-            playersListUpdate: (playersList) => { context.sentMessages.push({ playersListUpdate: playersList }) },
-            status: status => { context.sentMessages.push({ status }) },
-            start: groupMessage => { context.sentMessages.push({ start: groupMessage }) },
-            gameOver: () => { context.sentMessages.push({ gameOver: null }) },
-            result: (result) => { context.sentMessages.push({ result }) },
-            noOrganizer: () => { context.sentMessages.push({ noOrganizer: null }) }
+            ...signals.reduce((acc, signal) => ({
+                ...acc,
+                [signal]: obj => {
+                    context.sentMessages.push({ [signal]: obj });
+                    return new Promise(resolve => setTimeout(resolve, 100));
+                }
+            }), {})
         },
         receive: {
             setHandlers: givenHandlers => { context.handlers = givenHandlers; }
@@ -35,11 +46,25 @@ const createTestGameHub = () => {
     return { context, gameHub };
 };
 
+const MultiplayerTestContext = ({ children, gameHub, userIdGenerator }) => {
+    const [isConnected, setIsConnected] = React.useState(false);
+
+    useEffect(() => {
+        setTimeout(() => setIsConnected(true), 100);
+    }, []);
+
+    return (
+        <MultiplayerContext.Provider value={{ gameHub, isConnected, userId: userIdGenerator() }}>
+            {children}
+        </MultiplayerContext.Provider>
+    );
+};
+
 function renderWith({ gameHub, route, userIdGenerator }) {
     render(<MemoryRouter initialEntries={[route ?? "/group1"]}>
-        <MultiplayerContext.Provider value={{ gameHub, isConnected: true, userId: userIdGenerator() }}>
+        <MultiplayerTestContext gameHub={gameHub} userIdGenerator={userIdGenerator}>
             <App />
-        </MultiplayerContext.Provider>
+        </MultiplayerTestContext>
     </MemoryRouter>);
 }
 
@@ -126,33 +151,38 @@ test("Organizer: setting user name", async () => {
     });
 });
 
-// test("Organizer: starting a game", async () => {
-//     const { gameHub, context } = createTestGameHub();
-//     renderWith({ gameHub, route: "/organizer", userIdGenerator: () => "organizer" });
+test("Organizer: starting a game", async () => {
+    const { gameHub, context } = createTestGameHub();
+    renderWith({ gameHub, route: "/organizer", userIdGenerator: () => "organizer" });
 
-//     await waitFor(() => {
-//         expect(context.sentMessages).toEqual([
-//             { hello: { groupId: "organizer", message: { userId: "organizer" } } }
-//         ]);
-//     });
+    await waitFor(() => {
+        expect(context.sentMessages).toEqual([
+            { hello: { groupId: "organizer", message: { userId: "organizer" } } }
+        ]);
+    });
 
-//     screen.getByText("Set user name").click();
-//     const userNameTextInput = await within(
-//         await screen.findByRole("dialog")
-//     ).findByLabelText(/What user name would you like/);
-//     fireEvent.change(userNameTextInput, {
-//         target: { value: " Stewie  " },
-//     });
-//     screen.getByText(/Ok/).click();
-//     await waitForElementToBeRemoved(() => screen.getByText("Setting user name..."));
+    screen.getByText("Set user name").click();
+    const userNameTextInput = await within(
+        await screen.findByRole("dialog")
+    ).findByLabelText(/What user name would you like/);
+    fireEvent.change(userNameTextInput, {
+        target: { value: " Stewie  " },
+    });
+    screen.getByText(/Ok/).click();
+    await waitForElementToBeRemoved(() => screen.getByText(/What user name would you like/));
+    act(() => context.handlers.start());
+    act(() => {
+        window.dispatchEvent(new CustomEvent("iterate-game"));
+    });
 
-//     await waitFor(() => {
-//         expect(context.sentMessages).toEqual([
-//             { hello: { groupId: "organizer", message: { userId: "organizer" } } },
-//             { status: { groupId: "organizer", message: { userId: "organizer", name: "Stewie" } } }
-//         ]);
-//     });
-// });
+    await waitFor(() => {
+        expect(context.sentMessages).toEqual([
+            { hello: { groupId: "organizer", message: { userId: "organizer" } } },
+            { status: { groupId: "organizer", message: { userId: "organizer", name: "Stewie" } } },
+            { status: { groupId: "organizer", message: { userId: "organizer", board: stringFrom(emptyBoard) } } }
+        ]);
+    });
+});
 
 test("Player: joining a multiplayer game", async () => {
     const { gameHub, context } = createTestGameHub();
