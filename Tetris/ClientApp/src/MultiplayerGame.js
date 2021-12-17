@@ -8,7 +8,8 @@ import { CommandButton } from "./components/CommandButton";
 import SinglePlayerGame, { initialGameState, SinglePlayerGameContext } from "./SinglePlayerGame";
 import { StringInput } from "./components/Prompt";
 import { useAsyncEffect } from './hooks/useAsyncEffect';
-import { stringFrom } from './domain/serialization';
+import { stringFrom, tetrisBoardFrom } from './domain/serialization';
+import { TetrisBoard } from "./components/TetrisBoard";
 
 export const initialEmptyPlayersList = {};
 
@@ -34,8 +35,15 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             playersListUpdate: ({ players: updatedPlayersList }) => {
                 setOtherPlayers(otherPlayers => update(otherPlayers).with(updatedPlayersList));
             },
-            status: ({ userId, ...updatedUser }) => {
-                setOtherPlayers(otherPlayers => ({ ...otherPlayers, [userId]: updatedUser }));
+            status: ({ userId, ...userUpdates }) => {
+                setOtherPlayers(otherPlayers => ({
+                    ...otherPlayers,
+                    [userId]: {
+                        ...(otherPlayers[userId] ?? {}),
+                        ...userUpdates,
+                        board: userUpdates.board ? tetrisBoardFrom(userUpdates.board) : undefined
+                    }
+                }));
             },
             start: () => setGame(game => ({ ...game, paused: false })),
         });
@@ -99,6 +107,14 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 </CommandButton>
             </div>
         </SinglePlayerGame>
+        <div>
+            {Object
+                .keys(otherPlayers)
+                .filter(userId => userId !== currentUserId && otherPlayers[userId].board)
+                .map(userId => <div key={userId}>
+                    {otherPlayers[userId].board && <TetrisBoard board={otherPlayers[userId].board} />}
+                </div>)}
+        </div>
     </Game>;
 }
 
