@@ -17,7 +17,6 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     const {
         game,
         setGame,
-        username,
         setUsername,
         prompt
     } = useContext(SinglePlayerGameContext);

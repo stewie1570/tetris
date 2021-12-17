@@ -5,7 +5,8 @@ import {
     act,
     waitFor,
     within,
-    fireEvent
+    fireEvent,
+    waitForElementToBeRemoved
 } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import { App } from "./App";
@@ -124,6 +125,34 @@ test("Organizer: setting user name", async () => {
         ]);
     });
 });
+
+// test("Organizer: starting a game", async () => {
+//     const { gameHub, context } = createTestGameHub();
+//     renderWith({ gameHub, route: "/organizer", userIdGenerator: () => "organizer" });
+
+//     await waitFor(() => {
+//         expect(context.sentMessages).toEqual([
+//             { hello: { groupId: "organizer", message: { userId: "organizer" } } }
+//         ]);
+//     });
+
+//     screen.getByText("Set user name").click();
+//     const userNameTextInput = await within(
+//         await screen.findByRole("dialog")
+//     ).findByLabelText(/What user name would you like/);
+//     fireEvent.change(userNameTextInput, {
+//         target: { value: " Stewie  " },
+//     });
+//     screen.getByText(/Ok/).click();
+//     await waitForElementToBeRemoved(() => screen.getByText("Setting user name..."));
+
+//     await waitFor(() => {
+//         expect(context.sentMessages).toEqual([
+//             { hello: { groupId: "organizer", message: { userId: "organizer" } } },
+//             { status: { groupId: "organizer", message: { userId: "organizer", name: "Stewie" } } }
+//         ]);
+//     });
+// });
 
 test("Player: joining a multiplayer game", async () => {
     const { gameHub, context } = createTestGameHub();
