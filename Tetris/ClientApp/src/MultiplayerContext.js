@@ -18,6 +18,7 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
   const connection = useRef(null);
   const gameHub = useRef({
     send: {},
+    invoke: {},
     receive: {}
   });
   const userId = useUserId(userIdGenerator);
@@ -40,7 +41,8 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
       .start()
       .then(() => {
         signals.forEach(signal => {
-          gameHub.current.send[signal] = obj => connection.current.invoke(signal, obj);
+          gameHub.current.invoke[signal] = obj => connection.current.invoke(signal, obj);
+          gameHub.current.send[signal] = obj => connection.current.send(signal, obj);
         });
         setIsConnected(true);
       });

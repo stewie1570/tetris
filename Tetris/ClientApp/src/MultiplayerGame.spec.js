@@ -28,16 +28,16 @@ const createTestGameHub = () => {
         handlers: null,
         sentMessages: []
     };
+    const signalHandlers = signals.reduce((acc, signal) => ({
+        ...acc,
+        [signal]: obj => {
+            context.sentMessages.push({ [signal]: obj });
+            return new Promise(resolve => setTimeout(resolve, 100));
+        }
+    }), {});
     const gameHub = {
-        send: {
-            ...signals.reduce((acc, signal) => ({
-                ...acc,
-                [signal]: obj => {
-                    context.sentMessages.push({ [signal]: obj });
-                    return new Promise(resolve => setTimeout(resolve, 100));
-                }
-            }), {})
-        },
+        send: { ...signalHandlers },
+        invoke: { ...signalHandlers },
         receive: {
             setHandlers: givenHandlers => { context.handlers = givenHandlers; }
         }

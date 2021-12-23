@@ -57,7 +57,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         setGame({ ...initialGameState, paused: true });
     }, [gameHub, isConnected, currentUserId]);
 
-    useAsyncEffect(async () => isConnected && !game.paused && gameHub.send.status({
+    useAsyncEffect(async () => isConnected && !game.paused && gameHub.invoke.status({
         groupId: organizerUserId,
         message: {
             userId: currentUserId,
