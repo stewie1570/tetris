@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router";
-import { update } from "./domain/players";
+import { update, process } from "./domain/players";
 import { Organizer } from "./Organizer";
 import { Player } from "./Player";
 import { MultiplayerContext } from "./MultiplayerContext";
@@ -8,7 +8,7 @@ import { CommandButton } from "./components/CommandButton";
 import SinglePlayerGame, { initialGameState, SinglePlayerGameContext } from "./SinglePlayerGame";
 import { StringInput } from "./components/Prompt";
 import { useAsyncEffect } from './hooks/useAsyncEffect';
-import { stringFrom, tetrisBoardFrom } from './domain/serialization';
+import { stringFrom } from './domain/serialization';
 import { TetrisBoard } from "./components/TetrisBoard";
 
 export const initialEmptyPlayersList = {};
@@ -36,14 +36,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 setOtherPlayers(otherPlayers => update(otherPlayers).with(updatedPlayersList));
             },
             status: ({ userId, ...userUpdates }) => {
-                setOtherPlayers(otherPlayers => ({
-                    ...otherPlayers,
-                    [userId]: {
-                        ...(otherPlayers[userId] ?? {}),
-                        ...userUpdates,
-                        board: userUpdates.board ? tetrisBoardFrom(userUpdates.board) : undefined
-                    }
-                }));
+                setOtherPlayers(otherPlayers => process(userUpdates).on(userId).in(otherPlayers));
             },
             start: () => setGame(game => ({ ...game, paused: false })),
         });
@@ -117,4 +110,3 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         </div>
     </Game>;
 }
-
