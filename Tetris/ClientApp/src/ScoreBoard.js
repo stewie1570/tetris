@@ -4,7 +4,7 @@ import { CommandButton } from "./components/CommandButton";
 export function ScoreBoard({ game, postableScore, onPostScore: postScore, isLoading, username }) {
   const allowScorePost = game.paused && Boolean(postableScore);
 
-  const board = (game.scoreBoard || isLoading) &&
+  const scoreBoard = game.paused && (game.scoreBoard || isLoading) &&
     <div
       className="leader-board"
       style={{ height: allowScorePost ? "80%" : "100%" }}
@@ -37,7 +37,7 @@ export function ScoreBoard({ game, postableScore, onPostScore: postScore, isLoad
     </div>;
 
   return <>
-    {board}
+    {scoreBoard}
     {allowScorePost && (
       <div className="post-my-score">
         Would you like to post your score?
