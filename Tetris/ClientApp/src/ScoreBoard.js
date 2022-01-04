@@ -1,17 +1,14 @@
 import React from "react";
 import { CommandButton } from "./components/CommandButton";
 
-export function ScoreBoard({
-  game,
-  postableScore,
-  onPostScore: postScore,
-  isLoading,
-  username,
-  allowScorePost,
-  ...otherProps
-}) {
-  const board = (game.scoreBoard || isLoading) &&
-    <div {...otherProps}>
+export function ScoreBoard({ game, postableScore, onPostScore: postScore, isLoading, username }) {
+  const allowScorePost = game.paused && Boolean(postableScore);
+
+  const scoreBoard = game.paused && (game.scoreBoard || isLoading) &&
+    <div
+      className="leader-board"
+      style={{ height: allowScorePost ? "80%" : "100%" }}
+    >
       <table className="table">
         <thead>
           {Boolean(game.scoreBoard?.length) && <tr>
@@ -40,7 +37,7 @@ export function ScoreBoard({
     </div>;
 
   return <>
-    {board}
+    {scoreBoard}
     {allowScorePost && (
       <div className="post-my-score">
         Would you like to post your score?
