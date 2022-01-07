@@ -10,6 +10,7 @@ import { StringInput } from "./components/Prompt";
 import { useAsyncEffect } from './hooks/useAsyncEffect';
 import { stringFrom } from './domain/serialization';
 import { TetrisBoard } from "./components/TetrisBoard";
+import { GameMetaFrame } from "./components/GameMetaFrame";
 
 export const initialEmptyPlayersList = {};
 
@@ -54,7 +55,8 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         groupId: organizerUserId,
         message: {
             userId: currentUserId,
-            board: stringFrom(game.board)
+            board: stringFrom(game.board),
+            score: game.score,
         }
     }), [isConnected, game.paused, game.board]);
 
@@ -78,34 +80,46 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     const startGame = () => gameHub.send.start({ groupId: organizerUserId });
 
     const Game = isOrganizer ? Organizer : Player;
+    const otherPlayerIds = Object.keys(otherPlayers);
 
     return <Game otherPlayers={otherPlayers}>
-        <SinglePlayerGame shapeProvider={shapeProvider}>
-            Players:
-            {
-                Object
-                    .keys(otherPlayers)
-                    .map(userId => <div key={userId}>
-                        {otherPlayers[userId].name ?? "[Un-named player]"}
-                    </div>)
-            }
-            <div>
-                <CommandButton onClick={promptUserName} className="btn btn-primary">
-                    Set user name
-                </CommandButton>
-            </div>
-            <div>
-                <CommandButton onClick={startGame} className="btn btn-primary">
-                    Start game
-                </CommandButton>
-            </div>
-        </SinglePlayerGame>
-        <div>
-            {Object
-                .keys(otherPlayers)
+        <div className="row" style={{ margin: "auto" }}>
+            <SinglePlayerGame
+                shapeProvider={shapeProvider}
+                className={otherPlayerIds.length > 0 ? "col-xs-12 col-md-4" : undefined}>
+                <div className="leader-board" style={{ height: "100%" }}>
+                    Players:
+                    {
+                        Object
+                            .keys(otherPlayers)
+                            .map(userId => <div key={userId}>
+                                {otherPlayers[userId].name ?? "[Un-named player]"}
+                            </div>)
+                    }
+                    <div>
+                        <CommandButton onClick={promptUserName} className="btn btn-primary">
+                            Set user name
+                        </CommandButton>
+                    </div>
+                    <div>
+                        <CommandButton onClick={startGame} className="btn btn-primary">
+                            Start game
+                        </CommandButton>
+                    </div>
+                </div>
+            </SinglePlayerGame>
+            {otherPlayerIds
                 .filter(userId => userId !== currentUserId && otherPlayers[userId].board)
-                .map(userId => <div key={userId}>
-                    {otherPlayers[userId].board && <TetrisBoard board={otherPlayers[userId].board} />}
+                .map(userId => <div className="col-xs-12 col-md-4" key={userId}>
+                    {
+                        otherPlayers[userId].board &&
+                        <GameMetaFrame
+                            game={<TetrisBoard board={otherPlayers[userId].board} />}
+                            header={<>
+                                <p>{otherPlayers[userId].name ?? "[Un-named player]"}</p>
+                                <p>Score: {otherPlayers[userId].score ?? 0}</p>
+                            </>} />
+                    }
                 </div>)}
         </div>
     </Game>;
