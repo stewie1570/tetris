@@ -55,7 +55,8 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         groupId: organizerUserId,
         message: {
             userId: currentUserId,
-            board: stringFrom(game.board)
+            board: stringFrom(game.board),
+            score: game.score,
         }
     }), [isConnected, game.paused, game.board]);
 

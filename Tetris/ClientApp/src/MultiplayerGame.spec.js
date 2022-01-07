@@ -179,7 +179,12 @@ test("Organizer: starting a game", async () => {
         expect(context.sentMessages).toEqual([
             { hello: { groupId: "organizer", message: { userId: "organizer" } } },
             { status: { groupId: "organizer", message: { userId: "organizer", name: "Stewie" } } },
-            { status: { groupId: "organizer", message: { userId: "organizer", board: stringFrom(emptyBoard) } } }
+            {
+                status: {
+                    groupId: "organizer",
+                    message: { userId: "organizer", board: stringFrom(emptyBoard), score: 0 }
+                }
+            }
         ]);
     });
 });
