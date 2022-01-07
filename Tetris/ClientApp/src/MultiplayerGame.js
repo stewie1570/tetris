@@ -78,33 +78,35 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     const startGame = () => gameHub.send.start({ groupId: organizerUserId });
 
     const Game = isOrganizer ? Organizer : Player;
+    const otherPlayerIds = Object.keys(otherPlayers);
 
     return <Game otherPlayers={otherPlayers}>
-        <SinglePlayerGame shapeProvider={shapeProvider}>
-            Players:
-            {
-                Object
-                    .keys(otherPlayers)
-                    .map(userId => <div key={userId}>
-                        {otherPlayers[userId].name ?? "[Un-named player]"}
-                    </div>)
-            }
-            <div>
-                <CommandButton onClick={promptUserName} className="btn btn-primary">
-                    Set user name
-                </CommandButton>
-            </div>
-            <div>
-                <CommandButton onClick={startGame} className="btn btn-primary">
-                    Start game
-                </CommandButton>
-            </div>
-        </SinglePlayerGame>
-        <div>
-            {Object
-                .keys(otherPlayers)
+        <div className="row" style={{ margin: "auto" }}>
+            <SinglePlayerGame
+                shapeProvider={shapeProvider}
+                className={otherPlayerIds.length > 0 ? "col-xs-12 col-md-4" : undefined}>
+                Players:
+                {
+                    Object
+                        .keys(otherPlayers)
+                        .map(userId => <div key={userId}>
+                            {otherPlayers[userId].name ?? "[Un-named player]"}
+                        </div>)
+                }
+                <div>
+                    <CommandButton onClick={promptUserName} className="btn btn-primary">
+                        Set user name
+                    </CommandButton>
+                </div>
+                <div>
+                    <CommandButton onClick={startGame} className="btn btn-primary">
+                        Start game
+                    </CommandButton>
+                </div>
+            </SinglePlayerGame>
+            {otherPlayerIds
                 .filter(userId => userId !== currentUserId && otherPlayers[userId].board)
-                .map(userId => <div key={userId}>
+                .map(userId => <div className="col-xs-12 col-md-4" key={userId}>
                     {otherPlayers[userId].board && <TetrisBoard board={otherPlayers[userId].board} />}
                 </div>)}
         </div>

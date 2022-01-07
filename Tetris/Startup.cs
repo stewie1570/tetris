@@ -59,6 +59,7 @@ namespace Tetris
         {
             app.UseResponseCompression();
             app.UseRouting();
+            app.UseCustomExceptionHandler(env, loggerFactory);
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<GameHub>("/gameHub");
@@ -83,7 +84,6 @@ namespace Tetris
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-            app.UseCustomExceptionHandler(env, loggerFactory);
 
             app.UseEndpoints(endpoints =>
             {

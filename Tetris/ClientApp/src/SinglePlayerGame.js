@@ -6,6 +6,7 @@ import "./App.css";
 import { ScoreBoard } from "./ScoreBoard";
 import { GameControls } from "./GameControls";
 import { useLoadingState, useMountedOnlyState } from 'leaf-validator';
+import { GameMetaFrame } from "./components/GameMetaFrame";
 
 export const SinglePlayerGameContext = React.createContext();
 
@@ -35,7 +36,7 @@ export const SinglePlayerGameContextProvider = ({ children }) => {
   </SinglePlayerGameContext.Provider>;
 };
 
-export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers }) => {
+export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers, ...otherProps }) => {
   const {
     game,
     setGame,
@@ -84,41 +85,31 @@ export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers }) => {
   }
 
   return (
-    <div>
-      <center>
-        <div className="well app">
-          <p>
-            {`Score: ${game.score}` +
-              (game.oldScore
-                ? ` (Previous: ${game.oldScore})`
-                : "")}
-          </p>
-          <div className="game">
-            <TetrisGame
-              game={game}
-              onChange={setGame}
-              shapeProvider={shapeProvider}
-              onPause={pause}
-            />
-            {game.paused && <div
-              className="leader-board"
-              style={{ height: allowScorePost ? "80%" : "100%" }}>
-              {otherPlayers || <ScoreBoard
-                allowScorePost={allowScorePost}
-                game={game}
-                username={username}
-                isLoading={isLoadingScoreBoard}
-                onPostScore={postScore}
-                postableScore={postableScore} />}
-            </div>}
-          </div>
-          {!otherPlayers && <GameControls
-            game={game}
-            onPause={pause}
-            onToggleMobile={() => setGame(game => ({ ...game, mobile: !game.mobile }))} />}
-        </div>
-      </center>
-    </div>
+    <GameMetaFrame
+      {...otherProps}
+      header={<p>
+        {`Score: ${game.score}` +
+          (game.oldScore
+            ? ` (Previous: ${game.oldScore})`
+            : "")}
+      </p>}
+      game={<TetrisGame
+        game={game}
+        onChange={setGame}
+        shapeProvider={shapeProvider}
+        onPause={pause}
+      />}
+      scoreBoard={game.paused && (otherPlayers || <ScoreBoard
+        allowScorePost={allowScorePost}
+        game={game}
+        username={username}
+        isLoading={isLoadingScoreBoard}
+        onPostScore={postScore}
+        postableScore={postableScore} />)}
+      controls={!otherPlayers && <GameControls
+        game={game}
+        onPause={pause}
+        onToggleMobile={() => setGame(game => ({ ...game, mobile: !game.mobile }))} />} />
   );
 }
 

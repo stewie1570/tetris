@@ -18,8 +18,8 @@ const GlobalUI = () => {
     const { dialogProps } = useContext(SinglePlayerGameContext);
 
     return <>
-        <ErrorMessage />
         <Dialog {...dialogProps} />
+        <ErrorMessage />
     </>;
 }
 
