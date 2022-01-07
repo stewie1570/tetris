@@ -10,6 +10,7 @@ import { StringInput } from "./components/Prompt";
 import { useAsyncEffect } from './hooks/useAsyncEffect';
 import { stringFrom } from './domain/serialization';
 import { TetrisBoard } from "./components/TetrisBoard";
+import { GameMetaFrame } from "./components/GameMetaFrame";
 
 export const initialEmptyPlayersList = {};
 
@@ -107,7 +108,15 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             {otherPlayerIds
                 .filter(userId => userId !== currentUserId && otherPlayers[userId].board)
                 .map(userId => <div className="col-xs-12 col-md-4" key={userId}>
-                    {otherPlayers[userId].board && <TetrisBoard board={otherPlayers[userId].board} />}
+                    {
+                        otherPlayers[userId].board &&
+                        <GameMetaFrame
+                            game={<TetrisBoard board={otherPlayers[userId].board} />}
+                            header={<>
+                                <p>{otherPlayers[userId].name ?? "[Un-named player]"}</p>
+                                <p>Score: {otherPlayers[userId].score ?? 0}</p>
+                            </>} />
+                    }
                 </div>)}
         </div>
     </Game>;
