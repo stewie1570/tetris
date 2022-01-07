@@ -86,23 +86,25 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             <SinglePlayerGame
                 shapeProvider={shapeProvider}
                 className={otherPlayerIds.length > 0 ? "col-xs-12 col-md-4" : undefined}>
-                Players:
-                {
-                    Object
-                        .keys(otherPlayers)
-                        .map(userId => <div key={userId}>
-                            {otherPlayers[userId].name ?? "[Un-named player]"}
-                        </div>)
-                }
-                <div>
-                    <CommandButton onClick={promptUserName} className="btn btn-primary">
-                        Set user name
-                    </CommandButton>
-                </div>
-                <div>
-                    <CommandButton onClick={startGame} className="btn btn-primary">
-                        Start game
-                    </CommandButton>
+                <div className="leader-board" style={{ height: "100%" }}>
+                    Players:
+                    {
+                        Object
+                            .keys(otherPlayers)
+                            .map(userId => <div key={userId}>
+                                {otherPlayers[userId].name ?? "[Un-named player]"}
+                            </div>)
+                    }
+                    <div>
+                        <CommandButton onClick={promptUserName} className="btn btn-primary">
+                            Set user name
+                        </CommandButton>
+                    </div>
+                    <div>
+                        <CommandButton onClick={startGame} className="btn btn-primary">
+                            Start game
+                        </CommandButton>
+                    </div>
                 </div>
             </SinglePlayerGame>
             {otherPlayerIds
