@@ -36,7 +36,7 @@ export const SinglePlayerGameContextProvider = ({ children }) => {
   </SinglePlayerGameContext.Provider>;
 };
 
-export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers, ...otherProps }) => {
+export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers, header, ...otherProps }) => {
   const {
     game,
     setGame,
@@ -87,12 +87,15 @@ export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers, ...oth
   return (
     <GameMetaFrame
       {...otherProps}
-      header={<p>
-        {`Score: ${game.score}` +
-          (game.oldScore
-            ? ` (Previous: ${game.oldScore})`
-            : "")}
-      </p>}
+      header={<>
+        {header}
+        <p>
+          {`Score: ${game.score}` +
+            (game.oldScore
+              ? ` (Previous: ${game.oldScore})`
+              : "")}
+        </p>
+      </>}
       game={<TetrisGame
         game={game}
         onChange={setGame}

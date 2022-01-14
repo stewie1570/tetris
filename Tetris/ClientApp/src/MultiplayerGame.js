@@ -16,6 +16,7 @@ export const initialEmptyPlayersList = {};
 
 export const MultiplayerGame = ({ shapeProvider }) => {
     const [otherPlayers, setOtherPlayers] = React.useState(initialEmptyPlayersList);
+    const [gameEndTime, setGameEndTime] = React.useState(null);
     const { organizerUserId } = useParams();
     const { gameHub, isConnected, userId: currentUserId } = useContext(MultiplayerContext);
     const {
@@ -25,6 +26,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         prompt
     } = useContext(SinglePlayerGameContext);
     const isOrganizer = organizerUserId === currentUserId;
+    const timeLeft = gameEndTime && Math.ceil(gameEndTime - new Date().getTime());
 
     useEffect(() => {
         const isConnectedWithUserId = currentUserId && isConnected;
@@ -37,9 +39,14 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 setOtherPlayers(otherPlayers => update(otherPlayers).with(updatedPlayersList));
             },
             status: ({ userId, ...userUpdates }) => {
-                setOtherPlayers(otherPlayers => process(userUpdates).on(userId).in(otherPlayers));
+                const { timeLeft, ...otherUpdates } = userUpdates;
+                setOtherPlayers(otherPlayers => process(otherUpdates).on(userId).in(otherPlayers));
+                !isOrganizer && timeLeft && setGameEndTime(new Date().getTime() + timeLeft);
             },
-            start: () => setGame(game => ({ ...game, paused: false })),
+            start: () => {
+                setGame(game => ({ ...game, paused: false }));
+                isOrganizer && setGameEndTime(new Date().getTime() + 60000);
+            }
         });
         isConnectedWithUserId && gameHub.send.hello({
             groupId: organizerUserId,
@@ -49,7 +56,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         });
 
         setGame({ ...initialGameState, paused: true });
-    }, [gameHub, isConnected, currentUserId]);
+    }, [gameHub, isConnected, currentUserId, isOrganizer]);
 
     useAsyncEffect(async () => isConnected && !game.paused && gameHub.invoke.status({
         groupId: organizerUserId,
@@ -57,6 +64,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             userId: currentUserId,
             board: stringFrom(game.board),
             score: game.score,
+            timeLeft: isOrganizer ? timeLeft : undefined
         }
     }), [isConnected, game.paused, game.board]);
 
@@ -86,6 +94,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         <div className="row" style={{ margin: "auto" }}>
             <SinglePlayerGame
                 shapeProvider={shapeProvider}
+                header={gameEndTime && `Game ends in ${Math.floor(timeLeft / 1000)} seconds`}
                 className={otherPlayerIds.length > 0 ? "col-xs-12 col-md-4" : undefined}>
                 <div className="leader-board" style={{ height: "100%" }}>
                     Players:
