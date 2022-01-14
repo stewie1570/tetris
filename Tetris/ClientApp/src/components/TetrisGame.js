@@ -101,7 +101,7 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }
         [keys.up]: () => rotate({ board }),
       };
       const selectedMove = moves[keyCode];
-      selectedMove && event.preventDefault();
+      selectedMove && event.preventDefault?.();
       selectedMove && onChange(game => ({ ...game, board: selectedMove() }));
     };
 
