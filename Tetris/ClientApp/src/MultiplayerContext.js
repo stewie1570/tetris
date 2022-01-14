@@ -50,7 +50,12 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
     return () => connection.current.stop();
   }, []);
 
-  return <MultiplayerContext.Provider value={{ gameHub: gameHub.current, isConnected, userId }}>
+  return <MultiplayerContext.Provider value={{
+    gameHub: gameHub.current,
+    isConnected,
+    userId,
+    timeProvider: () => new Date().getTime()
+  }}>
     {children}
   </MultiplayerContext.Provider>;
 };

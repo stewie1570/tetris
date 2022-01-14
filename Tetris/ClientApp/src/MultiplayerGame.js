@@ -18,7 +18,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     const [otherPlayers, setOtherPlayers] = React.useState(initialEmptyPlayersList);
     const [gameEndTime, setGameEndTime] = React.useState(null);
     const { organizerUserId } = useParams();
-    const { gameHub, isConnected, userId: currentUserId } = useContext(MultiplayerContext);
+    const { gameHub, isConnected, userId: currentUserId, timeProvider } = useContext(MultiplayerContext);
     const {
         game,
         setGame,
@@ -26,7 +26,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         prompt
     } = useContext(SinglePlayerGameContext);
     const isOrganizer = organizerUserId === currentUserId;
-    const timeLeft = gameEndTime && Math.ceil(gameEndTime - new Date().getTime());
+    const timeLeft = gameEndTime && Math.ceil(gameEndTime - timeProvider());
 
     useEffect(() => {
         const isConnectedWithUserId = currentUserId && isConnected;
@@ -41,11 +41,11 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             status: ({ userId, ...userUpdates }) => {
                 const { timeLeft, ...otherUpdates } = userUpdates;
                 setOtherPlayers(otherPlayers => process(otherUpdates).on(userId).in(otherPlayers));
-                !isOrganizer && timeLeft && setGameEndTime(new Date().getTime() + timeLeft);
+                !isOrganizer && timeLeft && setGameEndTime(timeProvider() + timeLeft);
             },
             start: () => {
                 setGame(game => ({ ...game, paused: false }));
-                isOrganizer && setGameEndTime(new Date().getTime() + 60000);
+                isOrganizer && setGameEndTime(timeProvider() + 60000);
             }
         });
         isConnectedWithUserId && gameHub.send.hello({
