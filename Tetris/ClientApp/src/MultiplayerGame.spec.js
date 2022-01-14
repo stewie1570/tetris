@@ -53,8 +53,10 @@ const MultiplayerTestContext = ({ children, gameHub, userIdGenerator }) => {
         setTimeout(() => setIsConnected(true), 100);
     }, []);
 
+    const timeProvider = () => 1000;
+
     return (
-        <MultiplayerContext.Provider value={{ gameHub, isConnected, userId: userIdGenerator() }}>
+        <MultiplayerContext.Provider value={{ gameHub, isConnected, userId: userIdGenerator(), timeProvider }}>
             {children}
         </MultiplayerContext.Provider>
     );
