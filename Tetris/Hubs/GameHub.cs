@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
@@ -39,8 +40,14 @@ namespace Tetris.Hubs
 
         public async Task Status(GroupMessage statusMessage)
         {
-            await Clients
-                .Group(statusMessage.GroupId)
+            var sendToAll = statusMessage
+                .Message
+                .EnumerateObject()
+                .Any(prop => prop.Name == "name" && prop.Value.ValueKind == JsonValueKind.String);
+
+            await (sendToAll
+                ? Clients.Group(statusMessage.GroupId)
+                : Clients.OthersInGroup(statusMessage.GroupId))
                 .SendAsync("status", statusMessage.Message);
         }
 
