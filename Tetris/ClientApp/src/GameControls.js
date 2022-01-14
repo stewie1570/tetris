@@ -3,7 +3,7 @@ import { CommandButton } from "./components/CommandButton";
 
 export function GameControls({ onPause: togglePause, game, onToggleMobile: toggleMobile }) {
   return <div className="controls">
-    <CommandButton
+    {togglePause && <CommandButton
       className="btn btn-primary"
       runningText="Loading Score Board..."
       onClick={togglePause}>
@@ -13,7 +13,7 @@ export function GameControls({ onPause: togglePause, game, onToggleMobile: toggl
         &nbsp;
       </span>
       <span>{game.paused ? "Continue" : "Pause"}</span>
-    </CommandButton>
+    </CommandButton>}
     <div>
       <p />
       <CommandButton className="btn btn-primary" onClick={toggleMobile}>

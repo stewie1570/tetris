@@ -182,7 +182,11 @@ test("Organizer: starting a game", async () => {
             {
                 status: {
                     groupId: "organizer",
-                    message: { userId: "organizer", board: stringFrom(emptyBoard), score: 0 }
+                    message: {
+                        userId: "organizer",
+                        board: stringFrom(emptyBoard), score: 0,
+                        timeLeft: 60000
+                    }
                 }
             }
         ]);

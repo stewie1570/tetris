@@ -36,7 +36,7 @@ export const SinglePlayerGameContextProvider = ({ children }) => {
   </SinglePlayerGameContext.Provider>;
 };
 
-export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers, ...otherProps }) => {
+export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers, header, ...otherProps }) => {
   const {
     game,
     setGame,
@@ -87,17 +87,20 @@ export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers, ...oth
   return (
     <GameMetaFrame
       {...otherProps}
-      header={<p>
-        {`Score: ${game.score}` +
-          (game.oldScore
-            ? ` (Previous: ${game.oldScore})`
-            : "")}
-      </p>}
+      header={<>
+        {header}
+        <p>
+          {`Score: ${game.score}` +
+            (game.oldScore
+              ? ` (Previous: ${game.oldScore})`
+              : "")}
+        </p>
+      </>}
       game={<TetrisGame
         game={game}
         onChange={setGame}
         shapeProvider={shapeProvider}
-        onPause={pause}
+        onPause={!otherPlayers && pause}
       />}
       scoreBoard={game.paused && (otherPlayers || <ScoreBoard
         allowScorePost={allowScorePost}
@@ -106,9 +109,9 @@ export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers, ...oth
         isLoading={isLoadingScoreBoard}
         onPostScore={postScore}
         postableScore={postableScore} />)}
-      controls={!otherPlayers && <GameControls
+      controls={<GameControls
         game={game}
-        onPause={pause}
+        onPause={!otherPlayers && pause}
         onToggleMobile={() => setGame(game => ({ ...game, mobile: !game.mobile }))} />} />
   );
 }
