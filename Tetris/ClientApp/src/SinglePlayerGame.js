@@ -97,7 +97,7 @@ export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers, ...oth
         game={game}
         onChange={setGame}
         shapeProvider={shapeProvider}
-        onPause={pause}
+        onPause={!otherPlayers && pause}
       />}
       scoreBoard={game.paused && (otherPlayers || <ScoreBoard
         allowScorePost={allowScorePost}
@@ -106,9 +106,9 @@ export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers, ...oth
         isLoading={isLoadingScoreBoard}
         onPostScore={postScore}
         postableScore={postableScore} />)}
-      controls={!otherPlayers && <GameControls
+      controls={<GameControls
         game={game}
-        onPause={pause}
+        onPause={!otherPlayers && pause}
         onToggleMobile={() => setGame(game => ({ ...game, mobile: !game.mobile }))} />} />
   );
 }
