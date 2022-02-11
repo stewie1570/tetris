@@ -52,7 +52,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             },
             results: results => {
                 setGameResults(results);
-                setGame({ ...initialGameState, paused: true });
+                setGame(game => ({ ...game, paused: true }));
             }
         });
         isConnectedWithUserId && gameHub.send.hello({
@@ -106,7 +106,12 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
     const Game = isOrganizer ? Organizer : Player;
     const otherPlayerIds = Object.keys(otherPlayers);
-    const singlePlayerGameLink = <Link style={{ display: "block", marginTop: "1rem" }} to="/">Back To Single Player Game</Link>;
+    const singlePlayerGameLink = <Link
+        style={{ display: "block", marginTop: "1rem" }}
+        onClick={() => setGame(game => ({ ...game, paused: false }))}
+        to="/">
+        Back To Single Player Game
+    </Link>;
 
     return <Game otherPlayers={otherPlayers}>
         {gameResults
