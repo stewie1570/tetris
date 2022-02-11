@@ -10,7 +10,8 @@ const signals = [
   'status',
   'start',
   'gameUpdate',
-  'gameOver'
+  'gameOver',
+  'results'
 ];
 
 export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {

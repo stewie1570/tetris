@@ -24,3 +24,11 @@ export const process = userUpdates => ({
         })
     })
 });
+
+export const namesAndScoresFrom = players => Object.entries(players).reduce((currentPlayers, [userId, player]) => ({
+    ...currentPlayers,
+    [userId]: {
+        name: player.name,
+        score: player.score
+    }
+}), {});

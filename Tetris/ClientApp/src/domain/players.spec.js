@@ -1,4 +1,4 @@
-import { update } from './players';
+import { update, namesAndScoresFrom } from './players';
 
 test("players list update will add and remove user IDs to player list object", () => {
     expect(update({
@@ -20,5 +20,15 @@ test("players list update will add players to empty players list", () => {
     ])).toEqual({
         user1: {},
         user3: {}
+    });
+})
+
+test("get player names and scores from players object", () => {
+    expect(namesAndScoresFrom({
+        user1: { name: "User 1", score: 0, board: [] },
+        user2: { name: "User 2", score: 1, board: [] }
+    })).toEqual({
+        user1: { name: "User 1", score: 0 },
+        user2: { name: "User 2", score: 1 }
     });
 })
