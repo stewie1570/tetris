@@ -9,7 +9,6 @@ const signals = [
   'playersListUpdate',
   'status',
   'start',
-  'gameUpdate',
   'gameOver',
   'results'
 ];
