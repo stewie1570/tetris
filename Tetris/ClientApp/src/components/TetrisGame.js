@@ -89,7 +89,8 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }
     }
   }, [game.paused, onChange, shapeProvider]);
 
-  const keyPress = useCallback(({ keyCode }) => {
+  const keyPress = useCallback((event) => {
+    const { keyCode } = event;
     const processKeyCommand = ({ keyCode }) => {
       const { board } = game;
       const moves = {
@@ -100,6 +101,7 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }
         [keys.up]: () => rotate({ board }),
       };
       const selectedMove = moves[keyCode];
+      selectedMove && event.preventDefault?.();
       selectedMove && onChange(game => ({ ...game, board: selectedMove() }));
     };
 

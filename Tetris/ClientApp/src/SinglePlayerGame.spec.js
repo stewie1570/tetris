@@ -1,5 +1,4 @@
 import React from "react";
-import SinglePlayerGame from "./SinglePlayerGame";
 import {
   render,
   screen,
@@ -13,6 +12,9 @@ import { shapes } from "./components/TetrisGame";
 import { keys } from "./core/constants";
 import { rest } from "msw";
 import { server } from "./setupTests";
+import { MemoryRouter } from "react-router";
+import { App } from "./App";
+import { MultiplayerContext } from "./MultiplayerContext";
 
 const lineShape = shapes[1];
 
@@ -25,7 +27,6 @@ test("score a point", async () => {
     await scorePointOnEmptyBoard({ iterate, container });
   });
 
-  screen.getByText("Score: 1");
   expect(getSerializedBoard()).toBe(
     `
       *---------
@@ -45,6 +46,7 @@ test("score a point", async () => {
       --------##
       --------##`.replace(/ /gi, "")
   );
+  screen.getByText("Score: 1");
 });
 
 test("score a point and post score", async () => {
@@ -262,7 +264,11 @@ async function scorePointOnEmptyBoard({ iterate, container }) {
 
 function getIterableBoard() {
   const { container } = render(
-    <SinglePlayerGame shapeProvider={() => lineShape} />
+    <MemoryRouter initialEntries={['/']}>
+      <MultiplayerContext.Provider value={{ userId: "userId" }}>
+        <App shapeProvider={() => lineShape} />
+      </MultiplayerContext.Provider>
+    </MemoryRouter>
   );
 
   return {

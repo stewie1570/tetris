@@ -2,9 +2,10 @@ import "./Prompt.css";
 import React, { useRef } from 'react';
 import { CommandButton } from './CommandButton';
 import { TextInput } from './TextInput';
+import { useMountedOnlyState } from "leaf-validator";
 
 export const usePrompt = () => {
-    const [isVisible, setVisible] = React.useState(false);
+    const [isVisible, setVisible] = useMountedOnlyState(false)
     const resolver = useRef(undefined);
     const dialogContent = useRef(undefined);
     const resolveDialog = value => {

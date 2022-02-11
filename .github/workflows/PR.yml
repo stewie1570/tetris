@@ -1,8 +1,6 @@
 name: Build (PR)
 
-on:
-  pull_request:
-    branches: [ master ]
+on: [pull_request]
 
 jobs:  
   test-backend:

@@ -3,7 +3,7 @@ import { keys } from '../core/constants'
 import React from 'react'
 
 export function MobileControls(props) {
-    return <div style={{ float: "left" }}>
+    return <div style={{ position: "fixed", zIndex: 1 }}>
         <button className="btn btn-primary left-control" onClick={() => props.onClick && props.onClick(keys.left)}>
             <span className="glyphicon glyphicon-arrow-left">
                 &nbsp;
@@ -20,12 +20,12 @@ export function MobileControls(props) {
             </span>
             <b>Rotate</b>
         </button>
-        <button className="btn btn-primary top-stacked-control" onClick={props.onPause}>
+        {props.onPause && <button className="btn btn-primary top-stacked-control" onClick={props.onPause}>
             <span className="glyphicon glyphicon-pause">
                 &nbsp;
             </span>
             <b>Pause</b>
-        </button>
+        </button>}
         <button className="btn btn-primary bottom-stacked-control" onClick={() => props.onClick && props.onClick(keys.down)}>
             <span className="glyphicon glyphicon-arrow-down">
                 &nbsp;
