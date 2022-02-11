@@ -11,6 +11,7 @@ import { useAsyncEffect } from './hooks/useAsyncEffect';
 import { stringFrom } from './domain/serialization';
 import { TetrisBoard } from "./components/TetrisBoard";
 import { GameMetaFrame } from "./components/GameMetaFrame";
+import { Link } from "react-router-dom";
 
 export const initialEmptyPlayersList = {};
 
@@ -95,6 +96,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             <SinglePlayerGame
                 shapeProvider={shapeProvider}
                 header={gameEndTime && `Game ends in ${Math.floor(timeLeft / 1000)} seconds`}
+                additionalControls={<Link style={{ display: "block", marginTop: "1rem" }} to="/">Back To Single Player Game</Link>}
                 className={otherPlayerIds.length > 0 ? "col-xs-12 col-md-4" : undefined}>
                 <div className="leader-board" style={{ height: "100%" }}>
                     Players:

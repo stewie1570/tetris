@@ -31,10 +31,13 @@ export const App = ({ shapeProvider }) => {
         <Routes>
             <Route
                 path="/"
-                element={<>
-                    <SinglePlayerGame shapeProvider={selectedShapeProvider} />
-                    <Link to={`/${userId}`}>Host Multiplayer Game</Link>
-                </>} />
+                element={
+                    <SinglePlayerGame
+                        shapeProvider={selectedShapeProvider}
+                        additionalControls={<Link
+                            style={{ marginTop: "1rem", display: "block" }}
+                            to={`/${userId}`}>Host Multiplayer Game</Link>} />
+                } />
             <Route
                 path="/:organizerUserId"
                 element={<MultiplayerGame shapeProvider={selectedShapeProvider} />} />

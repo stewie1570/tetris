@@ -36,7 +36,7 @@ export const SinglePlayerGameContextProvider = ({ children }) => {
   </SinglePlayerGameContext.Provider>;
 };
 
-export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers, header, ...otherProps }) => {
+export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers, header, additionalControls, ...otherProps }) => {
   const {
     game,
     setGame,
@@ -109,10 +109,12 @@ export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers, header
         isLoading={isLoadingScoreBoard}
         onPostScore={postScore}
         postableScore={postableScore} />)}
-      controls={<GameControls
+      controls={<><GameControls
         game={game}
         onPause={!otherPlayers && pause}
-        onToggleMobile={() => setGame(game => ({ ...game, mobile: !game.mobile }))} />} />
+        onToggleMobile={() => setGame(game => ({ ...game, mobile: !game.mobile }))} />
+        {additionalControls}
+      </>} />
   );
 }
 
