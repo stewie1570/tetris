@@ -22,6 +22,7 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
     receive: {}
   });
   const userId = useUserId(userIdGenerator);
+  const [gameEndTime, setGameEndTime] = React.useState(null);
 
   useEffect(() => {
     connection.current = new HubConnectionBuilder()
@@ -54,7 +55,9 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
     gameHub: gameHub.current,
     isConnected,
     userId,
-    timeProvider: () => new Date().getTime()
+    timeProvider: () => new Date().getTime(),
+    gameEndTime,
+    setGameEndTime
   }}>
     {children}
   </MultiplayerContext.Provider>;

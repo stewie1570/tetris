@@ -1,13 +1,21 @@
 import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router";
+import { namesAndScoresFrom } from "./domain/players";
 import { MultiplayerContext } from "./MultiplayerContext";
 import { initialEmptyPlayersList } from "./MultiplayerGame";
 import { SinglePlayerGameContext } from "./SinglePlayerGame";
 
 export const Organizer = ({ children, otherPlayers }) => {
-    const { gameHub, isConnected, userId: currentUserId } = useContext(MultiplayerContext);
+    const {
+        gameHub,
+        isConnected,
+        userId: currentUserId,
+        timeProvider,
+        gameEndTime
+    } = useContext(MultiplayerContext);
     const { organizerUserId } = useParams();
-    const { username } = useContext(SinglePlayerGameContext);
+    const { username, game } = useContext(SinglePlayerGameContext);
+    const timeLeft = gameEndTime && Math.max(0, Math.ceil(gameEndTime - timeProvider()));
 
     useEffect(() => {
         const isConnectedWithUserId = currentUserId && isConnected;
@@ -25,6 +33,16 @@ export const Organizer = ({ children, otherPlayers }) => {
                 }
             });
     }, [Object.keys(otherPlayers).join(','), gameHub, isConnected, currentUserId]);
+
+    useEffect(() => {
+        timeLeft === 0 && gameHub.invoke.results({
+            groupId: organizerUserId,
+            message: namesAndScoresFrom({
+                ...otherPlayers,
+                [currentUserId]: { name: username, score: game.score }
+            })
+        });
+    }, [timeLeft]);
 
     return <>
         {children}
