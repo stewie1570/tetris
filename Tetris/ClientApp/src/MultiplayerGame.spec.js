@@ -47,6 +47,7 @@ const createTestGameHub = () => {
 
 const MultiplayerTestContext = ({ children, gameHub, userIdGenerator }) => {
     const [isConnected, setIsConnected] = React.useState(false);
+    const [gameEndTime, setGameEndTime] = React.useState(null);
 
     useEffect(() => {
         setTimeout(() => setIsConnected(true), 100);
@@ -55,7 +56,14 @@ const MultiplayerTestContext = ({ children, gameHub, userIdGenerator }) => {
     const timeProvider = () => 1000;
 
     return (
-        <MultiplayerContext.Provider value={{ gameHub, isConnected, userId: userIdGenerator(), timeProvider }}>
+        <MultiplayerContext.Provider value={{
+            gameHub,
+            isConnected,
+            userId: userIdGenerator(),
+            timeProvider,
+            gameEndTime,
+            setGameEndTime
+        }}>
             {children}
         </MultiplayerContext.Provider>
     );

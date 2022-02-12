@@ -17,14 +17,19 @@ export const initialEmptyPlayersList = {};
 
 export const MultiplayerGame = ({ shapeProvider }) => {
     const [otherPlayers, setOtherPlayers] = React.useState(initialEmptyPlayersList);
-    const [gameEndTime, setGameEndTime] = React.useState(null);
     const { organizerUserId } = useParams();
-    const { gameHub, isConnected, userId: currentUserId, timeProvider } = useContext(MultiplayerContext);
+    const {
+        gameHub,
+        isConnected,
+        userId: currentUserId,
+        timeProvider,
+        gameEndTime,
+        setGameEndTime
+    } = useContext(MultiplayerContext);
     const {
         game,
         setGame,
         setUsername,
-        username,
         prompt
     } = useContext(SinglePlayerGameContext);
     const isOrganizer = organizerUserId === currentUserId;
@@ -74,16 +79,6 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             timeLeft: isOrganizer ? timeLeft : undefined
         }
     }), [isConnected, game.paused, game.board]);
-
-    useAsyncEffect(async () => {
-        isOrganizer && timeLeft === 0 && gameHub.invoke.results({
-            groupId: organizerUserId,
-            message: namesAndScoresFrom({
-                ...otherPlayers,
-                [currentUserId]: { name: username, score: game.score }
-            })
-        });
-    }, [timeLeft, isOrganizer]);
 
     const promptUserName = () => prompt(exitModal => <StringInput
         filter={value => (value ?? "").trim()}
@@ -158,7 +153,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                             </CommandButton>
                         </div>
                         <div style={{ marginTop: "1rem" }}>
-                            <CommandButton onClick={startGame} className="btn btn-primary">
+                            <CommandButton onClick={startGame} runningText="Starting..." className="btn btn-primary">
                                 Start game
                             </CommandButton>
                         </div>
