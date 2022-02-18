@@ -12,7 +12,8 @@ const signals = [
   'start',
   'gameOver',
   'results',
-  'disconnect'
+  'disconnect',
+  'noOranizer'
 ];
 
 export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
@@ -26,6 +27,7 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
   });
   const userId = useUserId(userIdGenerator);
   const [gameEndTime, setGameEndTime] = React.useState(null);
+  const [isOrganizerDisconnected, setIsOrganizerDisconnected] = React.useState(false);
 
   useEffect(() => {
     setGameEndTime(null);
@@ -64,7 +66,9 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
     userId,
     timeProvider: () => new Date().getTime(),
     gameEndTime,
-    setGameEndTime
+    setGameEndTime,
+    isOrganizerDisconnected,
+    setIsOrganizerDisconnected
   }}>
     {children}
   </MultiplayerContext.Provider>;

@@ -68,10 +68,11 @@ namespace Tetris.Hubs
         {
             var groupId = Context.Items["groupId"] as string;
             var userId = Context.Items["userId"] as string;
+            var isOrganizer = groupId == userId;
 
-            await Clients
-                .Group($"{groupId}-organizer")
-                .SendAsync("disconnect", new { userId });
+            await (isOrganizer
+                ? Clients.Group(groupId).SendAsync("noOrganizer")
+                : Clients.Group($"{groupId}-organizer").SendAsync("disconnect", new { userId }));
         }
     }
 }
