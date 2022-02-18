@@ -119,42 +119,45 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         Back To Single Player Game
     </Link>;
 
-    const results = gameResults && <>
-        <div style={{ textAlign: "center" }}>
-            <h1 style={{ color: "black" }}>Game Over</h1>
-        </div>
-        <table className="table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                {Object.keys(gameResults).map(userId => <tr key={userId}>
-                    <td>{gameResults[userId].name}</td>
-                    <td>{gameResults[userId].score}</td>
-                </tr>)}
-            </tbody>
-        </table>
-        <div style={{ textAlign: "center" }}>
-            {singlePlayerGameLink}
-        </div>
-    </>;
+    const results = gameResults
+        ? () => <>
+            <div style={{ textAlign: "center" }}>
+                <h1 style={{ color: "black" }}>Game Over</h1>
+            </div>
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {Object.keys(gameResults).map(userId => <tr key={userId}>
+                        <td>{gameResults[userId].name}</td>
+                        <td>{gameResults[userId].score}</td>
+                    </tr>)}
+                </tbody>
+            </table>
+            <div style={{ textAlign: "center" }}>
+                {singlePlayerGameLink}
+            </div>
+        </> : undefined;
 
-    const waitingForOrganizer = (!isAccepted && !isOrganizer) && <h1 style={{ textAlign: "center", color: "black" }}>
-        Waiting for organizer...
-    </h1>;
+    const waitingForOrganizer = (!isAccepted && !isOrganizer)
+        ? () => <h1 style={{ textAlign: "center", color: "black" }}>
+            Waiting for organizer...
+        </h1> : undefined;
 
-    const organizerDisconnected = isOrganizerDisconnected && <h1 style={{ textAlign: "center", color: "black" }}>
-        Organizer has disconnected.
-    </h1>;
+    const organizerDisconnected = isOrganizerDisconnected
+        ? () => <h1 style={{ textAlign: "center", color: "black" }}>
+            Organizer has disconnected.
+        </h1> : undefined
 
     return <Game otherPlayers={otherPlayers}>
         {
-            results
-            || waitingForOrganizer
-            || organizerDisconnected
+            organizerDisconnected?.()
+            || waitingForOrganizer?.()
+            || results?.()
             || <div className="row" style={{ margin: "auto" }}>
                 <SinglePlayerGame
                     shapeProvider={shapeProvider}
