@@ -16,8 +16,8 @@ namespace Tetris.Hubs
         public async Task Hello(GroupMessage helloMessage)
         {
             string groupId = helloMessage.GroupId;
-            var isOrganizer = helloMessage.Message.GetProperty("userId").GetString() == groupId;
             string userId = helloMessage.Message.GetProperty("userId").GetString();
+            var isOrganizer = userId == groupId;
             Context.Items.Add("userId", userId);
             Context.Items.Add("groupId", groupId);
 
