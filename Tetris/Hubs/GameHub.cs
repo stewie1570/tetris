@@ -17,6 +17,9 @@ namespace Tetris.Hubs
         {
             string groupId = helloMessage.GroupId;
             var isOrganizer = helloMessage.Message.GetProperty("userId").GetString() == groupId;
+            string userId = helloMessage.Message.GetProperty("userId").GetString();
+            Context.Items.Add("userId", userId);
+            Context.Items.Add("groupId", groupId);
 
             await Task.WhenAll(
                 Groups.AddToGroupAsync(Context.ConnectionId, groupId),
@@ -59,6 +62,16 @@ namespace Tetris.Hubs
         public async Task Results(GroupMessage resultsMessage)
         {
             await Clients.Group(resultsMessage.GroupId).SendAsync("results", resultsMessage.Message);
+        }
+
+        public async override Task OnDisconnectedAsync(System.Exception exception)
+        {
+            var groupId = Context.Items["groupId"] as string;
+            var userId = Context.Items["userId"] as string;
+
+            await Clients
+                .Group($"{groupId}-organizer")
+                .SendAsync("disconnect", new { userId });
         }
     }
 }

@@ -19,7 +19,9 @@ const signals = [
     "playersListUpdate",
     "status",
     "start",
-    "gameOver"
+    "gameOver",
+    "results",
+    "disconnect"
 ];
 
 const createTestGameHub = () => {
@@ -231,6 +233,12 @@ test("Player: starting a multiplayer game", async () => {
             { hello: { groupId: "group1", message: { userId: "user1" } } }
         ]);
     });
+    act(() => context.handlers.playersListUpdate({
+        players: [
+            { userId: 'organizer', name: "The Organizer" },
+            { userId: 'user1', name: "Player One" }
+        ]
+    }));
 
     screen.getByText("Start game").click();
     await waitFor(() => {

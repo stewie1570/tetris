@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { HubConnectionBuilder } from '@microsoft/signalr';
 import { useUserId } from './hooks/useUserId';
+import { useLocation } from 'react-router-dom';
 
 export const MultiplayerContext = React.createContext(null);
 
@@ -10,11 +11,13 @@ const signals = [
   'status',
   'start',
   'gameOver',
-  'results'
+  'results',
+  'disconnect'
 ];
 
 export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
   const [isConnected, setIsConnected] = React.useState(false);
+  const location = useLocation();
   const connection = useRef(null);
   const gameHub = useRef({
     send: {},
@@ -23,6 +26,10 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
   });
   const userId = useUserId(userIdGenerator);
   const [gameEndTime, setGameEndTime] = React.useState(null);
+
+  useEffect(() => {
+    setGameEndTime(null);
+  }, [location]);
 
   useEffect(() => {
     connection.current = new HubConnectionBuilder()
