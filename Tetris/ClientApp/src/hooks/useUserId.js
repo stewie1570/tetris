@@ -1,13 +1,12 @@
 import { useEffect } from "react";
+import { randomIdGenerator } from "../randomIdGenerator";
 import { useSessionStorageState } from "./useSessionStorageState";
-
-const randomUserIdGenerator = () => Math.random().toString(36).substring(7);
 
 export const useUserId = (defaultUserIdGenerator) => {
     const [userId, setUserId] = useSessionStorageState('userId');
 
     useEffect(() => {
-        const userIdGenerator = defaultUserIdGenerator || randomUserIdGenerator;
+        const userIdGenerator = defaultUserIdGenerator || randomIdGenerator;
         !userId && setUserId(userIdGenerator());
     }, []);
 
