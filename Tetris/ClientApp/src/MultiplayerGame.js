@@ -24,7 +24,9 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         userId: currentUserId,
         timeProvider,
         gameEndTime,
-        setGameEndTime
+        setGameEndTime,
+        isOrganizerDisconnected,
+        setIsOrganizerDisconnected
     } = useContext(MultiplayerContext);
     const {
         game,
@@ -45,6 +47,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 setOtherPlayers(otherPlayers => ({ ...otherPlayers, [userId]: {} }));
             },
             playersListUpdate: ({ players: updatedPlayersList }) => {
+                setIsOrganizerDisconnected(false);
                 setOtherPlayers(otherPlayers => update(otherPlayers).with(updatedPlayersList));
             },
             status: ({ userId, ...userUpdates }) => {
@@ -63,7 +66,10 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             disconnect: ({ userId }) => setOtherPlayers(currentOtherPlayers => {
                 const { [userId]: removedPlayer, ...otherPlayers } = currentOtherPlayers;
                 return otherPlayers;
-            })
+            }),
+            noOrganizer: () => {
+                setIsOrganizerDisconnected(true);
+            }
         });
         isConnectedWithUserId && gameHub.send.hello({
             groupId: organizerUserId,
@@ -140,43 +146,51 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         Waiting for organizer...
     </h1>;
 
+    const organizerDisconnected = isOrganizerDisconnected && <h1 style={{ textAlign: "center", color: "black" }}>
+        Organizer has disconnected.
+    </h1>;
+
     return <Game otherPlayers={otherPlayers}>
-        {results || waitingForOrganizer || <div className="row" style={{ margin: "auto" }}>
-            <SinglePlayerGame
-                shapeProvider={shapeProvider}
-                header={gameEndTime && `Game ends in ${Math.floor(timeLeft / 1000)} seconds`}
-                additionalControls={singlePlayerGameLink}
-                className={otherPlayerIds.length > 0 ? "col-xs-12 col-md-4" : undefined}>
-                <div className="leader-board" style={{ height: "100%" }}>
-                    Players:
-                    {Object
-                        .keys(otherPlayers)
-                        .map(userId => <div key={userId}>
-                            {otherPlayers[userId].name ?? "[Un-named player]"}
-                        </div>)}
-                    <div>
-                        <CommandButton onClick={promptUserName} className="btn btn-primary">
-                            Set user name
-                        </CommandButton>
+        {
+            results
+            || waitingForOrganizer
+            || organizerDisconnected
+            || <div className="row" style={{ margin: "auto" }}>
+                <SinglePlayerGame
+                    shapeProvider={shapeProvider}
+                    header={gameEndTime && `Game ends in ${Math.floor(timeLeft / 1000)} seconds`}
+                    additionalControls={singlePlayerGameLink}
+                    className={otherPlayerIds.length > 0 ? "col-xs-12 col-md-4" : undefined}>
+                    <div className="leader-board" style={{ height: "100%" }}>
+                        Players:
+                        {Object
+                            .keys(otherPlayers)
+                            .map(userId => <div key={userId}>
+                                {otherPlayers[userId].name ?? "[Un-named player]"}
+                            </div>)}
+                        <div>
+                            <CommandButton onClick={promptUserName} className="btn btn-primary">
+                                Set user name
+                            </CommandButton>
+                        </div>
+                        <div style={{ marginTop: "1rem" }}>
+                            <CommandButton onClick={startGame} runningText="Starting..." className="btn btn-primary">
+                                Start game
+                            </CommandButton>
+                        </div>
                     </div>
-                    <div style={{ marginTop: "1rem" }}>
-                        <CommandButton onClick={startGame} runningText="Starting..." className="btn btn-primary">
-                            Start game
-                        </CommandButton>
-                    </div>
-                </div>
-            </SinglePlayerGame>
-            {otherPlayerIds
-                .filter(userId => userId !== currentUserId && otherPlayers[userId].board)
-                .map(userId => <div className="col-xs-12 col-md-4" key={userId}>
-                    {otherPlayers[userId].board &&
-                        <GameMetaFrame
-                            game={<TetrisBoard board={otherPlayers[userId].board} />}
-                            header={<>
-                                <p>{otherPlayers[userId].name ?? "[Un-named player]"}</p>
-                                <p>Score: {otherPlayers[userId].score ?? 0}</p>
-                            </>} />}
-                </div>)}
-        </div>}
+                </SinglePlayerGame>
+                {otherPlayerIds
+                    .filter(userId => userId !== currentUserId && otherPlayers[userId].board)
+                    .map(userId => <div className="col-xs-12 col-md-4" key={userId}>
+                        {otherPlayers[userId].board &&
+                            <GameMetaFrame
+                                game={<TetrisBoard board={otherPlayers[userId].board} />}
+                                header={<>
+                                    <p>{otherPlayers[userId].name ?? "[Un-named player]"}</p>
+                                    <p>Score: {otherPlayers[userId].score ?? 0}</p>
+                                </>} />}
+                    </div>)}
+            </div>}
     </Game>;
 }
