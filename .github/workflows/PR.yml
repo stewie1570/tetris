@@ -27,3 +27,17 @@ jobs:
           cd Tetris/ClientApp
           yarn
           yarn test
+
+  smoke-test:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test Frontend (via Mac)
+        run: |
+          cd Tetris/ClientApp
+          yarn
+          yarn test
+          yarn build
