@@ -144,14 +144,24 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         </> : undefined;
 
     const waitingForOrganizer = (!isAccepted && !isOrganizer)
-        ? () => <h1 style={{ textAlign: "center", color: "black" }}>
-            Waiting for organizer...
-        </h1> : undefined;
+        ? () => <>
+            <h1 style={{ textAlign: "center", color: "black" }}>
+                Waiting for organizer...
+            </h1>
+            <div style={{ textAlign: "center" }}>
+                {singlePlayerGameLink}
+            </div>
+        </> : undefined;
 
     const organizerDisconnected = isOrganizerDisconnected
-        ? () => <h1 style={{ textAlign: "center", color: "black" }}>
-            Organizer has disconnected.
-        </h1> : undefined
+        ? () => <>
+            <h1 style={{ textAlign: "center", color: "black" }}>
+                Organizer has disconnected.
+            </h1>
+            <div style={{ textAlign: "center" }}>
+                {singlePlayerGameLink}
+            </div>
+        </> : undefined
 
     return <Game otherPlayers={otherPlayers}>
         {
