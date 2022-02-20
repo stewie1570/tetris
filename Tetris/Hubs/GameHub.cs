@@ -26,11 +26,9 @@ namespace Tetris.Hubs
                 Groups.AddToGroupAsync(Context.ConnectionId, isOrganizer
                     ? $"{groupId}-organizer"
                     : $"{groupId}-players"),
-                isOrganizer
-                    ? Task.CompletedTask
-                    : Clients
-                        .Group($"{groupId}-organizer")
-                        .SendAsync("hello", helloMessage.Message)
+                Clients
+                    .Group($"{groupId}-organizer")
+                    .SendAsync("hello", helloMessage.Message)
             );
         }
 

@@ -32,6 +32,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         game,
         setGame,
         setUsername,
+        username,
         prompt
     } = useContext(SinglePlayerGameContext);
     const isOrganizer = organizerUserId === currentUserId;
@@ -43,8 +44,8 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         const isConnectedWithUserId = currentUserId && isConnected;
 
         isConnectedWithUserId && gameHub.receive.setHandlers({
-            hello: ({ userId }) => {
-                setOtherPlayers(otherPlayers => ({ ...otherPlayers, [userId]: {} }));
+            hello: ({ userId, ...otherProps }) => {
+                setOtherPlayers(otherPlayers => ({ ...otherPlayers, [userId]: { ...otherProps } }));
             },
             playersListUpdate: ({ players: updatedPlayersList }) => {
                 setIsOrganizerDisconnected(false);
@@ -74,7 +75,8 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         isConnectedWithUserId && gameHub.send.hello({
             groupId: organizerUserId,
             message: {
-                userId: currentUserId
+                userId: currentUserId,
+                name: username
             }
         });
 
@@ -116,7 +118,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         style={{ display: "block", marginTop: "1rem" }}
         onClick={() => setGame(game => ({ ...game, paused: false }))}
         to="/">
-        Back To Single Player Game
+        Single Player Game
     </Link>;
 
     const results = gameResults
