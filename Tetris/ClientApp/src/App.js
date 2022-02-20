@@ -3,9 +3,10 @@ import SinglePlayerGame, { SinglePlayerGameContext, SinglePlayerGameContextProvi
 import { MultiplayerGame } from "./MultiplayerGame";
 import { Routes, Route, Link } from 'react-router-dom';
 import { shapes } from './components/TetrisGame';
-import { MultiplayerContext } from "./MultiplayerContext";
+import { MultiplayerContextPassThrough } from "./MultiplayerContext";
 import { Dialog } from "./components/Prompt";
 import { ErrorMessage } from "./components/ErrorMessage";
+import { useUserId } from "./hooks/useUserId";
 
 const randomNumberGenerator = {
     between: ({ min, max }) => Math.floor(Math.random() * (max + 1)) + min,
@@ -24,7 +25,7 @@ const GlobalUI = () => {
 }
 
 export const App = ({ shapeProvider }) => {
-    const { userId } = useContext(MultiplayerContext);
+    const userId = useUserId();
     const selectedShapeProvider = shapeProvider ?? defaultShapeProvider;
 
     return <SinglePlayerGameContextProvider>
@@ -40,7 +41,10 @@ export const App = ({ shapeProvider }) => {
                 } />
             <Route
                 path="/:organizerUserId"
-                element={<MultiplayerGame shapeProvider={selectedShapeProvider} />} />
+                element={
+                    <MultiplayerContextPassThrough>
+                        <MultiplayerGame shapeProvider={selectedShapeProvider} />
+                    </MultiplayerContextPassThrough>} />
         </Routes>
         <GlobalUI />
     </SinglePlayerGameContextProvider>;
