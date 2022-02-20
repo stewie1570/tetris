@@ -73,3 +73,13 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
     {children}
   </MultiplayerContext.Provider>;
 };
+
+export const MultiplayerContextPassThrough = ({ children, ...otherProps }) => {
+  const parentContext = React.useContext(MultiplayerContext);
+
+  return parentContext
+    ? children
+    : <MultiplayerContextProvider {...otherProps}>
+      {children}
+    </MultiplayerContextProvider>;
+};

@@ -4,7 +4,6 @@ import "./index.css";
 import "bootstrap-css-only";
 import { BrowserRouter } from 'react-router-dom';
 import { App } from "./App";
-import { MultiplayerContextProvider } from "./MultiplayerContext";
 
 setInterval(() => {
   window.dispatchEvent(new CustomEvent("iterate-game"));
@@ -12,9 +11,7 @@ setInterval(() => {
 
 ReactDOM.render(
   <BrowserRouter>
-    <MultiplayerContextProvider>
-      <App />
-    </MultiplayerContextProvider>
+    <App />
   </BrowserRouter>,
   document.getElementById("root")
 );
