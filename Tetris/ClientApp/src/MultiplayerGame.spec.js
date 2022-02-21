@@ -200,6 +200,7 @@ test("Organizer: starting a game", async () => {
                     groupId: "organizer",
                     message: {
                         userId: "organizer",
+                        name: "Stewie",
                         board: stringFrom(emptyBoard), score: 0,
                         timeLeft: 60000
                     }
