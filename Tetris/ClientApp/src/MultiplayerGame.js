@@ -50,7 +50,8 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             playersListUpdate: ({ players: updatedPlayersList }) => {
                 setIsOrganizerDisconnected(false);
                 setOtherPlayers(otherPlayers => update(otherPlayers).with(updatedPlayersList));
-                !isAccepted && gameHub.invoke.status({
+                const isInPlayersList = updatedPlayersList.some(({ userId }) => userId === currentUserId);
+                !isInPlayersList && gameHub.invoke.status({
                     groupId: organizerUserId,
                     message: {
                         userId: currentUserId,
@@ -84,6 +85,11 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             reset: () => {
                 setGame({ ...initialGameState, paused: true });
                 setGameResults(null);
+                setGameEndTime(null);
+                setOtherPlayers(otherPlayers => [{}, ...Object.keys(otherPlayers)].reduce((currentPlayers, userId) => ({
+                    ...currentPlayers,
+                    [userId]: { name: otherPlayers[userId].name, score: 0 }
+                })));
             }
         });
         isConnectedWithUserId && gameHub.send.hello({
