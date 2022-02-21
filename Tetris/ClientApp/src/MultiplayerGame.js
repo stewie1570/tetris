@@ -68,7 +68,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             },
             start: () => {
                 setGame(game => ({ ...game, paused: false }));
-                isOrganizer && setGameEndTime(timeProvider() + 60000);
+                isOrganizer && setGameEndTime(timeProvider() + 6000);
             },
             results: results => {
                 setGameResults(results);
@@ -80,6 +80,10 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             }),
             noOrganizer: () => {
                 setIsOrganizerDisconnected(true);
+            },
+            reset: () => {
+                setGame({ ...initialGameState, paused: true });
+                setGameResults(null);
             }
         });
         isConnectedWithUserId && gameHub.send.hello({
@@ -131,6 +135,12 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         Single Player Game
     </Link>;
 
+    const resetButton = <CommandButton
+        className="btn btn-primary"
+        onClick={() => gameHub.invoke.reset({ groupId: organizerUserId })}>
+        Reset Game
+    </CommandButton>;
+
     const results = gameResults
         ? () => <>
             <div style={{ textAlign: "center" }}>
@@ -151,7 +161,8 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 </tbody>
             </table>
             <div style={{ textAlign: "center" }}>
-                {singlePlayerGameLink}
+                <div>{singlePlayerGameLink}</div>
+                <div>{resetButton}</div>
             </div>
         </> : undefined;
 

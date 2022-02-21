@@ -62,6 +62,11 @@ namespace Tetris.Hubs
             await Clients.Group(resultsMessage.GroupId).SendAsync("results", resultsMessage.Message);
         }
 
+        public async Task Reset(GroupMessage resetMessage)
+        {
+            await Clients.Group(resetMessage.GroupId).SendAsync("reset");
+        }
+
         public async override Task OnDisconnectedAsync(System.Exception exception)
         {
             var groupId = Context.Items["groupId"] as string;

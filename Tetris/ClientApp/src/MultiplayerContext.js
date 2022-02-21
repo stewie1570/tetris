@@ -13,7 +13,8 @@ const signals = [
   'gameOver',
   'results',
   'disconnect',
-  'noOranizer'
+  'noOranizer',
+  'reset'
 ];
 
 export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
