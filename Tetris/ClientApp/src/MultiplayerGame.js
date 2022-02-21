@@ -50,9 +50,20 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             playersListUpdate: ({ players: updatedPlayersList }) => {
                 setIsOrganizerDisconnected(false);
                 setOtherPlayers(otherPlayers => update(otherPlayers).with(updatedPlayersList));
+                const isInPlayersList = updatedPlayersList.some(({ userId }) => userId === currentUserId);
+                !isInPlayersList && gameHub.invoke.status({
+                    groupId: organizerUserId,
+                    message: {
+                        userId: currentUserId,
+                        board: stringFrom(game.board),
+                        score: game.score,
+                        timeLeft: isOrganizer ? timeLeft : undefined
+                    }
+                })
             },
             status: ({ userId, ...userUpdates }) => {
                 const { timeLeft, ...otherUpdates } = userUpdates;
+                setIsOrganizerDisconnected(false);
                 setOtherPlayers(otherPlayers => process(otherUpdates).on(userId).in(otherPlayers));
                 !isOrganizer && timeLeft && setGameEndTime(timeProvider() + timeLeft);
             },
@@ -70,6 +81,15 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             }),
             noOrganizer: () => {
                 setIsOrganizerDisconnected(true);
+            },
+            reset: () => {
+                setGame({ ...initialGameState, paused: true });
+                setGameResults(null);
+                setGameEndTime(null);
+                setOtherPlayers(otherPlayers => [{}, ...Object.keys(otherPlayers)].reduce((currentPlayers, userId) => ({
+                    ...currentPlayers,
+                    [userId]: { name: otherPlayers[userId].name, score: 0 }
+                })));
             }
         });
         isConnectedWithUserId && gameHub.send.hello({
@@ -121,6 +141,12 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         Single Player Game
     </Link>;
 
+    const resetButton = <CommandButton
+        className="btn btn-primary"
+        onClick={() => gameHub.invoke.reset({ groupId: organizerUserId })}>
+        Reset Game
+    </CommandButton>;
+
     const results = gameResults
         ? () => <>
             <div style={{ textAlign: "center" }}>
@@ -141,17 +167,31 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 </tbody>
             </table>
             <div style={{ textAlign: "center" }}>
-                {singlePlayerGameLink}
+                <div>{singlePlayerGameLink}</div>
+                <div>{resetButton}</div>
             </div>
         </> : undefined;
+
+    const retryButton = <CommandButton className="btn btn-primary" onClick={() => gameHub.invoke.status({
+        groupId: organizerUserId,
+        message: {
+            userId: currentUserId,
+            board: stringFrom(game.board),
+            score: game.score,
+            timeLeft: isOrganizer ? timeLeft : undefined
+        }
+    })}>
+        Retry Contacting Organizer
+    </CommandButton>;
 
     const waitingForOrganizer = (!isAccepted && !isOrganizer)
         ? () => <>
             <h1 style={{ textAlign: "center", color: "black" }}>
-                Waiting for organizer...
+                Unable to contact organizer...
             </h1>
             <div style={{ textAlign: "center" }}>
-                {singlePlayerGameLink}
+                <div>{singlePlayerGameLink}</div>
+                <div>{retryButton}</div>
             </div>
         </> : undefined;
 
@@ -161,7 +201,8 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 Organizer has disconnected.
             </h1>
             <div style={{ textAlign: "center" }}>
-                {singlePlayerGameLink}
+                <div>{singlePlayerGameLink}</div>
+                <div>{retryButton}</div>
             </div>
         </> : undefined
 

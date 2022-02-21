@@ -22,7 +22,8 @@ const signals = [
     "gameOver",
     "results",
     "disconnect",
-    "noOranizer"
+    "noOranizer",
+    "reset"
 ];
 
 const createTestGameHub = () => {
