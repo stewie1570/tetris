@@ -12,6 +12,7 @@ import { stringFrom } from './domain/serialization';
 import { TetrisBoard } from "./components/TetrisBoard";
 import { GameMetaFrame } from "./components/GameMetaFrame";
 import { Link } from "react-router-dom";
+import { emptyBoard } from "./components/TetrisGame";
 
 export const initialEmptyPlayersList = {};
 
@@ -49,6 +50,9 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             },
             playersListUpdate: ({ players: updatedPlayersList }) => {
                 setIsOrganizerDisconnected(false);
+                setGame({ ...initialGameState, paused: true });
+                setGameResults(null);
+                setGameEndTime(null);
                 setOtherPlayers(otherPlayers => update(otherPlayers).with(updatedPlayersList));
                 const isInPlayersList = updatedPlayersList.some(({ userId }) => userId === currentUserId);
                 !isInPlayersList && gameHub.invoke.status({
@@ -57,6 +61,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                         userId: currentUserId,
                         board: stringFrom(game.board),
                         score: game.score,
+                        name: username,
                         timeLeft: isOrganizer ? timeLeft : undefined
                     }
                 })
@@ -92,6 +97,12 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 })));
             }
         });
+
+        setGame({ ...initialGameState, paused: true });
+    }, [gameHub, isConnected, currentUserId, isOrganizer, username]);
+
+    useEffect(() => {
+        const isConnectedWithUserId = currentUserId && isConnected;
         isConnectedWithUserId && gameHub.send.hello({
             groupId: organizerUserId,
             message: {
@@ -99,8 +110,6 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 name: username
             }
         });
-
-        setGame({ ...initialGameState, paused: true });
     }, [gameHub, isConnected, currentUserId, isOrganizer]);
 
     useAsyncEffect(async () => isConnected && !game.paused && gameHub.invoke.status({
@@ -109,6 +118,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             userId: currentUserId,
             board: stringFrom(game.board),
             score: game.score,
+            name: username,
             timeLeft: isOrganizer ? timeLeft : undefined
         }
     }), [isConnected, game.paused, game.board]);
@@ -178,6 +188,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             userId: currentUserId,
             board: stringFrom(game.board),
             score: game.score,
+            name: username,
             timeLeft: isOrganizer ? timeLeft : undefined
         }
     })}>
@@ -187,7 +198,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     const waitingForOrganizer = (!isAccepted && !isOrganizer)
         ? () => <>
             <h1 style={{ textAlign: "center", color: "black" }}>
-                Unable to contact organizer...
+                Waiting for organizer...
             </h1>
             <div style={{ textAlign: "center" }}>
                 <div>{singlePlayerGameLink}</div>
@@ -236,16 +247,15 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                         </div>
                     </div>
                 </SinglePlayerGame>
-                {otherPlayerIds
+                {!game.paused && otherPlayerIds
                     .filter(userId => userId !== currentUserId && otherPlayers[userId].board)
                     .map(userId => <div className="col-xs-12 col-md-4" key={userId}>
-                        {otherPlayers[userId].board &&
-                            <GameMetaFrame
-                                game={<TetrisBoard board={otherPlayers[userId].board} />}
-                                header={<>
-                                    <p>{otherPlayers[userId].name ?? "[Un-named player]"}</p>
-                                    <p>Score: {otherPlayers[userId].score ?? 0}</p>
-                                </>} />}
+                        <GameMetaFrame
+                            game={<TetrisBoard board={otherPlayers[userId].board ?? emptyBoard} />}
+                            header={<>
+                                <p>{otherPlayers[userId].name ?? "[Un-named player]"}</p>
+                                <p>Score: {otherPlayers[userId].score ?? 0}</p>
+                            </>} />
                     </div>)}
             </div>}
     </Game>;
