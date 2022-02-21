@@ -68,7 +68,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             },
             start: () => {
                 setGame(game => ({ ...game, paused: false }));
-                isOrganizer && setGameEndTime(timeProvider() + 6000);
+                isOrganizer && setGameEndTime(timeProvider() + 60000);
             },
             results: results => {
                 setGameResults(results);
