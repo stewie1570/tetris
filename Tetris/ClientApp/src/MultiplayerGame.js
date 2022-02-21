@@ -50,6 +50,15 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             playersListUpdate: ({ players: updatedPlayersList }) => {
                 setIsOrganizerDisconnected(false);
                 setOtherPlayers(otherPlayers => update(otherPlayers).with(updatedPlayersList));
+                !isAccepted && gameHub.invoke.status({
+                    groupId: organizerUserId,
+                    message: {
+                        userId: currentUserId,
+                        board: stringFrom(game.board),
+                        score: game.score,
+                        timeLeft: isOrganizer ? timeLeft : undefined
+                    }
+                })
             },
             status: ({ userId, ...userUpdates }) => {
                 const { timeLeft, ...otherUpdates } = userUpdates;
