@@ -25,7 +25,6 @@ export const usePlayerListenerWith = ({ setOtherPlayers, setGameResults }) => {
             },
             playersListUpdate: ({ players: updatedPlayersList }) => {
                 setIsOrganizerDisconnected(false);
-                setGame({ ...initialGameState, paused: true });
                 setGameResults(null);
                 setGameEndTime(null);
                 setOtherPlayers(otherPlayers => update(otherPlayers).with(updatedPlayersList));
@@ -47,7 +46,7 @@ export const usePlayerListenerWith = ({ setOtherPlayers, setGameResults }) => {
                 !isOrganizer && timeLeft && setGameEndTime(timeProvider() + timeLeft);
             },
             start: () => {
-                setGame(game => ({ ...game, paused: false }));
+                setGame({ ...initialGameState, paused: false });
                 isOrganizer && setGameEndTime(timeProvider() + 60000);
             },
             results: results => {
@@ -60,6 +59,7 @@ export const usePlayerListenerWith = ({ setOtherPlayers, setGameResults }) => {
             }),
             noOrganizer: () => {
                 setIsOrganizerDisconnected(true);
+                setGame(currentGame => ({ ...currentGame, paused: true }));
             },
             reset: () => {
                 setGame({ ...initialGameState, paused: true });
