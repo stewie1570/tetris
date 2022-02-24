@@ -1,18 +1,19 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { useParams } from "react-router";
-import { update, process } from "./domain/players";
 import { Organizer } from "./Organizer";
 import { Player } from "./Player";
 import { MultiplayerContext } from "./MultiplayerContext";
 import { CommandButton } from "./components/CommandButton";
-import SinglePlayerGame, { initialGameState, SinglePlayerGameContext } from "./SinglePlayerGame";
+import SinglePlayerGame, { SinglePlayerGameContext } from "./SinglePlayerGame";
 import { StringInput } from "./components/Prompt";
-import { useAsyncEffect } from './hooks/useAsyncEffect';
 import { stringFrom } from './domain/serialization';
 import { TetrisBoard } from "./components/TetrisBoard";
 import { GameMetaFrame } from "./components/GameMetaFrame";
 import { Link } from "react-router-dom";
 import { emptyBoard } from "./components/TetrisGame";
+import { usePlayerListenerWith } from "./hooks/usePlayerListenerWith";
+import { useHelloSender } from "./hooks/useHelloSender";
+import { useStatusSender } from "./hooks/useStatusSender";
 
 export const initialEmptyPlayersList = {};
 
@@ -21,13 +22,10 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     const { organizerUserId } = useParams();
     const {
         gameHub,
-        isConnected,
         userId: currentUserId,
         timeProvider,
         gameEndTime,
-        setGameEndTime,
-        isOrganizerDisconnected,
-        setIsOrganizerDisconnected
+        isOrganizerDisconnected
     } = useContext(MultiplayerContext);
     const {
         game,
@@ -41,87 +39,9 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     const timeLeft = gameEndTime && Math.max(0, Math.ceil(gameEndTime - timeProvider()));
     const [gameResults, setGameResults] = React.useState(null);
 
-    useEffect(() => {
-        const isConnectedWithUserId = currentUserId && isConnected;
-
-        isConnectedWithUserId && gameHub.receive.setHandlers({
-            hello: ({ userId, ...otherProps }) => {
-                setOtherPlayers(otherPlayers => ({ ...otherPlayers, [userId]: { ...otherProps } }));
-            },
-            playersListUpdate: ({ players: updatedPlayersList }) => {
-                setIsOrganizerDisconnected(false);
-                setGame({ ...initialGameState, paused: true });
-                setGameResults(null);
-                setGameEndTime(null);
-                setOtherPlayers(otherPlayers => update(otherPlayers).with(updatedPlayersList));
-                const isInPlayersList = updatedPlayersList.some(({ userId }) => userId === currentUserId);
-                !isInPlayersList && gameHub.invoke.status({
-                    groupId: organizerUserId,
-                    message: {
-                        userId: currentUserId,
-                        board: stringFrom(game.board),
-                        score: game.score,
-                        name: username,
-                        timeLeft: isOrganizer ? timeLeft : undefined
-                    }
-                })
-            },
-            status: ({ userId, ...userUpdates }) => {
-                const { timeLeft, ...otherUpdates } = userUpdates;
-                setIsOrganizerDisconnected(false);
-                setOtherPlayers(otherPlayers => process(otherUpdates).on(userId).in(otherPlayers));
-                !isOrganizer && timeLeft && setGameEndTime(timeProvider() + timeLeft);
-            },
-            start: () => {
-                setGame(game => ({ ...game, paused: false }));
-                isOrganizer && setGameEndTime(timeProvider() + 60000);
-            },
-            results: results => {
-                setGameResults(results);
-                setGame(game => ({ ...game, paused: true }));
-            },
-            disconnect: ({ userId }) => setOtherPlayers(currentOtherPlayers => {
-                const { [userId]: removedPlayer, ...otherPlayers } = currentOtherPlayers;
-                return otherPlayers;
-            }),
-            noOrganizer: () => {
-                setIsOrganizerDisconnected(true);
-            },
-            reset: () => {
-                setGame({ ...initialGameState, paused: true });
-                setGameResults(null);
-                setGameEndTime(null);
-                setOtherPlayers(otherPlayers => [{}, ...Object.keys(otherPlayers)].reduce((currentPlayers, userId) => ({
-                    ...currentPlayers,
-                    [userId]: { name: otherPlayers[userId].name, score: 0 }
-                })));
-            }
-        });
-
-        setGame({ ...initialGameState, paused: true });
-    }, [gameHub, isConnected, currentUserId, isOrganizer, username]);
-
-    useEffect(() => {
-        const isConnectedWithUserId = currentUserId && isConnected;
-        isConnectedWithUserId && gameHub.send.hello({
-            groupId: organizerUserId,
-            message: {
-                userId: currentUserId,
-                name: username
-            }
-        });
-    }, [gameHub, isConnected, currentUserId, isOrganizer]);
-
-    useAsyncEffect(async () => isConnected && !game.paused && gameHub.invoke.status({
-        groupId: organizerUserId,
-        message: {
-            userId: currentUserId,
-            board: stringFrom(game.board),
-            score: game.score,
-            name: username,
-            timeLeft: isOrganizer ? timeLeft : undefined
-        }
-    }), [isConnected, game.paused, game.board]);
+    usePlayerListenerWith({ setOtherPlayers, setGameResults });
+    useHelloSender();
+    useStatusSender();
 
     const promptUserName = () => prompt(exitModal => <StringInput
         filter={value => (value ?? "").trim()}
