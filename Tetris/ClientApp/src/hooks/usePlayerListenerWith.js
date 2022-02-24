@@ -14,7 +14,6 @@ export const usePlayerListenerWith = ({ setOtherPlayers, setGameResults }) => {
         game, setGame, username,
     } = useContext(SinglePlayerGameContext);
     const isOrganizer = organizerUserId === currentUserId;
-    const timeLeft = gameEndTime && Math.max(0, Math.ceil(gameEndTime - timeProvider()));
 
     useEffect(() => {
         const isConnectedWithUserId = currentUserId && isConnected;
@@ -25,8 +24,6 @@ export const usePlayerListenerWith = ({ setOtherPlayers, setGameResults }) => {
             },
             playersListUpdate: ({ players: updatedPlayersList }) => {
                 setIsOrganizerDisconnected(false);
-                setGameResults(null);
-                setGameEndTime(null);
                 setOtherPlayers(otherPlayers => update(otherPlayers).with(updatedPlayersList));
                 const isInPlayersList = updatedPlayersList.some(({ userId }) => userId === currentUserId);
                 !isInPlayersList && gameHub.invoke.status({
@@ -35,8 +32,7 @@ export const usePlayerListenerWith = ({ setOtherPlayers, setGameResults }) => {
                         userId: currentUserId,
                         board: stringFrom(game.board),
                         score: game.score,
-                        name: username,
-                        timeLeft: isOrganizer ? timeLeft : undefined
+                        name: username
                     }
                 });
             },
