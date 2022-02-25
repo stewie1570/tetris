@@ -66,9 +66,8 @@ export function StringInput({ onSaveString, children, filter, submittingText }) 
             <br />
             <TextInput value={value} autofocus={true} onChange={setValue} />
         </label>
-        <br />
         <CommandButton
-            className="btn btn-primary space-top-right"
+            className="btn btn-primary space-top"
             onClick={() => onSaveString(undefined)}
         >
             <span className="glyphicon glyphicon-remove">&nbsp;</span>

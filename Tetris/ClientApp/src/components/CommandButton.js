@@ -8,7 +8,9 @@ export const CommandButton = forwardRef(({ onClick, runningText, disabled, type,
         await onClick && !isRunning && showRunningWhile(onClick(source))
     }
 
-    return <button {...otherProps}
+    return <button
+        style={{ width: "90%" }}
+        {...otherProps}
         ref={ref}
         onClick={click}
         disabled={disabled || isRunning}
