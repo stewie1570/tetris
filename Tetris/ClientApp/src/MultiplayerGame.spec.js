@@ -94,21 +94,44 @@ test("Organizer: hosting a multiplayer game", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
+            {
+                "playersListUpdate": {
+                    "groupId": "organizer",
+                    "message": {
+                        "players": [
+                            {
+                                "name": undefined,
+                                "userId": "organizer",
+                            },
+                        ],
+                    },
+                },
+            },
             { hello: { groupId: "organizer", message: { userId: "organizer" } } }
         ]);
     });
 
     act(() => context.handlers.hello({ userId: "user1" }));
-    await screen.findByText("[Un-named player]");
+    expect(await screen.findAllByText("[Un-named player]")).toHaveLength(2);
 
     act(() => context.handlers.status({ userId: "user1", name: "user one" }));
     await screen.findByText("user one");
 
     act(() => context.handlers.hello({ userId: "user2" }));
-    await screen.findByText("[Un-named player]");
+    expect(await screen.findAllByText("[Un-named player]")).toHaveLength(2);
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
+            {
+                playersListUpdate: {
+                    groupId: "organizer",
+                    message: {
+                        players: [
+                            { userId: "organizer" }
+                        ]
+                    }
+                }
+            },
             { hello: { groupId: "organizer", message: { userId: "organizer" } } },
             {
                 playersListUpdate: {
@@ -146,7 +169,28 @@ test("Organizer: setting user name", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
-            { hello: { groupId: "organizer", message: { userId: "organizer" } } }
+            {
+                "playersListUpdate": {
+                    "groupId": "organizer",
+                    "message": {
+                        "players": [
+                            {
+                                "name": undefined,
+                                "userId": "organizer",
+                            },
+                        ],
+                    },
+                },
+            },
+            {
+                "hello": {
+                    "groupId": "organizer",
+                    "message": {
+                        "name": undefined,
+                        "userId": "organizer",
+                    },
+                },
+            }
         ]);
     });
 
@@ -161,7 +205,28 @@ test("Organizer: setting user name", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
-            { hello: { groupId: "organizer", message: { userId: "organizer" } } },
+            {
+                "playersListUpdate": {
+                    "groupId": "organizer",
+                    "message": {
+                        "players": [
+                            {
+                                "name": undefined,
+                                "userId": "organizer",
+                            },
+                        ],
+                    },
+                },
+            },
+            {
+                "hello": {
+                    "groupId": "organizer",
+                    "message": {
+                        "name": undefined,
+                        "userId": "organizer",
+                    },
+                },
+            },
             { status: { groupId: "organizer", message: { userId: "organizer", name: "Stewie" } } }
         ]);
     });
@@ -173,7 +238,28 @@ test("Organizer: starting a game", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
-            { hello: { groupId: "organizer", message: { userId: "organizer" } } }
+            {
+                "playersListUpdate": {
+                    "groupId": "organizer",
+                    "message": {
+                        "players": [
+                            {
+                                "name": undefined,
+                                "userId": "organizer",
+                            },
+                        ],
+                    },
+                },
+            },
+            {
+                "hello": {
+                    "groupId": "organizer",
+                    "message": {
+                        "name": undefined,
+                        "userId": "organizer",
+                    },
+                },
+            },
         ]);
     });
 
@@ -193,6 +279,19 @@ test("Organizer: starting a game", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
+            {
+                "playersListUpdate": {
+                    "groupId": "organizer",
+                    "message": {
+                        "players": [
+                            {
+                                "name": undefined,
+                                "userId": "organizer",
+                            },
+                        ],
+                    },
+                },
+            },
             { hello: { groupId: "organizer", message: { userId: "organizer" } } },
             { status: { groupId: "organizer", message: { userId: "organizer", name: "Stewie" } } },
             {
