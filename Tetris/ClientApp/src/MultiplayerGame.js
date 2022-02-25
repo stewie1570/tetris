@@ -64,12 +64,30 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
     const Game = isOrganizer ? Organizer : Player;
     const otherPlayerIds = Object.keys(otherPlayers);
-    const singlePlayerGameLink = <Link
-        style={{ display: "block", marginTop: "1rem" }}
-        onClick={() => setGame(game => ({ ...game, paused: false }))}
-        to="/">
-        Single Player Game
-    </Link>;
+
+    const gameContextInfo = <table style={{ marginTop: "2rem" }} className="table">
+        <tbody>
+            <tr>
+                <th>Code</th>
+                <td>{organizerUserId}</td>
+            </tr>
+            <tr>
+                <th>URL</th>
+                <td>
+                    {window.location.toString()}
+                </td>
+            </tr>
+        </tbody>
+    </table>;
+
+    const singlePlayerGameLink = <>
+        <Link
+            style={{ display: "block", marginTop: "1rem" }}
+            onClick={() => setGame(game => ({ ...game, paused: false }))}
+            to="/">
+            Single Player Game
+        </Link>
+    </>
 
     const resetButton = <CommandButton
         className="btn btn-primary"
@@ -146,7 +164,10 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 <SinglePlayerGame
                     shapeProvider={shapeProvider}
                     header={gameEndTime && `Game ends in ${Math.floor(timeLeft / 1000)} seconds`}
-                    additionalControls={singlePlayerGameLink}
+                    additionalControls={<>
+                        {singlePlayerGameLink}
+                        {gameContextInfo}
+                    </>}
                     className={otherPlayerIds.length > 0 ? "col-xs-12 col-md-4" : undefined}>
                     <div className="leader-board" style={{ height: "100%" }}>
                         Players:
