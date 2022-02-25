@@ -42,7 +42,7 @@ export const usePlayerListenerWith = ({ setOtherPlayers, setGameResults }) => {
                 !isOrganizer && timeLeft && setGameEndTime(timeProvider() + timeLeft);
             },
             start: () => {
-                setGame({ ...initialGameState, paused: false });
+                setGame(({ mobile }) => ({ ...initialGameState, mobile, paused: false }));
                 isOrganizer && setGameEndTime(timeProvider() + 60000);
             },
             results: results => {
