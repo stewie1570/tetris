@@ -23,12 +23,10 @@ namespace Tetris.Hubs
 
             await Task.WhenAll(
                 Groups.AddToGroupAsync(Context.ConnectionId, groupId),
-                Groups.AddToGroupAsync(Context.ConnectionId, isOrganizer
-                    ? $"{groupId}-organizer"
-                    : $"{groupId}-players"),
-                Clients
-                    .Group($"{groupId}-organizer")
-                    .SendAsync("hello", helloMessage.Message)
+                Groups.AddToGroupAsync(Context.ConnectionId, isOrganizer ? $"{groupId}-organizer" : $"{groupId}-players"),
+                !isOrganizer
+                    ? Clients.Group($"{groupId}-organizer").SendAsync("hello", helloMessage.Message)
+                    : Task.FromResult(0)
             );
 
             if (isOrganizer)
