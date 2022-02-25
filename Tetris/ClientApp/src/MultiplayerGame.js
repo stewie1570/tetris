@@ -25,7 +25,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         userId: currentUserId,
         timeProvider,
         gameEndTime,
-        isOrganizerDisconnected
+        organizerConnectionStatus
     } = useContext(MultiplayerContext);
     const {
         game,
@@ -35,7 +35,6 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         prompt
     } = useContext(SinglePlayerGameContext);
     const isOrganizer = organizerUserId === currentUserId;
-    const isAccepted = Boolean(otherPlayers[currentUserId])
     const timeLeft = gameEndTime && Math.max(0, Math.ceil(gameEndTime - timeProvider()));
     const [gameResults, setGameResults] = React.useState(null);
 
@@ -133,7 +132,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         Retry Contacting Organizer
     </CommandButton>;
 
-    const waitingForOrganizer = (!isAccepted && !isOrganizer)
+    const waitingForOrganizer = (!organizerConnectionStatus && !isOrganizer)
         ? () => <>
             <h1 style={{ textAlign: "center", color: "black" }}>
                 Waiting for organizer...
@@ -144,7 +143,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             </div>
         </> : undefined;
 
-    const organizerDisconnected = isOrganizerDisconnected
+    const organizerDisconnected = (organizerConnectionStatus === 'disconnected' && !isOrganizer)
         ? () => <>
             <h1 style={{ textAlign: "center", color: "black" }}>
                 Organizer has disconnected.
@@ -157,8 +156,8 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
     return <Game otherPlayers={otherPlayers}>
         {
-            organizerDisconnected?.()
-            || waitingForOrganizer?.()
+            waitingForOrganizer?.()
+            || organizerDisconnected?.()
             || results?.()
             || <div className="row" style={{ margin: "auto" }}>
                 <SinglePlayerGame

@@ -52,7 +52,7 @@ const createTestGameHub = () => {
 const MultiplayerTestContext = ({ children, gameHub, userIdGenerator }) => {
     const [isConnected, setIsConnected] = React.useState(false);
     const [gameEndTime, setGameEndTime] = React.useState(null);
-    const [isOrganizerDisconnected, setIsOrganizerDisconnected] = React.useState(false);
+    const [organizerConnectionStatus, setOrganizerConnectionStatus] = React.useState(false);
 
     useEffect(() => {
         setTimeout(() => setIsConnected(true), 100);
@@ -68,8 +68,8 @@ const MultiplayerTestContext = ({ children, gameHub, userIdGenerator }) => {
             timeProvider,
             gameEndTime,
             setGameEndTime,
-            isOrganizerDisconnected,
-            setIsOrganizerDisconnected
+            organizerConnectionStatus,
+            setOrganizerConnectionStatus
         }}>
             {children}
         </MultiplayerContext.Provider>
