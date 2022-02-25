@@ -61,7 +61,7 @@ namespace Tetris
 
         private bool IsUsingBackplane()
         {
-            return Configuration["UseBackplane"].ToLower() == "true";
+            return Configuration["UseBackplane"]?.ToLower() == "true";
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
