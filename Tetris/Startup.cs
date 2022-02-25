@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,7 +31,11 @@ namespace Tetris
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSignalR();
+            var signalR = services.AddSignalR();
+            if (IsUsingBackplane())
+            {
+                signalR.AddStackExchangeRedis(Configuration["RedisConnectionString"]);
+            }
             services.AddResponseCompression();
             services.AddControllersWithViews();
 
@@ -54,6 +59,11 @@ namespace Tetris
             services.AddSingleton<Task<ConnectionMultiplexer>>(sp => ConnectionMultiplexer.ConnectAsync(Configuration["RedisConnectionString"]));
         }
 
+        private bool IsUsingBackplane()
+        {
+            return Configuration["UseBackplane"].ToLower() == "true";
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
@@ -62,7 +72,10 @@ namespace Tetris
             app.UseCustomExceptionHandler(env, loggerFactory);
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<GameHub>("/gameHub");
+                endpoints.MapHub<GameHub>("/gameHub", options =>
+                {
+                    options.Transports = HttpTransportType.WebSockets;
+                });
             });
             app.UseSwagger();
             app.UseSwaggerUI(c =>
