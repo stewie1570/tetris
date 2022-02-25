@@ -30,6 +30,11 @@ namespace Tetris.Hubs
                     .Group($"{groupId}-organizer")
                     .SendAsync("hello", helloMessage.Message)
             );
+
+            if (isOrganizer)
+            {
+                await Clients.Group($"{groupId}-players").SendAsync("reset");
+            }
         }
 
         public async Task PlayersListUpdate(GroupMessage playersListUpdateMessage)
