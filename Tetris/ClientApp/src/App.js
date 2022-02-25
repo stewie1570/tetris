@@ -1,12 +1,13 @@
 import React, { useContext } from "react";
 import SinglePlayerGame, { SinglePlayerGameContext, SinglePlayerGameContextProvider } from "./SinglePlayerGame";
 import { MultiplayerGame } from "./MultiplayerGame";
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { shapes } from './components/TetrisGame';
 import { MultiplayerContextPassThrough } from "./MultiplayerContext";
 import { Dialog } from "./components/Prompt";
 import { ErrorMessage } from "./components/ErrorMessage";
 import { useUserId } from "./hooks/useUserId";
+import { StringInput } from "./components/Prompt";
 
 const randomNumberGenerator = {
     between: ({ min, max }) => Math.floor(Math.random() * (max + 1)) + min,
@@ -25,7 +26,6 @@ const GlobalUI = () => {
 }
 
 export const App = ({ shapeProvider }) => {
-    const userId = useUserId();
     const selectedShapeProvider = shapeProvider ?? defaultShapeProvider;
 
     return <SinglePlayerGameContextProvider>
@@ -35,9 +35,7 @@ export const App = ({ shapeProvider }) => {
                 element={
                     <SinglePlayerGame
                         shapeProvider={selectedShapeProvider}
-                        additionalControls={<Link
-                            style={{ marginTop: "1rem", display: "block" }}
-                            to={`/${userId}`}>Host Multiplayer Game</Link>} />
+                        additionalControls={<MultiplayerLinks />} />
                 } />
             <Route
                 path="/:organizerUserId"
@@ -49,3 +47,31 @@ export const App = ({ shapeProvider }) => {
         <GlobalUI />
     </SinglePlayerGameContextProvider>;
 };
+
+const MultiplayerLinks = () => {
+    const userId = useUserId();
+    const { prompt } = useContext(SinglePlayerGameContext);
+    const navigate = useNavigate();
+
+    const goToMultiplayerGame = () => prompt(exitModal => <StringInput
+        filter={value => (value ?? "").trim()}
+        onSaveString={organizerId => {
+            if (organizerId) {
+                navigate(`/${organizerId}`);
+                exitModal();
+            }
+        }}
+        submittingText="Posting Your Score...">
+        Game Code:
+    </StringInput>);
+
+    return <>
+        <Link
+            style={{ marginTop: "1rem", display: "block" }}
+            to={`/${userId}`}>Host Multiplayer Game</Link>
+
+        <button type="button" className="btn btn-link" onClick={goToMultiplayerGame}>
+            Join Multiplayer Game
+        </button>
+    </>;
+}
