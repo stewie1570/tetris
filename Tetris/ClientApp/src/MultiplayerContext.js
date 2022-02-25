@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { HubConnectionBuilder } from '@microsoft/signalr';
+import { HubConnectionBuilder, HttpTransportType } from '@microsoft/signalr';
 import { useUserId } from './hooks/useUserId';
 import { useLocation } from 'react-router-dom';
 
@@ -36,7 +36,7 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
 
   useEffect(() => {
     connection.current = new HubConnectionBuilder()
-      .withUrl("/gameHub")
+      .withUrl("/gameHub", { transport: HttpTransportType.WebSockets })
       .withAutomaticReconnect()
       .build();
 
