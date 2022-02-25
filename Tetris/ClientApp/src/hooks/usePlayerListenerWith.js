@@ -8,7 +8,7 @@ import { stringFrom } from '../domain/serialization';
 export const usePlayerListenerWith = ({ setOtherPlayers, setGameResults }) => {
     const { organizerUserId } = useParams();
     const {
-        gameHub, isConnected, userId: currentUserId, timeProvider, setGameEndTime, setIsOrganizerDisconnected
+        gameHub, isConnected, userId: currentUserId, timeProvider, setGameEndTime, setOrganizerConnectionStatus
     } = useContext(MultiplayerContext);
     const {
         game, setGame, username,
@@ -23,7 +23,7 @@ export const usePlayerListenerWith = ({ setOtherPlayers, setGameResults }) => {
                 setOtherPlayers(otherPlayers => ({ ...otherPlayers, [userId]: { ...otherProps } }));
             },
             playersListUpdate: ({ players: updatedPlayersList }) => {
-                setIsOrganizerDisconnected(false);
+                setOrganizerConnectionStatus('connected');
                 setOtherPlayers(otherPlayers => update(otherPlayers).with(updatedPlayersList));
                 const isInPlayersList = updatedPlayersList.some(({ userId }) => userId === currentUserId);
                 !isInPlayersList && gameHub.invoke.status({
@@ -54,7 +54,7 @@ export const usePlayerListenerWith = ({ setOtherPlayers, setGameResults }) => {
                 return otherPlayers;
             }),
             noOrganizer: () => {
-                setIsOrganizerDisconnected(true);
+                setOrganizerConnectionStatus('disconnected');
                 setGame(currentGame => ({ ...currentGame, paused: true }));
             },
             reset: () => {

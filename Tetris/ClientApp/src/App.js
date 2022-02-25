@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import SinglePlayerGame, { SinglePlayerGameContext, SinglePlayerGameContextProvider } from "./SinglePlayerGame";
 import { MultiplayerGame } from "./MultiplayerGame";
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { shapes } from './components/TetrisGame';
 import { MultiplayerContextPassThrough } from "./MultiplayerContext";
 import { Dialog } from "./components/Prompt";
 import { ErrorMessage } from "./components/ErrorMessage";
-import { useUserId } from "./hooks/useUserId";
+import { MultiplayerLinks } from "./MultiplayerLinks";
 
 const randomNumberGenerator = {
     between: ({ min, max }) => Math.floor(Math.random() * (max + 1)) + min,
@@ -25,7 +25,6 @@ const GlobalUI = () => {
 }
 
 export const App = ({ shapeProvider }) => {
-    const userId = useUserId();
     const selectedShapeProvider = shapeProvider ?? defaultShapeProvider;
 
     return <SinglePlayerGameContextProvider>
@@ -35,9 +34,7 @@ export const App = ({ shapeProvider }) => {
                 element={
                     <SinglePlayerGame
                         shapeProvider={selectedShapeProvider}
-                        additionalControls={<Link
-                            style={{ marginTop: "1rem", display: "block" }}
-                            to={`/${userId}`}>Host Multiplayer Game</Link>} />
+                        additionalControls={<MultiplayerLinks />} />
                 } />
             <Route
                 path="/:organizerUserId"
