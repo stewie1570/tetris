@@ -57,14 +57,14 @@ export const Dialog = ({ isVisible, resolve, children }) => {
         </div>;
 };
 
-export function StringInput({ onSaveString, children, filter, submittingText }) {
+export function StringInput({ onSaveString, children, filter, inputFilter, submittingText }) {
     const [value, setValue] = React.useState("");
 
     return <form onSubmit={event => event.preventDefault()} name="dialog-form">
         <label>
             {children}
             <br />
-            <TextInput value={value} autofocus={true} onChange={setValue} />
+            <TextInput value={value} autofocus={true} onChange={str => setValue(inputFilter?.(str) || str)} />
         </label>
         <CommandButton
             className="btn btn-primary space-top"

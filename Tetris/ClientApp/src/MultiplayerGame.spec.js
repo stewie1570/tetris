@@ -194,7 +194,7 @@ test("Organizer: setting user name", async () => {
         ]);
     });
 
-    screen.getByText("Set user name").click();
+    screen.getByText("Set User Name").click();
     const userNameTextInput = await within(
         await screen.findByRole("dialog")
     ).findByLabelText(/What user name would you like/);
@@ -263,7 +263,7 @@ test("Organizer: starting a game", async () => {
         ]);
     });
 
-    screen.getByText("Set user name").click();
+    screen.getByText("Set User Name").click();
     const userNameTextInput = await within(
         await screen.findByRole("dialog")
     ).findByLabelText(/What user name would you like/);
@@ -345,7 +345,7 @@ test("Player: starting a multiplayer game", async () => {
         ]
     }));
 
-    screen.getByText("Start game").click();
+    screen.getByText("Start Game").click();
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
             { hello: { groupId: "group1", message: { userId: "user1" } } },

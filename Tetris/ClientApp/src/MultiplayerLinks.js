@@ -11,6 +11,7 @@ export const MultiplayerLinks = () => {
 
     const goToMultiplayerGame = () => prompt(exitModal => <StringInput
         filter={value => (value ?? "").trim()}
+        inputFilter={value => value.toUpperCase().substring(0, 5)}
         onSaveString={organizerId => {
             organizerId && navigate(`/${organizerId}`);
             exitModal();
