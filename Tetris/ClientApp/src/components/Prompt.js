@@ -61,7 +61,7 @@ export function StringInput({ onSaveString, children, filter, inputFilter, submi
     const [value, setValue] = React.useState("");
 
     return <form onSubmit={event => event.preventDefault()} name="dialog-form">
-        <label>
+        <label style={{ width: '100%' }}>
             {children}
             <br />
             <TextInput value={value} autofocus={true} onChange={str => setValue(inputFilter?.(str) || str)} />
