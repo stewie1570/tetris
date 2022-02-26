@@ -1,1 +1,1 @@
-export const randomIdGenerator = () => Math.random().toString(36).substring(7);
+export const randomIdGenerator = () => Math.random().toString(36).slice(-5).toUpperCase();
