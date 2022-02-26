@@ -51,8 +51,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                     userId: currentUserId,
                     name: name,
                 }
-            });
-            setUsername(name);
+            }).then(setUsername);
             exitModal();
         }}
         submittingText="Setting user name...">
