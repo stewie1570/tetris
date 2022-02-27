@@ -5,7 +5,7 @@ import { MultiplayerContext } from "../MultiplayerContext";
 import { initialGameState, SinglePlayerGameContext } from "../SinglePlayerGame";
 import { stringFrom } from '../domain/serialization';
 
-export const usePlayerListenerWith = ({ setOtherPlayers, setGameResults }) => {
+export const usePlayerListenerWith = ({ setOtherPlayers, setGameResults, selectedDuration }) => {
     const { organizerUserId } = useParams();
     const {
         gameHub, isConnected, userId: currentUserId, timeProvider, setGameEndTime, setOrganizerConnectionStatus
@@ -43,7 +43,7 @@ export const usePlayerListenerWith = ({ setOtherPlayers, setGameResults }) => {
             },
             start: () => {
                 setGame(({ mobile }) => ({ ...initialGameState, mobile, paused: false }));
-                isOrganizer && setGameEndTime(timeProvider() + 60000);
+                isOrganizer && setGameEndTime(timeProvider() + selectedDuration);
             },
             results: results => {
                 setGameResults(results);
@@ -73,5 +73,5 @@ export const usePlayerListenerWith = ({ setOtherPlayers, setGameResults }) => {
             ...otherPlayers,
             [currentUserId]: { name: username, score: 0 }
         }));
-    }, [gameHub, isConnected, currentUserId, isOrganizer, username]);
+    }, [gameHub, isConnected, currentUserId, isOrganizer, username, selectedDuration]);
 };
