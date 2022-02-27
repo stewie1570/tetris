@@ -14,8 +14,10 @@ import { emptyBoard } from "./components/TetrisGame";
 import { usePlayerListenerWith } from "./hooks/usePlayerListenerWith";
 import { useHelloSender } from "./hooks/useHelloSender";
 import { useStatusSender } from "./hooks/useStatusSender";
+import { getDisplayTimeFrom } from './domain/time';
 
 export const initialEmptyPlayersList = {};
+export const selectableDurations = [60, 120, 300, 600];
 
 export const MultiplayerGame = ({ shapeProvider }) => {
     const [otherPlayers, setOtherPlayers] = React.useState(initialEmptyPlayersList);
@@ -37,8 +39,9 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     const isOrganizer = organizerUserId === currentUserId;
     const timeLeft = gameEndTime && Math.max(0, Math.ceil(gameEndTime - timeProvider()));
     const [gameResults, setGameResults] = React.useState(null);
+    const [selectedDuration, setSelectedDuration] = React.useState(selectableDurations[0] * 1000);
 
-    usePlayerListenerWith({ setOtherPlayers, setGameResults });
+    usePlayerListenerWith({ setOtherPlayers, setGameResults, selectedDuration });
     useHelloSender();
     useStatusSender();
 
@@ -153,6 +156,26 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             </div>
         </> : undefined
 
+    const gameHeader = <>
+        {isOrganizer && game.paused && <>
+            <label htmlFor="duration">Duration:</label>
+            <select
+                name="duration"
+                className="form-control"
+                style={{ width: "242px" }}
+                value={selectedDuration}
+                onChange={e => setSelectedDuration(parseInt(e.target.value))}>
+                {selectableDurations.map(duration => <option
+                    key={duration}
+                    value={duration * 1000}>
+                    {getDisplayTimeFrom(duration)}
+                </option>)}
+            </select>
+        </>}
+
+        {gameEndTime && `Game ends in ${getDisplayTimeFrom(Math.floor(timeLeft / 1000))} seconds`}
+    </>;
+
     return <Game otherPlayers={otherPlayers}>
         {
             waitingForOrganizer?.()
@@ -161,7 +184,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             || <div className="row" style={{ margin: "auto" }}>
                 <SinglePlayerGame
                     shapeProvider={shapeProvider}
-                    header={gameEndTime && `Game ends in ${Math.floor(timeLeft / 1000)} seconds`}
+                    header={gameHeader}
                     additionalControls={<>
                         {singlePlayerGameLink}
                         {gameContextInfo}
