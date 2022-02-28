@@ -16,6 +16,7 @@ using Tetris.Hubs;
 using Tetris.Interactors;
 using Tetris.Interfaces;
 using Tetris.Storage;
+using Website.Middlewares;
 
 namespace Tetris
 {
@@ -70,6 +71,8 @@ namespace Tetris
             app.UseResponseCompression();
             app.UseRouting();
             app.UseCustomExceptionHandler(env, loggerFactory);
+            app.UseHttpsRedirection();
+            app.UseReverseProxyHttpsRedirect();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<GameHub>("/gameHub", options =>
