@@ -47,6 +47,10 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
         connection.current.on(key, handlers[key]);
       });
 
+    connection.current.onclose(() => setIsConnected(false));
+    connection.current.onreconnecting(() => setIsConnected(false));
+    connection.current.onreconnected(() => setIsConnected(true));
+
     connection
       .current
       .start()

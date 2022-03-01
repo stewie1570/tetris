@@ -27,7 +27,8 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         userId: currentUserId,
         timeProvider,
         gameEndTime,
-        organizerConnectionStatus
+        organizerConnectionStatus,
+        isConnected
     } = useContext(MultiplayerContext);
     const {
         game,
@@ -156,6 +157,15 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             </div>
         </> : undefined
 
+    const userIsDisconnected = isConnected ? undefined : () => <>
+        <h1 style={{ textAlign: "center", color: "black" }}>
+            Attempting to reconnect...
+        </h1>
+        <div style={{ textAlign: "center" }}>
+            <div>{singlePlayerGameLink}</div>
+        </div>
+    </>
+
     const gameHeader = <>
         {isOrganizer && game.paused && <>
             <label htmlFor="duration">Duration:</label>
@@ -178,7 +188,8 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
     return <Game otherPlayers={otherPlayers}>
         {
-            waitingForOrganizer?.()
+            userIsDisconnected?.()
+            || waitingForOrganizer?.()
             || organizerDisconnected?.()
             || results?.()
             || <div className="row" style={{ margin: "auto" }}>
