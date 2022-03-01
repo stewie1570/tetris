@@ -18,7 +18,7 @@ const signals = [
 ];
 
 export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
-  const [isConnected, setIsConnected] = React.useState(false);
+  const [isConnected, setIsConnected] = React.useState();
   const location = useLocation();
   const connection = useRef(null);
   const gameHub = useRef({

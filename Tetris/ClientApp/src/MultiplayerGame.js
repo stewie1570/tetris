@@ -159,7 +159,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
     const userIsDisconnected = isConnected ? undefined : () => <>
         <h1 style={{ textAlign: "center", color: "black" }}>
-            Attempting to reconnect...
+            Attempting to {isConnected === false ? " reconnect..." : " connect..."}
         </h1>
         <div style={{ textAlign: "center" }}>
             <div>{singlePlayerGameLink}</div>
