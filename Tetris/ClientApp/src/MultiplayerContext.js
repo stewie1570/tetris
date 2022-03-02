@@ -53,7 +53,10 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
 
     connection.current.onclose(() => setIsConnected(false));
     connection.current.onreconnecting(() => setIsConnected(false));
-    connection.current.onreconnected(() => setIsConnected(true));
+    connection.current.onreconnected(() => {
+      setIsConnected(true);
+      setGameEndTime(null);
+    });
 
     connection
       .current
