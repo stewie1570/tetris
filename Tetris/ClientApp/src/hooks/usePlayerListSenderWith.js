@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { useParams } from "react-router";
 import { MultiplayerContext } from "../MultiplayerContext";
-import { initialEmptyPlayersList } from "../MultiplayerGame";
+import { initialEmptyPlayersList } from "../constants";
 
 export const usePlayerListSenderWith = ({ otherPlayers }) => {
     const {

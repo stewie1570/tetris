@@ -5,10 +5,18 @@ import { MultiplayerContext } from "../MultiplayerContext";
 import { initialGameState, SinglePlayerGameContext } from "../SinglePlayerGame";
 import { stringFrom } from '../domain/serialization';
 
-export const usePlayerListenerWith = ({ setOtherPlayers, setGameResults, selectedDuration }) => {
+export const usePlayerListenerWith = () => {
     const { organizerUserId } = useParams();
     const {
-        gameHub, isConnected, userId: currentUserId, timeProvider, setGameEndTime, setOrganizerConnectionStatus
+        gameHub,
+        isConnected,
+        userId: currentUserId,
+        timeProvider,
+        setGameEndTime,
+        setOrganizerConnectionStatus,
+        setOtherPlayers,
+        setGameResults,
+        selectedDuration
     } = useContext(MultiplayerContext);
     const {
         game, setGame, username,

@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { HubConnectionBuilder, HttpTransportType } from '@microsoft/signalr';
 import { useUserId } from './hooks/useUserId';
 import { useLocation } from 'react-router-dom';
+import { initialEmptyPlayersList, selectableDurations } from './constants'
 
 export const MultiplayerContext = React.createContext(null);
 
@@ -29,6 +30,9 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
   const userId = useUserId(userIdGenerator);
   const [gameEndTime, setGameEndTime] = React.useState(null);
   const [organizerConnectionStatus, setOrganizerConnectionStatus] = React.useState(null);
+  const [otherPlayers, setOtherPlayers] = React.useState(initialEmptyPlayersList);
+  const [gameResults, setGameResults] = React.useState(null);
+  const [selectedDuration, setSelectedDuration] = React.useState(selectableDurations[0] * 1000);
 
   useEffect(() => {
     setGameEndTime(null);
@@ -73,7 +77,13 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
     gameEndTime,
     setGameEndTime,
     organizerConnectionStatus,
-    setOrganizerConnectionStatus
+    setOrganizerConnectionStatus,
+    otherPlayers,
+    setOtherPlayers,
+    gameResults,
+    setGameResults,
+    selectedDuration,
+    setSelectedDuration
   }}>
     {children}
   </MultiplayerContext.Provider>;

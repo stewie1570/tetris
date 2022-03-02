@@ -15,12 +15,9 @@ import { usePlayerListenerWith } from "./hooks/usePlayerListenerWith";
 import { useHelloSender } from "./hooks/useHelloSender";
 import { useStatusSender } from "./hooks/useStatusSender";
 import { getDisplayTimeFrom } from './domain/time';
-
-export const initialEmptyPlayersList = {};
-export const selectableDurations = [60, 120, 300, 600];
+import { selectableDurations } from "./constants";
 
 export const MultiplayerGame = ({ shapeProvider }) => {
-    const [otherPlayers, setOtherPlayers] = React.useState(initialEmptyPlayersList);
     const { organizerUserId } = useParams();
     const {
         gameHub,
@@ -28,7 +25,11 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         timeProvider,
         gameEndTime,
         organizerConnectionStatus,
-        isConnected
+        isConnected,
+        otherPlayers,
+        gameResults,
+        selectedDuration,
+        setSelectedDuration
     } = useContext(MultiplayerContext);
     const {
         game,
@@ -39,10 +40,8 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     } = useContext(SinglePlayerGameContext);
     const isOrganizer = organizerUserId === currentUserId;
     const timeLeft = gameEndTime && Math.max(0, Math.ceil(gameEndTime - timeProvider()));
-    const [gameResults, setGameResults] = React.useState(null);
-    const [selectedDuration, setSelectedDuration] = React.useState(selectableDurations[0] * 1000);
 
-    usePlayerListenerWith({ setOtherPlayers, setGameResults, selectedDuration });
+    usePlayerListenerWith();
     useHelloSender();
     useStatusSender();
 
