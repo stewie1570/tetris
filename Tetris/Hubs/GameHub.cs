@@ -31,7 +31,7 @@ namespace Tetris.Hubs
 
             if (isOrganizer)
             {
-                await Clients.Group($"{groupId}-players").SendAsync("reset");
+                await Clients.Group(groupId).SendAsync("reset");
             }
         }
 

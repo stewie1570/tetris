@@ -13,6 +13,7 @@ import { App } from "./App";
 import { MultiplayerContext } from "./MultiplayerContext";
 import { stringFrom } from "./domain/serialization";
 import { emptyBoard } from "./components/TetrisGame";
+import { initialEmptyPlayersList, selectableDurations } from './constants';
 
 const signals = [
     "hello",
@@ -53,6 +54,9 @@ const MultiplayerTestContext = ({ children, gameHub, userIdGenerator }) => {
     const [isConnected, setIsConnected] = React.useState(false);
     const [gameEndTime, setGameEndTime] = React.useState(null);
     const [organizerConnectionStatus, setOrganizerConnectionStatus] = React.useState(false);
+    const [otherPlayers, setOtherPlayers] = React.useState(initialEmptyPlayersList);
+    const [gameResults, setGameResults] = React.useState(null);
+    const [selectedDuration, setSelectedDuration] = React.useState(selectableDurations[0] * 1000);
 
     useEffect(() => {
         setTimeout(() => setIsConnected(true), 100);
@@ -69,7 +73,13 @@ const MultiplayerTestContext = ({ children, gameHub, userIdGenerator }) => {
             gameEndTime,
             setGameEndTime,
             organizerConnectionStatus,
-            setOrganizerConnectionStatus
+            setOrganizerConnectionStatus,
+            otherPlayers,
+            setOtherPlayers,
+            gameResults,
+            setGameResults,
+            selectedDuration,
+            setSelectedDuration
         }}>
             {children}
         </MultiplayerContext.Provider>
