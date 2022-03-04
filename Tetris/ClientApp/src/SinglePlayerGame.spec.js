@@ -122,6 +122,45 @@ test("score a point and post score twice", async () => {
   ]);
 });
 
+test("posting a score too low to show up on the board displays an error", async () => {
+  server.use(
+    rest.get("/api/userScores", async (req, res, ctx) => {
+      return res(ctx.json(new Array(20).fill(null).map((_, i) => ({
+        username: "user" + i,
+        score: i
+      }))));
+    }),
+    rest.post("/api/userScores", async (req, res, ctx) => {
+      scorePosts.push(req.body);
+      return res(ctx.status(200));
+    })
+  );
+  const { iterate, container } = getIterableBoard();
+
+  await act(async () => {
+    await scorePointOnEmptyBoard({ iterate, container });
+  });
+
+  screen.getByText(/Pause/).click();
+  (await screen.findByText(/Post My Score/)).click();
+
+  const userNameTextInput = await within(
+    await screen.findByRole("dialog")
+  ).findByLabelText(/What user name would you like/);
+  fireEvent.change(userNameTextInput, {
+    target: { value: "Stewie" },
+  });
+
+  screen.getByText(/Ok/).click();
+
+  await waitForElementToBeRemoved(() => screen.queryByText(/What user name would you like/));
+
+  (await screen.findByText(/Post My Score/)).click();
+  await screen.findByText("Posting your score...")
+  await waitForElementToBeRemoved(() => screen.queryByText("Posting your score..."));
+  await screen.findByText("Your score was recorded but didn't make the top 20.");
+});
+
 test("score a point and cancels posting a score", async () => {
   server.use(
     rest.get("/api/userScores", async (req, res, ctx) => {
