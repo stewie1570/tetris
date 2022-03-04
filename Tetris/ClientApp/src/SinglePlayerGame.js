@@ -57,7 +57,11 @@ export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers, header
         username: name,
         score: postableScore
       })
-      .then(reloadScoreBoard);
+      .then(reloadScoreBoard)
+      .then(scoreBoard => {
+        const scoreIsOnBoard = scoreBoard.find(({ username }) => username === name);
+        !scoreIsOnBoard && window.onerror(`Your score was recorded but didn't make the top ${scoreBoard.length}.`);
+      })
 
     const promptUserNameAndSendScore = () => prompt(exitModal => <StringPrompt
       filter={value => (value ?? "").trim()}
@@ -76,6 +80,7 @@ export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers, header
   const reloadScoreBoard = async () => {
     const scoreBoard = await leaderBoardService.get();
     setGame(game => ({ ...game, scoreBoard }));
+    return scoreBoard;
   };
 
   const pause = async () => {
