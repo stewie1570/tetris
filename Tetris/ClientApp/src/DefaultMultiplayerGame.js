@@ -1,1 +1,0 @@
-export { MultiplayerGame as default } from './MultiplayerGame';
