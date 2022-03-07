@@ -6,8 +6,7 @@ import { Dialog } from "./components/Prompt";
 import { ErrorMessage } from "./components/ErrorMessage";
 import { MultiplayerLinks } from "./MultiplayerLinks";
 
-const MultiplayerGame = React.lazy(() => import("./DefaultMultiplayerGame"));
-const MultiplayerContextPassThrough = React.lazy(() => import("./DefaultMultiplayerContext"));
+const MultiplayerGameWithContext = React.lazy(() => import("./MultiplayerGameWithContext"));
 
 const randomNumberGenerator = {
     between: ({ min, max }) => Math.floor(Math.random() * (max + 1)) + min,
@@ -39,10 +38,11 @@ export const App = ({ shapeProvider }) => {
                 } />
             <Route
                 path="/:organizerUserId"
-                element={<Suspense fallback={<div>Loading...</div>}>
-                    <MultiplayerContextPassThrough>
-                        <MultiplayerGame shapeProvider={selectedShapeProvider} />
-                    </MultiplayerContextPassThrough>
+                element={<Suspense
+                    fallback={<h1 style={{ textAlign: "center", color: "black" }}>
+                        Loading...
+                    </h1>}>
+                    <MultiplayerGameWithContext shapeProvider={selectedShapeProvider} />
                 </Suspense>} />
         </Routes>
         <GlobalUI />
