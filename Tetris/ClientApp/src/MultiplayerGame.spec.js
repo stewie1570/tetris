@@ -52,7 +52,7 @@ const createTestGameHub = () => {
 };
 
 const MultiplayerTestContext = ({ children, gameHub, userIdGenerator }) => {
-    const [isConnected, setIsConnected] = React.useState(false);
+    const [isConnected, setIsConnected] = React.useState();
     const [gameEndTime, setGameEndTime] = React.useState(null);
     const [organizerConnectionStatus, setOrganizerConnectionStatus] = React.useState(false);
     const [otherPlayers, setOtherPlayers] = useMountedOnlyState(initialEmptyPlayersList);
