@@ -1,0 +1,1 @@
+export { MultiplayerContextPassThrough as default } from './MultiplayerContext';

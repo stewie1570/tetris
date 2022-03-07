@@ -77,9 +77,5 @@ export const usePlayerListenerWith = () => {
         });
 
         setGame(({ mobile }) => ({ ...initialGameState, mobile, paused: true }));
-        setOtherPlayers(otherPlayers => ({
-            ...otherPlayers,
-            [currentUserId]: { name: username, score: 0 }
-        }));
     }, [gameHub, isConnected, currentUserId, isOrganizer, username, selectedDuration]);
 };

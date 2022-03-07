@@ -14,6 +14,7 @@ import { MultiplayerContext } from "./MultiplayerContext";
 import { stringFrom } from "./domain/serialization";
 import { emptyBoard } from "./components/TetrisGame";
 import { initialEmptyPlayersList, selectableDurations } from './constants';
+import { useMountedOnlyState } from "leaf-validator";
 
 const signals = [
     "hello",
@@ -51,10 +52,10 @@ const createTestGameHub = () => {
 };
 
 const MultiplayerTestContext = ({ children, gameHub, userIdGenerator }) => {
-    const [isConnected, setIsConnected] = React.useState(false);
+    const [isConnected, setIsConnected] = React.useState();
     const [gameEndTime, setGameEndTime] = React.useState(null);
     const [organizerConnectionStatus, setOrganizerConnectionStatus] = React.useState(false);
-    const [otherPlayers, setOtherPlayers] = React.useState(initialEmptyPlayersList);
+    const [otherPlayers, setOtherPlayers] = useMountedOnlyState(initialEmptyPlayersList);
     const [gameResults, setGameResults] = React.useState(null);
     const [selectedDuration, setSelectedDuration] = React.useState(selectableDurations[0] * 1000);
 
@@ -104,6 +105,7 @@ test("Organizer: hosting a multiplayer game", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
+            { hello: { groupId: "organizer", message: { userId: "organizer" } } },
             {
                 "playersListUpdate": {
                     "groupId": "organizer",
@@ -117,7 +119,6 @@ test("Organizer: hosting a multiplayer game", async () => {
                     },
                 },
             },
-            { hello: { groupId: "organizer", message: { userId: "organizer" } } }
         ]);
     });
 
@@ -132,6 +133,7 @@ test("Organizer: hosting a multiplayer game", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
+            { hello: { groupId: "organizer", message: { userId: "organizer" } } },
             {
                 playersListUpdate: {
                     groupId: "organizer",
@@ -142,7 +144,6 @@ test("Organizer: hosting a multiplayer game", async () => {
                     }
                 }
             },
-            { hello: { groupId: "organizer", message: { userId: "organizer" } } },
             {
                 playersListUpdate: {
                     groupId: "organizer",
@@ -171,7 +172,7 @@ test("Organizer: hosting a multiplayer game", async () => {
 
     act(() => context.handlers.status({ userId: "user1", name: "Stewart" }));
     await screen.findByText("Stewart");
-});
+}, 10000);
 
 test("Organizer: setting user name", async () => {
     const { gameHub, context } = createTestGameHub();
@@ -179,6 +180,15 @@ test("Organizer: setting user name", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
+            {
+                "hello": {
+                    "groupId": "organizer",
+                    "message": {
+                        "name": undefined,
+                        "userId": "organizer",
+                    },
+                },
+            },
             {
                 "playersListUpdate": {
                     "groupId": "organizer",
@@ -192,15 +202,6 @@ test("Organizer: setting user name", async () => {
                     },
                 },
             },
-            {
-                "hello": {
-                    "groupId": "organizer",
-                    "message": {
-                        "name": undefined,
-                        "userId": "organizer",
-                    },
-                },
-            }
         ]);
     });
 
@@ -216,6 +217,15 @@ test("Organizer: setting user name", async () => {
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
             {
+                "hello": {
+                    "groupId": "organizer",
+                    "message": {
+                        "name": undefined,
+                        "userId": "organizer",
+                    },
+                },
+            },
+            {
                 "playersListUpdate": {
                     "groupId": "organizer",
                     "message": {
@@ -228,19 +238,10 @@ test("Organizer: setting user name", async () => {
                     },
                 },
             },
-            {
-                "hello": {
-                    "groupId": "organizer",
-                    "message": {
-                        "name": undefined,
-                        "userId": "organizer",
-                    },
-                },
-            },
             { status: { groupId: "organizer", message: { userId: "organizer", name: "Stewie" } } }
         ]);
     });
-});
+}, 10000);
 
 test("Organizer: starting a game", async () => {
     const { gameHub, context } = createTestGameHub();
@@ -249,6 +250,15 @@ test("Organizer: starting a game", async () => {
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
             {
+                "hello": {
+                    "groupId": "organizer",
+                    "message": {
+                        "name": undefined,
+                        "userId": "organizer",
+                    },
+                },
+            },
+            {
                 "playersListUpdate": {
                     "groupId": "organizer",
                     "message": {
@@ -258,15 +268,6 @@ test("Organizer: starting a game", async () => {
                                 "userId": "organizer",
                             },
                         ],
-                    },
-                },
-            },
-            {
-                "hello": {
-                    "groupId": "organizer",
-                    "message": {
-                        "name": undefined,
-                        "userId": "organizer",
                     },
                 },
             },
@@ -289,6 +290,7 @@ test("Organizer: starting a game", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
+            { hello: { groupId: "organizer", message: { userId: "organizer" } } },
             {
                 "playersListUpdate": {
                     "groupId": "organizer",
@@ -302,7 +304,6 @@ test("Organizer: starting a game", async () => {
                     },
                 },
             },
-            { hello: { groupId: "organizer", message: { userId: "organizer" } } },
             { status: { groupId: "organizer", message: { userId: "organizer", name: "Stewie" } } },
             {
                 status: {
@@ -317,7 +318,7 @@ test("Organizer: starting a game", async () => {
             }
         ]);
     });
-});
+}, 10000);
 
 test("Player: joining a multiplayer game", async () => {
     const { gameHub, context } = createTestGameHub();
@@ -337,7 +338,7 @@ test("Player: joining a multiplayer game", async () => {
     }));
     await screen.findByText("The Organizer");
     await screen.findByText("Player One");
-});
+}, 10000);
 
 test("Player: starting a multiplayer game", async () => {
     const { gameHub, context } = createTestGameHub();
@@ -365,4 +366,4 @@ test("Player: starting a multiplayer game", async () => {
 
     act(() => context.handlers.start());
     await screen.findByText("Score: 0");
-});
+}, 10000);
