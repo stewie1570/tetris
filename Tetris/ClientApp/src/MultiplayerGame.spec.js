@@ -172,7 +172,7 @@ test("Organizer: hosting a multiplayer game", async () => {
 
     act(() => context.handlers.status({ userId: "user1", name: "Stewart" }));
     await screen.findByText("Stewart");
-});
+}, 10000);
 
 test("Organizer: setting user name", async () => {
     const { gameHub, context } = createTestGameHub();
@@ -241,7 +241,7 @@ test("Organizer: setting user name", async () => {
             { status: { groupId: "organizer", message: { userId: "organizer", name: "Stewie" } } }
         ]);
     });
-});
+}, 10000);
 
 test("Organizer: starting a game", async () => {
     const { gameHub, context } = createTestGameHub();
@@ -318,7 +318,7 @@ test("Organizer: starting a game", async () => {
             }
         ]);
     });
-});
+}, 10000);
 
 test("Player: joining a multiplayer game", async () => {
     const { gameHub, context } = createTestGameHub();
@@ -338,7 +338,7 @@ test("Player: joining a multiplayer game", async () => {
     }));
     await screen.findByText("The Organizer");
     await screen.findByText("Player One");
-});
+}, 10000);
 
 test("Player: starting a multiplayer game", async () => {
     const { gameHub, context } = createTestGameHub();
@@ -366,4 +366,4 @@ test("Player: starting a multiplayer game", async () => {
 
     act(() => context.handlers.start());
     await screen.findByText("Score: 0");
-});
+}, 10000);
