@@ -3,6 +3,7 @@ import { HubConnectionBuilder, HttpTransportType } from '@microsoft/signalr';
 import { useUserId } from './hooks/useUserId';
 import { useLocation } from 'react-router-dom';
 import { initialEmptyPlayersList, selectableDurations } from './constants'
+import { useMountedOnlyState } from "leaf-validator";
 
 export const MultiplayerContext = React.createContext(null);
 
@@ -30,7 +31,7 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
   const userId = useUserId(userIdGenerator);
   const [gameEndTime, setGameEndTime] = React.useState(null);
   const [organizerConnectionStatus, setOrganizerConnectionStatus] = React.useState(null);
-  const [otherPlayers, setOtherPlayers] = React.useState(initialEmptyPlayersList);
+  const [otherPlayers, setOtherPlayers] = useMountedOnlyState(initialEmptyPlayersList);
   const [gameResults, setGameResults] = React.useState(null);
   const [selectedDuration, setSelectedDuration] = React.useState(selectableDurations[0] * 1000);
 
