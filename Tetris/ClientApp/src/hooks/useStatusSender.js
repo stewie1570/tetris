@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { useParams } from "react-router";
 import { MultiplayerContext } from "../MultiplayerContext";
 import { SinglePlayerGameContext } from "../SinglePlayerGame";
@@ -7,6 +7,7 @@ import { stringFrom } from '../domain/serialization';
 
 export const useStatusSender = () => {
     const { organizerUserId } = useParams();
+    const isFirstRun = useRef(true);
     const {
         gameHub, isConnected, userId: currentUserId, timeProvider, gameEndTime
     } = useContext(MultiplayerContext);
@@ -15,7 +16,11 @@ export const useStatusSender = () => {
     const timeLeft = gameEndTime && Math.max(0, Math.ceil(gameEndTime - timeProvider()));
 
     useAsyncEffect(async () => {
-        console.log(`isConnected: ${isConnected}, paused: ${game.paused}, isOrganizer: ${isOrganizer}`);
+        if (isFirstRun.current) {
+            isFirstRun.current = false;
+            return;
+        }
+
         return isConnected && !game.paused && gameHub.invoke.status({
             groupId: organizerUserId,
             message: {

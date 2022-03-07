@@ -99,7 +99,7 @@ beforeEach(() => {
     window.sessionStorage.clear();
 });
 
-test.only("Organizer: hosting a multiplayer game", async () => {
+test("Organizer: hosting a multiplayer game", async () => {
     const { gameHub, context } = createTestGameHub();
     renderWith({ gameHub, route: "/organizer", userIdGenerator: () => "organizer" });
 
