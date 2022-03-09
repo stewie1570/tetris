@@ -57,7 +57,7 @@ export const Dialog = ({ isVisible, resolve, children }) => {
         </div>;
 };
 
-export function StringInput({ onSaveString, children, filter, inputFilter, submittingText }) {
+export function StringInput({ onSubmitString, children, filter, inputFilter, submittingText }) {
     const [value, setValue] = React.useState("");
 
     return <form onSubmit={event => event.preventDefault()} name="dialog-form">
@@ -68,14 +68,14 @@ export function StringInput({ onSaveString, children, filter, inputFilter, submi
         </label>
         <CommandButton
             className="btn btn-primary space-top"
-            onClick={() => onSaveString(undefined)}
+            onClick={() => onSubmitString(undefined)}
         >
             <span className="glyphicon glyphicon-remove">&nbsp;</span>
             Cancel
         </CommandButton>
         <CommandButton
             className="btn btn-primary space-top"
-            onClick={() => onSaveString(filter ? filter(value) : value)}
+            onClick={() => onSubmitString(filter ? filter(value) : value)}
             runningText={submittingText}
             type="submit"
         >

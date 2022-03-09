@@ -8,7 +8,7 @@ function TestApp() {
     const { prompt, dialogProps } = usePrompt();
 
     const editName = async () => {
-        const newName = await prompt(resolve => <StringInput onSaveString={resolve}>
+        const newName = await prompt(resolve => <StringInput onSubmitString={resolve}>
             What user name would you like
         </StringInput>);
 
