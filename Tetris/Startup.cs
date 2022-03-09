@@ -51,7 +51,6 @@ namespace Tetris
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddScoped<IRandonNumberGenerator, RandomNumberGenerator>();
             services.AddScoped<IScoreBoardStorage, RedisScoreBoardStorage>();
             services.AddScoped<ILeaderBoardProvider, RedisLeaderBoardProvider>();
             services.AddScoped<ILeaderBoardUpdater, LeaderBoardUpdater>();

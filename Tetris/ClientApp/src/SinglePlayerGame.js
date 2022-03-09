@@ -65,7 +65,7 @@ export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers, header
 
     const promptUserNameAndSendScore = () => prompt(exitModal => <StringPrompt
       filter={value => (value ?? "").trim()}
-      onSaveString={name => Boolean(name?.length)
+      onSubmitString={name => Boolean(name?.length)
         ? sendCurrentScoreFor(name)
           .then(() => setUsername(name))
           .then(exitModal)

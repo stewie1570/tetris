@@ -5,7 +5,7 @@ import { MultiplayerContext } from "../MultiplayerContext";
 import { initialGameState, SinglePlayerGameContext } from "../SinglePlayerGame";
 import { stringFrom } from '../domain/serialization';
 
-export const usePlayerListenerWith = () => {
+export const usePlayerListener = () => {
     const { organizerUserId } = useParams();
     const {
         gameHub,

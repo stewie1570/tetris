@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { useParams } from "react-router";
 import { Organizer } from "./Organizer";
-import { Player } from "./Player";
 import { MultiplayerContext } from "./MultiplayerContext";
 import { CommandButton } from "./components/CommandButton";
 import SinglePlayerGame, { SinglePlayerGameContext } from "./SinglePlayerGame";
@@ -11,7 +10,7 @@ import { TetrisBoard } from "./components/TetrisBoard";
 import { GameMetaFrame } from "./components/GameMetaFrame";
 import { Link } from "react-router-dom";
 import { emptyBoard } from "./components/TetrisGame";
-import { usePlayerListenerWith } from "./hooks/usePlayerListenerWith";
+import { usePlayerListener } from "./hooks/usePlayerListener";
 import { useHelloSender } from "./hooks/useHelloSender";
 import { useStatusSender } from "./hooks/useStatusSender";
 import { getDisplayTimeFrom } from './domain/time';
@@ -41,13 +40,13 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     const isOrganizer = organizerUserId === currentUserId;
     const timeLeft = gameEndTime && Math.max(0, Math.ceil(gameEndTime - timeProvider()));
 
-    usePlayerListenerWith();
+    usePlayerListener();
     useHelloSender();
     useStatusSender();
 
     const promptUserName = () => prompt(exitModal => <StringInput
         filter={value => (value ?? "").trim()}
-        onSaveString={async name => {
+        onSubmitString={async name => {
             name && await gameHub.send.status({
                 groupId: organizerUserId,
                 message: {
@@ -63,7 +62,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
     const startGame = () => gameHub.send.start({ groupId: organizerUserId });
 
-    const Game = isOrganizer ? Organizer : Player;
+    const Game = isOrganizer ? Organizer : ({ children }) => <>{children}</>;
     const otherPlayerIds = Object.keys(otherPlayers);
 
     const gameContextInfo = <table style={{ marginTop: "2rem" }} className="table">
