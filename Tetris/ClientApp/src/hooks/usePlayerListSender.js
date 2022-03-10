@@ -3,9 +3,9 @@ import { useParams } from "react-router";
 import { MultiplayerContext } from "../MultiplayerContext";
 import { initialEmptyPlayersList } from "../constants";
 
-export const usePlayerListSenderWith = ({ otherPlayers }) => {
+export const usePlayerListSender = () => {
     const {
-        gameHub, isConnected, userId: currentUserId
+        gameHub, isConnected, userId: currentUserId, otherPlayers
     } = useContext(MultiplayerContext);
     const { organizerUserId } = useParams();
 
