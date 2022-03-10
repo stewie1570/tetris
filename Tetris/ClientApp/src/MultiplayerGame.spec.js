@@ -120,7 +120,7 @@ test("Organizer: hosting a multiplayer game", async () => {
                 },
             },
         ]);
-    });
+    }, { timeout: 10000 });
 
     act(() => context.handlers.hello({ userId: "user1" }));
     expect(await screen.findAllByText("[Un-named player]")).toHaveLength(2);
