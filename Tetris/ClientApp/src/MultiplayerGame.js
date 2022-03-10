@@ -62,7 +62,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
     const startGame = () => gameHub.send.start({ groupId: organizerUserId });
 
-    const Game = isOrganizer ? Organizer : ({ children }) => <>{children}</>;
+    const Game = isOrganizer ? Organizer : React.Fragment;
     const otherPlayerIds = Object.keys(otherPlayers);
 
     const gameContextInfo = <table style={{ marginTop: "2rem" }} className="table">
@@ -184,7 +184,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         {gameEndTime && `Game ends in ${getDisplayTimeFrom(Math.floor(timeLeft / 1000))} seconds`}
     </>;
 
-    return <Game otherPlayers={otherPlayers}>
+    return <Game>
         {
             userIsDisconnected?.()
             || waitingForOrganizer?.()
