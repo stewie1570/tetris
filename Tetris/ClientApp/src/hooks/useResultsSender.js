@@ -4,9 +4,9 @@ import { namesAndScoresFrom } from "../domain/players";
 import { MultiplayerContext } from "../MultiplayerContext";
 import { SinglePlayerGameContext } from "../SinglePlayerGame";
 
-export const useResultsSenderWith = ({ otherPlayers }) => {
+export const useResultsSender = () => {
     const {
-        gameHub, userId: currentUserId, timeProvider, gameEndTime
+        gameHub, userId: currentUserId, timeProvider, gameEndTime, otherPlayers
     } = useContext(MultiplayerContext);
     const { organizerUserId } = useParams();
     const { username, game } = useContext(SinglePlayerGameContext);
@@ -20,5 +20,5 @@ export const useResultsSenderWith = ({ otherPlayers }) => {
                 [currentUserId]: { name: username, score: game.score }
             })
         });
-    }, [timeLeft]);
+    }, [timeLeft, gameHub, currentUserId, username, game.score, otherPlayers]);
 };

@@ -1,13 +1,10 @@
-import React, { useContext } from "react";
-import { useResultsSenderWith } from "./hooks/useResultsSenderWith";
-import { usePlayerListSenderWith } from "./hooks/usePlayerListSenderWith";
-import { MultiplayerContext } from "./MultiplayerContext";
+import React from "react";
+import { useResultsSender } from "./hooks/useResultsSender";
+import { usePlayerListSender } from "./hooks/usePlayerListSender";
 
 export const Organizer = ({ children }) => {
-    const { otherPlayers } = useContext(MultiplayerContext);
-
-    usePlayerListSenderWith({ otherPlayers });
-    useResultsSenderWith({ otherPlayers });
+    usePlayerListSender();
+    useResultsSender();
 
     return <>{children}</>;
 };
