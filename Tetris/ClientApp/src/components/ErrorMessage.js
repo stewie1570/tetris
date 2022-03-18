@@ -10,12 +10,12 @@ export const ErrorMessage = () => {
     && visible
     && hide();
 
-  useEffect(() => {
-    const showError = ({ detail: errorMessage }) => {
-      setError(errorMessage);
-      setVisible(true);
-    }
+  const showError = ({ detail: errorMessage }) => {
+    setError(errorMessage);
+    setVisible(true);
+  }
 
+  useEffect(() => {
     window.addEventListener("click", windowClick);
     window.addEventListener("touchstart", windowClick);
     window.addEventListener("user-error", showError);
