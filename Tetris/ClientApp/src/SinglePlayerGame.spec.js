@@ -82,6 +82,38 @@ test("score a point and post score", async () => {
   expect(scorePosts).toEqual([{ username: "Stewie", score: 1 }]);
 });
 
+test("score a point and fail to post score", async () => {
+  server.use(
+    rest.get("/api/userScores", async (req, res, ctx) => {
+      return res(ctx.json(scorePosts));
+    }),
+    rest.post("/api/userScores", async (req, res, ctx) => {
+      return res.networkError('Failed to connect');
+    })
+  );
+  const { iterate, container } = getIterableBoard();
+
+  await act(async () => {
+    await scorePointOnEmptyBoard({ iterate, container });
+  });
+
+  screen.getByText(/Pause/).click();
+  (await screen.findByText(/Post My Score/)).click();
+
+  const userNameTextInput = await within(
+    await screen.findByRole("dialog")
+  ).findByLabelText(/What user name would you like/);
+  fireEvent.change(userNameTextInput, {
+    target: { value: " Stewie  " },
+  });
+
+  screen.getByText(/Ok/).click();
+
+  await waitFor(() => {
+    within(screen.getByText('Error').parentElement.parentElement).getByText(/Network Error/);
+  })
+});
+
 test("score a point and post score twice", async () => {
   server.use(
     rest.get("/api/userScores", async (req, res, ctx) => {

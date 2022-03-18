@@ -60,7 +60,9 @@ export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers, header
       .then(reloadScoreBoard)
       .then(scoreBoard => {
         const scoreIsOnBoard = scoreBoard.find(({ username }) => username === name);
-        !scoreIsOnBoard && window.onerror(`Your score was recorded but didn't make the top ${scoreBoard.length}.`);
+        !scoreIsOnBoard && window.dispatchEvent(new CustomEvent("user-error", {
+          detail: `Your score was recorded but didn't make the top ${scoreBoard.length}.`
+        }));
       })
 
     const promptUserNameAndSendScore = () => prompt(exitModal => <StringPrompt
@@ -68,7 +70,7 @@ export const SinglePlayerGame = ({ shapeProvider, children: otherPlayers, header
       onSubmitString={name => Boolean(name?.length)
         ? sendCurrentScoreFor(name)
           .then(() => setUsername(name))
-          .then(exitModal)
+          .then(exitModal, exitModal)
         : exitModal()}
       submittingText="Posting Your Score...">
       What user name would you like?
