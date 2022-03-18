@@ -329,6 +329,13 @@ test("Player: joining a multiplayer game", async () => {
             { hello: { groupId: "group1", message: { userId: "user1" } } }
         ]);
     });
+    act(() => context.handlers.playersListUpdate({
+        players: [
+            { userId: 'organizer', name: "The Organizer" },
+            { userId: 'user1' }
+        ]
+    }));
+    await screen.findByText("[Un-named player]");
 
     act(() => context.handlers.playersListUpdate({
         players: [
