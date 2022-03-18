@@ -7,7 +7,7 @@ const errorHandled = async (request) => {
     const error = caughtError?.response?.data;
     const message =
       error?.title || caughtError?.message || "An unknown error occurred.";
-    window.onerror(message);
+    window.dispatchEvent(new CustomEvent("user-error", { detail: message }));
     throw caughtError;
   }
 };

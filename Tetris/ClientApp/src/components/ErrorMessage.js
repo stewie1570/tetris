@@ -1,61 +1,63 @@
 import "./ErrorMessage.css";
-import React from "react";
+import React, { useEffect } from "react";
 
-export class ErrorMessage extends React.Component {
-  constructor(props) {
-    super(props);
+export const ErrorMessage = () => {
+  const [visible, setVisible] = React.useState(false);
+  const [error, setError] = React.useState(null);
+  const errorContainer = React.useRef(null);
 
-    this.state = { visible: false };
-  }
+  const windowClick = ({ target }) => !errorContainer.current.contains(target)
+    && visible
+    && hide();
 
-  windowClick = ({ target }) =>
-    !this.errorContainer.contains(target) && this.hide();
+  useEffect(() => {
+    const showError = ({ detail: errorMessage }) => {
+      setError(errorMessage);
+      setVisible(true);
+    }
 
-  componentDidMount() {
-    window.onerror = (errorMessage) =>
-      this.setState({ visible: true, errorMessage });
-    window.addEventListener("click", this.windowClick);
-    window.addEventListener("touchstart", this.windowClick);
-  }
+    window.addEventListener("click", windowClick);
+    window.addEventListener("touchstart", windowClick);
+    window.addEventListener("user-error", showError);
 
-  componentWillUnmount() {
-    window.removeEventListener("click", this.windowClick);
-    window.removeEventListener("touchstart", this.windowClick);
-  }
+    return () => {
+      window.removeEventListener("click", windowClick);
+      window.removeEventListener("touchstart", windowClick);
+      window.removeEventListener("user-error", showError);
+    }
+  }, []);
 
-  hide = () => this.setState({ visible: false });
+  const hide = () => setVisible(false);
 
-  render() {
-    return (
+  return (
+    <div
+      className="modal"
+      style={{ display: visible ? "block" : "none" }}
+      role="dialog"
+    >
+      <div className="dialog-shade" />
       <div
-        className="modal"
-        style={{ display: this.state.visible ? "block" : "none" }}
-        role="dialog"
+        className="modal-dialog"
+        ref={errorContainer}
+        role="document"
       >
-        <div className="dialog-shade" />
-        <div
-          className="modal-dialog"
-          ref={(ref) => (this.errorContainer = ref)}
-          role="document"
-        >
-          <div className="modal-content">
-            <div className="modal-header modal-header-error">
-              <b>Error</b>
-              <button
-                type="button"
-                onClick={this.hide}
-                className="close"
-                aria-label="Close"
-              >
-                <span>&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              {(this.state.errorMessage || "").replace("Uncaught Error: ", "")}
-            </div>
+        <div className="modal-content">
+          <div className="modal-header modal-header-error">
+            <b>Error</b>
+            <button
+              type="button"
+              onClick={hide}
+              className="close"
+              aria-label="Close"
+            >
+              <span>&times;</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            {(error || "").replace("Uncaught Error: ", "")}
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
