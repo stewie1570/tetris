@@ -347,7 +347,9 @@ test("Player: joining a multiplayer game", async () => {
         ]
     }));
     await screen.findByText("The Organizer");
-    await within(screen.getByText("Players:")).findByText("-Player One-");
+    await waitFor(() => {
+        within(screen.getByText("Players:")).getByText("-Player One-");
+    });
 });
 
 test("Player: starting a multiplayer game", async () => {
