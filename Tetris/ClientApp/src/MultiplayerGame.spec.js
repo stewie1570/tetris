@@ -322,7 +322,7 @@ test("Organizer: starting a game", async () => {
     });
 }, 10000);
 
-test.only("Player: joining a multiplayer game", async () => {
+test("Player: joining a multiplayer game", async () => {
     const { gameHub, context } = createTestGameHub();
     renderWith({ gameHub, userIdGenerator: () => "user1" });
 
@@ -343,11 +343,11 @@ test.only("Player: joining a multiplayer game", async () => {
     act(() => context.handlers.playersListUpdate({
         players: [
             { userId: 'organizer', name: "The Organizer" },
-            { userId: 'user1', name: "Player One" }
+            { userId: 'user1', name: "-Player One-" }
         ]
     }));
     await screen.findByText("The Organizer");
-    await within(screen.getByText("Players:")).findByText("Player One", { timeout: 10000 });
+    await within(screen.getByText("Players:")).findByText("-Player One-", { timeout: 10000 });
 }, 10000);
 
 test("Player: starting a multiplayer game", async () => {
