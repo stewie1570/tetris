@@ -44,7 +44,9 @@ const createTestGameHub = () => {
         send: { ...signalHandlers },
         invoke: { ...signalHandlers },
         receive: {
-            setHandlers: givenHandlers => { context.handlers = givenHandlers; }
+            setHandlers: givenHandlers => {
+                context.handlers = givenHandlers;
+            }
         }
     }
 
@@ -320,7 +322,7 @@ test("Organizer: starting a game", async () => {
     });
 }, 10000);
 
-test("Player: joining a multiplayer game", async () => {
+test.only("Player: joining a multiplayer game", async () => {
     const { gameHub, context } = createTestGameHub();
     renderWith({ gameHub, userIdGenerator: () => "user1" });
 
@@ -335,6 +337,7 @@ test("Player: joining a multiplayer game", async () => {
             { userId: 'user1' }
         ]
     }));
+    await screen.findByText("The Organizer");
     await screen.findByText("[Un-named player]");
 
     act(() => context.handlers.playersListUpdate({
