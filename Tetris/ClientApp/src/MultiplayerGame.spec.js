@@ -347,8 +347,8 @@ test("Player: joining a multiplayer game", async () => {
         ]
     }));
     await screen.findByText("The Organizer");
-    await within(screen.getByText("Players:")).findByText("-Player One-", { timeout: 10000 });
-}, 10000);
+    await within(screen.getByText("Players:")).findByText("-Player One-");
+});
 
 test("Player: starting a multiplayer game", async () => {
     const { gameHub, context } = createTestGameHub();
