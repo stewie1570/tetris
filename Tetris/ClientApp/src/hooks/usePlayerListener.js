@@ -31,8 +31,8 @@ export const usePlayerListener = () => {
                 setOtherPlayers(otherPlayers => ({ ...otherPlayers, [userId]: { ...otherProps } }));
             },
             playersListUpdate: ({ players: updatedPlayersList }) => {
-                setOrganizerConnectionStatus('connected');
                 setOtherPlayers(otherPlayers => update(otherPlayers).with(updatedPlayersList));
+                setOrganizerConnectionStatus('connected');
                 const isInPlayersList = updatedPlayersList.some(({ userId }) => userId === currentUserId);
                 !isInPlayersList && gameHub.invoke.status({
                     groupId: organizerUserId,

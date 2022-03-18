@@ -5,6 +5,7 @@ import { shapes } from './components/TetrisGame';
 import { Dialog } from "./components/Prompt";
 import { ErrorMessage } from "./components/ErrorMessage";
 import { MultiplayerLinks } from "./MultiplayerLinks";
+import { ReloadRecoveryErrorBoundary } from './components/ReloadRecoveryErrorBoundary';
 
 const MultiplayerGameWithContext = React.lazy(() => import("./MultiplayerGameWithContext"));
 
@@ -38,12 +39,14 @@ export const App = ({ shapeProvider }) => {
                 } />
             <Route
                 path="/:organizerUserId"
-                element={<Suspense
-                    fallback={<h1 style={{ textAlign: "center", color: "black" }}>
-                        Loading...
-                    </h1>}>
-                    <MultiplayerGameWithContext shapeProvider={selectedShapeProvider} />
-                </Suspense>} />
+                element={<ReloadRecoveryErrorBoundary>
+                    <Suspense
+                        fallback={<h1 style={{ textAlign: "center", color: "black" }}>
+                            Loading...
+                        </h1>}>
+                        <MultiplayerGameWithContext shapeProvider={selectedShapeProvider} />
+                    </Suspense>
+                </ReloadRecoveryErrorBoundary>} />
         </Routes>
         <GlobalUI />
     </SinglePlayerGameContextProvider>;

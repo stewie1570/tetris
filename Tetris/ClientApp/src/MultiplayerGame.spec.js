@@ -44,7 +44,9 @@ const createTestGameHub = () => {
         send: { ...signalHandlers },
         invoke: { ...signalHandlers },
         receive: {
-            setHandlers: givenHandlers => { context.handlers = givenHandlers; }
+            setHandlers: givenHandlers => {
+                context.handlers = givenHandlers;
+            }
         }
     }
 
@@ -329,16 +331,26 @@ test("Player: joining a multiplayer game", async () => {
             { hello: { groupId: "group1", message: { userId: "user1" } } }
         ]);
     });
+    act(() => context.handlers.playersListUpdate({
+        players: [
+            { userId: 'organizer', name: "The Organizer" },
+            { userId: 'user1' }
+        ]
+    }));
+    await screen.findByText("The Organizer");
+    await screen.findByText("[Un-named player]");
 
     act(() => context.handlers.playersListUpdate({
         players: [
             { userId: 'organizer', name: "The Organizer" },
-            { userId: 'user1', name: "Player One" }
+            { userId: 'user1', name: "-Player One-" }
         ]
     }));
     await screen.findByText("The Organizer");
-    await screen.findByText("Player One");
-}, 10000);
+    await waitFor(() => {
+        within(screen.getByText("Players:")).getByText("-Player One-");
+    });
+});
 
 test("Player: starting a multiplayer game", async () => {
     const { gameHub, context } = createTestGameHub();
