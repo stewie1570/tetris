@@ -9,11 +9,11 @@ namespace Tetris.Storage
     public class RedisLeaderBoardProvider : ILeaderBoardProvider
     {
         public int MaxScores { get; set; } = 20;
-        private Task<ConnectionMultiplexer> redis;
+        private Task<ConnectionMultiplexer> gettingRedis;
 
-        public RedisLeaderBoardProvider(Task<ConnectionMultiplexer> redis)
+        public RedisLeaderBoardProvider(Task<ConnectionMultiplexer> gettingRedis)
         {
-            this.redis = redis;
+            this.gettingRedis = gettingRedis;
         }
 
         public async Task<LeaderBoard> GetLeaderBoard()
@@ -21,7 +21,7 @@ namespace Tetris.Storage
             return new LeaderBoard
             {
                 UserScores = (
-                        await (await redis)
+                        await (await gettingRedis)
                             .GetDatabase()
                             .SortedSetRangeByRankWithScoresAsync("user", 0, MaxScores - 1, Order.Descending)
                     )

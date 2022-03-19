@@ -44,8 +44,7 @@ export const usePlayerListener = () => {
                     }
                 });
             },
-            status: ({ userId, ...userUpdates }) => {
-                const { timeLeft, ...otherUpdates } = userUpdates;
+            status: ({ userId, timeLeft, ...otherUpdates }) => {
                 setOtherPlayers(otherPlayers => process(otherUpdates).on(userId).in(otherPlayers));
                 !isOrganizer && timeLeft && setGameEndTime(timeProvider() + timeLeft);
             },

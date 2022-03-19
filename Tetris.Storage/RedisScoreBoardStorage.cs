@@ -7,16 +7,16 @@ namespace Tetris.Storage
 {
     public class RedisScoreBoardStorage : IScoreBoardStorage
     {
-        private Task<ConnectionMultiplexer> redis;
+        private Task<ConnectionMultiplexer> gettingRedis;
 
-        public RedisScoreBoardStorage(Task<ConnectionMultiplexer> redis)
+        public RedisScoreBoardStorage(Task<ConnectionMultiplexer> gettingRedis)
         {
-            this.redis = redis;
+            this.gettingRedis = gettingRedis;
         }
 
         public async Task Add(UserScore userScore)
         {
-            await (await redis)
+            await (await gettingRedis)
                 .GetDatabase()
                 .SortedSetAddAsync("user", userScore.Username, userScore.Score);
         }
