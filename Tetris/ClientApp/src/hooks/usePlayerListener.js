@@ -66,9 +66,9 @@ export const usePlayerListener = () => {
                 setGame(currentGame => ({ ...currentGame, paused: true }));
             },
             reset: () => {
-                setGame(({ mobile }) => ({ ...initialGameState, mobile, paused: true }));
                 setGameResults(null);
                 setGameEndTime(null);
+                setGame(({ mobile }) => ({ ...initialGameState, mobile, paused: true }));
                 setOtherPlayers(otherPlayers => [{}, ...Object.keys(otherPlayers)].reduce((currentPlayers, userId) => ({
                     ...currentPlayers,
                     [userId]: { name: otherPlayers[userId].name, score: 0 }
