@@ -15,6 +15,15 @@ namespace Tetris
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    if (GlobalConfig.IsSentryEnabled())
+                    {
+                        webBuilder.UseSentry(o =>
+                        {
+                            o.Dsn = GlobalConfig.SentryDsn();
+                            o.Debug = true;
+                            o.TracesSampleRate = 1.0;
+                        });
+                    }
                 });
     }
 }

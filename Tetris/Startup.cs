@@ -70,6 +70,10 @@ namespace Tetris
             app.UseResponseCompression();
             app.UseRouting();
             app.UseCustomExceptionHandler(env, loggerFactory);
+            if (GlobalConfig.IsSentryEnabled())
+            {
+                app.UseSentryTracing();
+            }
             app.UseHttpsRedirection();
             app.UseReverseProxyHttpsRedirect();
             app.UseEndpoints(endpoints =>
