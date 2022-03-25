@@ -1,5 +1,17 @@
-import "./ErrorMessage.css";
 import React, { useEffect } from "react";
+import styled from 'styled-components';
+
+const ErrorModalHeader = styled.div`
+  padding:9px 15px;
+  border-bottom:1px solid #eee;
+  background-color: hsl(0, 100%, 81%);
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+`;
 
 export const ErrorMessage = () => {
   const [visible, setVisible] = React.useState(false);
@@ -42,7 +54,7 @@ export const ErrorMessage = () => {
         role="document"
       >
         <div className="modal-content">
-          <div className="modal-header modal-header-error">
+          <ErrorModalHeader className="modal-header">
             <b>Error</b>
             <button
               type="button"
@@ -52,7 +64,7 @@ export const ErrorMessage = () => {
             >
               <span>&times;</span>
             </button>
-          </div>
+          </ErrorModalHeader>
           <div className="modal-body">
             {(error || "").replace("Uncaught Error: ", "")}
           </div>
