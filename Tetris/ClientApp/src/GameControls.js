@@ -1,8 +1,13 @@
 import React from "react";
 import { CommandButton } from "./components/CommandButton";
+import styled from 'styled-components';
+
+const Controls = styled.div`
+  padding-top: 10px;
+`;
 
 export function GameControls({ onPause: togglePause, game, onToggleMobile: toggleMobile }) {
-  return <div className="controls">
+  return <Controls>
     {togglePause && <CommandButton
       className="btn btn-primary"
       runningText="Loading Score Board..."
@@ -20,5 +25,5 @@ export function GameControls({ onPause: togglePause, game, onToggleMobile: toggl
         {game.mobile ? "No Mobile Controls" : "Mobile Controls"}
       </CommandButton>
     </div>
-  </div>;
+  </Controls>;
 }
