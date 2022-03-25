@@ -15,6 +15,7 @@ import { useHelloSender } from "./hooks/useHelloSender";
 import { useStatusSender } from "./hooks/useStatusSender";
 import { getDisplayTimeFrom } from './domain/time';
 import { selectableDurations } from "./constants";
+import { LeaderBoard } from "./ScoreBoard";
 
 export const MultiplayerGame = ({ shapeProvider }) => {
     const { organizerUserId } = useParams();
@@ -199,7 +200,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                         {gameContextInfo}
                     </>}
                     className={otherPlayerIds.length > 0 ? "col-xs-12 col-md-4" : undefined}>
-                    <div className="leader-board" style={{ height: "100%" }}>
+                    <LeaderBoard style={{ height: "100%" }}>
                         Players:
                         {Object
                             .keys(otherPlayers)
@@ -216,7 +217,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                                 Start Game
                             </CommandButton>
                         </div>
-                    </div>
+                    </LeaderBoard>
                 </SinglePlayerGame>
                 {!game.paused && otherPlayerIds
                     .filter(userId => userId !== currentUserId && otherPlayers[userId].board)

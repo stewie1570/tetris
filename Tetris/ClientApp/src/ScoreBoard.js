@@ -1,14 +1,35 @@
 import React from "react";
 import { CommandButton } from "./components/CommandButton";
+import styled from 'styled-components';
+
+export const LeaderBoard = styled.div`
+  background-color: rgba(245, 245, 245, 0.8);
+  position: absolute;
+  top: 0px;
+  height: 80%;
+  width: 100%;
+  overflow: auto;
+`;
+
+const PostMyScore = styled.div`
+  background-color: rgba(245, 245, 245, 0.8);
+  position: absolute;
+  bottom: 0px;
+  height: 20%;
+  width: 100%;
+`;
+
+const PostMyScoreButton = styled(CommandButton)`
+  position: relative;
+  opacity: 1.0;
+  margin-top: 7px;
+`;
 
 export function ScoreBoard({ game, postableScore, onPostScore: postScore, isLoading, username }) {
   const allowScorePost = game.paused && Boolean(postableScore);
 
   const scoreBoard = game.paused && (game.scoreBoard || isLoading) &&
-    <div
-      className="leader-board"
-      style={{ height: allowScorePost ? "80%" : "100%" }}
-    >
+    <LeaderBoard style={{ height: allowScorePost ? "80%" : "100%" }}>
       <table className="table">
         <thead>
           {Boolean(game.scoreBoard?.length) && <tr>
@@ -34,21 +55,21 @@ export function ScoreBoard({ game, postableScore, onPostScore: postScore, isLoad
           )}
         </tbody>
       </table>
-    </div>;
+    </LeaderBoard>;
 
   return <>
     {scoreBoard}
     {allowScorePost && (
-      <div className="post-my-score">
+      <PostMyScore>
         Would you like to post your score?
-        <CommandButton
-          className="btn btn-primary post-my-score-button"
+        <PostMyScoreButton
+          className="btn btn-primary"
           runningText={Boolean(username) ? "Posting your score..." : undefined}
           onClick={postScore}>
           <span className="glyphicon glyphicon-send">&nbsp;</span>
           Post My Score ({postableScore})
-        </CommandButton>
-      </div>
+        </PostMyScoreButton>
+      </PostMyScore>
     )}
   </>;
 }
