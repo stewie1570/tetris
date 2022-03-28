@@ -35,8 +35,7 @@ jobs:
     needs: [test-frontend, test-backend]
     steps:
       - name: Bump version and push tag
-        uses: ncipollo/release-action@v1
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v5.6
         with:
-          tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
