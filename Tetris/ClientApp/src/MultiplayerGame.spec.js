@@ -319,7 +319,7 @@ test("Organizer: starting a game", async () => {
                 }
             }
         ]);
-    });
+    }, { timeout: 5000 });
 }, 10000);
 
 test("Player: joining a multiplayer game", async () => {
