@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from "react";
+import { flushSync } from 'react-dom';
 import { TetrisBoard } from "./TetrisBoard";
 import { tetrisBoardFrom } from "../domain/serialization";
 import { move, rotate } from "../domain/motion";
@@ -69,22 +70,24 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }
 
   const cycle = useCallback(() => {
     if (!game.paused) {
-      onChange(game => {
-        const { board, score } = game;
-        const iteratedGame = iterate({
-          board,
-          score,
-          shapeProvider,
-        });
+      flushSync(() => {
+        onChange(game => {
+          const { board, score } = game;
+          const iteratedGame = iterate({
+            board,
+            score,
+            shapeProvider,
+          });
 
-        return iteratedGame.isOver
-          ? {
-            ...game,
-            board: emptyBoard,
-            score: 0,
-            oldScore: game.score,
-          }
-          : { ...game, ...iteratedGame };
+          return iteratedGame.isOver
+            ? {
+              ...game,
+              board: emptyBoard,
+              score: 0,
+              oldScore: game.score,
+            }
+            : { ...game, ...iteratedGame };
+        });
       });
     }
   }, [game.paused, onChange, shapeProvider]);
@@ -102,7 +105,9 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }
       };
       const selectedMove = moves[keyCode];
       selectedMove && event.preventDefault?.();
-      selectedMove && onChange(game => ({ ...game, board: selectedMove() }));
+      selectedMove && flushSync(() => {
+        onChange(game => ({ ...game, board: selectedMove() }));
+      });
     };
 
     return !game.paused && processKeyCommand({ keyCode });
