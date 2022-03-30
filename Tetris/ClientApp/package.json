@@ -19,7 +19,7 @@
     "@testing-library/react": "^13.0.0-alpha.6",
     "@testing-library/user-event": "^14.0.0",
     "msw": "^0.39.2",
-    "react-scripts": "^4.0.3",
+    "react-scripts": "^5.0.0",
     "source-map-explorer": "^2.5.2"
   },
   "scripts": {
