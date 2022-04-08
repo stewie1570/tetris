@@ -17,6 +17,4 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
 COPY --from=build-env /app/out .
 EXPOSE 80
-EXPOSE 443
-EXPOSE $PORT
 ENTRYPOINT ["dotnet", "Tetris.dll"]
