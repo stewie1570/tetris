@@ -13,8 +13,3 @@ Build the image
 ```terminal
 docker build -t tetris .
 ```
-
-Start it
-```terminal
-
-```
