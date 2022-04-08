@@ -7,3 +7,9 @@ A ReactJS SPA with a .NET WebApi/MVC backend.
 Hosted at: https://dotnetcore-react-tetris.herokuapp.com/
 
 *(Free plan, first request will be slow)*
+
+**Docker Notes**
+Build the image
+```terminal
+docker build -t tetris .
+```

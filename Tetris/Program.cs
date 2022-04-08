@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
@@ -15,6 +16,13 @@ namespace Tetris
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+
+                    var port = Environment.GetEnvironmentVariable("PORT");
+                    if (!string.IsNullOrWhiteSpace(port))
+                    {
+                        webBuilder.UseUrls("http://*:" + port);
+                    }
+
                     if (GlobalConfig.IsSentryEnabled())
                     {
                         webBuilder.UseSentry(o =>
