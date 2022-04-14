@@ -6,6 +6,7 @@ import { Dialog } from "./components/Prompt";
 import { ErrorMessage } from "./components/ErrorMessage";
 import { MultiplayerLinks } from "./MultiplayerLinks";
 import { ReloadRecoveryErrorBoundary } from './components/ReloadRecoveryErrorBoundary';
+import { Header } from "./Styling";
 
 const MultiplayerGameWithContext = React.lazy(() => import("./MultiplayerGameWithContext"));
 
@@ -40,10 +41,7 @@ export const App = ({ shapeProvider }) => {
             <Route
                 path="/:organizerUserId"
                 element={<ReloadRecoveryErrorBoundary>
-                    <Suspense
-                        fallback={<h1 style={{ textAlign: "center", color: "black" }}>
-                            Loading...
-                        </h1>}>
+                    <Suspense fallback={<Header>Loading...</Header>}>
                         <MultiplayerGameWithContext shapeProvider={selectedShapeProvider} />
                     </Suspense>
                 </ReloadRecoveryErrorBoundary>} />

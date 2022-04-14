@@ -16,6 +16,7 @@ import { useStatusSender } from "./hooks/useStatusSender";
 import { getDisplayTimeFrom } from './domain/time';
 import { selectableDurations } from "./constants";
 import { LeaderBoard } from "./ScoreBoard";
+import { Centered, Header } from "./Styling";
 
 export const MultiplayerGame = ({ shapeProvider }) => {
     const { organizerUserId } = useParams();
@@ -98,9 +99,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
     const results = gameResults
         ? () => <>
-            <div style={{ textAlign: "center" }}>
-                <h1 style={{ color: "black" }}>Game Over</h1>
-            </div>
+            <Header>Game Over</Header>
             <table className="table">
                 <thead>
                     <tr>
@@ -115,10 +114,10 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                     </tr>)}
                 </tbody>
             </table>
-            <div style={{ textAlign: "center" }}>
+            <Centered>
                 <div>{singlePlayerGameLink}</div>
                 <div>{resetButton}</div>
-            </div>
+            </Centered>
         </> : undefined;
 
     const retryButton = <CommandButton className="btn btn-primary" onClick={() => gameHub.invoke.status({
