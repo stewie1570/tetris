@@ -1,8 +1,10 @@
 import { active } from '../core/constants'
-import _ from 'lodash'
+import _ from 'lodash';
+import min from 'lodash/min';
+import max from 'lodash/max';
+import flatMap from 'lodash/flatMap';
 
-export const flatBoardFrom = ({ board }) => _(board)
-    .flatMap((row, y) => row.map((square, x) => ({ ...square, x, y })));
+export const flatBoardFrom = ({ board }) => flatMap(board, (row, y) => row.map((square, x) => ({ ...square, x, y })));
 
 export const activeColumnRangeFrom = ({ board }) => {
     const activeXs = flatBoardFrom({ board })
@@ -10,7 +12,7 @@ export const activeColumnRangeFrom = ({ board }) => {
         .map(({ x }) => x);
 
     return {
-        x1: _(activeXs).min(),
-        x2: _(activeXs).max()
+        x1: min(activeXs),
+        x2: max(activeXs)
     };
 };
