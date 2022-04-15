@@ -8,18 +8,17 @@ import mapObject from 'lodash/map';
 import { active, empty, inactive, squareFrom } from '../core/constants'
 import { flatBoardFrom } from './board';
 
-const availablePositionsFrom = ({ flatBoard }) => flatBoard.filter(({ type }) => type !== inactive.type).value();
+const availablePositionsFrom = ({ flatBoard }) => flatBoard.filter(({ type }) => type !== inactive.type);
 
 export const move = ({ board, to }) => {
     const flatBoard = flatBoardFrom({ board });
 
     const requestedSquares = flatBoard
-        .filter(active)
+        .filter(({ type }) => type === active.type)
         .map(square => ({
             x: square.x + (to.x || 0),
             y: square.y + (to.y || 0)
-        }))
-        .value();
+        }));
 
     const requestedPositionsAreAvailable = () => requestedSquares.every(({ x, y }) =>
         availablePositionsFrom({ flatBoard }).some(square => square.x === x && square.y === y));
