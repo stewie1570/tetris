@@ -136,28 +136,28 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     const waitingForOrganizer = (!organizerConnectionStatus && !isOrganizer)
         ? () => <>
             <Header>Waiting for organizer...</Header>
-            <div style={{ textAlign: "center" }}>
+            <Centered>
                 <div>{singlePlayerGameLink}</div>
                 <div>{retryButton}</div>
-            </div>
+            </Centered>
         </> : undefined;
 
     const organizerDisconnected = (organizerConnectionStatus === 'disconnected' && !isOrganizer)
         ? () => <>
             <Header>Organizer has disconnected.</Header>
-            <div style={{ textAlign: "center" }}>
+            <Centered>
                 <div>{singlePlayerGameLink}</div>
                 <div>{retryButton}</div>
-            </div>
+            </Centered>
         </> : undefined
 
     const userIsDisconnected = isConnected ? undefined : () => <>
         <Header>
             Attempting to {isConnected === false ? " reconnect..." : " connect..."}
         </Header>
-        <div style={{ textAlign: "center" }}>
+        <Centered>
             <div>{singlePlayerGameLink}</div>
-        </div>
+        </Centered>
     </>
 
     const gameHeader = <>
