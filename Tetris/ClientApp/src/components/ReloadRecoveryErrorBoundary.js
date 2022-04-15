@@ -1,4 +1,5 @@
 import React from "react";
+import { Header } from "../Styling";
 import { CommandButton } from './CommandButton';
 
 export class ReloadRecoveryErrorBoundary extends React.Component {
@@ -15,8 +16,7 @@ export class ReloadRecoveryErrorBoundary extends React.Component {
         return this.state.hasError
             ? (
                 <>
-                    <h1 style={{ textAlign: "center", color: "black" }}>Something went wrong.</h1>
-
+                    <Header>Something went wrong.</Header>
                     <span>
                         Please &nbsp;
                         <CommandButton
