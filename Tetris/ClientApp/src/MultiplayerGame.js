@@ -16,6 +16,7 @@ import { useStatusSender } from "./hooks/useStatusSender";
 import { getDisplayTimeFrom } from './domain/time';
 import { selectableDurations } from "./constants";
 import { LeaderBoard } from "./ScoreBoard";
+import { Centered, Header } from "./Styling";
 
 export const MultiplayerGame = ({ shapeProvider }) => {
     const { organizerUserId } = useParams();
@@ -98,9 +99,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
     const results = gameResults
         ? () => <>
-            <div style={{ textAlign: "center" }}>
-                <h1 style={{ color: "black" }}>Game Over</h1>
-            </div>
+            <Header>Game Over</Header>
             <table className="table">
                 <thead>
                     <tr>
@@ -115,10 +114,10 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                     </tr>)}
                 </tbody>
             </table>
-            <div style={{ textAlign: "center" }}>
+            <Centered>
                 <div>{singlePlayerGameLink}</div>
                 <div>{resetButton}</div>
-            </div>
+            </Centered>
         </> : undefined;
 
     const retryButton = <CommandButton className="btn btn-primary" onClick={() => gameHub.invoke.status({
@@ -136,33 +135,29 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
     const waitingForOrganizer = (!organizerConnectionStatus && !isOrganizer)
         ? () => <>
-            <h1 style={{ textAlign: "center", color: "black" }}>
-                Waiting for organizer...
-            </h1>
-            <div style={{ textAlign: "center" }}>
+            <Header>Waiting for organizer...</Header>
+            <Centered>
                 <div>{singlePlayerGameLink}</div>
                 <div>{retryButton}</div>
-            </div>
+            </Centered>
         </> : undefined;
 
     const organizerDisconnected = (organizerConnectionStatus === 'disconnected' && !isOrganizer)
         ? () => <>
-            <h1 style={{ textAlign: "center", color: "black" }}>
-                Organizer has disconnected.
-            </h1>
-            <div style={{ textAlign: "center" }}>
+            <Header>Organizer has disconnected.</Header>
+            <Centered>
                 <div>{singlePlayerGameLink}</div>
                 <div>{retryButton}</div>
-            </div>
+            </Centered>
         </> : undefined
 
     const userIsDisconnected = isConnected ? undefined : () => <>
-        <h1 style={{ textAlign: "center", color: "black" }}>
+        <Header>
             Attempting to {isConnected === false ? " reconnect..." : " connect..."}
-        </h1>
-        <div style={{ textAlign: "center" }}>
+        </Header>
+        <Centered>
             <div>{singlePlayerGameLink}</div>
-        </div>
+        </Centered>
     </>
 
     const gameHeader = <>
@@ -199,7 +194,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                         {singlePlayerGameLink}
                         {gameContextInfo}
                     </>}
-                    className={otherPlayerIds.length > 0 ? "col-xs-12 col-md-4" : undefined}>
+                    className="col-xs-12 col-md-4">
                     <LeaderBoard style={{ height: "100%" }}>
                         Players:
                         {Object
