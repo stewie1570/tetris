@@ -1,5 +1,4 @@
-import { active } from '../core/constants'
-import _ from 'lodash';
+import { active } from '../core/constants';
 import min from 'lodash/min';
 import max from 'lodash/max';
 import flatMap from 'lodash/flatMap';
