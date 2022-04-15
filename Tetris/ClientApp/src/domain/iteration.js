@@ -1,8 +1,9 @@
-import { move } from './motion'
-import { active, empty, inactive } from '../core/constants'
-import _ from 'lodash'
+import { move } from './motion';
+import { active, empty, inactive } from '../core/constants';
+import flatMap from 'lodash/flatMap';
+import some from 'lodash/some';
 
-const isActive = ({ board }) => _(board).some(row => row.some(square => square === active));
+const isActive = ({ board }) => board.some(row => row.some(square => square === active));
 
 const inactivedBoardFrom = ({ board }) => board.map(row => row.map(square => square === active ? inactive : square));
 
@@ -22,11 +23,11 @@ export const iterateUntilInactive = ({ board }) => isActive({ board })
 
 export function iterate({ board, shapeProvider, score }) {
     const newShapeIteration = () => {
-        const newShape = _(shapeProvider()).flatMap((row, y) => row.map((value, x) => ({ x, y, value }))).value();
+        const newShape = flatMap(shapeProvider(), (row, y) => row.map((value, x) => ({ x, y, value })));
         const isFull = row => row.every(square => square === inactive);
-        const emptyRowFor = ({ y }) => _.range(0, board[y].length).map(() => empty);
+        const emptyRowFor = ({ y }) => new Array(board[y].length).fill(empty);
         const noFullRows = ({ board, score }) => {
-            const firstFullRowY = _(board).findIndex(isFull);
+            const firstFullRowY = board.findIndex(isFull);
 
             return firstFullRowY >= 0
                 ? noFullRows({
@@ -38,11 +39,11 @@ export function iterate({ board, shapeProvider, score }) {
                 : { board, score };
         };
         const noFullRowsResult = noFullRows({ board, score });
-        const boardWithNewShape = board => board.map((row, y) => row.map((square, x) => _(newShape).some({ x, y, value: true }) ? active : square));
+        const boardWithNewShape = board => board.map((row, y) => row.map((square, x) => some(newShape, { x, y, value: true }) ? active : square));
 
         return {
             board: boardWithNewShape(noFullRowsResult.board),
-            isOver: noFullRowsResult.board.some((row, y) => row.some((square, x) => square !== empty && _(newShape).some({ x, y, value: true }))),
+            isOver: noFullRowsResult.board.some((row, y) => row.some((square, x) => square !== empty && some(newShape, { x, y, value: true }))),
             score: noFullRowsResult.score
         };
     }
