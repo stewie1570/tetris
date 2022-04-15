@@ -1,6 +1,12 @@
+import min from 'lodash/min';
+import max from 'lodash/max';
+import range from 'lodash/range';
+import flatMap from 'lodash/flatMap';
+import groupBy from 'lodash/groupBy';
+import orderBy from 'lodash/orderBy';
+import mapObject from 'lodash/map';
 import { active, empty, inactive, squareFrom } from '../core/constants'
-import { flatBoardFrom } from './board'
-import _ from 'lodash'
+import { flatBoardFrom } from './board';
 
 const availablePositionsFrom = ({ flatBoard }) => flatBoard.filter(({ type }) => type !== inactive.type).value();
 
@@ -16,7 +22,7 @@ export const move = ({ board, to }) => {
         .value();
 
     const requestedPositionsAreAvailable = () => requestedSquares.every(({ x, y }) =>
-        _(availablePositionsFrom({ flatBoard })).some(square => square.x === x && square.y === y));
+        availablePositionsFrom({ flatBoard }).some(square => square.x === x && square.y === y));
 
     const squaresWereRequestedToMove = to.x || to.y;
 
@@ -29,25 +35,21 @@ export const move = ({ board, to }) => {
 }
 
 export const rotate = ({ board }) => {
-    const activeSquares = _(board)
-        .flatMap((row, y) => row.map((square, x) => ({ ...square, x, y })))
-        .filter(active)
-        .value();
+    const activeSquares = flatMap(board, (row, y) => row.map((square, x) => ({ ...square, x, y })))
+        .filter(({ type }) => type === active.type);
     const activeXs = activeSquares.map(({ x }) => x);
     const activeYs = activeSquares.map(({ y }) => y);
-    const x1 = _(activeXs).min();
-    const x2 = _(activeXs).max();
-    const y1 = _(activeYs).min();
-    const y2 = _(activeYs).max();
+    const x1 = min(activeXs);
+    const x2 = max(activeXs);
+    const y1 = min(activeYs);
+    const y2 = max(activeYs);
     const origWidth = (x2 - x1) + 1;
     const origHeight = (y2 - y1) + 1;
     const newWidth = origHeight;
     const newHeight = origWidth;
-    const originalShape = _.range(y1, y2 + 1).map(y => _.range(x1, x2 + 1).map(x => board[y][x]));
+    const originalShape = range(y1, y2 + 1).map(y => range(x1, x2 + 1).map(x => board[y][x]));
 
-    const flatShape = _(originalShape)
-        .flatMap((row, y) => row.map((square, x) => ({ ...square, x, y })))
-        .value();
+    const flatShape = flatMap(originalShape, (row, y) => row.map((square, x) => ({ ...square, x, y })));
 
     const rotatedFlatShape = flatShape
         .map(({ x, y, ...square }) => ({ ...square, x: origHeight - y, y: x }));
@@ -61,10 +63,9 @@ export const rotate = ({ board }) => {
         .every(({ x, y }) => availablePositions
             .some(availableSquare => availableSquare.x === x && availableSquare.y === y));
 
-    const rotatedShape = () => _(rotatedFlatShape)
-        .groupBy(({ y }) => y)
-        .map(row => _(row).orderBy(({ x }) => x).map(({ type }) => squareFrom({ type })).value())
-        .value();
+    const rotatedShape = () => mapObject(
+        groupBy(rotatedFlatShape, 'y'),
+        row => orderBy(row, ({ x }) => x).map(({ type }) => squareFrom({ type })));
 
     const newBoard = () => board.map((row, y) => row.map((square, x) =>
         (x >= x1 && x < x1 + newWidth && y >= y1 && y < y1 + newHeight)
