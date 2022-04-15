@@ -194,7 +194,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                         {singlePlayerGameLink}
                         {gameContextInfo}
                     </>}
-                    className={otherPlayerIds.length > 0 ? "col-xs-12 col-md-4" : undefined}>
+                    className="col-xs-12 col-md-4">
                     <LeaderBoard style={{ height: "100%" }}>
                         Players:
                         {Object
