@@ -14,6 +14,8 @@ jobs:
           echo $RELEASE_VERSION
           echo ${{ env.RELEASE_VERSION }}
       - name: Build, Push and Release a Docker container to Heroku. # Your custom step name
+        env:
+          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
         uses: gonuit/heroku-docker-deploy@v1.3.3 # GitHub action name (leave it as it is).
         with:
           # Below you must provide variables for your Heroku app.
