@@ -1,6 +1,5 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
-ENV CURRENT_GIT_TAG=$(git describe --tags --abbrev=0)
-RUN echo "CURRENT_GIT_TAG: $CURRENT_GIT_TAG"
+RUN export version=$(git describe --tags --abbrev=0); echo $version;
 # WORKDIR /app
 
 # RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - 
@@ -12,7 +11,8 @@ RUN echo "CURRENT_GIT_TAG: $CURRENT_GIT_TAG"
 # # Restore as distinct layers
 # RUN dotnet restore
 # # Build and publish a release
-# RUN dotnet publish -c Release -o out
+# # RUN export bleah=$(hostname -f);echo $bleah;
+# RUN export version=$(git describe --tags --abbrev=0); echo $version; dotnet publish -c Release -o out
 
 # # Build runtime image
 # FROM mcr.microsoft.com/dotnet/aspnet:6.0
