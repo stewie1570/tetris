@@ -10,13 +10,13 @@ jobs:
       - name: Set env
         run: |
           git fetch --prune --unshallow
-          echo "RELEASE_VERSION=$(git describe --tags --abbrev=0 | sed 's/v//')" >> $GITHUB_ENV
+          echo "RELEASE_VERSION=$(git describe --tags --abbrev=0 | sed 's/v//').0" >> $GITHUB_ENV
       - name: Test
         run: echo $RELEASE_VERSION
       - name: Build, Push and Release a Docker container to Heroku. # Your custom step name
         uses: gonuit/heroku-docker-deploy@v1.3.3 # GitHub action name (leave it as it is).
         env:
-          RELEASE_VERSION: test-${{ env.RELEASE_VERSION }}
+          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
         with:
           # Below you must provide variables for your Heroku app.
 
@@ -30,7 +30,7 @@ jobs:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
 
           # Name of the heroku application to which the build is to be sent.
-          heroku_app_name: dont-deploy
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
 
           # (Optional, default: "./")
           # Dockerfile directory.
