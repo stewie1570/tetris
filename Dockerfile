@@ -1,4 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
+ARG RELEASE_VERSION=1.0.0.0
+RUN echo "Version: ${RELEASE_VERSION}"
 WORKDIR /app
 
 RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - 
@@ -10,7 +12,7 @@ COPY . ./
 # Restore as distinct layers
 RUN dotnet restore
 # Build and publish a release
-RUN dotnet publish -c Release -o out
+RUN dotnet publish -c Release -o out /property:Version=$RELEASE_VERSION
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
