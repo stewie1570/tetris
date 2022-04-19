@@ -30,6 +30,7 @@ namespace Tetris
                             o.Dsn = GlobalConfig.SentryDsn();
                             o.Debug = true;
                             o.TracesSampleRate = 1.0;
+                            o.AutoSessionTracking = true;
                         });
                     }
                 });
