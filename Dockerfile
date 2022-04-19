@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /app
-ARG RELEASE_VERSION=$RELEASE_VERSION
+ARG RELEASE_VERSION=1.0.0
 RUN ["echo", "${RELEASE_VERSION}"]
 
 # RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - 
