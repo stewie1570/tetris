@@ -43,7 +43,7 @@ jobs:
 
           # (Optional, default: "")
           # Additional options of docker build command.
-          docker_options: '--no-cache'
+          docker_options: '--no-cache --build-arg RELEASE_VERSION=${{ env.RELEASE_VERSION }}'
 
           # (Optional, default: "web")
           # Select the process type for which you want the docker container to be uploaded.
