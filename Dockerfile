@@ -1,5 +1,5 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
-ARG RELEASE_VERSION=v1.0.0
+ARG RELEASE_VERSION=1.0.0.0
 RUN echo "Version: ${RELEASE_VERSION}"
 WORKDIR /app
 
