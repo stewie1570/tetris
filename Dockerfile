@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /app
 ARG RELEASE_VERSION=1.0.0
-RUN echo "Release version: ${RELEASE_VERSION}"
+RUN echo "Release version: $RELEASE_VERSION"
 
 # RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - 
 # RUN apt-get install -y nodejs
