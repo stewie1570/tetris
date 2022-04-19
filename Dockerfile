@@ -1,5 +1,5 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
-ARG CURRENT_GIT_TAG = $(git describe --tags --abbrev=0)
+ARG CURRENT_GIT_TAG=$(git describe --tags --abbrev=0)
 RUN echo "CURRENT_GIT_TAG: $CURRENT_GIT_TAG"
 # WORKDIR /app
 
