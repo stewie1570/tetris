@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /app
-# ARG RELEASE_VERSION=1.0.0
+ARG RELEASE_VERSION
 ARG GITHUB_ENV
 RUN echo "Release version: $RELEASE_VERSION"
 RUN echo "GITHUB_ENV: $GITHUB_ENV"
