@@ -1,6 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
-RUN export version=$(git describe --tags --abbrev=0); echo $version;
-# WORKDIR /app
+WORKDIR /app
+
+RUN echo "Release Version: $RELEASE_VERSION"
 
 # RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - 
 # RUN apt-get install -y nodejs
@@ -11,8 +12,7 @@ RUN export version=$(git describe --tags --abbrev=0); echo $version;
 # # Restore as distinct layers
 # RUN dotnet restore
 # # Build and publish a release
-# # RUN export bleah=$(hostname -f);echo $bleah;
-# RUN export version=$(git describe --tags --abbrev=0); echo $version; dotnet publish -c Release -o out
+# RUN dotnet publish -c Release -o out
 
 # # Build runtime image
 # FROM mcr.microsoft.com/dotnet/aspnet:6.0
