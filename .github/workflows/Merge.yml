@@ -46,6 +46,7 @@ jobs:
           tag: ${{ steps.tag_version.outputs.new_tag }}
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
+          tag_prefix: ''
 
   publish-container:
     runs-on: ubuntu-latest
