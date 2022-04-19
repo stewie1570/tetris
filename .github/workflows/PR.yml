@@ -13,6 +13,7 @@ jobs:
         run: |
           echo $RELEASE_VERSION
           echo ${{ env.RELEASE_VERSION }}
+          echo ${{ GITHUB_ENV }}
       - name: Build, Push and Release a Docker container to Heroku. # Your custom step name
         env:
           RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
