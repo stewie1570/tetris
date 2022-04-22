@@ -81,7 +81,7 @@ jobs:
 
           # (Optional, default: "")
           # Additional options of docker build command.
-          docker_options: '--no-cache --build-arg RELEASE_VERSION=${{ env.RELEASE_VERSION }} --build-arg=${{ secrets.NEWRELIC_KEY }}'
+          docker_options: '--no-cache --build-arg RELEASE_VERSION=${{ env.RELEASE_VERSION }} --build-arg NEWRELIC_KEY=${{ secrets.NEWRELIC_KEY }}'
 
           # (Optional, default: "web")
           # Select the process type for which you want the docker container to be uploaded.
