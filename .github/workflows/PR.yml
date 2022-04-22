@@ -41,4 +41,3 @@ jobs:
           yarn
           yarn test
           yarn build
-          
