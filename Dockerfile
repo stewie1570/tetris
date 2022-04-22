@@ -1,5 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 ARG RELEASE_VERSION=1.0.0.0
+ARG NEWRELIC_KEY=''
 RUN echo "Version: ${RELEASE_VERSION}"
 WORKDIR /app
 
@@ -31,7 +32,7 @@ ENV CORECLR_ENABLE_PROFILING=1 \
 CORECLR_PROFILER={36032161-FFC0-4B61-B559-F6C5D41BAE5A} \
 CORECLR_NEWRELIC_HOME=/usr/local/newrelic-netcore20-agent \
 CORECLR_PROFILER_PATH=/usr/local/newrelic-netcore20-agent/libNewRelicProfiler.so \
-NEW_RELIC_LICENSE_KEY=fedf35ec8a898af08dd53ae644acf5ceFFFFNRAL \
+NEW_RELIC_LICENSE_KEY=$NEWRELIC_KEY \
 NEW_RELIC_APP_NAME=tetris
 
 WORKDIR /app
