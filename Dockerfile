@@ -28,13 +28,6 @@ RUN apt-get update && apt-get install -y wget ca-certificates gnupg \
 
 # Enable the agent
 ARG NEWRELIC_KEY=''
-RUN echo "New Relic Key: ${NEWRELIC_KEY}"
-ENV test=$NEWRELIC_KEY
-ARG test2=$NEWRELIC_KEY
-RUN echo "test should be $NEWRELIC_KEY"
-RUN echo "test: ${test}"
-RUN echo "test2: ${test2}"
-
 ENV CORECLR_ENABLE_PROFILING=1 \
 CORECLR_PROFILER={36032161-FFC0-4B61-B559-F6C5D41BAE5A} \
 CORECLR_NEWRELIC_HOME=/usr/local/newrelic-netcore20-agent \
