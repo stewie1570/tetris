@@ -30,6 +30,7 @@ RUN apt-get update && apt-get install -y wget ca-certificates gnupg \
 
 # Enable the agent
 ENV test=$NEWRELIC_KEY
+RUN echo "test should be $NEWRELIC_KEY"
 RUN echo "test: ${test}"
 
 ENV CORECLR_ENABLE_PROFILING=1 \
