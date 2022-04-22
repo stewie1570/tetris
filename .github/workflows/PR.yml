@@ -44,7 +44,7 @@ jobs:
 
   publish-container:
     runs-on: ubuntu-latest
-    needs: [test-frontend, test-backend, macos-latest]
+    needs: [test-frontend, test-backend, smoke-test]
     steps:
       - uses: actions/checkout@v2
       - name: Find Release Version
