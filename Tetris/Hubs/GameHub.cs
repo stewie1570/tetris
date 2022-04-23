@@ -2,6 +2,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using NewRelic.Api.Agent;
 
 namespace Tetris.Hubs
 {
@@ -13,6 +14,7 @@ namespace Tetris.Hubs
 
     public class GameHub : Hub
     {
+        [Transaction(Web = true)]
         public async Task Hello(GroupMessage helloMessage)
         {
             string groupId = helloMessage.GroupId;
@@ -35,6 +37,7 @@ namespace Tetris.Hubs
             }
         }
 
+        [Transaction(Web = true)]
         public async Task PlayersListUpdate(GroupMessage playersListUpdateMessage)
         {
             await Clients
@@ -42,6 +45,7 @@ namespace Tetris.Hubs
                 .SendAsync("playersListUpdate", playersListUpdateMessage.Message);
         }
 
+        [Transaction(Web = true)]
         public async Task Status(GroupMessage statusMessage)
         {
             var sendToAll = statusMessage
@@ -55,21 +59,25 @@ namespace Tetris.Hubs
                 .SendAsync("status", statusMessage.Message);
         }
 
+        [Transaction(Web = true)]
         public async Task Start(GroupMessage statusMessage)
         {
             await Clients.Group(statusMessage.GroupId).SendAsync("start");
         }
 
+        [Transaction(Web = true)]
         public async Task Results(GroupMessage resultsMessage)
         {
             await Clients.Group(resultsMessage.GroupId).SendAsync("results", resultsMessage.Message);
         }
 
+        [Transaction(Web = true)]
         public async Task Reset(GroupMessage resetMessage)
         {
             await Clients.Group(resetMessage.GroupId).SendAsync("reset");
         }
 
+        [Transaction(Web = true)]
         public async override Task OnDisconnectedAsync(System.Exception exception)
         {
             var groupId = Context.Items["groupId"] as string;
