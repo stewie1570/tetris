@@ -14,9 +14,6 @@ RUN dotnet restore
 # Build and publish a release
 RUN dotnet publish -c Release -o out /property:Version=$RELEASE_VERSION
 
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
-
 # Install the agent
 RUN apt-get update && apt-get install -y wget ca-certificates gnupg \
 && echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | tee /etc/apt/sources.list.d/newrelic.list \
@@ -25,6 +22,9 @@ RUN apt-get update && apt-get install -y wget ca-certificates gnupg \
 && apt-get update \
 && apt-get install -y newrelic-netcore20-agent \
 && rm -rf /var/lib/apt/lists/*
+
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
 
 # Enable the agent
 ARG NEWRELIC_KEY=''
