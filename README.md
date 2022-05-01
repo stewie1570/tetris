@@ -4,7 +4,9 @@
 
 A ReactJS SPA with a .NET WebApi/MVC backend.
 
-Hosted at: https://dotnetcore-react-tetris.herokuapp.com/
+Hosted at:
+- https://dotnetcore-react-tetris.herokuapp.com/
+- https://tetris-k2l9.onrender.com
 
 (**NOTE**, First request may be slow. I'm using Heroku's free plan)*
 
