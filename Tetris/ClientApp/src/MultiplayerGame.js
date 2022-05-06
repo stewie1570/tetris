@@ -67,20 +67,29 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     const Game = isOrganizer ? Organizer : React.Fragment;
     const otherPlayerIds = Object.keys(otherPlayers);
 
-    const gameContextInfo = <table style={{ marginTop: "2rem" }} className="table">
-        <tbody>
-            <tr>
-                <th>Code</th>
-                <td>{organizerUserId}</td>
-            </tr>
-            <tr>
-                <th>URL</th>
-                <td>
-                    {window.location.toString()}
-                </td>
-            </tr>
-        </tbody>
-    </table>;
+    const gameContextInfo = <>
+        <table style={{ marginTop: "2rem" }} className="table">
+            <thead>
+                <tr>
+                    <th colSpan={2}>
+                        Other players can join via the Code or URL below:
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Code</th>
+                    <td>{organizerUserId}</td>
+                </tr>
+                <tr>
+                    <th>URL</th>
+                    <td>
+                        {window.location.toString()}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </>;
 
     const singlePlayerGameLink = <>
         <Link
