@@ -201,7 +201,6 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                     header={gameHeader}
                     additionalControls={<>
                         {singlePlayerGameLink}
-                        {gameContextInfo}
                     </>}
                     className="col-xs-12 col-md-4">
                     <LeaderBoard style={{ height: "100%" }}>
@@ -223,16 +222,17 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                         </div>
                     </LeaderBoard>
                 </SinglePlayerGame>
-                {!game.paused && otherPlayerIds
-                    .filter(userId => userId !== currentUserId && otherPlayers[userId].board)
-                    .map(userId => <div className="col-xs-12 col-md-4" key={userId}>
-                        <GameMetaFrame
-                            game={<TetrisBoard board={otherPlayers[userId].board ?? emptyBoard} />}
-                            header={<>
-                                <p>{otherPlayers[userId].name ?? "[Un-named player]"}</p>
-                                <p>Score: {otherPlayers[userId].score ?? 0}</p>
-                            </>} />
-                    </div>)}
+                {game.paused
+                    ? <div className="col-xs-12 col-md-4">{gameContextInfo}</div>
+                    : otherPlayerIds.filter(userId => userId !== currentUserId && otherPlayers[userId].board)
+                        .map(userId => <div className="col-xs-12 col-md-4" key={userId}>
+                            <GameMetaFrame
+                                game={<TetrisBoard board={otherPlayers[userId].board ?? emptyBoard} />}
+                                header={<>
+                                    <p>{otherPlayers[userId].name ?? "[Un-named player]"}</p>
+                                    <p>Score: {otherPlayers[userId].score ?? 0}</p>
+                                </>} />
+                        </div>)}
             </div>}
     </Game>;
 }
