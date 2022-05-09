@@ -28,7 +28,7 @@ export const usePlayerListener = () => {
 
         isConnectedWithUserId && gameHub.receive.setHandlers({
             hello: ({ userId, ...otherProps }) => {
-                setOtherPlayers(otherPlayers => ({ ...otherPlayers, [userId]: { ...otherPlayers[userId], ...otherProps } }));
+                setOtherPlayers(otherPlayers => ({ ...otherPlayers, [userId]: { ...otherProps } }));
             },
             playersListUpdate: ({ players: updatedPlayersList }) => {
                 setOtherPlayers(otherPlayers => update(otherPlayers).with(updatedPlayersList));
@@ -74,5 +74,7 @@ export const usePlayerListener = () => {
                 })));
             }
         });
+
+        setGame(({ mobile }) => ({ ...initialGameState, mobile, paused: true }));
     }, [gameHub, isConnected, currentUserId, isOrganizer, username, selectedDuration]);
 };
