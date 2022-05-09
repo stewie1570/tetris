@@ -8,7 +8,7 @@ export const useHelloSender = () => {
     const {
         gameHub, isConnected, userId: currentUserId, setOtherPlayers
     } = useContext(MultiplayerContext);
-    const { username } = useContext(SinglePlayerGameContext);
+    const { username, game } = useContext(SinglePlayerGameContext);
     const isOrganizer = organizerUserId === currentUserId;
 
     useEffect(() => {
@@ -17,13 +17,14 @@ export const useHelloSender = () => {
             groupId: organizerUserId,
             message: {
                 userId: currentUserId,
-                name: username
+                name: username,
+                isRunning: !game.paused
             }
         }).then(() => {
-            setOtherPlayers(otherPlayers => ({
+            game.paused && setOtherPlayers(otherPlayers => ({
                 ...otherPlayers,
                 [currentUserId]: { name: username, score: 0 }
             }));
         });
-    }, [gameHub, isConnected, currentUserId, isOrganizer]);
+    }, [gameHub, isConnected, currentUserId, isOrganizer, game.paused]);
 };
