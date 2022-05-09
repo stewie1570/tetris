@@ -42,13 +42,13 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     const isOrganizer = organizerUserId === currentUserId;
     const timeLeft = gameEndTime && Math.max(0, Math.ceil(gameEndTime - timeProvider()));
 
-    usePlayerListener();
-    useHelloSender();
-    useStatusSender();
-
     useEffect(() => {
         setGame(({ mobile }) => ({ ...initialGameState, mobile, paused: true }));
     }, []);
+
+    usePlayerListener();
+    useHelloSender();
+    useStatusSender();
 
     const promptUserName = () => prompt(exitModal => <StringInput
         filter={value => (value ?? "").trim()}
