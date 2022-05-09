@@ -230,7 +230,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                         </LeaderBoard>
                     </SinglePlayerGame>
                     {game.paused
-                        ? <div className="col-xs-12 col-md-4">{gameContextInfo}</div>
+                        ? <div className="col-xs-12 col-md-8">{gameContextInfo}</div>
                         : otherPlayerIds.filter(userId => userId !== currentUserId && otherPlayers[userId].board)
                             .map(userId => <div className="col-xs-12 col-md-4" key={userId}>
                                 <GameMetaFrame
