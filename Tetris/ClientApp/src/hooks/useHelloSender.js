@@ -13,7 +13,7 @@ export const useHelloSender = () => {
 
     useEffect(() => {
         const isConnectedWithUserId = currentUserId && isConnected;
-        isConnectedWithUserId && game.paused && gameHub.send.hello({
+        isConnectedWithUserId && gameHub.send.hello({
             groupId: organizerUserId,
             message: {
                 userId: currentUserId,

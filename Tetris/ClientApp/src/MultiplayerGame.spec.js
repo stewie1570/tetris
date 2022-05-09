@@ -5,7 +5,8 @@ import {
     act,
     waitFor,
     within,
-    fireEvent} from "@testing-library/react";
+    fireEvent
+} from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import { App } from "./App";
 import { MultiplayerContext } from "./MultiplayerContext";
@@ -58,7 +59,7 @@ const MultiplayerTestContext = ({ children, gameHub, userIdGenerator }) => {
     const [selectedDuration, setSelectedDuration] = React.useState(selectableDurations[0] * 1000);
 
     useEffect(() => {
-        setTimeout(() => setIsConnected(true), 100);
+        setTimeout(() => setIsConnected(true), 1000);
     }, []);
 
     const timeProvider = () => 1000;
@@ -202,7 +203,7 @@ test("Organizer: setting user name", async () => {
                 },
             },
         ]);
-    });
+    }, { timeout: 5000 });
 
     screen.getByText("Set User Name").click();
     const userNameTextInput = await within(
@@ -251,7 +252,7 @@ test("Player: joining a multiplayer game", async () => {
         expect(context.sentMessages).toEqual([
             { hello: { groupId: "group1", message: { userId: "user1", isRunning: false } } }
         ]);
-    });
+    }, { timeout: 5000 });
     act(() => context.handlers.playersListUpdate({
         players: [
             { userId: 'organizer', name: "The Organizer" },
@@ -271,7 +272,7 @@ test("Player: joining a multiplayer game", async () => {
     await waitFor(() => {
         within(screen.getByText("Players:")).getByText("-Player One-");
     });
-});
+}, 10000);
 
 test("Player: starting a multiplayer game", async () => {
     const { gameHub, context } = createTestGameHub();
@@ -281,7 +282,8 @@ test("Player: starting a multiplayer game", async () => {
         expect(context.sentMessages).toEqual([
             { hello: { groupId: "group1", message: { userId: "user1", isRunning: false } } }
         ]);
-    });
+    }, { timeout: 5000 });
+
     act(() => context.handlers.playersListUpdate({
         players: [
             { userId: 'organizer', name: "The Organizer" },
