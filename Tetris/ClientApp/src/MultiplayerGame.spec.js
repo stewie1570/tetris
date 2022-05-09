@@ -5,14 +5,10 @@ import {
     act,
     waitFor,
     within,
-    fireEvent,
-    waitForElementToBeRemoved
-} from "@testing-library/react";
+    fireEvent} from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import { App } from "./App";
 import { MultiplayerContext } from "./MultiplayerContext";
-import { stringFrom } from "./domain/serialization";
-import { emptyBoard } from "./components/TetrisGame";
 import { initialEmptyPlayersList, selectableDurations } from './constants';
 import { useMountedOnlyState } from "leaf-validator";
 
@@ -107,7 +103,7 @@ test("Organizer: hosting a multiplayer game", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
-            { hello: { groupId: "organizer", message: { userId: "organizer" } } },
+            { hello: { groupId: "organizer", message: { userId: "organizer", isRunning: false } } },
             {
                 "playersListUpdate": {
                     "groupId": "organizer",
@@ -135,7 +131,7 @@ test("Organizer: hosting a multiplayer game", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
-            { hello: { groupId: "organizer", message: { userId: "organizer" } } },
+            { hello: { groupId: "organizer", message: { userId: "organizer", isRunning: false } } },
             {
                 playersListUpdate: {
                     groupId: "organizer",
@@ -174,7 +170,7 @@ test("Organizer: hosting a multiplayer game", async () => {
 
     act(() => context.handlers.status({ userId: "user1", name: "Stewart" }));
     await screen.findByText("Stewart");
-}, 10000);
+}, 30000);
 
 test("Organizer: setting user name", async () => {
     const { gameHub, context } = createTestGameHub();
@@ -188,6 +184,7 @@ test("Organizer: setting user name", async () => {
                     "message": {
                         "name": undefined,
                         "userId": "organizer",
+                        isRunning: false
                     },
                 },
             },
@@ -224,6 +221,7 @@ test("Organizer: setting user name", async () => {
                     "message": {
                         "name": undefined,
                         "userId": "organizer",
+                        isRunning: false
                     },
                 },
             },
@@ -251,7 +249,7 @@ test("Player: joining a multiplayer game", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
-            { hello: { groupId: "group1", message: { userId: "user1" } } }
+            { hello: { groupId: "group1", message: { userId: "user1", isRunning: false } } }
         ]);
     });
     act(() => context.handlers.playersListUpdate({
@@ -281,7 +279,7 @@ test("Player: starting a multiplayer game", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
-            { hello: { groupId: "group1", message: { userId: "user1" } } }
+            { hello: { groupId: "group1", message: { userId: "user1", isRunning: false } } }
         ]);
     });
     act(() => context.handlers.playersListUpdate({
@@ -294,7 +292,7 @@ test("Player: starting a multiplayer game", async () => {
     screen.getByText("Start Game").click();
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
-            { hello: { groupId: "group1", message: { userId: "user1" } } },
+            { hello: { groupId: "group1", message: { userId: "user1", isRunning: false } } },
             { start: { groupId: "group1" } }
         ]);
     });
