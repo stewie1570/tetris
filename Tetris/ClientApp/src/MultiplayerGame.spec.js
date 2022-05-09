@@ -170,7 +170,7 @@ test("Organizer: hosting a multiplayer game", async () => {
 
     act(() => context.handlers.status({ userId: "user1", name: "Stewart" }));
     await screen.findByText("Stewart");
-}, 10000);
+}, 30000);
 
 test("Organizer: setting user name", async () => {
     const { gameHub, context } = createTestGameHub();
