@@ -29,8 +29,8 @@ namespace Tetris.Hubs
             string userId = helloMessage.Message.GetProperty("userId").GetString();
             bool isRunning = helloMessage.Message.GetProperty("isRunning").GetBoolean();
             var isOrganizer = userId == groupId;
-            Context.Items.Add("userId", userId);
-            Context.Items.Add("groupId", groupId);
+            Context.Items["userId"] = userId;
+            Context.Items["groupId"] = groupId;
 
             await Task.WhenAll(
                 Groups.AddToGroupAsync(Context.ConnectionId, groupId),
