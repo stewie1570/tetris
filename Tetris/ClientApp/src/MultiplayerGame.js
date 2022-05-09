@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { useParams } from "react-router";
 import { Organizer } from "./Organizer";
 import { MultiplayerContext } from "./MultiplayerContext";
 import { CommandButton } from "./components/CommandButton";
-import SinglePlayerGame, { SinglePlayerGameContext, initialGameState } from "./SinglePlayerGame";
+import SinglePlayerGame, { SinglePlayerGameContext } from "./SinglePlayerGame";
 import { StringInput } from "./components/Prompt";
 import { stringFrom } from './domain/serialization';
 import { TetrisBoard } from "./components/TetrisBoard";
@@ -16,7 +16,7 @@ import { useStatusSender } from "./hooks/useStatusSender";
 import { getDisplayTimeFrom } from './domain/time';
 import { selectableDurations } from "./constants";
 import { LeaderBoard } from "./ScoreBoard";
-import { Centered, Header, Warning } from "./Styling";
+import { Centered, Header } from "./Styling";
 
 export const MultiplayerGame = ({ shapeProvider }) => {
     const { organizerUserId } = useParams();
@@ -41,10 +41,6 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     } = useContext(SinglePlayerGameContext);
     const isOrganizer = organizerUserId === currentUserId;
     const timeLeft = gameEndTime && Math.max(0, Math.ceil(gameEndTime - timeProvider()));
-
-    useEffect(() => {
-        setGame(({ mobile }) => ({ ...initialGameState, mobile, paused: true }));
-    }, []);
 
     usePlayerListener();
     useHelloSender();
@@ -164,16 +160,14 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             </Centered>
         </> : undefined
 
-    const userIsDisconnected = isConnected === undefined
-        ? () => <>
-            <Header>
-                Connecting to game server...
-            </Header>
-            <Centered>
-                <div>{singlePlayerGameLink}</div>
-            </Centered>
-        </>
-        : undefined;
+    const userIsDisconnected = isConnected ? undefined : () => <>
+        <Header>
+            Attempting to {isConnected === false ? " reconnect..." : " connect..."}
+        </Header>
+        <Centered>
+            <div>{singlePlayerGameLink}</div>
+        </Centered>
+    </>
 
     const gameHeader = <>
         {isOrganizer && game.paused && <>
@@ -195,53 +189,50 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         {gameEndTime && `Game ends in ${getDisplayTimeFrom(Math.floor(timeLeft / 1000))} seconds`}
     </>;
 
-    return <>
-        <Game>
-            {
-                userIsDisconnected?.()
-                || waitingForOrganizer?.()
-                || organizerDisconnected?.()
-                || results?.()
-                || <div className="row" style={{ margin: "auto" }}>
-                    <SinglePlayerGame
-                        shapeProvider={shapeProvider}
-                        header={gameHeader}
-                        additionalControls={<>
-                            {singlePlayerGameLink}
-                        </>}
-                        className="col-xs-12 col-md-4">
-                        <LeaderBoard style={{ height: "100%" }}>
-                            Players:
-                            {Object
-                                .keys(otherPlayers)
-                                .map(userId => <div key={userId}>
-                                    {otherPlayers[userId].name ?? "[Un-named player]"}
-                                </div>)}
-                            <div>
-                                <CommandButton onClick={promptUserName} className="btn btn-primary">
-                                    Set User Name
-                                </CommandButton>
-                            </div>
-                            <div style={{ marginTop: "1rem" }}>
-                                <CommandButton onClick={startGame} runningText="Starting..." className="btn btn-primary">
-                                    Start Game
-                                </CommandButton>
-                            </div>
-                        </LeaderBoard>
-                    </SinglePlayerGame>
-                    {game.paused
-                        ? <div className="col-xs-12 col-md-8">{gameContextInfo}</div>
-                        : otherPlayerIds.filter(userId => userId !== currentUserId && otherPlayers[userId].board)
-                            .map(userId => <div className="col-xs-12 col-md-4" key={userId}>
-                                <GameMetaFrame
-                                    game={<TetrisBoard board={otherPlayers[userId].board ?? emptyBoard} />}
-                                    header={<>
-                                        <p>{otherPlayers[userId].name ?? "[Un-named player]"}</p>
-                                        <p>Score: {otherPlayers[userId].score ?? 0}</p>
-                                    </>} />
+    return <Game>
+        {
+            userIsDisconnected?.()
+            || waitingForOrganizer?.()
+            || organizerDisconnected?.()
+            || results?.()
+            || <div className="row" style={{ margin: "auto" }}>
+                <SinglePlayerGame
+                    shapeProvider={shapeProvider}
+                    header={gameHeader}
+                    additionalControls={<>
+                        {singlePlayerGameLink}
+                    </>}
+                    className="col-xs-12 col-md-4">
+                    <LeaderBoard style={{ height: "100%" }}>
+                        Players:
+                        {Object
+                            .keys(otherPlayers)
+                            .map(userId => <div key={userId}>
+                                {otherPlayers[userId].name ?? "[Un-named player]"}
                             </div>)}
-                </div>}
-        </Game>
-        {isConnected === false && <Warning>Reconnecting...</Warning>}
-    </>;
+                        <div>
+                            <CommandButton onClick={promptUserName} className="btn btn-primary">
+                                Set User Name
+                            </CommandButton>
+                        </div>
+                        <div style={{ marginTop: "1rem" }}>
+                            <CommandButton onClick={startGame} runningText="Starting..." className="btn btn-primary">
+                                Start Game
+                            </CommandButton>
+                        </div>
+                    </LeaderBoard>
+                </SinglePlayerGame>
+                {game.paused
+                    ? <div className="col-xs-12 col-md-8">{gameContextInfo}</div>
+                    : otherPlayerIds.filter(userId => userId !== currentUserId && otherPlayers[userId].board)
+                        .map(userId => <div className="col-xs-12 col-md-4" key={userId}>
+                            <GameMetaFrame
+                                game={<TetrisBoard board={otherPlayers[userId].board ?? emptyBoard} />}
+                                header={<>
+                                    <p>{otherPlayers[userId].name ?? "[Un-named player]"}</p>
+                                    <p>Score: {otherPlayers[userId].score ?? 0}</p>
+                                </>} />
+                        </div>)}
+            </div>}
+    </Game>;
 }

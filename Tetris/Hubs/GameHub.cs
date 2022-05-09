@@ -2,7 +2,6 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Logging;
 using NewRelic.Api.Agent;
 
 namespace Tetris.Hubs
@@ -15,19 +14,11 @@ namespace Tetris.Hubs
 
     public class GameHub : Hub
     {
-        private readonly ILogger<GameHub> logger;
-
-        public GameHub(ILogger<GameHub> logger)
-        {
-            this.logger = logger;
-        }
-
         [Transaction(Web = true)]
         public async Task Hello(GroupMessage helloMessage)
         {
             string groupId = helloMessage.GroupId;
             string userId = helloMessage.Message.GetProperty("userId").GetString();
-            bool isRunning = helloMessage.Message.GetProperty("isRunning").GetBoolean();
             var isOrganizer = userId == groupId;
             Context.Items.Add("userId", userId);
             Context.Items.Add("groupId", groupId);
@@ -39,7 +30,7 @@ namespace Tetris.Hubs
 
             if (isOrganizer)
             {
-                if (!isRunning) await Clients.Group(groupId).SendAsync("reset");
+                await Clients.Group(groupId).SendAsync("reset");
             }
             else
             {
@@ -97,8 +88,6 @@ namespace Tetris.Hubs
             await (isOrganizer
                 ? Clients.Group(groupId).SendAsync("noOrganizer")
                 : Clients.Group($"{groupId}-organizer").SendAsync("disconnect", new { userId }));
-
-            if (exception != null) logger.LogError(exception, "Disconnected");
         }
     }
 }
