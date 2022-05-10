@@ -62,7 +62,6 @@ export const usePlayerListener = () => {
             }),
             noOrganizer: () => {
                 setOrganizerConnectionStatus('disconnected');
-                setGame(currentGame => ({ ...currentGame, paused: true }));
             },
             reset: () => {
                 setGameResults(null);

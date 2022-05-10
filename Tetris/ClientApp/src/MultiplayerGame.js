@@ -155,7 +155,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             </Centered>
         </> : undefined;
 
-    const organizerDisconnected = (organizerConnectionStatus === 'disconnected' && !isOrganizer)
+    const organizerDisconnected = (organizerConnectionStatus === 'disconnected' && !isOrganizer && game.paused)
         ? () => <>
             <Header>Organizer has disconnected.</Header>
             <Centered>
@@ -243,5 +243,6 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 </div>}
         </Game>
         {isConnected === false && <Warning>Reconnecting...</Warning>}
+        {!game.paused && organizerConnectionStatus === 'disconnected' && <Warning>Organizer is disconnected.</Warning>}
     </>;
 }
