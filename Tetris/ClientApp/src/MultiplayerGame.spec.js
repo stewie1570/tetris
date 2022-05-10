@@ -104,7 +104,7 @@ test("Organizer: hosting a multiplayer game", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
-            { hello: { groupId: "organizer", message: { userId: "organizer", isRunning: false } } },
+            { hello: { groupId: "organizer", message: { userId: "organizer" } } },
             {
                 "playersListUpdate": {
                     "groupId": "organizer",
@@ -132,7 +132,7 @@ test("Organizer: hosting a multiplayer game", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
-            { hello: { groupId: "organizer", message: { userId: "organizer", isRunning: false } } },
+            { hello: { groupId: "organizer", message: { userId: "organizer" } } },
             {
                 playersListUpdate: {
                     groupId: "organizer",
@@ -184,8 +184,7 @@ test("Organizer: setting user name", async () => {
                     "groupId": "organizer",
                     "message": {
                         "name": undefined,
-                        "userId": "organizer",
-                        isRunning: false
+                        "userId": "organizer"
                     },
                 },
             },
@@ -221,8 +220,7 @@ test("Organizer: setting user name", async () => {
                     "groupId": "organizer",
                     "message": {
                         "name": undefined,
-                        "userId": "organizer",
-                        isRunning: false
+                        "userId": "organizer"
                     },
                 },
             },
@@ -250,7 +248,7 @@ test("Player: joining a multiplayer game", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
-            { hello: { groupId: "group1", message: { userId: "user1", isRunning: false } } }
+            { hello: { groupId: "group1", message: { userId: "user1" } } }
         ]);
     }, { timeout: 5000 });
     act(() => context.handlers.playersListUpdate({
@@ -280,7 +278,7 @@ test("Player: starting a multiplayer game", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
-            { hello: { groupId: "group1", message: { userId: "user1", isRunning: false } } }
+            { hello: { groupId: "group1", message: { userId: "user1" } } }
         ]);
     }, { timeout: 5000 });
 
@@ -294,7 +292,7 @@ test("Player: starting a multiplayer game", async () => {
     screen.getByText("Start Game").click();
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
-            { hello: { groupId: "group1", message: { userId: "user1", isRunning: false } } },
+            { hello: { groupId: "group1", message: { userId: "user1" } } },
             { start: { groupId: "group1" } }
         ]);
     });
