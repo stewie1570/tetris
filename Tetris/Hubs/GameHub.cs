@@ -28,6 +28,7 @@ namespace Tetris.Hubs
             string groupId = helloMessage.GroupId;
             string userId = helloMessage.Message.GetProperty("userId").GetString();
             var isOrganizer = userId == groupId;
+            var hasPreviouslyConnected = Context.Items.ContainsKey("userId");
             Context.Items["userId"] = userId;
             Context.Items["groupId"] = groupId;
 
@@ -36,7 +37,11 @@ namespace Tetris.Hubs
                 Groups.AddToGroupAsync(Context.ConnectionId, isOrganizer ? $"{groupId}-organizer" : $"{groupId}-players")
             );
 
-            if (!isOrganizer)
+            if (isOrganizer)
+            {
+                await Clients.Group(groupId).SendAsync("reset");
+            }
+            else
             {
                 await Clients.Group($"{groupId}-organizer").SendAsync("hello", helloMessage.Message);
             }
