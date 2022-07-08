@@ -1,12 +1,12 @@
 import { useContext, useEffect } from "react";
-import { useParams } from "react-router";
 import { update, process } from "../domain/players";
 import { MultiplayerContext } from "../MultiplayerContext";
 import { initialGameState, SinglePlayerGameContext } from "../SinglePlayerGame";
 import { stringFrom } from '../domain/serialization';
+import { useOrganizerId } from "./useOrganizerId";
 
 export const usePlayerListener = () => {
-    const { organizerUserId } = useParams();
+    const organizerUserId = useOrganizerId();
     const {
         gameHub,
         isConnected,
