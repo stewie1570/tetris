@@ -1,10 +1,10 @@
 import { useContext, useEffect, useRef } from "react";
-import { useParams } from "react-router";
 import { MultiplayerContext } from "../MultiplayerContext";
 import { SinglePlayerGameContext } from "../SinglePlayerGame";
+import { useOrganizerId } from "./useOrganizerId";
 
 export const useHelloSender = () => {
-    const { organizerUserId } = useParams();
+    const organizerUserId = useOrganizerId();
     const {
         gameHub, isConnected, userId: currentUserId, setOtherPlayers
     } = useContext(MultiplayerContext);

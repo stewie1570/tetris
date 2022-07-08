@@ -100,19 +100,19 @@ beforeEach(() => {
 
 test("Organizer: hosting a multiplayer game", async () => {
     const { gameHub, context } = createTestGameHub();
-    renderWith({ gameHub, route: "/organizer", userIdGenerator: () => "organizer" });
+    renderWith({ gameHub, route: "/host", userIdGenerator: () => "host" });
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
-            { hello: { groupId: "organizer", message: { userId: "organizer", "isRunning": false } } },
+            { hello: { groupId: "host", message: { userId: "host", "isRunning": false } } },
             {
                 "playersListUpdate": {
-                    "groupId": "organizer",
+                    "groupId": "host",
                     "message": {
                         "players": [
                             {
                                 "name": undefined,
-                                "userId": "organizer",
+                                "userId": "host",
                             },
                         ],
                     },
@@ -132,23 +132,23 @@ test("Organizer: hosting a multiplayer game", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
-            { hello: { groupId: "organizer", message: { userId: "organizer", "isRunning": false} } },
+            { hello: { groupId: "host", message: { userId: "host", "isRunning": false} } },
             {
                 playersListUpdate: {
-                    groupId: "organizer",
+                    groupId: "host",
                     message: {
                         players: [
-                            { userId: "organizer" }
+                            { userId: "host" }
                         ]
                     }
                 }
             },
             {
                 playersListUpdate: {
-                    groupId: "organizer",
+                    groupId: "host",
                     message: {
                         players: [
-                            { userId: "organizer" },
+                            { userId: "host" },
                             { userId: "user1" }
                         ]
                     }
@@ -156,10 +156,10 @@ test("Organizer: hosting a multiplayer game", async () => {
             },
             {
                 playersListUpdate: {
-                    groupId: "organizer",
+                    groupId: "host",
                     message: {
                         players: [
-                            { userId: "organizer" },
+                            { userId: "host" },
                             { userId: "user1", name: "user one" },
                             { userId: "user2" }
                         ]
@@ -175,28 +175,28 @@ test("Organizer: hosting a multiplayer game", async () => {
 
 test("Organizer: setting user name", async () => {
     const { gameHub, context } = createTestGameHub();
-    renderWith({ gameHub, route: "/organizer", userIdGenerator: () => "organizer" });
+    renderWith({ gameHub, route: "/host", userIdGenerator: () => "host" });
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
             {
                 "hello": {
-                    "groupId": "organizer",
+                    "groupId": "host",
                     "message": {
                         "name": undefined,
-                        "userId": "organizer",
+                        "userId": "host",
                         "isRunning": false
                     },
                 },
             },
             {
                 "playersListUpdate": {
-                    "groupId": "organizer",
+                    "groupId": "host",
                     "message": {
                         "players": [
                             {
                                 "name": undefined,
-                                "userId": "organizer",
+                                "userId": "host",
                             },
                         ],
                     },
@@ -218,28 +218,28 @@ test("Organizer: setting user name", async () => {
         expect(context.sentMessages).toEqual([
             {
                 "hello": {
-                    "groupId": "organizer",
+                    "groupId": "host",
                     "message": {
                         "name": undefined,
-                        "userId": "organizer",
+                        "userId": "host",
                         "isRunning": false
                     },
                 },
             },
             {
                 "playersListUpdate": {
-                    "groupId": "organizer",
+                    "groupId": "host",
                     "message": {
                         "players": [
                             {
                                 "name": undefined,
-                                "userId": "organizer",
+                                "userId": "host",
                             },
                         ],
                     },
                 },
             },
-            { status: { groupId: "organizer", message: { userId: "organizer", name: "Stewie" } } }
+            { status: { groupId: "host", message: { userId: "host", name: "Stewie" } } }
         ]);
     });
 }, 10000);
@@ -255,7 +255,7 @@ test("Player: joining a multiplayer game", async () => {
     }, { timeout: 5000 });
     act(() => context.handlers.playersListUpdate({
         players: [
-            { userId: 'organizer', name: "The Organizer" },
+            { userId: 'host', name: "The Organizer" },
             { userId: 'user1' }
         ]
     }));
@@ -264,7 +264,7 @@ test("Player: joining a multiplayer game", async () => {
 
     act(() => context.handlers.playersListUpdate({
         players: [
-            { userId: 'organizer', name: "The Organizer" },
+            { userId: 'host', name: "The Organizer" },
             { userId: 'user1', name: "-Player One-" }
         ]
     }));
@@ -286,7 +286,7 @@ test("Player: starting a multiplayer game", async () => {
 
     act(() => context.handlers.playersListUpdate({
         players: [
-            { userId: 'organizer', name: "The Organizer" },
+            { userId: 'host', name: "The Organizer" },
             { userId: 'user1', name: "Player One" }
         ]
     }));

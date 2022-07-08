@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from "react";
-import { useParams } from "react-router";
 import { Organizer } from "./Organizer";
 import { MultiplayerContext } from "./MultiplayerContext";
 import { CommandButton } from "./components/CommandButton";
@@ -17,9 +16,10 @@ import { getDisplayTimeFrom } from './domain/time';
 import { selectableDurations } from "./constants";
 import { LeaderBoard } from "./ScoreBoard";
 import { Centered, Header, Warning } from "./Styling";
+import { useOrganizerId } from "./hooks/useOrganizerId";
 
 export const MultiplayerGame = ({ shapeProvider }) => {
-    const { organizerUserId } = useParams();
+    const organizerUserId = useOrganizerId();
     const {
         gameHub,
         userId: currentUserId,

@@ -1,13 +1,13 @@
 import { useContext, useEffect } from "react";
-import { useParams } from "react-router";
 import { MultiplayerContext } from "../MultiplayerContext";
 import { initialEmptyPlayersList } from "../constants";
+import { useOrganizerId } from "./useOrganizerId";
 
 export const usePlayerListSender = () => {
     const {
         gameHub, isConnected, userId: currentUserId, otherPlayers
     } = useContext(MultiplayerContext);
-    const { organizerUserId } = useParams();
+    const organizerUserId = useOrganizerId();
 
     useEffect(() => {
         const isConnectedWithUserId = currentUserId && isConnected;

@@ -1,12 +1,12 @@
 import { useContext, useRef } from "react";
-import { useParams } from "react-router";
 import { MultiplayerContext } from "../MultiplayerContext";
 import { SinglePlayerGameContext } from "../SinglePlayerGame";
 import { useAsyncEffect } from './useAsyncEffect';
 import { stringFrom } from '../domain/serialization';
+import { useOrganizerId } from "./useOrganizerId";
 
 export const useStatusSender = () => {
-    const { organizerUserId } = useParams();
+    const organizerUserId = useOrganizerId();
     const isFirstRun = useRef(true);
     const {
         gameHub, isConnected, userId: currentUserId, timeProvider, gameEndTime
