@@ -6,20 +6,19 @@ namespace Website.Middlewares
 {
     public class NewRelicIgnore
     {
-        private const string ForwardedProtoHeader = "X-Forwarded-Proto";
         private readonly RequestDelegate next;
-        private readonly string hubPath;
+        private readonly string path;
 
-        public NewRelicIgnore(RequestDelegate next, string hubPath)
+        public NewRelicIgnore(RequestDelegate next, string path)
         {
             this.next = next;
-            this.hubPath = hubPath;
+            this.path = path;
         }
 
         public async Task Invoke(HttpContext ctx)
         {
-            if (ctx.Request.Path.Value.Equals(hubPath, System.StringComparison.CurrentCultureIgnoreCase)
-                || ctx.Request.Path.Value.StartsWith($"{hubPath}/"))
+            if (ctx.Request.Path.Value.Equals(path, System.StringComparison.CurrentCultureIgnoreCase)
+                || ctx.Request.Path.Value.StartsWith($"{path}/"))
             {
                 NewRelic.Api.Agent.NewRelic.IgnoreTransaction();
                 NewRelic.Api.Agent.NewRelic.IgnoreApdex();
@@ -30,9 +29,9 @@ namespace Website.Middlewares
 
     public static class NewRelicIgnoreExtensions
     {
-        public static IApplicationBuilder UseNewRelicIgnore(this IApplicationBuilder builder, string hubPath)
+        public static IApplicationBuilder UseNewRelicIgnore(this IApplicationBuilder builder, string path)
         {
-            return builder.UseMiddleware<NewRelicIgnore>(hubPath);
+            return builder.UseMiddleware<NewRelicIgnore>(path);
         }
     }
 }
