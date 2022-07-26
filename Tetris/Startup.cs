@@ -76,6 +76,7 @@ namespace Tetris
             }
             app.UseHttpsRedirection();
             app.UseReverseProxyHttpsRedirect();
+            app.UseNewRelicIgnore("/gameHub");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<GameHub>("/gameHub", options =>
