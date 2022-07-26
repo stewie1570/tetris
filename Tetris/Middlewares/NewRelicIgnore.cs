@@ -6,7 +6,6 @@ namespace Website.Middlewares
 {
     public class NewRelicIgnore
     {
-        private const string ForwardedProtoHeader = "X-Forwarded-Proto";
         private readonly RequestDelegate next;
         private readonly string hubPath;
 
