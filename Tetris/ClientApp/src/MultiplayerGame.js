@@ -88,7 +88,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 <tr>
                     <th>URL</th>
                     <td>
-                        {window.location.protocol}{window.location.host}/{organizerUserId}
+                        {window.location.protocol}//{window.location.host}/{organizerUserId}
                     </td>
                 </tr>
             </tbody>
