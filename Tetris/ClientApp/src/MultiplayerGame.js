@@ -223,7 +223,11 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                                 </CommandButton>
                             </div>
                             <div style={{ marginTop: "1rem" }}>
-                                <CommandButton onClick={startGame} runningText="Starting..." className="btn btn-primary">
+                                <CommandButton
+                                    disabled={gameEndTime > 0}
+                                    onClick={startGame}
+                                    runningText="Starting..."
+                                    className="btn btn-primary">
                                     Start Game
                                 </CommandButton>
                             </div>
