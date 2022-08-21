@@ -16,7 +16,8 @@ export const usePlayerListener = () => {
         setOrganizerConnectionStatus,
         setOtherPlayers,
         setGameResults,
-        selectedDuration
+        selectedDuration,
+        setCanGuestStartGame
     } = useContext(MultiplayerContext);
     const {
         game, setGame, username,
@@ -30,9 +31,10 @@ export const usePlayerListener = () => {
             hello: ({ userId, ...otherProps }) => {
                 setOtherPlayers(otherPlayers => ({ ...otherPlayers, [userId]: { ...otherPlayers[userId], ...otherProps } }));
             },
-            playersListUpdate: ({ players: updatedPlayersList }) => {
+            playersListUpdate: ({ players: updatedPlayersList, isStartable }) => {
                 setOtherPlayers(otherPlayers => update(otherPlayers).with(updatedPlayersList));
                 setOrganizerConnectionStatus('connected');
+                setCanGuestStartGame(isStartable);
                 const isInPlayersList = updatedPlayersList.some(({ userId }) => userId === currentUserId);
                 !isInPlayersList && gameHub.invoke.status({
                     groupId: organizerUserId,
@@ -54,6 +56,7 @@ export const usePlayerListener = () => {
             },
             results: results => {
                 setGameResults(results);
+                setGameEndTime(null);
                 setGame(game => ({ ...game, paused: true }));
             },
             disconnect: ({ userId }) => setOtherPlayers(currentOtherPlayers => {

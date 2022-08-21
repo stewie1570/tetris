@@ -30,7 +30,8 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         otherPlayers,
         gameResults,
         selectedDuration,
-        setSelectedDuration
+        setSelectedDuration,
+        canGuestStartGame
     } = useContext(MultiplayerContext);
     const {
         game,
@@ -41,6 +42,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     } = useContext(SinglePlayerGameContext);
     const isOrganizer = organizerUserId === currentUserId;
     const timeLeft = gameEndTime && Math.max(0, Math.ceil(gameEndTime - timeProvider()));
+    const isStartable = isOrganizer || canGuestStartGame;
 
     useEffect(() => {
         setGame(({ mobile }) => ({ ...initialGameState, mobile, paused: true }));
@@ -224,7 +226,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                             </div>
                             <div style={{ marginTop: "1rem" }}>
                                 <CommandButton
-                                    disabled={gameEndTime > 0}
+                                    disabled={!isStartable}
                                     onClick={startGame}
                                     runningText="Starting..."
                                     className="btn btn-primary">

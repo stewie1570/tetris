@@ -57,6 +57,7 @@ const MultiplayerTestContext = ({ children, gameHub, userIdGenerator }) => {
     const [otherPlayers, setOtherPlayers] = useMountedOnlyState(initialEmptyPlayersList);
     const [gameResults, setGameResults] = React.useState(null);
     const [selectedDuration, setSelectedDuration] = React.useState(selectableDurations[0] * 1000);
+    const [canGuestStartGame, setCanGuestStartGame] = React.useState(false);
 
     useEffect(() => {
         setTimeout(() => setIsConnected(true), 1000);
@@ -79,7 +80,9 @@ const MultiplayerTestContext = ({ children, gameHub, userIdGenerator }) => {
             gameResults,
             setGameResults,
             selectedDuration,
-            setSelectedDuration
+            setSelectedDuration,
+            canGuestStartGame,
+            setCanGuestStartGame
         }}>
             {children}
         </MultiplayerContext.Provider>
@@ -115,6 +118,7 @@ test("Organizer: hosting a multiplayer game", async () => {
                                 "userId": "host",
                             },
                         ],
+                        "isStartable": true
                     },
                 },
             },
@@ -132,14 +136,15 @@ test("Organizer: hosting a multiplayer game", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
-            { hello: { groupId: "host", message: { userId: "host", "isRunning": false} } },
+            { hello: { groupId: "host", message: { userId: "host", "isRunning": false } } },
             {
                 playersListUpdate: {
                     groupId: "host",
                     message: {
                         players: [
                             { userId: "host" }
-                        ]
+                        ],
+                        "isStartable": true
                     }
                 }
             },
@@ -150,7 +155,8 @@ test("Organizer: hosting a multiplayer game", async () => {
                         players: [
                             { userId: "host" },
                             { userId: "user1" }
-                        ]
+                        ],
+                        "isStartable": true
                     }
                 }
             },
@@ -162,7 +168,8 @@ test("Organizer: hosting a multiplayer game", async () => {
                             { userId: "host" },
                             { userId: "user1", name: "user one" },
                             { userId: "user2" }
-                        ]
+                        ],
+                        "isStartable": true
                     }
                 }
             }
@@ -199,6 +206,7 @@ test("Organizer: setting user name", async () => {
                                 "userId": "host",
                             },
                         ],
+                        "isStartable": true
                     },
                 },
             },
@@ -236,6 +244,7 @@ test("Organizer: setting user name", async () => {
                                 "userId": "host",
                             },
                         ],
+                        "isStartable": true
                     },
                 },
             },
@@ -250,7 +259,7 @@ test("Player: joining a multiplayer game", async () => {
 
     await waitFor(() => {
         expect(context.sentMessages).toEqual([
-            { hello: { groupId: "group1", message: { userId: "user1", "isRunning": false} } }
+            { hello: { groupId: "group1", message: { userId: "user1", "isRunning": false } } }
         ]);
     }, { timeout: 5000 });
     act(() => context.handlers.playersListUpdate({
@@ -288,7 +297,8 @@ test("Player: starting a multiplayer game", async () => {
         players: [
             { userId: 'host', name: "The Organizer" },
             { userId: 'user1', name: "Player One" }
-        ]
+        ],
+        isStartable: true
     }));
 
     screen.getByText("Start Game").click();

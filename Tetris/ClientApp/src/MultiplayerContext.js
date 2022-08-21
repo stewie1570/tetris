@@ -30,6 +30,7 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
   });
   const userId = useUserId(userIdGenerator);
   const [gameEndTime, setGameEndTime] = React.useState(null);
+  const [canGuestStartGame, setCanGuestStartGame] = React.useState(false);
   const [organizerConnectionStatus, setOrganizerConnectionStatus] = React.useState(null);
   const [otherPlayers, setOtherPlayers] = useMountedOnlyState(initialEmptyPlayersList);
   const [gameResults, setGameResults] = React.useState(null);
@@ -86,7 +87,9 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
     gameResults,
     setGameResults,
     selectedDuration,
-    setSelectedDuration
+    setSelectedDuration,
+    canGuestStartGame,
+    setCanGuestStartGame
   }}>
     {children}
   </MultiplayerContext.Provider>;
