@@ -21,7 +21,7 @@ COPY --from=build-env /app/out .
 
 # Mount the agent key
 RUN --mount=type=secret,id=NEWRELIC_KEY \
-    NEWRELIC_KEY="$(cat /run/secrets/NEWRELIC_KEY)" some_command
+    NEWRELIC_KEY="$(cat /run/secrets/NEWRELIC_KEY)"
 
 # Install the agent
 RUN apt-get update && apt-get install -y wget ca-certificates gnupg \
