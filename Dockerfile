@@ -30,11 +30,6 @@ RUN apt-get update && apt-get install -y wget ca-certificates gnupg \
 
 # Enable the agent
 ARG NEWRELIC_KEY=''
-
-# Mount the agent key
-RUN --mount=type=secret,id=NEWRELIC_KEY \
-    NEWRELIC_KEY="$(cat /run/secrets/NEWRELIC_KEY)"
-
 ENV CORECLR_ENABLE_PROFILING=1 \
 CORECLR_PROFILER={36032161-FFC0-4B61-B559-F6C5D41BAE5A} \
 CORECLR_NEWRELIC_HOME=/usr/local/newrelic-netcore20-agent \
