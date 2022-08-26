@@ -57,3 +57,5 @@ jobs:
         - uses: actions/checkout@v2
         - uses: superfly/flyctl-actions/setup-flyctl@master
         - run: flyctl deploy --env NEWRELIC_KEY=${{ secrets.NEWRELIC_KEY }} --remote-only
+          env:
+            NEWRELIC_KEY: ${{ secrets.NEWRELIC_KEY }}
