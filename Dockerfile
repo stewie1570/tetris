@@ -16,6 +16,8 @@ RUN dotnet publish -c Release -o out /property:Version=$RELEASE_VERSION
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
+WORKDIR /app
+COPY --from=build-env /app/out .
 
 # Install the agent
 RUN apt-get update && apt-get install -y wget ca-certificates gnupg \
@@ -35,7 +37,5 @@ CORECLR_PROFILER_PATH=/usr/local/newrelic-netcore20-agent/libNewRelicProfiler.so
 NEW_RELIC_LICENSE_KEY=$NEWRELIC_KEY \
 NEW_RELIC_APP_NAME=tetris
 
-WORKDIR /app
-COPY --from=build-env /app/out .
 EXPOSE 80
 ENTRYPOINT ["dotnet", "Tetris.dll"]
