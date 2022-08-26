@@ -19,6 +19,10 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
 COPY --from=build-env /app/out .
 
+# Mount the agent key
+RUN --mount=type=secret,id=NEWRELIC_KEY \
+    NEWRELIC_KEY="$(cat /run/secrets/NEWRELIC_KEY)" some_command
+
 # Install the agent
 RUN apt-get update && apt-get install -y wget ca-certificates gnupg \
 && echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | tee /etc/apt/sources.list.d/newrelic.list \
