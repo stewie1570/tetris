@@ -63,5 +63,5 @@ jobs:
         - name: deploy
           env:
             RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
-          run: flyctl deploy --build-arg RELEASE_VERSION=${{ env.RELEASE_VERSION }} --build-arg NEWRELIC_KEY=${{ secrets.NEWRELIC_KEY }}
+          run: flyctl deploy --no-cache --build-arg RELEASE_VERSION=${{ env.RELEASE_VERSION }} --build-arg NEWRELIC_KEY=${{ secrets.NEWRELIC_KEY }}
         
