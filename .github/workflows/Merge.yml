@@ -55,7 +55,12 @@ jobs:
       needs: [version]
       steps:
         - uses: actions/checkout@v2
+        - name: Find Release Version
+          run: |
+            git fetch --prune --unshallow
+            echo "RELEASE_VERSION=$(git describe --tags --abbrev=0 | sed 's/v//').0" >> $GITHUB_ENV
         - uses: superfly/flyctl-actions/setup-flyctl@master
+        - name: deploy
         - env:
             RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
         - run: flyctl deploy --build-arg RELEASE_VERSION=${{ env.RELEASE_VERSION }} --build-arg NEWRELIC_KEY=${{ secrets.NEWRELIC_KEY }}
