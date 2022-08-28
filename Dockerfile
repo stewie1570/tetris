@@ -1,5 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 ARG RELEASE_VERSION=1.0.0.0
+ARG NEWRELIC_KEY=''
 RUN echo "Version: ${RELEASE_VERSION}"
 RUN echo "New Relic: ${NEWRELIC_KEY}"
 WORKDIR /app
@@ -30,7 +31,6 @@ RUN apt-get update && apt-get install -y wget ca-certificates gnupg \
 && rm -rf /var/lib/apt/lists/*
 
 # Enable the agent
-ARG NEWRELIC_KEY=''
 ENV CORECLR_ENABLE_PROFILING=1 \
 CORECLR_PROFILER={36032161-FFC0-4B61-B559-F6C5D41BAE5A} \
 CORECLR_NEWRELIC_HOME=/usr/local/newrelic-netcore20-agent \
