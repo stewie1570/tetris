@@ -59,11 +59,9 @@ jobs:
           run: |
             git fetch --prune --unshallow
             echo "RELEASE_VERSION=$(git describe --tags --abbrev=0 | sed 's/v//').0" >> $GITHUB_ENV
-            echo "NEWRELIC_KEY=${{ secrets.NEWRELIC_KEY }}" >> $GITHUB_ENV
         - uses: superfly/flyctl-actions/setup-flyctl@master
         - name: deploy
           env:
             RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
-            NEWRELIC_KEY: ${{ secrets.NEWRELIC_KEY }}
-          run: flyctl deploy --no-cache --build-arg RELEASE_VERSION=${{ env.RELEASE_VERSION }} --build-arg NEWRELIC_KEY=${{ env.NEWRELIC_KEY }}
+          run: flyctl deploy --no-cache --build-arg RELEASE_VERSION=${{ env.RELEASE_VERSION }} --build-arg NEWRELIC_KEY=${{ secrets.NEWRELIC_KEY }}
         
