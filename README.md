@@ -5,7 +5,7 @@
 A ReactJS SPA with a .NET WebApi/MVC backend.
 
 Hosted at:
-- https://stewie1570-tetris.fly.dev/
+- https://stewie1570-tetris.fly.dev
 - https://tetris-k2l9.onrender.com
 
 **Docker Notes**
