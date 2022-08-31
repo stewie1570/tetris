@@ -52,6 +52,7 @@ export const usePlayerListener = () => {
             },
             start: () => {
                 setGame(({ mobile }) => ({ ...initialGameState, mobile, paused: false }));
+                setGameResults(null);
                 isOrganizer && setGameEndTime(timeProvider() + selectedDuration);
             },
             results: results => {
