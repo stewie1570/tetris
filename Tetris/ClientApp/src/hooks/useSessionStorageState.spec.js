@@ -19,10 +19,6 @@ afterEach(() => { storage = {}; });
 function SetStateViaValue() {
     const [state, setState] = useSessionStorageState("StorageKey");
 
-    useEffect(() => {
-        state && window.dispatchEvent(new Event("storage"));
-    }, [state]);
-
     return <div>
         {state || "no state"}
         <button onClick={() => flushSync(() => setState("expected value"))}>Set State</button>
@@ -32,11 +28,6 @@ function SetStateViaValue() {
 function SetStateViaCallback() {
     const [state, setState] = useSessionStorageState("StorageKey");
     const callCount = useRef(0);
-
-    useEffect(() => {
-        state && callCount.current > 0 && window.dispatchEvent(new Event("storage"));
-        callCount.current++;
-    }, [state]);
 
     return <div>
         {state || "no state"}
@@ -111,55 +102,7 @@ test("can update state via callback", () => {
     screen.getByText("value: undefined");
 });
 
-test("can update common state via value", async () => {
-    render(<>
-        <SetStateViaValue />
-        <SetStateViaValue />
-    </>);
-
-    expect(screen.getAllByText("no state").length).toBe(2);
-    act(() => {
-        screen.getAllByText("Set State")[0].click();
-    });
-    await waitFor(() => {
-        expect(screen.getAllByText("expected value").length).toBe(2);
-    });
-});
-
-test("can update common state via callback", async () => {
-    render(<>
-        <SetStateViaCallback />
-        <SetStateViaCallback />
-    </>);
-
-    expect(screen.getAllByText("no state").length).toBe(2);
-    act(() => {
-        screen.getAllByText("Set State")[0].click();
-    });
-    await waitFor(() => {
-        expect(screen.getAllByText("value: undefined").length).toBe(2);
-    });
-});
-
-test("can update common pre-existing state via callback", async () => {
-    window.localStorage.setItem("StorageKey", '"initial"');
-    render(<>
-        <SetStateViaCallback />
-        <SetStateViaCallback />
-    </>);
-
-    await waitFor(() => {
-        expect(screen.getAllByText("initial").length).toBe(2);
-    });
-    act(() => {
-        screen.getAllByText("Set State")[0].click();
-    });
-    await waitFor(() => {
-        expect(screen.getAllByText("value: \"initial\"").length).toBe(2);
-    });
-});
-
-test("shows proper initial state when local storage key is defined", async () => {
+test("shows proper initial state when session storage key is defined", async () => {
     render(<>
         <SetStateViaValue />
         <Hide>
