@@ -10,18 +10,6 @@ export function useSessionStorageState(storageKey) {
     const initialState = useMemo(() => getSessionStateFor(storageKey), [storageKey]);
     const [state, setState] = useState(initialState);
 
-    useEffect(() => {
-        function loadStorageIntoState() {
-            setState(getSessionStateFor(storageKey));
-        }
-
-        window.addEventListener('storage', loadStorageIntoState);
-
-        return () => {
-            window.removeEventListener('storage', loadStorageIntoState);
-        }
-    }, [storageKey]);
-
     function setStorageState(valueOrSetter) {
         setState(valueOrSetter instanceof Function
             ? state => updateStorageValue(valueOrSetter(state))
