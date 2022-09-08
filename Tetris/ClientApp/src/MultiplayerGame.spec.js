@@ -11,7 +11,7 @@ import { MemoryRouter } from "react-router";
 import { App } from "./App";
 import { MultiplayerContext } from "./MultiplayerContext";
 import { initialEmptyPlayersList, selectableDurations } from "./constants";
-import { useMountedOnlyState } from "leaf-validator";
+import { set, useMountedOnlyState } from "leaf-validator";
 
 const signals = [
   "hello",
@@ -129,7 +129,7 @@ test("Organizer: hosting a multiplayer game", async () => {
         {
           hello: {
             groupId: "host",
-            message: { userId: "host", isRunning: false },
+            message: { userId: "host" },
           },
         },
         {
