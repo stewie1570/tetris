@@ -161,11 +161,14 @@ test("Organizer: hosting a multiplayer game", async () => {
   expect(await screen.findAllByText("[Un-named player]")).toHaveLength(2);
 
   await waitFor(() => {
-    expect(context.sentMessages).toEqual([
+    const filteredSentMessages = set("0.hello.message.isRunning")
+      .to(undefined)
+      .in(context.sentMessages);
+    expect(filteredSentMessages).toEqual([
       {
         hello: {
           groupId: "host",
-          message: { userId: "host", isRunning: false },
+          message: { userId: "host" },
         },
       },
       {
