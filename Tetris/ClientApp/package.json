@@ -5,7 +5,6 @@
   "main": "src/index.js",
   "dependencies": {
     "@microsoft/signalr": "^6.0.4",
-    "axios": "^0.26.1",
     "bootstrap-css-only": "3.3.7",
     "leaf-validator": "^7.1.2",
     "lodash": "^4.17.21",
