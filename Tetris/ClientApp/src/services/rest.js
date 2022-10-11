@@ -33,14 +33,24 @@ async function assertSuccessfulFetchResponse(response) {
   }
 }
 
+const makeFetchRequest = async (...args) => {
+  try {
+    return await fetch(...args);
+  } catch (networkError) {
+    throw new HttpError("Network error", {
+      data: { title: "Network Error" },
+    });
+  }
+};
+
 const get = async (url) => {
-  const response = await fetch(url);
+  const response = await makeFetchRequest(url);
   await assertSuccessfulFetchResponse(response);
   return await response.json();
 };
 
 const post = async (url, data) => {
-  const response = await fetch(url, {
+  const response = await makeFetchRequest(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -48,7 +58,10 @@ const post = async (url, data) => {
     body: JSON.stringify(data),
   });
   await assertSuccessfulFetchResponse(response);
-  return await response.json();
+  const contentType = response.headers.get("content-type");
+  return contentType && contentType.indexOf("application/json") !== -1
+    ? response.json()
+    : response.text();
 };
 
 export const Rest = {

@@ -4,18 +4,15 @@ import { server } from "../setupTests";
 
 let receivedUserErrors = [];
 
-beforeAll(() => server.listen());
 const addEvent = (event) => receivedUserErrors.push({ detail: event.detail });
 
 beforeEach(() => {
   window.addEventListener("user-error", addEvent);
 });
 afterEach(() => {
-  server.resetHandlers();
   receivedUserErrors = [];
   window.removeEventListener("user-error", addEvent);
 });
-afterAll(() => server.close());
 
 test("can make a successful get request", async () => {
   server.use(
@@ -27,6 +24,20 @@ test("can make a successful get request", async () => {
   expect(await Rest.get("/something")).toEqual({
     prop1: "the expected value",
   });
+});
+
+test("network error is handled", async () => {
+  server.use(rest.get("/something", (req, res, ctx) => res.networkError()));
+
+  let caughtError;
+  try {
+    await Rest.get("/something");
+  } catch (error) {
+    caughtError = error;
+  }
+
+  expect(receivedUserErrors).toEqual([{ detail: "Network Error" }]);
+  expect(caughtError.message).toEqual("Network error");
 });
 
 test("can make a successful post request", async () => {
@@ -42,6 +53,17 @@ test("can make a successful post request", async () => {
   ).toEqual({
     prop1: "the expected value",
   });
+});
+
+test("can make a successful post request with no response payload expected", async () => {
+  server.use(rest.post("/something", (req, res, ctx) => res(ctx.status(200))));
+
+  expect(
+    await Rest.post({
+      url: "/something",
+      data: { prop1: "the expected value" },
+    })
+  ).toEqual("");
 });
 
 test("handles failed post request with title", async () => {

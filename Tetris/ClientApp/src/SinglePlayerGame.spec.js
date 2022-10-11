@@ -77,7 +77,9 @@ test("score a point and post score", async () => {
 
   screen.getByText(/Ok/).click();
 
-  await waitForElementToBeRemoved(() => screen.getByText(/What user name would you like/));
+  await waitForElementToBeRemoved(() =>
+    screen.getByText(/What user name would you like/)
+  );
 
   expect(scorePosts).toEqual([{ username: "Stewie", score: 1 }]);
 });
@@ -88,7 +90,7 @@ test("score a point and fail to post score", async () => {
       return res(ctx.json(scorePosts));
     }),
     rest.post("/api/userScores", async (req, res, ctx) => {
-      return res.networkError('Failed to connect');
+      return res.networkError("Failed to connect");
     })
   );
   const { iterate, container } = getIterableBoard();
@@ -110,8 +112,10 @@ test("score a point and fail to post score", async () => {
   screen.getByText(/Ok/).click();
 
   await waitFor(() => {
-    within(screen.getByText('Error').parentElement.parentElement).getByText(/Network Error/);
-  })
+    within(screen.getByText("Error").parentElement.parentElement).getByText(
+      /Network Error/
+    );
+  });
 });
 
 test("score a point and post score twice", async () => {
@@ -142,25 +146,33 @@ test("score a point and post score twice", async () => {
 
   screen.getByText(/Ok/).click();
 
-  await waitForElementToBeRemoved(() => screen.queryByText(/What user name would you like/));
+  await waitForElementToBeRemoved(() =>
+    screen.queryByText(/What user name would you like/)
+  );
 
   (await screen.findByText(/Post My Score/)).click();
-  await screen.findByText("Posting your score...")
-  await waitForElementToBeRemoved(() => screen.queryByText("Posting your score..."));
+  await screen.findByText("Posting your score...");
+  await waitForElementToBeRemoved(() =>
+    screen.queryByText("Posting your score...")
+  );
 
   expect(scorePosts).toEqual([
     { username: "Stewie", score: 1 },
-    { username: "Stewie", score: 1 }
+    { username: "Stewie", score: 1 },
   ]);
 });
 
 test("posting a score too low to show up on the board displays an error", async () => {
   server.use(
     rest.get("/api/userScores", async (req, res, ctx) => {
-      return res(ctx.json(new Array(20).fill(null).map((_, i) => ({
-        username: "user" + i,
-        score: i
-      }))));
+      return res(
+        ctx.json(
+          new Array(20).fill(null).map((_, i) => ({
+            username: "user" + i,
+            score: i,
+          }))
+        )
+      );
     }),
     rest.post("/api/userScores", async (req, res, ctx) => {
       scorePosts.push(req.body);
@@ -185,12 +197,18 @@ test("posting a score too low to show up on the board displays an error", async 
 
   screen.getByText(/Ok/).click();
 
-  await waitForElementToBeRemoved(() => screen.queryByText(/What user name would you like/));
+  await waitForElementToBeRemoved(() =>
+    screen.queryByText(/What user name would you like/)
+  );
 
   (await screen.findByText(/Post My Score/)).click();
-  await screen.findByText("Posting your score...")
-  await waitForElementToBeRemoved(() => screen.queryByText("Posting your score..."));
-  await screen.findByText("Your score was recorded but didn't make the top 20.");
+  await screen.findByText("Posting your score...");
+  await waitForElementToBeRemoved(() =>
+    screen.queryByText("Posting your score...")
+  );
+  await screen.findByText(
+    "Your score was recorded but didn't make the top 20."
+  );
 });
 
 test("score a point and cancels posting a score", async () => {
@@ -221,11 +239,11 @@ test("score a point and cancels posting a score", async () => {
 
   screen.getByText(/Cancel/).click();
 
-  await waitForElementToBeRemoved(() => screen.getByText(/What user name would you like/));
-
-  await waitFor(() =>
-    expect(scorePosts).toEqual([])
+  await waitForElementToBeRemoved(() =>
+    screen.getByText(/What user name would you like/)
   );
+
+  await waitFor(() => expect(scorePosts).toEqual([]));
 });
 
 test("score a point and entering a blank username cancels posting the score", async () => {
@@ -256,21 +274,21 @@ test("score a point and entering a blank username cancels posting the score", as
 
   screen.getByText(/Ok/).click();
 
-  await waitForElementToBeRemoved(() => screen.getByText(/What user name would you like/));
-
-  await waitFor(() =>
-    expect(scorePosts).toEqual([])
+  await waitForElementToBeRemoved(() =>
+    screen.getByText(/What user name would you like/)
   );
+
+  await waitFor(() => expect(scorePosts).toEqual([]));
 });
 
-const wait = () => new Promise(resolve => setTimeout(resolve, 1));
+const wait = () => new Promise((resolve) => setTimeout(resolve, 1));
 
 async function scorePointOnEmptyBoard({ iterate, container }) {
   await wait();
   iterate();
   await wait();
   fireEvent.keyDown(container, { keyCode: keys.up });
-  await wait()
+  await wait();
   fireEvent.keyDown(container, { keyCode: keys.space });
   await wait();
   iterate();
@@ -335,7 +353,7 @@ async function scorePointOnEmptyBoard({ iterate, container }) {
 
 function getIterableBoard() {
   const { container } = render(
-    <MemoryRouter initialEntries={['/']}>
+    <MemoryRouter initialEntries={["/"]}>
       <MultiplayerContext.Provider value={{ userId: "userId" }}>
         <App shapeProvider={() => lineShape} />
       </MultiplayerContext.Provider>
@@ -344,7 +362,7 @@ function getIterableBoard() {
 
   return {
     iterate: () => window.dispatchEvent(new CustomEvent("iterate-game")),
-    container
+    container,
   };
 }
 
@@ -364,9 +382,6 @@ function getSerializedBoard() {
 }
 
 let scorePosts = [];
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
 beforeEach(() => {
   scorePosts = [];
 });
-afterAll(() => server.close());
