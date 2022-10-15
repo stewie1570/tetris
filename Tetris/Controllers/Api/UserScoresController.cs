@@ -8,7 +8,7 @@ namespace Tetris.Controllers.Api
 {
     public class UserScoresController : Controller
     {
-        IUserScoresInteractor userScoreInteractor;
+        readonly IUserScoresInteractor userScoreInteractor;
 
         public UserScoresController(IUserScoresInteractor userScoreInteractor)
         {
@@ -17,7 +17,8 @@ namespace Tetris.Controllers.Api
 
         [Route("api/userScores")]
         [HttpGet]
-        public async Task<IEnumerable<Models.UserScore>> GetUserScores()
+        [HttpHead]
+        public async Task<IEnumerable<UserScore>> GetUserScores()
         {
             return await userScoreInteractor.GetUserScores(count: 20);
         }
