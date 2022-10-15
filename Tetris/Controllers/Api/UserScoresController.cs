@@ -16,8 +16,14 @@ namespace Tetris.Controllers.Api
         }
 
         [Route("api/userScores")]
-        [HttpGet]
         [HttpHead]
+        public object Headers()
+        {
+            return null;
+        }
+
+        [Route("api/userScores")]
+        [HttpGet]
         public async Task<IEnumerable<UserScore>> GetUserScores()
         {
             return await userScoreInteractor.GetUserScores(count: 20);
