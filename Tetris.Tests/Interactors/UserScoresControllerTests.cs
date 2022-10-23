@@ -22,7 +22,7 @@ namespace Tetris.Tests.Interactors
             leaderBoardUpdater = Substitute.For<ILeaderBoardUpdater>();
             userScoresInteractor = new UserScoresInteractor(
                 leaderBoardUpdater,
-                getLeaderBoard: Task.FromResult(leaderBoard));
+                getLeaderBoard: () => Task.FromResult(leaderBoard));
         }
 
         [Fact]
