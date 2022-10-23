@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tetris.Domain.Interfaces;
@@ -9,12 +10,12 @@ namespace Tetris.Interactors
 {
     public class UserScoresInteractor : IUserScoresInteractor
     {
-        private Task<LeaderBoard> getLeaderBoard;
+        private Func<Task<LeaderBoard>> getLeaderBoard;
         private ILeaderBoardUpdater leaderBoardUpdater;
 
         public UserScoresInteractor(
             ILeaderBoardUpdater leaderBoardUpdater,
-            Task<LeaderBoard> getLeaderBoard)
+            Func<Task<LeaderBoard>> getLeaderBoard)
         {
             this.leaderBoardUpdater = leaderBoardUpdater;
             this.getLeaderBoard = getLeaderBoard;
@@ -31,7 +32,7 @@ namespace Tetris.Interactors
 
         public async Task<List<Models.UserScore>> GetUserScores(int count)
         {
-            return (await getLeaderBoard)
+            return (await getLeaderBoard())
                 .UserScores
                 .OrderByDescending(userScore => userScore.Score)
                 .Take(count)

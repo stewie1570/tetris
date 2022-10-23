@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tetris.Core.Exceptions;
@@ -10,12 +11,12 @@ namespace Tetris.Domain.LeaderBoard
     public class LeaderBoardUpdater : ILeaderBoardUpdater
     {
         private const int maxUsernameLength = 20;
-        private Task<Models.LeaderBoard> getLeaderBoard;
+        private Func<Task<Models.LeaderBoard>> getLeaderBoard;
         private IScoreBoardStorage scoreBoardStorage;
 
         public LeaderBoardUpdater(
             IScoreBoardStorage scoreBoardStorage,
-            Task<Models.LeaderBoard> getLeaderBoard)
+            Func<Task<Models.LeaderBoard>> getLeaderBoard)
         {
             this.scoreBoardStorage = scoreBoardStorage;
             this.getLeaderBoard = getLeaderBoard;
@@ -28,7 +29,7 @@ namespace Tetris.Domain.LeaderBoard
             if (trimmedUserScore.Username.Length > maxUsernameLength)
                 throw new ValidationException($"Username length must not be over {maxUsernameLength}.");
 
-            var leaderBoard = await getLeaderBoard;
+            var leaderBoard = await getLeaderBoard();
 
             var firstRepeat = (leaderBoard.UserScores ?? new List<UserScore>())
                 .FirstOrDefault(currentUserScore =>

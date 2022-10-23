@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -54,7 +55,7 @@ namespace Tetris
             services.AddScoped<IScoreBoardStorage, RedisScoreBoardStorage>();
             services.AddScoped<ILeaderBoardProvider, RedisLeaderBoardProvider>();
             services.AddScoped<ILeaderBoardUpdater, LeaderBoardUpdater>();
-            services.AddScoped<Task<LeaderBoard>>(sp => sp.GetService<ILeaderBoardProvider>().GetLeaderBoard());
+            services.AddScoped<Func<Task<LeaderBoard>>>(sp => sp.GetService<ILeaderBoardProvider>().GetLeaderBoard);
             services.AddScoped<IUserScoresInteractor, UserScoresInteractor>();
             services.AddSingleton<Task<ConnectionMultiplexer>>(sp => ConnectionMultiplexer.ConnectAsync(Configuration["RedisConnectionString"]));
         }
