@@ -23,7 +23,7 @@ namespace Tetris.Domain.Tests.LeaderBoard
             scoreBoardStorage = Substitute.For<IScoreBoardStorage>();
             leaderBoardUpdater = new LeaderBoardUpdater(
                 scoreBoardStorage,
-                getLeaderBoard: Task.FromResult(leaderBoard));
+                getLeaderBoard: () => Task.FromResult(leaderBoard));
         }
 
         [Fact]
