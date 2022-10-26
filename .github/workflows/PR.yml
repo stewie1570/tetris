@@ -29,12 +29,11 @@ jobs:
         - name: Publish
           run: |
             dotnet publish
-            ls
         - name: Upload Tetris Build Artifact
           uses: actions/upload-artifact@v2
           with:
             name: Tetris
-            path: /home/runner/work/Tetris/bin/Debug/net6.0/publish/
+            path: /home/runner/work/tetris/tetris/Tetris/bin/Debug/net6.0/publish/
 
   test-frontend:
     runs-on: ubuntu-latest
