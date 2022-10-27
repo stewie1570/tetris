@@ -60,7 +60,7 @@ jobs:
             dotnet-version: 6.*.*
         - name: Publish
           run: |
-            dotnet publish
+            dotnet publish -c Release -o out
         - name: Upload Tetris Build Artifact
           uses: actions/upload-artifact@v2
           with:
