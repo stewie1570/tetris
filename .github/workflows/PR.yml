@@ -49,7 +49,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
     steps:
       - uses: actions/checkout@v3
       - name: Test Frontend (via Mac)

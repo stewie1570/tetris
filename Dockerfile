@@ -3,7 +3,7 @@ ARG RELEASE_VERSION=1.0.0.0
 RUN echo "Version: ${RELEASE_VERSION}"
 WORKDIR /app
 
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - 
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - 
 RUN apt-get install -y nodejs
 RUN npm install -g yarn
 
