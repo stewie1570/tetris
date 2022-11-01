@@ -57,7 +57,7 @@ namespace Tetris
             services.AddScoped<ILeaderBoardUpdater, LeaderBoardUpdater>();
             services.AddScoped<Func<Task<LeaderBoard>>>(sp => sp.GetService<ILeaderBoardProvider>().GetLeaderBoard);
             services.AddScoped<IUserScoresInteractor, UserScoresInteractor>();
-            services.AddSingleton<Task<ConnectionMultiplexer>>(sp => ConnectionMultiplexer.ConnectAsync(Configuration["RedisConnectionString"]));
+            services.AddSingleton(sp => ConnectionMultiplexer.ConnectAsync(Configuration["RedisConnectionString"]));
         }
 
         private bool IsUsingBackplane()
@@ -77,6 +77,7 @@ namespace Tetris
             }
             app.UseHttpsRedirection();
             app.UseReverseProxyHttpsRedirect();
+            app.UseIPLogger();
             app.UseNewRelicIgnore("/gameHub");
             app.UseEndpoints(endpoints =>
             {
