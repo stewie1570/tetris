@@ -19,10 +19,12 @@ namespace Website.Middlewares
         public async Task Invoke(HttpContext ctx)
         {
             await next(ctx);
-            logger.LogInformation("{method} {url} from {ip}",
+            var forwardedIP = ctx.Request.Headers["X-Forwarded-For"].ToString();
+            logger.LogInformation("{method} {url} from {ip}{forwardInfo}",
                 ctx.Request.Method,
                 ctx.Request.Path.ToString(),
-                ctx.Connection.RemoteIpAddress
+                ctx.Connection.RemoteIpAddress,
+                string.IsNullOrWhiteSpace(forwardedIP) ? "" : $" (forwarded from: {forwardedIP})"
             );
         }
     }
