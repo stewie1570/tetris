@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Logging;
 
 namespace Website.Middlewares
@@ -22,7 +23,7 @@ namespace Website.Middlewares
             var forwardedIP = ctx.Request.Headers["X-Forwarded-For"].ToString();
             logger.LogInformation("{method} {url} from {ip}{forwardInfo}",
                 ctx.Request.Method,
-                ctx.Request.Path.ToString(),
+                UriHelper.GetDisplayUrl(ctx.Request),
                 ctx.Connection.RemoteIpAddress,
                 string.IsNullOrWhiteSpace(forwardedIP) ? "" : $" (forwarded from: {forwardedIP})"
             );
