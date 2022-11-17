@@ -7,9 +7,6 @@ processes = []
 
 [env]
 
-[memory]
-  limit = 230000000
-
 [experimental]
   allowed_public_ports = []
   auto_rollback = true
