@@ -1,5 +1,5 @@
-import React, { Suspense, useContext } from "react";
-import SinglePlayerGame, { SinglePlayerGameContext, SinglePlayerGameContextProvider } from "./SinglePlayerGame";
+import React, { Suspense } from "react";
+import SinglePlayerGame, { SinglePlayerGameContextProvider, useSinglePlayerGameContext } from "./SinglePlayerGame";
 import { Routes, Route } from 'react-router-dom';
 import { shapes } from './components/TetrisGame';
 import { Dialog } from "./components/Prompt";
@@ -18,7 +18,7 @@ const defaultShapeProvider = () =>
     shapes[randomNumberGenerator.between({ min: 0, max: shapes.length - 1 })];
 
 const GlobalUI = () => {
-    const { dialogProps } = useContext(SinglePlayerGameContext);
+    const { dialogProps } = useSinglePlayerGameContext();
 
     return <>
         <Dialog {...dialogProps} />

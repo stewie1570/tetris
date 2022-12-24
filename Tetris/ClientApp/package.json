@@ -6,7 +6,7 @@
   "dependencies": {
     "@microsoft/signalr": "^6.0.4",
     "bootstrap-css-only": "3.3.7",
-    "leaf-validator": "^7.1.2",
+    "leaf-validator": "^7.4.0",
     "lodash": "^4.17.21",
     "react": "18.0.0",
     "react-dom": "18.0.0",

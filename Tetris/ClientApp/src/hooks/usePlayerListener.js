@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { update, process } from "../domain/players";
 import { MultiplayerContext } from "../MultiplayerContext";
-import { initialGameState, SinglePlayerGameContext } from "../SinglePlayerGame";
+import { initialGameState, useSinglePlayerGameContext } from "../SinglePlayerGame";
 import { stringFrom } from '../domain/serialization';
 import { useOrganizerId } from "./useOrganizerId";
 
@@ -21,7 +21,7 @@ export const usePlayerListener = () => {
     } = useContext(MultiplayerContext);
     const {
         game, setGame, username,
-    } = useContext(SinglePlayerGameContext);
+    } = useSinglePlayerGameContext();
     const isOrganizer = organizerUserId === currentUserId;
 
     useEffect(() => {
