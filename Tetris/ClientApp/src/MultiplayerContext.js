@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { HubConnectionBuilder, HttpTransportType } from '@microsoft/signalr';
 import { useUserId } from './hooks/useUserId';
 import { useLocation } from 'react-router-dom';
@@ -92,7 +92,7 @@ export const [MultiplayerContextProvider, useMultiplayerContext, MultiplayerCont
 });
 
 export const MultiplayerContextPassThrough = ({ children }) => {
-  const parentContext = useMultiplayerContext();
+  const parentContext = useContext(MultiplayerContext);
 
   return parentContext
     ? children
