@@ -1,13 +1,13 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { namesAndScoresFrom } from "../domain/players";
-import { MultiplayerContext } from "../MultiplayerContext";
+import { useMultiplayerContext } from "../MultiplayerContext";
 import { useSinglePlayerGameContext } from "../SinglePlayerGame";
 import { useOrganizerId } from "./useOrganizerId";
 
 export const useResultsSender = () => {
     const {
         gameHub, userId: currentUserId, timeProvider, gameEndTime, otherPlayers
-    } = useContext(MultiplayerContext);
+    } = useMultiplayerContext();
     const organizerUserId = useOrganizerId();
     const { username, game } = useSinglePlayerGameContext();
     const timeLeft = gameEndTime && Math.max(0, Math.ceil(gameEndTime - timeProvider()));

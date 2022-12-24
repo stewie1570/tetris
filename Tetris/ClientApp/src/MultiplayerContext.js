@@ -3,9 +3,7 @@ import { HubConnectionBuilder, HttpTransportType } from '@microsoft/signalr';
 import { useUserId } from './hooks/useUserId';
 import { useLocation } from 'react-router-dom';
 import { initialEmptyPlayersList, selectableDurations } from './constants'
-import { useMountedOnlyState } from "leaf-validator";
-
-export const MultiplayerContext = React.createContext(null);
+import { createManagedContext, useMountedOnlyState } from "leaf-validator";
 
 const signals = [
   'hello',
@@ -19,7 +17,7 @@ const signals = [
   'reset'
 ];
 
-export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
+export const [MultiplayerContextProvider, useMultiplayerContext, MultiplayerContext] = createManagedContext(() => {
   const [isConnected, setIsConnected] = React.useState();
   const location = useLocation();
   const connection = useRef(null);
@@ -28,7 +26,7 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
     invoke: {},
     receive: {}
   });
-  const userId = useUserId(userIdGenerator);
+  const userId = useUserId();
   const [gameEndTime, setGameEndTime] = React.useState(null);
   const [canGuestStartGame, setCanGuestStartGame] = React.useState(false);
   const [organizerConnectionStatus, setOrganizerConnectionStatus] = React.useState(null);
@@ -73,7 +71,7 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
     return () => connection.current.stop();
   }, []);
 
-  return <MultiplayerContext.Provider value={{
+  return {
     gameHub: gameHub.current,
     isConnected,
     userId,
@@ -90,17 +88,15 @@ export const MultiplayerContextProvider = ({ userIdGenerator, children }) => {
     setSelectedDuration,
     canGuestStartGame,
     setCanGuestStartGame
-  }}>
-    {children}
-  </MultiplayerContext.Provider>;
-};
+  };
+});
 
-export const MultiplayerContextPassThrough = ({ children, ...otherProps }) => {
-  const parentContext = React.useContext(MultiplayerContext);
+export const MultiplayerContextPassThrough = ({ children }) => {
+  const parentContext = useMultiplayerContext();
 
   return parentContext
     ? children
-    : <MultiplayerContextProvider {...otherProps}>
+    : <MultiplayerContextProvider>
       {children}
     </MultiplayerContextProvider>;
 };

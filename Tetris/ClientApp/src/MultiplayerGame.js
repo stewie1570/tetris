@@ -1,6 +1,6 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Organizer } from "./Organizer";
-import { MultiplayerContext } from "./MultiplayerContext";
+import { useMultiplayerContext } from "./MultiplayerContext";
 import { CommandButton } from "./components/CommandButton";
 import SinglePlayerGame, { initialGameState, useSinglePlayerGameContext } from "./SinglePlayerGame";
 import { StringInput } from "./components/Prompt";
@@ -32,7 +32,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         selectedDuration,
         setSelectedDuration,
         canGuestStartGame
-    } = useContext(MultiplayerContext);
+    } = useMultiplayerContext();
     const {
         game,
         setGame,
