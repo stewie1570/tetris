@@ -1,8 +1,8 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Organizer } from "./Organizer";
-import { MultiplayerContext } from "./MultiplayerContext";
+import { useMultiplayerContext } from "./MultiplayerContext";
 import { CommandButton } from "./components/CommandButton";
-import SinglePlayerGame, { SinglePlayerGameContext, initialGameState } from "./SinglePlayerGame";
+import SinglePlayerGame, { initialGameState, useSinglePlayerGameContext } from "./SinglePlayerGame";
 import { StringInput } from "./components/Prompt";
 import { stringFrom } from './domain/serialization';
 import { TetrisBoard } from "./components/TetrisBoard";
@@ -32,14 +32,14 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         selectedDuration,
         setSelectedDuration,
         canGuestStartGame
-    } = useContext(MultiplayerContext);
+    } = useMultiplayerContext();
     const {
         game,
         setGame,
         setUsername,
         username,
         prompt
-    } = useContext(SinglePlayerGameContext);
+    } = useSinglePlayerGameContext();
     const isOrganizer = organizerUserId === currentUserId;
     const timeLeft = gameEndTime && Math.max(0, Math.ceil(gameEndTime - timeProvider()));
     const isStartable = isOrganizer || canGuestStartGame;

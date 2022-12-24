@@ -1,14 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import { TetrisGame, emptyBoard } from "./components/TetrisGame";
 import { StringInput as StringPrompt, usePrompt } from "./components/Prompt";
 import { leaderBoardService } from "./services";
 import "./App.css";
 import { ScoreBoard } from "./ScoreBoard";
 import { GameControls } from "./GameControls";
-import { useLoadingState, useMountedOnlyState } from "leaf-validator";
+import { createManagedContext, useLoadingState, useMountedOnlyState } from "leaf-validator";
 import { GameMetaFrame } from "./components/GameMetaFrame";
 
-export const SinglePlayerGameContext = React.createContext();
 
 export const initialGameState = {
   board: emptyBoard,
@@ -19,7 +18,7 @@ export const initialGameState = {
   score: 0,
 };
 
-export const SinglePlayerGameContextProvider = ({ children }) => {
+export const [SinglePlayerGameContextProvider, useSinglePlayerGameContext] = createManagedContext(() => {
   const [game, setGame] = useMountedOnlyState(initialGameState);
   const [username, setUsername] = useMountedOnlyState();
   const { dialogProps, prompt } = usePrompt();
@@ -58,8 +57,8 @@ export const SinglePlayerGameContextProvider = ({ children }) => {
           onSubmitString={(name) =>
             Boolean(name?.length)
               ? sendCurrentScoreFor(name)
-                  .then(() => setUsername(name))
-                  .then(exitModal, exitModal)
+                .then(() => setUsername(name))
+                .then(exitModal, exitModal)
               : exitModal()
           }
           submittingText="Posting Your Score..."
@@ -91,28 +90,22 @@ export const SinglePlayerGameContextProvider = ({ children }) => {
       (await showLoadingScoreBoardWhile(reloadScoreBoard()));
   };
 
-  return (
-    <SinglePlayerGameContext.Provider
-      value={{
-        game,
-        setGame,
-        username,
-        setUsername,
-        dialogProps,
-        prompt,
-        isLoadingScoreBoard,
-        showLoadingScoreBoardWhile,
-        postableScore,
-        allowScorePost,
-        postScore,
-        reloadScoreBoard,
-        pause,
-      }}
-    >
-      {children}
-    </SinglePlayerGameContext.Provider>
-  );
-};
+  return {
+    game,
+    setGame,
+    username,
+    setUsername,
+    dialogProps,
+    prompt,
+    isLoadingScoreBoard,
+    showLoadingScoreBoardWhile,
+    postableScore,
+    allowScorePost,
+    postScore,
+    reloadScoreBoard,
+    pause,
+  };
+});
 
 export const SinglePlayerGame = ({
   shapeProvider,
@@ -130,7 +123,7 @@ export const SinglePlayerGame = ({
     isLoadingScoreBoard,
     postableScore,
     postScore,
-  } = useContext(SinglePlayerGameContext);
+  } = useSinglePlayerGameContext();
 
   return (
     <GameMetaFrame

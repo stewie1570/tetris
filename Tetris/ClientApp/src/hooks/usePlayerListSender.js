@@ -1,12 +1,12 @@
-import { useContext, useEffect, useRef } from "react";
-import { MultiplayerContext } from "../MultiplayerContext";
+import { useEffect } from "react";
+import { useMultiplayerContext } from "../MultiplayerContext";
 import { initialEmptyPlayersList } from "../constants";
 import { useOrganizerId } from "./useOrganizerId";
 
 export const usePlayerListSender = () => {
     const {
         gameHub, isConnected, userId: currentUserId, otherPlayers, gameEndTime
-    } = useContext(MultiplayerContext);
+    } = useMultiplayerContext();
     const organizerUserId = useOrganizerId();
     const isStartable = gameEndTime === null;
 
