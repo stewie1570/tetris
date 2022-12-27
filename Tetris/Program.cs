@@ -8,7 +8,6 @@ namespace Tetris
     {
         public static void Main(string[] args)
         {
-            NewRelic.Api.Agent.NewRelic.StartAgent();
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -24,6 +23,7 @@ namespace Tetris
                         webBuilder.UseUrls("http://*:" + port);
                     }
 
+                    NewRelic.Api.Agent.NewRelic.StartAgent();
                     if (GlobalConfig.IsSentryEnabled())
                     {
                         webBuilder.UseSentry(o =>
