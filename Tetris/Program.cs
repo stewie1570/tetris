@@ -8,6 +8,7 @@ namespace Tetris
     {
         public static void Main(string[] args)
         {
+            NewRelic.Api.Agent.NewRelic.StartAgent();
             CreateHostBuilder(args).Build().Run();
         }
 
