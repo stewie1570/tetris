@@ -25,15 +25,15 @@ RUN apt-get update && apt-get install -y wget ca-certificates gnupg \
 && wget https://download.newrelic.com/548C16BF.gpg \
 && apt-key add 548C16BF.gpg \
 && apt-get update \
-&& apt-get install -y newrelic-netcore20-agent \
+&& apt-get install -y newrelic-dotnet-agent \
 && rm -rf /var/lib/apt/lists/*
 
 # Enable the agent
 ARG NEWRELIC_KEY=''
 ENV CORECLR_ENABLE_PROFILING=1 \
 CORECLR_PROFILER={36032161-FFC0-4B61-B559-F6C5D41BAE5A} \
-CORECLR_NEWRELIC_HOME=/usr/local/newrelic-netcore20-agent \
-CORECLR_PROFILER_PATH=/usr/local/newrelic-netcore20-agent/libNewRelicProfiler.so \
+CORECLR_NEWRELIC_HOME=/usr/local/newrelic-dotnet-agent \
+CORECLR_PROFILER_PATH=/usr/local/newrelic-dotnet-agent/libNewRelicProfiler.so \
 NEW_RELIC_LICENSE_KEY=${NEWRELIC_KEY} \
 NEW_RELIC_APP_NAME=tetris
 
