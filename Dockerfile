@@ -15,7 +15,7 @@ RUN dotnet restore
 RUN dotnet publish -c Release -o out /property:Version=$RELEASE_VERSION
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:7.0
+FROM mcr.microsoft.com/dotnet/aspnet:7.0-bullseye-slim
 WORKDIR /app
 COPY --from=build-env /app/out .
 
