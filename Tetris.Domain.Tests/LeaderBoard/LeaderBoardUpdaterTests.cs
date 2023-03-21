@@ -13,14 +13,14 @@ namespace Tetris.Domain.Tests.LeaderBoard
 {
     public class LeaderBoardUpdaterTests
     {
-        ILeaderBoardUpdater leaderBoardUpdater;
-        IScoreBoardStorage scoreBoardStorage;
-        Models.LeaderBoard leaderBoard;
+        readonly ILeaderBoardUpdater leaderBoardUpdater;
+        readonly ILeaderBoardStorage scoreBoardStorage;
+        readonly Models.LeaderBoard leaderBoard;
 
         public LeaderBoardUpdaterTests()
         {
             leaderBoard = new Models.LeaderBoard();
-            scoreBoardStorage = Substitute.For<IScoreBoardStorage>();
+            scoreBoardStorage = Substitute.For<ILeaderBoardStorage>();
             leaderBoardUpdater = new LeaderBoardUpdater(
                 scoreBoardStorage,
                 getLeaderBoard: () => Task.FromResult(leaderBoard));
