@@ -3,7 +3,7 @@ using Tetris.Domain.Models;
 
 namespace Tetris.Domain.Interfaces
 {
-    public interface IScoreBoardStorage
+    public interface ILeaderBoardStorage
     {
         Task Add(UserScore userScore);
     }

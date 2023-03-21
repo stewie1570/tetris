@@ -9,7 +9,7 @@ namespace Tetris.Storage
     public class RedisLeaderBoardProvider : ILeaderBoardProvider
     {
         public int MaxScores { get; set; } = 20;
-        private Task<ConnectionMultiplexer> gettingRedis;
+        private readonly Task<ConnectionMultiplexer> gettingRedis;
 
         public RedisLeaderBoardProvider(Task<ConnectionMultiplexer> gettingRedis)
         {

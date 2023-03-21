@@ -5,9 +5,9 @@ using Tetris.Domain.Models;
 
 namespace Tetris.Storage
 {
-    public class RedisScoreBoardStorage : IScoreBoardStorage
+    public class RedisScoreBoardStorage : ILeaderBoardStorage
     {
-        private Task<ConnectionMultiplexer> gettingRedis;
+        private readonly Task<ConnectionMultiplexer> gettingRedis;
 
         public RedisScoreBoardStorage(Task<ConnectionMultiplexer> gettingRedis)
         {

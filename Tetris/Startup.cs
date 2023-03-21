@@ -52,7 +52,7 @@ namespace Tetris
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddScoped<IScoreBoardStorage, RedisScoreBoardStorage>();
+            services.AddScoped<ILeaderBoardStorage, RedisScoreBoardStorage>();
             services.AddScoped<ILeaderBoardProvider, RedisLeaderBoardProvider>();
             services.AddScoped<ILeaderBoardUpdater, LeaderBoardUpdater>();
             services.AddScoped<Func<Task<LeaderBoard>>>(sp => sp.GetService<ILeaderBoardProvider>().GetLeaderBoard);

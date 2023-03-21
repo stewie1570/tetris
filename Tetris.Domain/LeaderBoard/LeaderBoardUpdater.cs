@@ -12,10 +12,10 @@ namespace Tetris.Domain.LeaderBoard
     {
         private const int maxUsernameLength = 20;
         private Func<Task<Models.LeaderBoard>> getLeaderBoard;
-        private IScoreBoardStorage scoreBoardStorage;
+        private ILeaderBoardStorage scoreBoardStorage;
 
         public LeaderBoardUpdater(
-            IScoreBoardStorage scoreBoardStorage,
+            ILeaderBoardStorage scoreBoardStorage,
             Func<Task<Models.LeaderBoard>> getLeaderBoard)
         {
             this.scoreBoardStorage = scoreBoardStorage;
