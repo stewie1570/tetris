@@ -35,7 +35,7 @@ namespace Tetris.Storage.Tests
                 new UserScore { Username = $"user {start + 4}", Score = 2 }
             };
             var leaderBoardProvider = new RedisLeaderBoardProvider(getRedis) { MaxScores = 10000 };
-            var scoreBoard = new RedisScoreBoardStorage(getRedis);
+            var scoreBoard = new RedisLeaderBoardStorage(getRedis);
 
             await Task.WhenAll(userScores
                 .Select(userScore => db.SortedSetRemoveAsync("user", userScore.Username)));

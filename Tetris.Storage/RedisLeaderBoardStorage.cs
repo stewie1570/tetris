@@ -5,11 +5,11 @@ using Tetris.Domain.Models;
 
 namespace Tetris.Storage
 {
-    public class RedisScoreBoardStorage : ILeaderBoardStorage
+    public class RedisLeaderBoardStorage : ILeaderBoardStorage
     {
         private readonly Task<ConnectionMultiplexer> gettingRedis;
 
-        public RedisScoreBoardStorage(Task<ConnectionMultiplexer> gettingRedis)
+        public RedisLeaderBoardStorage(Task<ConnectionMultiplexer> gettingRedis)
         {
             this.gettingRedis = gettingRedis;
         }
