@@ -45,6 +45,7 @@ flowchart LR
 
 
     subgraph Tetris.Domain.Interfaces.ILeaderBoardUpdater
+        direction TD
         Tetris.Domain.LeaderBoard.LeaderBoardUpdater
     end
 
@@ -60,11 +61,13 @@ flowchart LR
 
 
     subgraph Tetris.Interfaces.IUserScoresInteractor
+        direction TD
         Tetris.Interactors.UserScoresInteractor
     end
 
 
     subgraph Tetris.Domain.Interfaces.ILeaderBoardStorage
+        direction TD
         Tetris.Storage.RedisLeaderBoardStorage
     end
 
