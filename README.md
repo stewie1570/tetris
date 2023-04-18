@@ -23,7 +23,7 @@ docker build -t tetris .
 - If you don't want an error when pausing & loading the score board or want to be able to post a score you'll need to provide a Redis connection string for the `RedisConnectionString` configuration key
 - Other optional config keys include `SentryDsn` & `UseBackplane`
 
-## Design (dependency summary)
+## Backend Design (dependency summary)
 (via: https://github.com/stewie1570/DIGraph)
 
 ```mermaid
