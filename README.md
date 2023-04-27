@@ -27,7 +27,7 @@ docker build -t tetris .
 (via: https://github.com/stewie1570/DIGraph)
 
 ```mermaid
-flowchart LR
+stateDiagram
   Tetris.Core.Exceptions.DomainException --> System.String
   Tetris.Core.Exceptions.ValidationException --> System.String
   Tetris.Storage.RedisLeaderBoardProvider --> System.Threading.Tasks.Task`1
@@ -39,44 +39,20 @@ flowchart LR
   Tetris.Interactors.UserScoresInteractor --> System.Func`1
   Tetris.Hubs.GameHub --> Microsoft.Extensions.Logging.ILogger`1
   Tetris.Controllers.Api.UserScoresController --> Tetris.Interfaces.IUserScoresInteractor
-
-    subgraph System.String
-        
-    end
     
 
-    subgraph System.Threading.Tasks.Task`1
-        
-    end
-    
-
-    subgraph Tetris.Domain.Interfaces.ILeaderBoardStorage
+    state Tetris.Domain.Interfaces.ILeaderBoardStorage {
         Tetris.Storage.RedisLeaderBoardStorage
-    end
+    }
     
 
-    subgraph System.Func`1
-        
-    end
-    
-
-    subgraph Microsoft.Extensions.Configuration.IConfiguration
-        
-    end
-    
-
-    subgraph Tetris.Domain.Interfaces.ILeaderBoardUpdater
+    state Tetris.Domain.Interfaces.ILeaderBoardUpdater {
         Tetris.Domain.LeaderBoard.LeaderBoardUpdater
-    end
+    }
     
 
-    subgraph Microsoft.Extensions.Logging.ILogger`1
-        
-    end
-    
-
-    subgraph Tetris.Interfaces.IUserScoresInteractor
+    state Tetris.Interfaces.IUserScoresInteractor {
         Tetris.Interactors.UserScoresInteractor
-    end
+    }
     
 ```
