@@ -1,0 +1,27 @@
+{
+  "name": "tetris",
+  "version": "1.0.0",
+  "description": "[![Build](https://github.com/stewie1570/tetris/actions/workflows/Merge.yml/badge.svg)](https://github.com/stewie1570/tetris/actions/workflows/Merge.yml)\r [![Build (PR)](https://github.com/stewie1570/tetris/actions/workflows/PR.yml/badge.svg)](https://github.com/stewie1570/tetris/actions/workflows/PR.yml)\r ======",
+  "main": "index.js",
+  "devDependencies": {
+    "@playwright/test": "^1.34.3",
+    "concurrently": "^8.2.0"
+  },
+  "scripts": {
+    "test": "concurrently \"npm run start-server\" \"npm run run-tests\"",
+    "start-server": "dotnet run --project .\\Tetris\\Tetris.csproj\"",
+    "run-tests": "playwright test && npm run stop-server",
+    "stop-server": "taskkill /im dotnet.exe /f"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stewie1570/tetris.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stewie1570/tetris/issues"
+  },
+  "homepage": "https://github.com/stewie1570/tetris#readme"
+}
