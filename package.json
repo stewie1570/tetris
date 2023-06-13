@@ -11,7 +11,7 @@
   "scripts": {
     "test": "concurrently \"npm run start-server\" \"wait-on https://localhost:5001 && npm run run-tests\"",
     "start-server": "dotnet run --project Tetris/Tetris.csproj",
-    "run-tests": "playwright test ; npm run stop-server",
+    "run-tests": "node run-e2e.js",
     "stop-server": "pkill dotnet"
   },
   "repository": {
