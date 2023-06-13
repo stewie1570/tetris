@@ -12,7 +12,7 @@
     "test": "concurrently \"npm run start-server\" \"wait-on https://localhost:5001 && npm run run-tests\"",
     "start-server": "dotnet run --project Tetris/Tetris.csproj",
     "run-tests": "playwright test && npm run stop-server",
-    "stop-server": "taskkill /im dotnet.exe /f"
+    "stop-server": "pkill -f dotnet.exe"
   },
   "repository": {
     "type": "git",
