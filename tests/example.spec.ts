@@ -1,5 +1,9 @@
 import { test, chromium } from '@playwright/test';
 
+test.use({
+  ignoreHTTPSErrors: true
+});
+
 test('start a multiplayer game', async () => {
   test.setTimeout(60000);
   const { page: browserPage1, context: context1 } = await newBrowserPage();
