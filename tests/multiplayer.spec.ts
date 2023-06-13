@@ -35,7 +35,7 @@ test('start a multiplayer game', async () => {
   await browserPage2.getByRole('button', { name: 'Set User Name' }).click();
   await browserPage2.getByLabel('What user name would you like?').fill('browser page 2');
   await browserPage2.getByLabel('What user name would you like?').press('Enter');
-  await browserPage2.getByRole('button', { name: 'Start Gamee' }).click();
+  await browserPage2.getByRole('button', { name: 'Start Game' }).click();
 
   await context1.close();
   await context2.close();
