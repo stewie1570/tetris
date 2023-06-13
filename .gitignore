@@ -271,3 +271,6 @@ ModelManifest.xml
 .fake/
 Tetris/appsettings.json
 Tetris.Storage.Tests/appsettings.json
+/test-results/
+/playwright-report/
+/playwright/.cache/
