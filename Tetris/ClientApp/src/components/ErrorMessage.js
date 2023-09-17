@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from 'styled-components';
+import { useLifeCycle } from '../hooks/useLifeCycle';
 
 const ErrorModalHeader = styled.div`
   padding:9px 15px;
@@ -27,17 +28,18 @@ export const ErrorMessage = () => {
     setVisible(true);
   }
 
-  useEffect(() => {
-    window.addEventListener("click", windowClick);
-    window.addEventListener("touchstart", windowClick);
-    window.addEventListener("user-error", showError);
-
-    return () => {
+  useLifeCycle({
+    onMount: () => {
+      window.addEventListener("click", windowClick);
+      window.addEventListener("touchstart", windowClick);
+      window.addEventListener("user-error", showError);
+    },
+    onUnMount: () => {
       window.removeEventListener("click", windowClick);
       window.removeEventListener("touchstart", windowClick);
       window.removeEventListener("user-error", showError);
     }
-  }, []);
+  });
 
   const hide = () => setVisible(false);
 

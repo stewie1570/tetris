@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { namesAndScoresFrom } from "../domain/players";
 import { useMultiplayerContext } from "../MultiplayerContext";
 import { useSinglePlayerGameContext } from "../SinglePlayerGame";
@@ -11,14 +11,19 @@ export const useResultsSender = () => {
     const organizerUserId = useOrganizerId();
     const { username, game } = useSinglePlayerGameContext();
     const timeLeft = gameEndTime && Math.max(0, Math.ceil(gameEndTime - timeProvider()));
+    const externalsRef = useRef({ gameHub, currentUserId, username, game, otherPlayers });
+    externalsRef.current = { gameHub, currentUserId, username, game, otherPlayers };
 
     useEffect(() => {
-        timeLeft === 0 && gameHub.invoke.results({
+        timeLeft === 0 && externalsRef.current.gameHub.invoke.results({
             groupId: organizerUserId,
             message: namesAndScoresFrom({
-                ...otherPlayers,
-                [currentUserId]: { name: username, score: game.score }
+                ...externalsRef.current.otherPlayers,
+                [externalsRef.current.currentUserId]: {
+                    name: externalsRef.current.username,
+                    score: externalsRef.current.game.score
+                }
             })
         });
-    }, [timeLeft, gameHub, currentUserId, username, game.score, otherPlayers]);
+    }, [timeLeft]);
 };
