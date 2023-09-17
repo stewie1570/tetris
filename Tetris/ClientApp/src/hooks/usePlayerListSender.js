@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useMultiplayerContext } from "../MultiplayerContext";
 import { initialEmptyPlayersList } from "../constants";
 import { useOrganizerId } from "./useOrganizerId";
@@ -9,19 +9,21 @@ export const usePlayerListSender = () => {
     } = useMultiplayerContext();
     const organizerUserId = useOrganizerId();
     const isStartable = gameEndTime === null;
+    const externalsRef = useRef({ gameHub, isConnected, currentUserId, isStartable });
+    externalsRef.current = { gameHub, isConnected, currentUserId, isStartable };
 
     useEffect(() => {
-        const isConnectedWithUserId = currentUserId && isConnected;
+        const isConnectedWithUserId = externalsRef.current.currentUserId && externalsRef.current.isConnected;
         isConnectedWithUserId
             && otherPlayers !== initialEmptyPlayersList
-            && gameHub.send.playersListUpdate({
+            && externalsRef.current.gameHub.send.playersListUpdate({
                 groupId: organizerUserId,
                 message: {
                     players: Object
                         .keys(otherPlayers)
                         .map(userId => ({ userId, name: otherPlayers[userId].name })),
-                    isStartable
+                    isStartable: externalsRef.current.isStartable
                 }
             });
-    }, [Object.keys(otherPlayers).join(','), gameHub, isConnected, currentUserId, isStartable]);
+    }, [Object.keys(otherPlayers).join(',')]);
 };

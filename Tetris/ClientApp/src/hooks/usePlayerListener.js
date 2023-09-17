@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { update, process } from "../domain/players";
 import { useMultiplayerContext } from "../MultiplayerContext";
 import { initialGameState, useSinglePlayerGameContext } from "../SinglePlayerGame";
@@ -23,11 +23,13 @@ export const usePlayerListener = () => {
         game, setGame, username,
     } = useSinglePlayerGameContext();
     const isOrganizer = organizerUserId === currentUserId;
+    const externalsRef = useRef({ gameHub, isOrganizer, username, selectedDuration });
+    externalsRef.current = { gameHub, isOrganizer, username, selectedDuration };
 
     useEffect(() => {
         const isConnectedWithUserId = currentUserId && isConnected;
 
-        isConnectedWithUserId && gameHub.receive.setHandlers({
+        isConnectedWithUserId && externalsRef.current.gameHub.receive.setHandlers({
             hello: ({ userId, ...otherProps }) => {
                 setOtherPlayers(otherPlayers => ({ ...otherPlayers, [userId]: { ...otherPlayers[userId], ...otherProps } }));
             },
@@ -36,24 +38,26 @@ export const usePlayerListener = () => {
                 setOrganizerConnectionStatus('connected');
                 setCanGuestStartGame(isStartable);
                 const isInPlayersList = updatedPlayersList.some(({ userId }) => userId === currentUserId);
-                !isInPlayersList && gameHub.invoke.status({
+                !isInPlayersList && externalsRef.current.gameHub.invoke.status({
                     groupId: organizerUserId,
                     message: {
                         userId: currentUserId,
                         board: stringFrom(game.board),
                         score: game.score,
-                        name: username
+                        name: externalsRef.current.username
                     }
                 });
             },
             status: ({ userId, timeLeft, ...otherUpdates }) => {
                 setOtherPlayers(otherPlayers => process(otherUpdates).on(userId).in(otherPlayers));
-                !isOrganizer && timeLeft && setGameEndTime(timeProvider() + timeLeft);
+                !externalsRef.current.isOrganizer && timeLeft && setGameEndTime(timeProvider() + timeLeft);
             },
             start: () => {
                 setGame(({ mobile }) => ({ ...initialGameState, mobile, paused: false }));
                 setGameResults(null);
-                isOrganizer && setGameEndTime(timeProvider() + selectedDuration);
+                externalsRef
+                    .current
+                    .isOrganizer && setGameEndTime(timeProvider() + externalsRef.current.selectedDuration);
             },
             results: results => {
                 setGameResults(results);
@@ -77,5 +81,5 @@ export const usePlayerListener = () => {
                 })));
             }
         });
-    }, [gameHub, isConnected, currentUserId, isOrganizer, username, selectedDuration]);
+    }, [isConnected, currentUserId]);
 };

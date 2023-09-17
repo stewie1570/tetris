@@ -21,6 +21,7 @@ test('start a multiplayer game', async () => {
   const userNamePromptLabel = browserPage1.getByLabel('What user name would you like?');
   await userNamePromptLabel.fill('browser page 1');
   await userNamePromptLabel.press('Enter');
+  await expect(browserPage1.getByText('browser page 1')).toBeVisible();
   await browserPage1.getByRole('button', { name: 'Start Game' });
 
   await browserPage2.goto('https://localhost:5001/');
@@ -35,6 +36,7 @@ test('start a multiplayer game', async () => {
   await browserPage2.getByRole('button', { name: 'Set User Name' }).click();
   await browserPage2.getByLabel('What user name would you like?').fill('browser page 2');
   await browserPage2.getByLabel('What user name would you like?').press('Enter');
+  await expect(browserPage1.getByText('browser page 2')).toBeVisible();
   await browserPage1.getByRole('button', { name: 'Start Game' }).click();
   await expect(await browserPage1.getByText("browser page 2")).toBeVisible();
   await expect(await browserPage2.getByText("browser page 1")).toBeVisible();

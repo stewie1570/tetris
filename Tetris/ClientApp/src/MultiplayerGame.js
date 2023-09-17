@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Organizer } from "./Organizer";
 import { useMultiplayerContext } from "./MultiplayerContext";
 import { CommandButton } from "./components/CommandButton";
@@ -17,6 +17,7 @@ import { selectableDurations } from "./constants";
 import { LeaderBoard } from "./ScoreBoard";
 import { Centered, Header, Warning } from "./Styling";
 import { useOrganizerId } from "./hooks/useOrganizerId";
+import { useLifeCycle } from "./hooks/useLifeCycle";
 
 export const MultiplayerGame = ({ shapeProvider }) => {
     const organizerUserId = useOrganizerId();
@@ -44,9 +45,11 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     const timeLeft = gameEndTime && Math.max(0, Math.ceil(gameEndTime - timeProvider()));
     const isStartable = isOrganizer || canGuestStartGame;
 
-    useEffect(() => {
-        setGame(({ mobile }) => ({ ...initialGameState, mobile, paused: true }));
-    }, []);
+    useLifeCycle({
+        onMount: () => {
+            setGame(({ mobile }) => ({ ...initialGameState, mobile, paused: true }));
+        }
+    });
 
     usePlayerListener();
     useHelloSender();
