@@ -9,7 +9,6 @@ export const useHelloSender = () => {
         gameHub, isConnected, userId: currentUserId, setOtherPlayers
     } = useMultiplayerContext();
     const { username, game } = useSinglePlayerGameContext();
-    const isOrganizer = organizerUserId === currentUserId;
     const externalsRef = useRef({ isRunning: !game.paused, gameHub });
 
     externalsRef.current = { isRunning: !game.paused, gameHub };
