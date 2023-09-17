@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useMountedOnlyState as useState } from 'leaf-validator'
 
 function getSessionStateFor(storageKey) {

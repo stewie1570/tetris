@@ -12,9 +12,7 @@ export const useHelloSender = () => {
     const isRunning = useRef(false);
     const isOrganizer = organizerUserId === currentUserId;
 
-    useEffect(() => {
-        isRunning.current = !game.paused;
-    }, [game.paused]);
+    isRunning.current = !game.paused;
 
     useEffect(() => {
         const isConnectedWithUserId = currentUserId && isConnected;

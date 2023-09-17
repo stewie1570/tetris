@@ -1,12 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
+import { useLifeCycle } from '../hooks/useLifeCycle';
 
 export const TextInput = ({ value, onChange, autofocus, ...otherProps }) => {
     const inputRef = useRef();
     const update = (event) => onChange?.(event.target.value);
 
-    useEffect(() => {
-        autofocus && inputRef.current?.focus();
-    }, []);
+    useLifeCycle({
+        onMount: () => autofocus && inputRef.current?.focus()
+    });
 
     return <input
         style={{ width: '90%' }}

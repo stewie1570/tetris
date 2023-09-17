@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   render,
   screen,
@@ -12,6 +12,7 @@ import { App } from "./App";
 import { MultiplayerContext } from "./MultiplayerContext";
 import { initialEmptyPlayersList, selectableDurations } from "./constants";
 import { set, useMountedOnlyState } from "leaf-validator";
+import { useLifeCycle } from "./hooks/useLifeCycle";
 
 const signals = [
   "hello",
@@ -67,9 +68,9 @@ const MultiplayerTestContext = ({ children, gameHub, userIdGenerator }) => {
   );
   const [canGuestStartGame, setCanGuestStartGame] = React.useState(false);
 
-  useEffect(() => {
-    setTimeout(() => setIsConnected(true), 1000);
-  }, []);
+  useLifeCycle({
+    onMount: () => setTimeout(() => setIsConnected(true), 1000)
+  })
 
   const timeProvider = () => 1000;
 
