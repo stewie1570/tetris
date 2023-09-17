@@ -9,25 +9,25 @@ export const useHelloSender = () => {
         gameHub, isConnected, userId: currentUserId, setOtherPlayers
     } = useMultiplayerContext();
     const { username, game } = useSinglePlayerGameContext();
-    const isRunning = useRef(false);
     const isOrganizer = organizerUserId === currentUserId;
+    const externalsRef = useRef({ isRunning: !game.paused, gameHub });
 
-    isRunning.current = !game.paused;
+    externalsRef.current = { isRunning: !game.paused, gameHub };
 
     useEffect(() => {
         const isConnectedWithUserId = currentUserId && isConnected;
-        isConnectedWithUserId && gameHub.send.hello({
+        isConnectedWithUserId && externalsRef.current.gameHub.send.hello({
             groupId: organizerUserId,
             message: {
                 userId: currentUserId,
                 name: username,
-                isRunning: isRunning.current
+                isRunning: externalsRef.current.isRunning
             }
         }).then(() => {
-            !isRunning.current && setOtherPlayers(otherPlayers => ({
+            !externalsRef.current.isRunning && setOtherPlayers(otherPlayers => ({
                 ...otherPlayers,
                 [currentUserId]: { name: username, score: 0 }
             }));
         });
-    }, [gameHub, isConnected, currentUserId, isOrganizer]);
+    }, [isConnected, currentUserId]);
 };
