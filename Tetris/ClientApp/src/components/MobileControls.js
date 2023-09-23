@@ -59,36 +59,18 @@ const BottomButton = styled.button`
 export function MobileControls(props) {
     return <div style={{ position: "fixed", zIndex: 1 }}>
         <LeftButton className="btn btn-primary" onClick={() => props.onClick && props.onClick(keys.left)}>
-            <span className="glyphicon glyphicon-arrow-left">
-                &nbsp;
-            </span>
         </LeftButton>
         <RighButton className="btn btn-primary" onClick={() => props.onClick && props.onClick(keys.right)}>
-            <span className="glyphicon glyphicon-arrow-right">
-                &nbsp;
-            </span>
         </RighButton>
         <TopButton className="btn btn-primary" onClick={() => props.onClick && props.onClick(keys.up)}>
-            <span className="glyphicon glyphicon-refresh">
-                &nbsp;
-            </span>
             <b>Rotate</b>
         </TopButton>
         {props.onPause && <TopStackedButton className="btn btn-primary" onClick={props.onPause}>
-            <span className="glyphicon glyphicon-pause">
-                &nbsp;
-            </span>
             <b>Pause</b>
         </TopStackedButton>}
         <BottomStackedButton className="btn btn-primary" onClick={() => props.onClick && props.onClick(keys.down)}>
-            <span className="glyphicon glyphicon-arrow-down">
-                &nbsp;
-            </span>
         </BottomStackedButton>
         <BottomButton className="btn btn-primary" onClick={() => props.onClick && props.onClick(keys.space)}>
-            <span className="glyphicon glyphicon-check">
-                &nbsp;
-            </span>
             <b>Commit</b>
         </BottomButton>
     </div>;
