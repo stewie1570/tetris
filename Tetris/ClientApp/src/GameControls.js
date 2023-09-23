@@ -13,11 +13,6 @@ export function GameControls({ onPause: togglePause, game, onToggleMobile: toggl
       className="btn btn-primary"
       runningText="Loading Score Board..."
       onClick={togglePause}>
-      <span
-        className={`glyphicon glyphicon-${game.paused ? "play" : "pause"}`}
-      >
-        &nbsp;
-      </span>
       <span>{game.paused ? "Continue" : "Pause"}</span>
     </CommandButton>}
     <p />

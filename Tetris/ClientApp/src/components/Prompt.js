@@ -69,7 +69,6 @@ export function StringInput({ onSubmitString, children, filter, inputFilter, sub
             className="btn btn-primary space-top"
             onClick={() => onSubmitString(undefined)}
         >
-            <span className="glyphicon glyphicon-remove">&nbsp;</span>
             Cancel
         </CommandButton>
         <CommandButton
@@ -78,7 +77,6 @@ export function StringInput({ onSubmitString, children, filter, inputFilter, sub
             runningText={submittingText}
             type="submit"
         >
-            <span className="glyphicon glyphicon-ok">&nbsp;</span>
             Ok
         </CommandButton>
     </form>;

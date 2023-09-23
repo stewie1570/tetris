@@ -32,7 +32,7 @@ test('start a multiplayer game', async () => {
     .click();
   await browserPage2.getByLabel('Code:').click();
   await browserPage2.getByLabel('Code:').fill(gameRoomCode ?? '');
-  await browserPage2.getByRole('button', { name: ' Ok' }).click();
+  await browserPage2.getByRole('button', { name: 'Ok' }).click();
   await browserPage2.getByRole('button', { name: 'Set User Name' }).click();
   await browserPage2.getByLabel('What user name would you like?').fill('browser page 2');
   await browserPage2.getByLabel('What user name would you like?').press('Enter');
