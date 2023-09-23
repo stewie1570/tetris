@@ -18,6 +18,11 @@ import { LeaderBoard } from "./ScoreBoard";
 import { Centered, Header, Warning } from "./Styling";
 import { useOrganizerId } from "./hooks/useOrganizerId";
 import { useLifeCycle } from "./hooks/useLifeCycle";
+import styled from "styled-components";
+
+const GameDurationSelect = styled.select`
+    width: 90%;
+`;
 
 export const MultiplayerGame = ({ shapeProvider }) => {
     const organizerUserId = useOrganizerId();
@@ -183,10 +188,9 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     const gameHeader = <>
         {isOrganizer && game.paused && <>
             <label htmlFor="duration">Duration:</label>
-            <select
+            <GameDurationSelect
                 name="duration"
                 className="form-control"
-                style={{ width: "242px" }}
                 value={selectedDuration}
                 onChange={e => setSelectedDuration(parseInt(e.target.value))}>
                 {selectableDurations.map(duration => <option
@@ -194,7 +198,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                     value={duration * 1000}>
                     {getDisplayTimeFrom(duration)}
                 </option>)}
-            </select>
+            </GameDurationSelect>
         </>}
 
         {gameEndTime && `Game ends in ${getDisplayTimeFrom(Math.floor(timeLeft / 1000))} seconds`}

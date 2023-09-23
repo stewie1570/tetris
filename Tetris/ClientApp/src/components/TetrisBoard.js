@@ -4,9 +4,9 @@ import { empty } from "../core/constants";
 import styled from 'styled-components';
 
 const Square = styled.div`
-  width: 25px;
-  height: 25px;
-  margin: -0.5px;
+  width: 29.3px;
+  height: 29.3px;
+  margin: 0;
 `;
 
 const Active = styled(Square)`
@@ -29,6 +29,10 @@ const Squares = {
   'inactive-empty': <InactiveEmpty data-testid="space" title="-" />
 }
 
+const TabelCell = styled.td`
+  padding: 0;
+`;
+
 export function TetrisBoard({ board }) {
   const activeColumnRange = activeColumnRangeFrom({ board });
   const squareFrom = ({ square, x }) => {
@@ -47,9 +51,9 @@ export function TetrisBoard({ board }) {
         {board.map((row, y) => (
           <tr key={y} data-testid="row">
             {row.map((square, x) => (
-              <td key={`${x},${y}`}>
+              <TabelCell key={`${x},${y}`} style={{ padding: "0px" }}>
                 {squareFrom({ square, x })}
-              </td>
+              </TabelCell>
             ))}
           </tr>
         ))}

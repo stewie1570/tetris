@@ -25,6 +25,10 @@ const PostMyScoreButton = styled(CommandButton)`
   margin-top: 7px;
 `;
 
+const UserNameCell = styled.td`
+  text-align: left;
+`;
+
 export function ScoreBoard({ game, postableScore, onPostScore: postScore, isLoading, username }) {
   const allowScorePost = game.paused && Boolean(postableScore);
 
@@ -48,7 +52,7 @@ export function ScoreBoard({ game, postableScore, onPostScore: postScore, isLoad
           ) : (
             game.scoreBoard.map(userScore => (
               <tr key={userScore.username}>
-                <td>{userScore.username}</td>
+                <UserNameCell>{userScore.username}</UserNameCell>
                 <td>{userScore.score}</td>
               </tr>
             ))
