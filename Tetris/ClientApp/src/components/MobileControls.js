@@ -1,6 +1,8 @@
 import { keys } from '../core/constants'
 import React from 'react'
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faArrowRight, faArrowDown, faPause, faRotate } from '@fortawesome/free-solid-svg-icons';
 
 const LeftButton = styled.button`
     position: fixed;
@@ -59,16 +61,23 @@ const BottomButton = styled.button`
 export function MobileControls(props) {
     return <div style={{ position: "fixed", zIndex: 1 }}>
         <LeftButton className="btn btn-primary" onClick={() => props.onClick && props.onClick(keys.left)}>
+            <FontAwesomeIcon icon={faArrowLeft} />
         </LeftButton>
         <RighButton className="btn btn-primary" onClick={() => props.onClick && props.onClick(keys.right)}>
+            <FontAwesomeIcon icon={faArrowRight} />
         </RighButton>
         <TopButton className="btn btn-primary" onClick={() => props.onClick && props.onClick(keys.up)}>
+            <FontAwesomeIcon icon={faRotate} />
+            &nbsp;
             <b>Rotate</b>
         </TopButton>
         {props.onPause && <TopStackedButton className="btn btn-primary" onClick={props.onPause}>
+            <FontAwesomeIcon icon={faPause} />
+            &nbsp;
             <b>Pause</b>
         </TopStackedButton>}
         <BottomStackedButton className="btn btn-primary" onClick={() => props.onClick && props.onClick(keys.down)}>
+            <FontAwesomeIcon icon={faArrowDown} />
         </BottomStackedButton>
         <BottomButton className="btn btn-primary" onClick={() => props.onClick && props.onClick(keys.space)}>
             <b>Commit</b>
