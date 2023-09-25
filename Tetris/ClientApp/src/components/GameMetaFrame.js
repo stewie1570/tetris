@@ -6,6 +6,7 @@ const App = styled.div`
   margin-top: 10px;
   text-align: center;
   align-items: center;
+  min-width: unset;
 `;
 
 const Game = styled.div`
