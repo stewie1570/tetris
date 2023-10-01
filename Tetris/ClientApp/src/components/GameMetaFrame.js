@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const App = styled.div`
   width: 300px;
-  margin-top: 10px;
+  margin: 10px 0 10px 0;
   text-align: center;
   align-items: center;
   min-width: unset;
