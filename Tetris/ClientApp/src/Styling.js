@@ -16,4 +16,5 @@ export const Warning = styled.div`
     text-align: center;
     color: red;
     font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.7);
 `;
