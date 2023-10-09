@@ -4,6 +4,7 @@ import { useUserId } from './hooks/useUserId';
 import { useLocation } from 'react-router-dom';
 import { initialEmptyPlayersList, selectableDurations } from './constants'
 import { createManagedContext, useMountedOnlyState } from "leaf-validator";
+import { useLifeCycle } from "./hooks/useLifeCycle";
 
 const signals = [
   'hello',
@@ -38,38 +39,39 @@ export const [MultiplayerContextProvider, useMultiplayerContext, MultiplayerCont
     setGameEndTime(null);
   }, [location]);
 
-  useEffect(() => {
-    connection.current = new HubConnectionBuilder()
-      .withUrl("/gameHub", { transport: HttpTransportType.WebSockets })
-      .withAutomaticReconnect()
-      .build();
+  useLifeCycle({
+    onMount: () => {
+      connection.current = new HubConnectionBuilder()
+        .withUrl("/gameHub", { transport: HttpTransportType.WebSockets })
+        .withAutomaticReconnect()
+        .build();
 
-    gameHub.current.receive.setHandlers = handlers => Object
-      .keys(handlers)
-      .forEach(key => {
-        connection.current.off(key);
-        connection.current.on(key, handlers[key]);
-      });
-
-    connection.current.onclose(() => setIsConnected(false));
-    connection.current.onreconnecting(() => setIsConnected(false));
-    connection.current.onreconnected(() => {
-      setIsConnected(true);
-    });
-
-    connection
-      .current
-      .start()
-      .then(() => {
-        signals.forEach(signal => {
-          gameHub.current.invoke[signal] = obj => connection.current.invoke(signal, obj);
-          gameHub.current.send[signal] = obj => connection.current.send(signal, obj);
+      gameHub.current.receive.setHandlers = handlers => Object
+        .keys(handlers)
+        .forEach(key => {
+          connection.current.off(key);
+          connection.current.on(key, handlers[key]);
         });
+
+      connection.current.onclose(() => setIsConnected(false));
+      connection.current.onreconnecting(() => setIsConnected(false));
+      connection.current.onreconnected(() => {
         setIsConnected(true);
       });
 
-    return () => connection.current.stop();
-  }, []);
+      connection
+        .current
+        .start()
+        .then(() => {
+          signals.forEach(signal => {
+            gameHub.current.invoke[signal] = obj => connection.current.invoke(signal, obj);
+            gameHub.current.send[signal] = obj => connection.current.send(signal, obj);
+          });
+          setIsConnected(true);
+        });
+    },
+    onUnMount: () => connection.current.stop()
+  });
 
   return {
     gameHub: gameHub.current,
