@@ -10,7 +10,6 @@ export const TextInput = ({ value, onChange, autofocus, ...otherProps }) => {
     });
 
     return <input
-        style={{ width: '90%' }}
         {...otherProps}
         type="text"
         value={value}

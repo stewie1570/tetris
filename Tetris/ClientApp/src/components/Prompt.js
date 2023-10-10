@@ -1,7 +1,13 @@
 import React, { useRef } from 'react';
 import { CommandButton } from './CommandButton';
 import { TextInput } from './TextInput';
-import { useMountedOnlyState } from "leaf-validator";
+import { useMountedOnlyState } from 'leaf-validator';
+import styled from 'styled-components';
+
+const StyledTextInput = styled(TextInput)`
+    display: inherit;
+    width: 90%;
+`;
 
 export const usePrompt = () => {
     const [isVisible, setVisible] = useMountedOnlyState(false)
@@ -63,7 +69,11 @@ export function StringInput({ onSubmitString, children, filter, inputFilter, sub
         <label style={{ width: '100%' }}>
             {children}
             <br />
-            <TextInput value={value} autofocus={true} onChange={str => setValue(inputFilter?.(str) || str)} />
+            <StyledTextInput
+                className="form-control"
+                value={value}
+                autofocus
+                onChange={str => setValue(inputFilter?.(str) || str)} />
         </label>
         <CommandButton
             className="btn btn-primary space-top"
