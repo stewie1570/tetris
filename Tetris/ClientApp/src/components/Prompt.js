@@ -62,8 +62,8 @@ export const Dialog = ({ isVisible, resolve, children }) => {
         </div>;
 };
 
-export function StringInput({ onSubmitString, children, filter, inputFilter, submittingText }) {
-    const [value, setValue] = React.useState("");
+export function StringInput({ onSubmitString, children, filter, inputFilter, submittingText, initialValue }) {
+    const [value, setValue] = React.useState(initialValue || "");
 
     return <form onSubmit={event => event.preventDefault()} name="dialog-form">
         <label style={{ width: '100%' }}>
