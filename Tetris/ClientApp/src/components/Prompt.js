@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { CommandButton } from './CommandButton';
 import { TextInput } from './TextInput';
 import { useMountedOnlyState } from 'leaf-validator';
+import { useEscapeKeyOnClick } from '../hooks/useEscapeKeyOnClick';
 import styled from 'styled-components';
 
 const StyledTextInput = styled(TextInput)`
@@ -17,6 +18,8 @@ export const usePrompt = () => {
         resolver.current(value);
         setVisible(false);
     };
+
+    useEscapeKeyOnClick({ onEscapeKeyClick: () => resolveDialog(undefined) });
 
     return {
         prompt: (content) => {
