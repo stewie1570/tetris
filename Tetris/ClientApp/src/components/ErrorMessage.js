@@ -1,6 +1,7 @@
 import React from "react";
 import styled from 'styled-components';
 import { useLifeCycle } from '../hooks/useLifeCycle';
+import { useEscapeKeyOnClick } from "../hooks/useEscapeKeyOnClick";
 
 const ErrorModalHeader = styled.div`
   padding:9px 15px;
@@ -28,6 +29,10 @@ export const ErrorMessage = () => {
     setVisible(true);
   }
 
+  const hide = () => setVisible(false);
+
+  useEscapeKeyOnClick({ onEscapeKeyClick: hide });
+
   useLifeCycle({
     onMount: () => {
       window.addEventListener("click", windowClick);
@@ -41,7 +46,6 @@ export const ErrorMessage = () => {
     }
   });
 
-  const hide = () => setVisible(false);
 
   return (
     <div
