@@ -12,7 +12,7 @@ test('Username text input is initialized with current user name', async ({ page 
 });
 
 test("Escape key can be used to close error message and prompt modals", async ({ page }) => {
-  await page.goto('https://localhost:5001/');
+  await page.goto('http://localhost:5000/');
   await page.getByRole('button', { name: 'Pause' }).click();
   await expect(await page.getByText('Error', { exact: true })).toBeVisible();
   await page.locator('body').press('Escape');
