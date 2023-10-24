@@ -45,6 +45,7 @@ test('cant start an already in-progress game', async () => {
   await browserPage2.goBack();
   await expect(await browserPage2.getByText("Game ends in")).toBeVisible();
   await expect(await browserPage2.getByRole('button', { name: 'Start Game' })).toBeDisabled();
+  await expect(await browserPage2.getByText('Score: 0')).not.toBeVisible();
 
   await context1.close();
   await context2.close();
