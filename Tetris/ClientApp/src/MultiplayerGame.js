@@ -219,7 +219,8 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                         additionalControls={<>
                             {singlePlayerGameLink}
                         </>}
-                        className="col-xs-12 col-md-4">
+                        className="col-xs-12 col-md-4"
+                        isStartable={isStartable}>
                         <LeaderBoard style={{ height: "100%" }}>
                             Players:
                             {Object

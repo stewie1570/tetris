@@ -5,9 +5,12 @@ import { leaderBoardService } from "./services";
 import "./App.css";
 import { ScoreBoard } from "./ScoreBoard";
 import { GameControls } from "./GameControls";
-import { createManagedContext, useLoadingState, useMountedOnlyState } from "leaf-validator";
+import {
+  createManagedContext,
+  useLoadingState,
+  useMountedOnlyState,
+} from "leaf-validator";
 import { GameMetaFrame } from "./components/GameMetaFrame";
-
 
 export const initialGameState = {
   board: emptyBoard,
@@ -18,100 +21,102 @@ export const initialGameState = {
   score: 0,
 };
 
-export const [SinglePlayerGameContextProvider, useSinglePlayerGameContext] = createManagedContext(() => {
-  const [game, setGame] = useMountedOnlyState(initialGameState);
-  const [username, setUsername] = useMountedOnlyState();
-  const { dialogProps, prompt } = usePrompt();
+export const [SinglePlayerGameContextProvider, useSinglePlayerGameContext] =
+  createManagedContext(() => {
+    const [game, setGame] = useMountedOnlyState(initialGameState);
+    const [username, setUsername] = useMountedOnlyState();
+    const { dialogProps, prompt } = usePrompt();
 
-  const [isLoadingScoreBoard, showLoadingScoreBoardWhile] = useLoadingState();
+    const [isLoadingScoreBoard, showLoadingScoreBoardWhile] = useLoadingState();
 
-  const postableScore = game.score || game.oldScore;
-  const allowScorePost = game.paused && Boolean(postableScore);
+    const postableScore = game.score || game.oldScore;
+    const allowScorePost = game.paused && Boolean(postableScore);
 
-  const postScore = async () => {
-    const hasUserName = Boolean(username?.trim().length);
+    const postScore = async () => {
+      const hasUserName = Boolean(username?.trim().length);
 
-    const sendCurrentScoreFor = (name) =>
-      leaderBoardService
-        .postScore({
-          username: name,
-          score: postableScore,
-        })
-        .then(reloadScoreBoard)
-        .then((scoreBoard) => {
-          const scoreIsOnBoard = scoreBoard.find(
-            ({ username }) => username === name
-          );
-          !scoreIsOnBoard &&
-            window.dispatchEvent(
-              new CustomEvent("user-error", {
-                detail: `Your score was recorded but didn't make the top ${scoreBoard.length}.`,
-              })
+      const sendCurrentScoreFor = (name) =>
+        leaderBoardService
+          .postScore({
+            username: name,
+            score: postableScore,
+          })
+          .then(reloadScoreBoard)
+          .then((scoreBoard) => {
+            const scoreIsOnBoard = scoreBoard.find(
+              ({ username }) => username === name
             );
-        });
+            !scoreIsOnBoard &&
+              window.dispatchEvent(
+                new CustomEvent("user-error", {
+                  detail: `Your score was recorded but didn't make the top ${scoreBoard.length}.`,
+                })
+              );
+          });
 
-    const promptUserNameAndSendScore = () =>
-      prompt((exitModal) => (
-        <StringPrompt
-          filter={(value) => (value ?? "").trim()}
-          onSubmitString={(name) =>
-            Boolean(name?.length)
-              ? sendCurrentScoreFor(name)
-                .then(() => setUsername(name))
-                .then(exitModal, exitModal)
-              : exitModal()
-          }
-          submittingText="Posting Your Score..."
-        >
-          What user name would you like?
-        </StringPrompt>
-      ));
+      const promptUserNameAndSendScore = () =>
+        prompt((exitModal) => (
+          <StringPrompt
+            filter={(value) => (value ?? "").trim()}
+            onSubmitString={(name) =>
+              Boolean(name?.length)
+                ? sendCurrentScoreFor(name)
+                    .then(() => setUsername(name))
+                    .then(exitModal, exitModal)
+                : exitModal()
+            }
+            submittingText="Posting Your Score..."
+          >
+            What user name would you like?
+          </StringPrompt>
+        ));
 
-    await (hasUserName
-      ? sendCurrentScoreFor(username)
-      : promptUserNameAndSendScore());
-  };
+      await (hasUserName
+        ? sendCurrentScoreFor(username)
+        : promptUserNameAndSendScore());
+    };
 
-  const reloadScoreBoard = async () => {
-    const scoreBoard = await leaderBoardService.get();
-    setGame((game) => ({ ...game, scoreBoard }));
-    return scoreBoard;
-  };
+    const reloadScoreBoard = async () => {
+      const scoreBoard = await leaderBoardService.get();
+      setGame((game) => ({ ...game, scoreBoard }));
+      return scoreBoard;
+    };
 
-  const pause = async ({ showScoreBoard }) => {
-    const paused = !game.paused;
-    setGame({
-      ...game,
-      paused,
-      scoreBoard: paused ? game.scoreBoard : undefined,
-    });
-    paused &&
-      showScoreBoard &&
-      (await showLoadingScoreBoardWhile(reloadScoreBoard()));
-  };
+    const pause = async ({ showScoreBoard }) => {
+      const paused = !game.paused;
+      setGame({
+        ...game,
+        paused,
+        scoreBoard: paused ? game.scoreBoard : undefined,
+      });
+      paused &&
+        showScoreBoard &&
+        (await showLoadingScoreBoardWhile(reloadScoreBoard()));
+    };
 
-  return {
-    game,
-    setGame,
-    username,
-    setUsername,
-    dialogProps,
-    prompt,
-    isLoadingScoreBoard,
-    showLoadingScoreBoardWhile,
-    postableScore,
-    allowScorePost,
-    postScore,
-    reloadScoreBoard,
-    pause,
-  };
-});
+    return {
+      game,
+      setGame,
+      username,
+      setUsername,
+      dialogProps,
+      prompt,
+      isLoadingScoreBoard,
+      showLoadingScoreBoardWhile,
+      postableScore,
+      allowScorePost,
+      postScore,
+      reloadScoreBoard,
+      pause,
+    };
+  });
 
 export const SinglePlayerGame = ({
   shapeProvider,
   children: otherPlayers,
   header,
   additionalControls,
+  isStartable,
   ...otherProps
 }) => {
   const {
@@ -132,8 +137,9 @@ export const SinglePlayerGame = ({
         <>
           {header}
           <p>
-            {`Score: ${game.score}` +
-              (game.oldScore ? ` (Previous: ${game.oldScore})` : "")}
+            {isStartable &&
+              `Score: ${game.score}` +
+                (game.oldScore ? ` (Previous: ${game.oldScore})` : "")}
           </p>
         </>
       }
