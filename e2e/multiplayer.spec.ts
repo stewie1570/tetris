@@ -99,6 +99,26 @@ test('Organizer has disconnected screen appears and replaces all else when organ
   await context2.close();
 });
 
+test("can't set user name that is too long", async ({ page }) => {
+  await page.goto('http://localhost:5000/');
+  await page.getByRole('link', { name: 'Host Multiplayer Game' }).click();
+  await page.getByRole('button', { name: 'Set User Name' }).click();
+  await page.getByLabel('What user name would you like?').fill('stewart');
+  await page.getByLabel('What user name would you like?').press('Enter');
+  await expect(await page.getByText('stewart')).toBeVisible();
+  await page.getByRole('button', { name: 'Set User Name' }).click();
+  await page.getByLabel('What user name would you like?').fill('stewart mcphie anderson');
+  await page.getByLabel('What user name would you like?').press('Enter');
+  await expect(await page.getByText('Name must be 20 characters or less.')).toBeVisible();
+  await page.locator('div').filter({ hasText: /^Error×$/ }).getByLabel('Close').click();
+  await page.getByRole('button', { name: 'Cancel' }).click();
+  await page.getByRole('button', { name: 'Set User Name' }).click();
+  await page.getByLabel('What user name would you like?').click();
+  await page.getByLabel('What user name would you like?').fill('stewie');
+  await page.getByLabel('What user name would you like?').press('Enter');
+  await expect(await page.getByText('stewie')).toBeVisible();
+});
+
 async function joinMultiplayerGame({ guestBrowserPage, gameRoomCode }) {
   await guestBrowserPage.goto('https://localhost:5001/');
   await guestBrowserPage.getByRole('button', { name: 'Join Multiplayer Game' }).click();
