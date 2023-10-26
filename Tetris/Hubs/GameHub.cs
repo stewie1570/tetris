@@ -16,6 +16,7 @@ namespace Tetris.Hubs
     public class GameHub : Hub
     {
         private readonly ILogger<GameHub> logger;
+        private readonly int UserNameMaxLength = 20;
 
         public GameHub(ILogger<GameHub> logger)
         {
@@ -58,15 +59,23 @@ namespace Tetris.Hubs
         [Transaction(Web = true)]
         public async Task Status(GroupMessage statusMessage)
         {
-            var sendToAll = statusMessage
+            var isNameChange = statusMessage
                 .Message
                 .EnumerateObject()
                 .Any(prop => prop.Name == "name" && prop.Value.ValueKind == JsonValueKind.String);
 
-            await (sendToAll
+            if (isNameChange)
+            {
+                var newName = statusMessage.Message.GetProperty("name").GetString();
+                if (newName.Length > UserNameMaxLength)
+                {
+                    throw new HubException($"Name must be {UserNameMaxLength} characters or less.");
+                }
+            }
+
+            await (isNameChange
                 ? Clients.Group(statusMessage.GroupId)
-                : Clients.OthersInGroup(statusMessage.GroupId))
-                .SendAsync("status", statusMessage.Message);
+                : Clients.OthersInGroup(statusMessage.GroupId)).SendAsync("status", statusMessage.Message);
         }
 
         [Transaction(Web = true)]
