@@ -10,7 +10,6 @@ namespace Tetris.Domain.LeaderBoard
 {
     public class LeaderBoardUpdater : ILeaderBoardUpdater
     {
-        private const int maxUsernameLength = 20;
         private Func<Task<Models.LeaderBoard>> getLeaderBoard;
         private ILeaderBoardStorage scoreBoardStorage;
 
@@ -26,8 +25,8 @@ namespace Tetris.Domain.LeaderBoard
         {
             var trimmedUserScore = new UserScore { Username = userScore.Username.Trim(), Score = userScore.Score };
 
-            if (trimmedUserScore.Username.Length > maxUsernameLength)
-                throw new ValidationException($"Username length must not be over {maxUsernameLength}.");
+            if (trimmedUserScore.Username.Length > Constants.MaxUsernameChars)
+                throw new ValidationException($"Username length must not be over {Constants.MaxUsernameChars}.");
 
             var leaderBoard = await getLeaderBoard();
 

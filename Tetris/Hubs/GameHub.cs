@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using NewRelic.Api.Agent;
+using Tetris.Domain;
 
 namespace Tetris.Hubs
 {
@@ -16,7 +17,6 @@ namespace Tetris.Hubs
     public class GameHub : Hub
     {
         private readonly ILogger<GameHub> logger;
-        private readonly int UserNameMaxLength = 20;
 
         public GameHub(ILogger<GameHub> logger)
         {
@@ -67,9 +67,9 @@ namespace Tetris.Hubs
             if (isNameChange)
             {
                 var newName = statusMessage.Message.GetProperty("name").GetString();
-                if (newName.Length > UserNameMaxLength)
+                if (newName.Length > Domain.Constants.MaxUsernameChars)
                 {
-                    throw new HubException($"Name must be {UserNameMaxLength} characters or less.");
+                    throw new HubException($"Name must be {Domain.Constants.MaxUsernameChars} characters or less.");
                 }
             }
 
