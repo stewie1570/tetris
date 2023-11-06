@@ -100,11 +100,7 @@ namespace Tetris.Hubs
         [Transaction(Web = true)]
         public async Task SendChat(GroupMessage chatMessage)
         {
-            await Clients.Group(chatMessage.GroupId).SendAsync("addToChat", new
-            {
-                name = $"{Context.Items["name"] ?? "[Un-named player]"}: ",
-                text = chatMessage.Message
-            });
+            await Clients.Group(chatMessage.GroupId).SendAsync("addToChat", chatMessage.Message);
         }
 
         [Transaction(Web = true)]
@@ -128,7 +124,7 @@ namespace Tetris.Hubs
             {
                 await Clients.Group(groupId).SendAsync("addToChat", new
                 {
-                    name = $"[{Context.Items["name"] ?? "[Un-named player]"} disconnected]"
+                    notification = $"[{Context.Items["name"] ?? "[Un-named player]"} disconnected]"
                 });
             }
 
