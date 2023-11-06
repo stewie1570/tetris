@@ -17,7 +17,15 @@ export function GameChat() {
 
     const sendMessage = async (event) => {
         event?.preventDefault();
-        await gameHub.invoke.sendChat({ groupId: organizerId, message: message });
+        try {
+            await gameHub.invoke.sendChat({ groupId: organizerId, message: message });
+        } catch (error) {
+            window.dispatchEvent(
+                new CustomEvent("user-error", {
+                    detail: error?.message ?? "Unknown error.",
+                })
+            );
+        }
         setMessage("");
     };
 
