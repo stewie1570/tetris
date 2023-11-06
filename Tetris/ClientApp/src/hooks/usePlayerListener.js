@@ -23,6 +23,7 @@ export const usePlayerListener = () => {
     setGameResults,
     selectedDuration,
     setCanGuestStartGame,
+    chatLines,
     setChatLines
   } = useMultiplayerContext();
   const { game, setGame, username } = useSinglePlayerGameContext();
@@ -33,7 +34,7 @@ export const usePlayerListener = () => {
     username,
     selectedDuration,
   });
-  externalsRef.current = { gameHub, isOrganizer, username, selectedDuration };
+  externalsRef.current = { gameHub, isOrganizer, username, selectedDuration, chatLines };
 
   useEffect(() => {
     const isConnectedWithUserId = currentUserId && isConnected;
@@ -45,6 +46,10 @@ export const usePlayerListener = () => {
             ...otherPlayers,
             [userId]: { ...otherPlayers[userId], ...otherProps },
           }));
+          externalsRef.current.gameHub.invoke.setChatLines({
+            groupId: organizerUserId,
+            message: externalsRef.current.chatLines
+          })
         },
         playersListUpdate: ({ players: updatedPlayersList, isStartable }) => {
           setOtherPlayers((otherPlayers) =>

@@ -16,7 +16,8 @@ const signals = [
   'disconnect',
   'noOranizer',
   'reset',
-  'sendChat'
+  'sendChat',
+  'setChatLines'
 ];
 
 export const [MultiplayerContextProvider, useMultiplayerContext, MultiplayerContext] = createManagedContext(() => {

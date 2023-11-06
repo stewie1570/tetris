@@ -108,6 +108,12 @@ namespace Tetris.Hubs
         }
 
         [Transaction(Web = true)]
+        public async Task SetChatLines(GroupMessage chatMessage)
+        {
+            await Clients.OthersInGroup(chatMessage.GroupId).SendAsync("setChatLines", chatMessage.Message);
+        }
+
+        [Transaction(Web = true)]
         public async override Task OnDisconnectedAsync(System.Exception exception)
         {
             var groupId = Context.Items["groupId"] as string;
