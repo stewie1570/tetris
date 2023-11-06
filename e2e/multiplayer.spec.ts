@@ -39,6 +39,16 @@ test("players can chat with each other", async () => {
   await browserPage2.getByRole('textbox').press('Enter');
   await expect(await browserPage1.getByText('browser page 2: here is a response')).toBeVisible();
   await expect(await browserPage2.getByText('browser page 2: here is a response')).toBeVisible();
+
+  await setUserName(browserPage1, 'browser page one');
+  await setUserName(browserPage2, 'browser page two');
+  await expect(await browserPage1.getByText('browser page one: here is some chat')).toBeVisible();
+  await expect(await browserPage2.getByText('browser page one: here is some chat')).toBeVisible();
+  await expect(await browserPage1.getByText('browser page two: here is a response')).toBeVisible();
+  await expect(await browserPage2.getByText('browser page two: here is a response')).toBeVisible();
+
+  await context1.close();
+  await context2.close();
 });
 
 test('cant start an already in-progress game', async () => {
@@ -148,8 +158,12 @@ async function joinMultiplayerGame({ guestBrowserPage, gameRoomCode }) {
   await guestBrowserPage.getByLabel('Code:').click();
   await guestBrowserPage.getByLabel('Code:').fill(gameRoomCode ?? '');
   await guestBrowserPage.getByRole('button', { name: 'Ok' }).click();
+  await setUserName(guestBrowserPage, 'browser page 2');
+}
+
+async function setUserName(guestBrowserPage: any, userName: string) {
   await guestBrowserPage.getByRole('button', { name: 'Set User Name' }).click();
-  await guestBrowserPage.getByLabel('What user name would you like?').fill('browser page 2');
+  await guestBrowserPage.getByLabel('What user name would you like?').fill(userName);
   await guestBrowserPage.getByLabel('What user name would you like?').press('Enter');
 }
 
