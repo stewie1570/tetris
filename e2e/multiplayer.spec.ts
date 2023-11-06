@@ -51,6 +51,35 @@ test("players can chat with each other", async () => {
   await context2.close();
 });
 
+test("chat is reset with the rest of the game context", async () => {
+  const { page: browserPage1, context: context1 } = await newBrowserPage();
+  const { page: browserPage2, context: context2 } = await newBrowserPage();
+
+  const gameRoomCode = await hostMultiplayerGameOn({ hostBrowserPage: browserPage1 });
+
+  await joinMultiplayerGame({ guestBrowserPage: browserPage2, gameRoomCode });
+
+  await browserPage1.getByRole('textbox').fill('here is some chat');
+  await browserPage1.getByRole('textbox').press('Enter');
+  await expect(await browserPage1.getByText('browser page 1: here is some chat')).toBeVisible();
+  await expect(await browserPage2.getByText('browser page 1: here is some chat')).toBeVisible();
+
+  await browserPage1.getByRole('link', { name: 'Single Player Game' }).click();
+  await browserPage1.getByRole('button', { name: 'Pause' }).click();
+  await browserPage1.getByRole('dialog')
+    .filter({ hasText: 'Error×An error occurred.' })
+    .getByRole('button', { name: 'Close' })
+    .click();
+  await browserPage1.goBack();
+  await expect(await browserPage1.getByText("browser page 1")).toBeVisible();
+
+  await expect(await browserPage1.getByText('browser page 1: here is some chat')).not.toBeVisible();
+  await expect(await browserPage2.getByText('browser page 1: here is some chat')).not.toBeVisible();
+
+  await context1.close();
+  await context2.close();
+});
+
 test('cant start an already in-progress game', async () => {
   test.setTimeout(60000);
   const { page: browserPage1, context: context1 } = await newBrowserPage();

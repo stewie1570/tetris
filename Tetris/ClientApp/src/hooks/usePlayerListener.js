@@ -24,7 +24,7 @@ export const usePlayerListener = () => {
     selectedDuration,
     setCanGuestStartGame,
     chatLines,
-    setChatLines
+    setChatLines,
   } = useMultiplayerContext();
   const { game, setGame, username } = useSinglePlayerGameContext();
   const isOrganizer = organizerUserId === currentUserId;
@@ -34,7 +34,13 @@ export const usePlayerListener = () => {
     username,
     selectedDuration,
   });
-  externalsRef.current = { gameHub, isOrganizer, username, selectedDuration, chatLines };
+  externalsRef.current = {
+    gameHub,
+    isOrganizer,
+    username,
+    selectedDuration,
+    chatLines,
+  };
 
   useEffect(() => {
     const isConnectedWithUserId = currentUserId && isConnected;
@@ -48,8 +54,8 @@ export const usePlayerListener = () => {
           }));
           externalsRef.current.gameHub.invoke.setChatLines({
             groupId: organizerUserId,
-            message: externalsRef.current.chatLines
-          })
+            message: externalsRef.current.chatLines,
+          });
         },
         playersListUpdate: ({ players: updatedPlayersList, isStartable }) => {
           setOtherPlayers((otherPlayers) =>
@@ -114,6 +120,7 @@ export const usePlayerListener = () => {
             mobile,
             paused: true,
           }));
+          setChatLines([]);
           setOtherPlayers((otherPlayers) =>
             [{}, ...Object.keys(otherPlayers)].reduce(
               (currentPlayers, userId) => ({
@@ -123,13 +130,13 @@ export const usePlayerListener = () => {
             )
           );
         },
-        addToChat: chatLine => setChatLines(chatLines => [
-          ...chatLines,
-          chatLine
-        ].slice(
-          Math.max((chatLines?.length ?? 0) - (MaxChatLines - 1), 0)
-        )),
-        setChatLines: chatLines => setChatLines(chatLines)
+        addToChat: (chatLine) =>
+          setChatLines((chatLines) =>
+            [...chatLines, chatLine].slice(
+              Math.max((chatLines?.length ?? 0) - (MaxChatLines - 1), 0)
+            )
+          ),
+        setChatLines: (chatLines) => setChatLines(chatLines),
       });
   }, [isConnected, currentUserId]);
 };
