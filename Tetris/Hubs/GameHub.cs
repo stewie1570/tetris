@@ -71,6 +71,7 @@ namespace Tetris.Hubs
                 {
                     throw new HubException($"Name must be {Domain.Constants.MaxUsernameChars} characters or less.");
                 }
+                Context.Items["name"] = newName;
             }
 
             await (isNameChange
@@ -97,6 +98,22 @@ namespace Tetris.Hubs
         }
 
         [Transaction(Web = true)]
+        public async Task SendChat(GroupMessage chatMessage)
+        {
+            await Clients.Group(chatMessage.GroupId).SendAsync("addToChat", new
+            {
+                name = $"{Context.Items["name"] ?? "[Un-named player]"}: ",
+                text = chatMessage.Message
+            });
+        }
+
+        [Transaction(Web = true)]
+        public async Task SetChatLines(GroupMessage chatMessage)
+        {
+            await Clients.OthersInGroup(chatMessage.GroupId).SendAsync("setChatLines", chatMessage.Message);
+        }
+
+        [Transaction(Web = true)]
         public async override Task OnDisconnectedAsync(System.Exception exception)
         {
             var groupId = Context.Items["groupId"] as string;
@@ -106,6 +123,14 @@ namespace Tetris.Hubs
             await (isOrganizer
                 ? Clients.Group(groupId).SendAsync("noOrganizer")
                 : Clients.Group($"{groupId}-organizer").SendAsync("disconnect", new { userId }));
+
+            if (!isOrganizer)
+            {
+                await Clients.Group(groupId).SendAsync("addToChat", new
+                {
+                    name = $"[{Context.Items["name"] ?? "[Un-named player]"} disconnected]"
+                });
+            }
 
             if (exception != null) logger.LogError(exception, "Disconnected");
         }
