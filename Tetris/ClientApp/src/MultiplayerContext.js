@@ -15,7 +15,8 @@ const signals = [
   'results',
   'disconnect',
   'noOranizer',
-  'reset'
+  'reset',
+  'sendChat'
 ];
 
 export const [MultiplayerContextProvider, useMultiplayerContext, MultiplayerContext] = createManagedContext(() => {
@@ -34,6 +35,7 @@ export const [MultiplayerContextProvider, useMultiplayerContext, MultiplayerCont
   const [otherPlayers, setOtherPlayers] = useMountedOnlyState(initialEmptyPlayersList);
   const [gameResults, setGameResults] = React.useState(null);
   const [selectedDuration, setSelectedDuration] = React.useState(selectableDurations[0] * 1000);
+  const [chatLines, setChatLines] = React.useState([]);
 
   useEffect(() => {
     setGameEndTime(null);
@@ -89,7 +91,9 @@ export const [MultiplayerContextProvider, useMultiplayerContext, MultiplayerCont
     selectedDuration,
     setSelectedDuration,
     canGuestStartGame,
-    setCanGuestStartGame
+    setCanGuestStartGame,
+    chatLines,
+    setChatLines
   };
 });
 

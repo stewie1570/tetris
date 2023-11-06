@@ -11,6 +11,7 @@ import { stringFrom } from "./domain/serialization";
 import { TetrisBoard } from "./components/TetrisBoard";
 import { GameMetaFrame } from "./components/GameMetaFrame";
 import { Link } from "react-router-dom";
+import { GameChat } from './GameChat';
 import { emptyBoard } from "./components/TetrisGame";
 import { usePlayerListener } from "./hooks/usePlayerListener";
 import { useHelloSender } from "./hooks/useHelloSender";
@@ -71,22 +72,22 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         onSubmitString={async (name) => {
           name
             ? await gameHub.invoke
-                .status({
-                  groupId: organizerUserId,
-                  message: {
-                    userId: currentUserId,
-                    name: name,
-                  },
-                })
-                .then(() => setUsername(name))
-                .then(exitModal)
-                .catch(({ message }) =>
-                  window.dispatchEvent(
-                    new CustomEvent("user-error", {
-                      detail: trimHubExceptionMessage(message),
-                    })
-                  )
+              .status({
+                groupId: organizerUserId,
+                message: {
+                  userId: currentUserId,
+                  name: name,
+                },
+              })
+              .then(() => setUsername(name))
+              .then(exitModal)
+              .catch(({ message }) =>
+                window.dispatchEvent(
+                  new CustomEvent("user-error", {
+                    detail: trimHubExceptionMessage(message),
+                  })
                 )
+              )
             : exitModal();
         }}
         submittingText="Setting user name..."
@@ -151,30 +152,30 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
   const results = gameResults
     ? () => (
-        <>
-          <Header>Game Over</Header>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Score</th>
+      <>
+        <Header>Game Over</Header>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.keys(gameResults).map((userId) => (
+              <tr key={userId}>
+                <td>{gameResults[userId].name}</td>
+                <td>{gameResults[userId].score}</td>
               </tr>
-            </thead>
-            <tbody>
-              {Object.keys(gameResults).map((userId) => (
-                <tr key={userId}>
-                  <td>{gameResults[userId].name}</td>
-                  <td>{gameResults[userId].score}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <Centered>
-            <div>{singlePlayerGameLink}</div>
-            <div>{resetButton}</div>
-          </Centered>
-        </>
-      )
+            ))}
+          </tbody>
+        </table>
+        <Centered>
+          <div>{singlePlayerGameLink}</div>
+          <div>{resetButton}</div>
+        </Centered>
+      </>
+    )
     : undefined;
 
   const retryButton = (
@@ -200,39 +201,39 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const waitingForOrganizer =
     !organizerConnectionStatus && !isOrganizer
       ? () => (
-          <>
-            <Header>Waiting for organizer...</Header>
-            <Centered>
-              <div>{singlePlayerGameLink}</div>
-              <div>{retryButton}</div>
-            </Centered>
-          </>
-        )
+        <>
+          <Header>Waiting for organizer...</Header>
+          <Centered>
+            <div>{singlePlayerGameLink}</div>
+            <div>{retryButton}</div>
+          </Centered>
+        </>
+      )
       : undefined;
 
   const organizerDisconnected =
     organizerConnectionStatus === "disconnected" && !isOrganizer && game.paused
       ? () => (
-          <>
-            <Header>Organizer has disconnected.</Header>
-            <Centered>
-              <div>{singlePlayerGameLink}</div>
-              <div>{retryButton}</div>
-            </Centered>
-          </>
-        )
+        <>
+          <Header>Organizer has disconnected.</Header>
+          <Centered>
+            <div>{singlePlayerGameLink}</div>
+            <div>{retryButton}</div>
+          </Centered>
+        </>
+      )
       : undefined;
 
   const userIsDisconnected =
     isConnected === undefined
       ? () => (
-          <>
-            <Header>Connecting to game server...</Header>
-            <Centered>
-              <div>{singlePlayerGameLink}</div>
-            </Centered>
-          </>
-        )
+        <>
+          <Header>Connecting to game server...</Header>
+          <Centered>
+            <div>{singlePlayerGameLink}</div>
+          </Centered>
+        </>
+      )
       : undefined;
 
   const gameHeader = (
@@ -305,7 +306,10 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 </LeaderBoard>
               </SinglePlayerGame>
               {game.paused ? (
-                <div className="col-xs-12 col-md-8">{gameContextInfo}</div>
+                <div className="col-xs-12 col-md-8">
+                  {gameContextInfo}
+                  <GameChat />
+                </div>
               ) : (
                 otherPlayerIds
                   .filter(
