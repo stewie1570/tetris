@@ -22,6 +22,25 @@ test('start a multiplayer game', async () => {
   await context2.close();
 });
 
+test("players can chat with each other", async () => {
+  const { page: browserPage1, context: context1 } = await newBrowserPage();
+  const { page: browserPage2, context: context2 } = await newBrowserPage();
+
+  const gameRoomCode = await hostMultiplayerGameOn({ hostBrowserPage: browserPage1 });
+
+  await joinMultiplayerGame({ guestBrowserPage: browserPage2, gameRoomCode });
+
+  await browserPage1.getByRole('textbox').fill('here is some chat');
+  await browserPage1.getByRole('textbox').press('Enter');
+  await expect(await browserPage1.getByText('browser page 1: here is some chat')).toBeVisible();
+  await expect(await browserPage2.getByText('browser page 1: here is some chat')).toBeVisible();
+
+  await browserPage2.getByRole('textbox').fill('here is a response');
+  await browserPage2.getByRole('textbox').press('Enter');
+  await expect(await browserPage1.getByText('browser page 2: here is a response')).toBeVisible();
+  await expect(await browserPage2.getByText('browser page 2: here is a response')).toBeVisible();
+});
+
 test('cant start an already in-progress game', async () => {
   test.setTimeout(60000);
   const { page: browserPage1, context: context1 } = await newBrowserPage();
