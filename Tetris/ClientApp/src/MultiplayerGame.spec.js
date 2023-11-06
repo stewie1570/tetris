@@ -15,15 +15,17 @@ import { set, useMountedOnlyState } from "leaf-validator";
 import { useLifeCycle } from "./hooks/useLifeCycle";
 
 const signals = [
-  "hello",
-  "playersListUpdate",
-  "status",
-  "start",
-  "gameOver",
-  "results",
-  "disconnect",
-  "noOranizer",
-  "reset",
+  'hello',
+  'playersListUpdate',
+  'status',
+  'start',
+  'gameOver',
+  'results',
+  'disconnect',
+  'noOranizer',
+  'reset',
+  'sendChat',
+  'setChatLines'
 ];
 
 const createTestGameHub = () => {
@@ -182,6 +184,11 @@ test("Organizer: hosting a multiplayer game", async () => {
         },
       },
       {
+        setChatLines: {
+          "groupId": "host"
+        }
+      },
+      {
         playersListUpdate: {
           groupId: "host",
           message: {
@@ -189,6 +196,11 @@ test("Organizer: hosting a multiplayer game", async () => {
             isStartable: true,
           },
         },
+      },
+      {
+        setChatLines: {
+          "groupId": "host"
+        }
       },
       {
         playersListUpdate: {

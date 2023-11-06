@@ -26,7 +26,7 @@ export function GameChat() {
             <div className="card-header">Chat</div>
             <div className="card-body">
                 <div className="chat-history">
-                    {chatLines.map((line, index) => (
+                    {chatLines?.map((line, index) => (
                         <div key={index} className="chat-message">
                             <strong>{line.name}</strong>
                             {line.text}
