@@ -11,7 +11,7 @@ import { stringFrom } from "./domain/serialization";
 import { TetrisBoard } from "./components/TetrisBoard";
 import { GameMetaFrame } from "./components/GameMetaFrame";
 import { Link } from "react-router-dom";
-import { GameChat } from './GameChat';
+import { GameChat } from "./GameChat";
 import { emptyBoard } from "./components/TetrisGame";
 import { usePlayerListener } from "./hooks/usePlayerListener";
 import { useHelloSender } from "./hooks/useHelloSender";
@@ -72,22 +72,22 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         onSubmitString={async (name) => {
           name
             ? await gameHub.invoke
-              .status({
-                groupId: organizerUserId,
-                message: {
-                  userId: currentUserId,
-                  name: name,
-                },
-              })
-              .then(() => setUsername(name))
-              .then(exitModal)
-              .catch(({ message }) =>
-                window.dispatchEvent(
-                  new CustomEvent("user-error", {
-                    detail: trimHubExceptionMessage(message),
-                  })
+                .status({
+                  groupId: organizerUserId,
+                  message: {
+                    userId: currentUserId,
+                    name: name,
+                  },
+                })
+                .then(() => setUsername(name))
+                .then(exitModal)
+                .catch(({ message }) =>
+                  window.dispatchEvent(
+                    new CustomEvent("user-error", {
+                      detail: trimHubExceptionMessage(message),
+                    })
+                  )
                 )
-              )
             : exitModal();
         }}
         submittingText="Setting user name..."
@@ -103,30 +103,33 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const otherPlayerIds = Object.keys(otherPlayers);
 
   const gameContextInfo = (
-    <>
-      <table style={{ marginTop: "2rem" }} className="table">
-        <thead>
-          <tr>
-            <th colSpan={2}>
-              Other players can join via the Code or URL below:
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th>Code</th>
-            <td>{organizerUserId}</td>
-          </tr>
-          <tr>
-            <th>URL</th>
-            <td>
-              {window.location.protocol}//{window.location.host}/
-              {organizerUserId}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </>
+    <div className="card" style={{ marginTop: "1rem" }}>
+      <div className="card-header">Connectivity</div>
+      <div className="card-body">
+        <table className="table">
+          <thead>
+            <tr>
+              <th colSpan={2}>
+                Other players can join via the Code or URL below:
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Code</th>
+              <td>{organizerUserId}</td>
+            </tr>
+            <tr>
+              <th>URL</th>
+              <td>
+                {window.location.protocol}//{window.location.host}/
+                {organizerUserId}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 
   const singlePlayerGameLink = (
@@ -152,30 +155,30 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
   const results = gameResults
     ? () => (
-      <>
-        <Header>Game Over</Header>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.keys(gameResults).map((userId) => (
-              <tr key={userId}>
-                <td>{gameResults[userId].name}</td>
-                <td>{gameResults[userId].score}</td>
+        <>
+          <Header>Game Over</Header>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Score</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <Centered>
-          <div>{singlePlayerGameLink}</div>
-          <div>{resetButton}</div>
-        </Centered>
-      </>
-    )
+            </thead>
+            <tbody>
+              {Object.keys(gameResults).map((userId) => (
+                <tr key={userId}>
+                  <td>{gameResults[userId].name}</td>
+                  <td>{gameResults[userId].score}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <Centered>
+            <div>{singlePlayerGameLink}</div>
+            <div>{resetButton}</div>
+          </Centered>
+        </>
+      )
     : undefined;
 
   const retryButton = (
@@ -201,39 +204,39 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const waitingForOrganizer =
     !organizerConnectionStatus && !isOrganizer
       ? () => (
-        <>
-          <Header>Waiting for organizer...</Header>
-          <Centered>
-            <div>{singlePlayerGameLink}</div>
-            <div>{retryButton}</div>
-          </Centered>
-        </>
-      )
+          <>
+            <Header>Waiting for organizer...</Header>
+            <Centered>
+              <div>{singlePlayerGameLink}</div>
+              <div>{retryButton}</div>
+            </Centered>
+          </>
+        )
       : undefined;
 
   const organizerDisconnected =
     organizerConnectionStatus === "disconnected" && !isOrganizer && game.paused
       ? () => (
-        <>
-          <Header>Organizer has disconnected.</Header>
-          <Centered>
-            <div>{singlePlayerGameLink}</div>
-            <div>{retryButton}</div>
-          </Centered>
-        </>
-      )
+          <>
+            <Header>Organizer has disconnected.</Header>
+            <Centered>
+              <div>{singlePlayerGameLink}</div>
+              <div>{retryButton}</div>
+            </Centered>
+          </>
+        )
       : undefined;
 
   const userIsDisconnected =
     isConnected === undefined
       ? () => (
-        <>
-          <Header>Connecting to game server...</Header>
-          <Centered>
-            <div>{singlePlayerGameLink}</div>
-          </Centered>
-        </>
-      )
+          <>
+            <Header>Connecting to game server...</Header>
+            <Centered>
+              <div>{singlePlayerGameLink}</div>
+            </Centered>
+          </>
+        )
       : undefined;
 
   const gameHeader = (

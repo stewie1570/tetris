@@ -52,7 +52,7 @@ export function GameChat() {
   }
 
   return (
-    <div className="card">
+    <div className="card" style={{ marginTop: "1rem", marginBottom: "1rem" }}>
       <div className="card-header">Chat</div>
       <div className="card-body">
         <div className="chat-history">
