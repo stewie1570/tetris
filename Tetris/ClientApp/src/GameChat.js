@@ -19,24 +19,22 @@ export function GameChat() {
   const sendMessage = async (event) => {
     event?.preventDefault();
 
-    if (!messageText || messageText === "") {
-      return;
-    }
+    const isMessageEmpty = !messageText || messageText === "";
+    const canChat = !isMessageEmpty && userHasName;
 
-    if (!userHasName) {
+    !userHasName &&
       window.dispatchEvent(
         new CustomEvent("user-error", {
           detail: "You must set a name before sending messages.",
         })
       );
-      return;
-    }
 
     try {
-      await gameHub.invoke.sendChat({
-        groupId: organizerId,
-        message: { text: messageText, userId },
-      });
+      canChat &&
+        (await gameHub.invoke.sendChat({
+          groupId: organizerId,
+          message: { text: messageText, userId },
+        }));
     } catch (error) {
       window.dispatchEvent(
         new CustomEvent("user-error", {
