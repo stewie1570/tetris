@@ -19,6 +19,10 @@ export function GameChat() {
   const sendMessage = async (event) => {
     event?.preventDefault();
 
+    if (!messageText || messageText === "") {
+      return;
+    }
+
     if (!userHasName) {
       window.dispatchEvent(
         new CustomEvent("user-error", {
