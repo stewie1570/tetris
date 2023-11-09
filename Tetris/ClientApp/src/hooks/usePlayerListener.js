@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { update, process } from "../domain/players";
 import { useMultiplayerContext } from "../MultiplayerContext";
 import {
@@ -7,6 +7,8 @@ import {
 } from "../SinglePlayerGame";
 import { stringFrom } from "../domain/serialization";
 import { useOrganizerId } from "./useOrganizerId";
+
+const MaxChatLines = 10;
 
 export const usePlayerListener = () => {
   const organizerUserId = useOrganizerId();
@@ -21,6 +23,8 @@ export const usePlayerListener = () => {
     setGameResults,
     selectedDuration,
     setCanGuestStartGame,
+    chatLines,
+    setChatLines,
   } = useMultiplayerContext();
   const { game, setGame, username } = useSinglePlayerGameContext();
   const isOrganizer = organizerUserId === currentUserId;
@@ -30,7 +34,13 @@ export const usePlayerListener = () => {
     username,
     selectedDuration,
   });
-  externalsRef.current = { gameHub, isOrganizer, username, selectedDuration };
+  externalsRef.current = {
+    gameHub,
+    isOrganizer,
+    username,
+    selectedDuration,
+    chatLines,
+  };
 
   useEffect(() => {
     const isConnectedWithUserId = currentUserId && isConnected;
@@ -42,6 +52,10 @@ export const usePlayerListener = () => {
             ...otherPlayers,
             [userId]: { ...otherPlayers[userId], ...otherProps },
           }));
+          externalsRef.current.gameHub.invoke.setChatLines({
+            groupId: organizerUserId,
+            message: externalsRef.current.chatLines,
+          });
         },
         playersListUpdate: ({ players: updatedPlayersList, isStartable }) => {
           setOtherPlayers((otherPlayers) =>
@@ -106,6 +120,7 @@ export const usePlayerListener = () => {
             mobile,
             paused: true,
           }));
+          setChatLines([]);
           setOtherPlayers((otherPlayers) =>
             [{}, ...Object.keys(otherPlayers)].reduce(
               (currentPlayers, userId) => ({
@@ -115,6 +130,13 @@ export const usePlayerListener = () => {
             )
           );
         },
+        addToChat: (chatLine) =>
+          setChatLines((chatLines) =>
+            [...chatLines, chatLine].slice(
+              Math.max((chatLines?.length ?? 0) - (MaxChatLines - 1), 0)
+            )
+          ),
+        setChatLines: (chatLines) => setChatLines(chatLines),
       });
   }, [isConnected, currentUserId]);
 };

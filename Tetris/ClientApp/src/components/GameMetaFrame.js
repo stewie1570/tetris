@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const App = styled.div`
   width: 300px;
-  margin: 10px 0 10px 0;
+  margin: 1rem 0 1rem 0;
   text-align: center;
   align-items: center;
   min-width: unset;
@@ -16,21 +16,29 @@ const Game = styled.div`
 `;
 
 const Container = styled.div`
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
-export const GameMetaFrame = ({ header, game, scoreBoard, controls, ...otherProps }) => {
-    return <Container {...otherProps}>
-        <App className="card">
-            {header}
-            <Game className="game">
-                {game}
-                {scoreBoard}
-            </Game>
-            {controls}
-        </App>
-    </Container>;
-}
+export const GameMetaFrame = ({
+  header,
+  game,
+  scoreBoard,
+  controls,
+  ...otherProps
+}) => {
+  return (
+    <Container {...otherProps}>
+      <App className="card">
+        {header}
+        <Game className="game">
+          {game}
+          {scoreBoard}
+        </Game>
+        {controls}
+      </App>
+    </Container>
+  );
+};

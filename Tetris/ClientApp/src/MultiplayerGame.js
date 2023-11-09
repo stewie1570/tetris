@@ -11,6 +11,7 @@ import { stringFrom } from "./domain/serialization";
 import { TetrisBoard } from "./components/TetrisBoard";
 import { GameMetaFrame } from "./components/GameMetaFrame";
 import { Link } from "react-router-dom";
+import { GameChat } from "./GameChat";
 import { emptyBoard } from "./components/TetrisGame";
 import { usePlayerListener } from "./hooks/usePlayerListener";
 import { useHelloSender } from "./hooks/useHelloSender";
@@ -102,30 +103,33 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const otherPlayerIds = Object.keys(otherPlayers);
 
   const gameContextInfo = (
-    <>
-      <table style={{ marginTop: "2rem" }} className="table">
-        <thead>
-          <tr>
-            <th colSpan={2}>
-              Other players can join via the Code or URL below:
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th>Code</th>
-            <td>{organizerUserId}</td>
-          </tr>
-          <tr>
-            <th>URL</th>
-            <td>
-              {window.location.protocol}//{window.location.host}/
-              {organizerUserId}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </>
+    <div className="card" style={{ marginTop: "1rem" }}>
+      <div className="card-header">Connectivity</div>
+      <div className="card-body">
+        <table className="table">
+          <thead>
+            <tr>
+              <th colSpan={2}>
+                Other players can join via the Code or URL below:
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Code</th>
+              <td>{organizerUserId}</td>
+            </tr>
+            <tr>
+              <th>URL</th>
+              <td>
+                {window.location.protocol}//{window.location.host}/
+                {organizerUserId}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 
   const singlePlayerGameLink = (
@@ -305,7 +309,10 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 </LeaderBoard>
               </SinglePlayerGame>
               {game.paused ? (
-                <div className="col-xs-12 col-md-8">{gameContextInfo}</div>
+                <div className="col-xs-12 col-md-8">
+                  {gameContextInfo}
+                  <GameChat />
+                </div>
               ) : (
                 otherPlayerIds
                   .filter(
