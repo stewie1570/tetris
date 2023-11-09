@@ -34,7 +34,8 @@ export function GameChat() {
         (await gameHub.invoke.sendChat({
           groupId: organizerId,
           message: { text: messageText, userId },
-        }));
+        })
+          .then(() => setMessageText("")));
     } catch (error) {
       window.dispatchEvent(
         new CustomEvent("user-error", {
@@ -42,7 +43,6 @@ export function GameChat() {
         })
       );
     }
-    setMessageText("");
   };
 
   function nameFrom(chatLine) {
