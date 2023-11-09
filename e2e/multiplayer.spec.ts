@@ -47,6 +47,24 @@ test("players can chat with each other", async () => {
   await expect(await browserPage1.getByText('browser page two: here is a response')).toBeVisible();
   await expect(await browserPage2.getByText('browser page two: here is a response')).toBeVisible();
 
+  await browserPage2.getByRole('link', { name: 'Single Player Game' }).click();
+  await browserPage2.getByRole('button', { name: 'Pause' }).click();
+  await browserPage2.getByRole('dialog')
+    .filter({ hasText: 'Error×An error occurred.' })
+    .getByRole('button', { name: 'Close' })
+    .click();
+  await browserPage2.goBack();
+  await expect(await browserPage2.getByText("[browser page two disconnected]")).toBeVisible();
+
+  await browserPage2.getByRole('link', { name: 'Single Player Game' }).click();
+  await browserPage2.getByRole('button', { name: 'Pause' }).click();
+  await browserPage2.getByRole('dialog')
+    .filter({ hasText: 'Error×An error occurred.' })
+    .getByRole('button', { name: 'Close' })
+    .click();
+  await browserPage2.goBack();
+  await expect(await browserPage2.getByText("[browser page two disconnected]")).toHaveCount(2);
+
   await context1.close();
   await context2.close();
 });
