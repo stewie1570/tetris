@@ -70,7 +70,7 @@ export function GameChat() {
           ))}
         </div>
         <form>
-          <div className="input-group mb-3">
+          <div className="input-group mb-3 pt-1">
             <TextInput
               className="form-control"
               value={messageText}
