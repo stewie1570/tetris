@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('Username text input is initialized with current user name', async ({ page }) => {
+test('username text input is initialized with current user name', async ({ page }) => {
   await page.goto('http://localhost:5000/');
   await page.getByRole('link', { name: 'Host Multiplayer Game' }).click();
   await page.getByRole('button', { name: 'Set User Name' }).click();
@@ -11,7 +11,7 @@ test('Username text input is initialized with current user name', async ({ page 
   await expect(await page.getByLabel('What user name would you like?')).toHaveValue("Stewart");
 });
 
-test("Escape key can be used to close error message and prompt modals", async ({ page }) => {
+test("escape key can be used to close error message and prompt modals", async ({ page }) => {
   await page.goto('http://localhost:5000/');
   await page.getByRole('button', { name: 'Pause' }).click();
   await expect(await page.getByText('Error', { exact: true })).toBeVisible();
