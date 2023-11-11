@@ -152,7 +152,7 @@ test('disconnected warning shows when organizer disconnects from a game in-progr
   await context2.close();
 });
 
-test('Organizer has disconnected screen appears and replaces all else when organizer disconnects from game not in-progress', async () => {
+test('organizer has disconnected screen appears and replaces all else when organizer disconnects from game not in-progress', async () => {
   test.setTimeout(60000);
   const { page: browserPage1, context: context1 } = await newBrowserPage();
   const { page: browserPage2, context: context2 } = await newBrowserPage();
