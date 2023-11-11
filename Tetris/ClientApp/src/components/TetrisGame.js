@@ -112,7 +112,7 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }
       });
     };
 
-    return !game.paused && processKeyCommand({ keyCode });
+    return !instance.current.game.paused && processKeyCommand({ keyCode });
   }, []);
 
   useEffect(() => {
