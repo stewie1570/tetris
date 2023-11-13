@@ -23,8 +23,7 @@ import { Centered, Header, Warning } from "./Styling";
 import { useOrganizerId } from "./hooks/useOrganizerId";
 import { useLifeCycle } from "./hooks/useLifeCycle";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCopy } from "@fortawesome/free-solid-svg-icons";
+import { CopyButton } from "./components/CopyButton";
 
 const GameDurationSelect = styled.select`
   width: 90%;
@@ -108,7 +107,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const gameContextInfo = (
     <div className="card" style={{ marginTop: "1rem" }}>
       <div className="card-header">Connectivity</div>
-      <div className="card-body">
+      <div className="card-body" style={{ padding: 0 }}>
         <table className="table" style={{ marginBottom: 0 }}>
           <thead>
             <tr>
@@ -120,27 +119,18 @@ export const MultiplayerGame = ({ shapeProvider }) => {
           <tbody>
             <tr>
               <th>Code</th>
-              <td>{organizerUserId}</td>
+              <td>
+                {organizerUserId}
+                <br />
+                <CopyButton text={organizerUserId} />
+              </td>
             </tr>
             <tr>
               <th>URL</th>
               <td>
                 {otherPlayersLink}
                 <br />
-                <CommandButton
-                  style={{ display: "inline", padding: 0 }}
-                  className="btn btn-link"
-                  onClick={async () => {
-                    await Promise.all([
-                      navigator.clipboard.writeText(otherPlayersLink),
-                      new Promise((resolve) => setTimeout(resolve, 1000)),
-                    ]);
-                  }}
-                  runningText="Copying..."
-                >
-                  <FontAwesomeIcon icon={faCopy} />
-                  &nbsp; Copy
-                </CommandButton>
+                <CopyButton text={otherPlayersLink} />
               </td>
             </tr>
           </tbody>
