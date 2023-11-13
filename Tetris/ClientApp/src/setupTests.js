@@ -11,5 +11,9 @@ export const server = setupServer(
   ...methods.map((method) => method(/(.*)/, handler))
 );
 beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
+afterEach(() => {
+  server.resetHandlers();
+  window.sessionStorage.clear();
+  window.localStorage.clear();
+});
 afterAll(() => server.close());

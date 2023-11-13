@@ -11,6 +11,7 @@ import {
   useMountedOnlyState,
 } from "leaf-validator";
 import { GameMetaFrame } from "./components/GameMetaFrame";
+import { useSessionStorageState } from './hooks/useSessionStorageState';
 
 export const initialGameState = {
   board: emptyBoard,
@@ -24,7 +25,7 @@ export const initialGameState = {
 export const [SinglePlayerGameContextProvider, useSinglePlayerGameContext] =
   createManagedContext(() => {
     const [game, setGame] = useMountedOnlyState(initialGameState);
-    const [username, setUsername] = useMountedOnlyState();
+    const [username, setUsername] = useSessionStorageState("username");
     const { dialogProps, prompt } = usePrompt();
 
     const [isLoadingScoreBoard, showLoadingScoreBoardWhile] = useLoadingState();
@@ -61,8 +62,8 @@ export const [SinglePlayerGameContextProvider, useSinglePlayerGameContext] =
             onSubmitString={(name) =>
               Boolean(name?.length)
                 ? sendCurrentScoreFor(name)
-                    .then(() => setUsername(name))
-                    .then(exitModal, exitModal)
+                  .then(() => setUsername(name))
+                  .then(exitModal, exitModal)
                 : exitModal()
             }
             submittingText="Posting Your Score..."
@@ -139,7 +140,7 @@ export const SinglePlayerGame = ({
           <p>
             {isStartable &&
               `Score: ${game.score}` +
-                (game.oldScore ? ` (Previous: ${game.oldScore})` : "")}
+              (game.oldScore ? ` (Previous: ${game.oldScore})` : "")}
           </p>
         </>
       }

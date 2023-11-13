@@ -47,6 +47,24 @@ test("players can chat with each other", async () => {
   await expect(await browserPage1.getByText('browser page two: here is a response')).toBeVisible();
   await expect(await browserPage2.getByText('browser page two: here is a response')).toBeVisible();
 
+  await browserPage2.getByRole('link', { name: 'Single Player Game' }).click();
+  await browserPage2.getByRole('button', { name: 'Pause' }).click();
+  await browserPage2.getByRole('dialog')
+    .filter({ hasText: 'Error×An error occurred.' })
+    .getByRole('button', { name: 'Close' })
+    .click();
+  await browserPage2.goBack();
+  await expect(await browserPage2.getByText("[browser page two disconnected]")).toBeVisible();
+
+  await browserPage2.getByRole('link', { name: 'Single Player Game' }).click();
+  await browserPage2.getByRole('button', { name: 'Pause' }).click();
+  await browserPage2.getByRole('dialog')
+    .filter({ hasText: 'Error×An error occurred.' })
+    .getByRole('button', { name: 'Close' })
+    .click();
+  await browserPage2.goBack();
+  await expect(await browserPage2.getByText("[browser page two disconnected]")).toHaveCount(2);
+
   await context1.close();
   await context2.close();
 });
@@ -134,7 +152,7 @@ test('disconnected warning shows when organizer disconnects from a game in-progr
   await context2.close();
 });
 
-test('Organizer has disconnected screen appears and replaces all else when organizer disconnects from game not in-progress', async () => {
+test('organizer has disconnected screen appears and replaces all else when organizer disconnects from game not in-progress', async () => {
   test.setTimeout(60000);
   const { page: browserPage1, context: context1 } = await newBrowserPage();
   const { page: browserPage2, context: context2 } = await newBrowserPage();

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { flushSync } from 'react-dom';
 import { TetrisBoard } from "./TetrisBoard";
 import { tetrisBoardFrom } from "../domain/serialization";
@@ -67,16 +67,18 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }
     mobile: false,
     ...{ board, score, oldScore, paused, mobile }
   }
+  const instance = useRef({ onChange, shapeProvider, game });
+  instance.current = { onChange, shapeProvider, game };
 
   const cycle = useCallback(() => {
-    if (!game.paused) {
+    if (!instance.current.game.paused) {
       flushSync(() => {
-        onChange(game => {
+        instance.current.onChange(game => {
           const { board, score } = game;
           const iteratedGame = iterate({
             board,
             score,
-            shapeProvider,
+            shapeProvider: instance.current.shapeProvider
           });
 
           return iteratedGame.isOver
@@ -90,12 +92,12 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }
         });
       });
     }
-  }, [game.paused, onChange, shapeProvider]);
+  }, []);
 
   const keyPress = useCallback((event) => {
     const { keyCode } = event;
     const processKeyCommand = ({ keyCode }) => {
-      const { board } = game;
+      const { board } = instance.current.game;
       const moves = {
         [keys.left]: () => move({ board, to: { x: -1 } }),
         [keys.right]: () => move({ board, to: { x: 1 } }),
@@ -106,12 +108,12 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }
       const selectedMove = moves[keyCode];
       selectedMove && event.preventDefault?.();
       selectedMove && flushSync(() => {
-        onChange(game => ({ ...game, board: selectedMove() }));
+        instance.current.onChange(game => ({ ...game, board: selectedMove() }));
       });
     };
 
-    return !game.paused && processKeyCommand({ keyCode });
-  }, [game, onChange]);
+    return !instance.current.game.paused && processKeyCommand({ keyCode });
+  }, []);
 
   useEffect(() => {
     window.addEventListener("keydown", keyPress, false);
