@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
 using StackExchange.Redis;
 using Tetris.Domain.Interfaces;
 using Tetris.Domain.LeaderBoard;
@@ -58,6 +59,8 @@ namespace Tetris
             services.AddScoped<Func<Task<LeaderBoard>>>(sp => sp.GetService<ILeaderBoardProvider>().GetLeaderBoard);
             services.AddScoped<IUserScoresInteractor, UserScoresInteractor>();
             services.AddSingleton(sp => ConnectionMultiplexer.ConnectAsync(Configuration["RedisConnectionString"]));
+            services.AddSingleton<MongoClient>(sp => new MongoClient(Configuration["MongoConnectionString"]));
+            services.AddScoped<IGameRoomRepo, MongoGameRoomRepo>();
         }
 
         private bool IsUsingBackplane()
