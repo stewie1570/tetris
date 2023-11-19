@@ -59,8 +59,14 @@ namespace Tetris
             services.AddScoped<Func<Task<LeaderBoard>>>(sp => sp.GetService<ILeaderBoardProvider>().GetLeaderBoard);
             services.AddScoped<IUserScoresInteractor, UserScoresInteractor>();
             services.AddSingleton(sp => ConnectionMultiplexer.ConnectAsync(Configuration["RedisConnectionString"]));
-            services.AddSingleton<MongoClient>(sp => new MongoClient(Configuration["MongoConnectionString"]));
-            services.AddScoped<IGameRoomRepo, MongoGameRoomRepo>();
+            services.AddSingleton<IMongoClient>(sp => Configuration["MongoConnectionString"] == null
+                ? null
+                : new MongoClient(Configuration["MongoConnectionString"]));
+            services.AddScoped<InMemoryGameRoomRepo>();
+            services.AddScoped<MongoGameRoomRepo>();
+            services.AddScoped<IGameRoomRepo>(sp => sp.GetService<MongoClient>() == null
+                ? sp.GetService<InMemoryGameRoomRepo>()
+                : sp.GetService<MongoGameRoomRepo>());
         }
 
         private bool IsUsingBackplane()
