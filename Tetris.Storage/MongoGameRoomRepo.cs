@@ -1,40 +1,44 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MongoDB.Bson;
+using Microsoft.AspNetCore.JsonPatch;
 using MongoDB.Driver;
 using Tetris.Domain.Interfaces;
 using Tetris.Domain.Models;
 
+namespace Tetris.Storage;
+
 public class MongoGameRoomRepo : IGameRoomRepo
 {
-    private readonly IMongoCollection<GameRoom> _gameRoomCollection;
+    private readonly IMongoCollection<GameRoom> _gameRoomsCollection;
     private const string DbName = "tetris";
     private const string CollectionName = "rooms";
 
-    public MongoGameRoomRepo(IMongoClient mongoClient)
+    public MongoGameRoomRepo(IMongoClient database)
     {
-        var database = mongoClient.GetDatabase(DbName);
-        _gameRoomCollection = database.GetCollection<GameRoom>(CollectionName);
+        _gameRoomsCollection = database.GetDatabase(DbName).GetCollection<GameRoom>(CollectionName);
     }
 
-    public async Task AddOrUpdateGameRoom(GameRoom gameRoom)
+    public async Task AddGameRoom(GameRoom gameRoom)
     {
-        var filter = Builders<GameRoom>.Filter.Eq("_id", gameRoom.OrganizerId);
-        var options = new ReplaceOptions { IsUpsert = true };
+        await _gameRoomsCollection.InsertOneAsync(gameRoom);
+    }
 
-        await _gameRoomCollection.ReplaceOneAsync(filter, gameRoom, options);
+    public async Task UpdateGameRoom(JsonPatchDocument<GameRoom> patch, string gameRoomCode)
+    {
+        var filter = Builders<GameRoom>.Filter.Eq(x => x.OrganizerId, gameRoomCode);
+
+        await _gameRoomsCollection.UpdateOneAsync(filter, patch.ToMongoUpdate<GameRoom>());
     }
 
     public async Task RemoveGameRoom(GameRoom gameRoom)
     {
-        var filter = Builders<GameRoom>.Filter.Eq("_id", gameRoom.OrganizerId);
-
-        await _gameRoomCollection.DeleteOneAsync(filter);
+        var filter = Builders<GameRoom>.Filter.Eq(x => x.OrganizerId, gameRoom.OrganizerId);
+        await _gameRoomsCollection.DeleteOneAsync(filter);
     }
 
     public async Task<List<GameRoom>> GetGameRooms(int start, int count)
     {
-        var gameRooms = await _gameRoomCollection.Find(new BsonDocument())
+        var gameRooms = await _gameRoomsCollection.Find(Builders<GameRoom>.Filter.Empty)
             .Skip(start)
             .Limit(count)
             .ToListAsync();
@@ -42,4 +46,3 @@ public class MongoGameRoomRepo : IGameRoomRepo
         return gameRooms;
     }
 }
-

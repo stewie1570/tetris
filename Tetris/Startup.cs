@@ -62,11 +62,14 @@ namespace Tetris
             services.AddSingleton<IMongoClient>(sp => Configuration["MongoConnectionString"] == null
                 ? null
                 : new MongoClient(Configuration["MongoConnectionString"]));
-            services.AddScoped<InMemoryGameRoomRepo>();
+            services.AddSingleton<InMemoryGameRoomRepo>();
             services.AddScoped<MongoGameRoomRepo>();
-            services.AddScoped<IGameRoomRepo>(sp => sp.GetService<MongoClient>() == null
-                ? sp.GetService<InMemoryGameRoomRepo>()
-                : sp.GetService<MongoGameRoomRepo>());
+            services.AddScoped<IGameRoomRepo>(sp =>
+            {
+                return sp.GetService<MongoClient>() == null
+                    ? sp.GetService<InMemoryGameRoomRepo>()
+                    : sp.GetService<MongoGameRoomRepo>();
+            });
         }
 
         private bool IsUsingBackplane()

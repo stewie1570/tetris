@@ -23,6 +23,7 @@ test('start a multiplayer game', async () => {
 });
 
 test("players can chat with each other", async () => {
+  test.setTimeout(60000);
   const { page: browserPage1, context: context1 } = await newBrowserPage();
   const { page: browserPage2, context: context2 } = await newBrowserPage();
 

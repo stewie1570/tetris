@@ -1,10 +1,15 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using NewRelic.Api.Agent;
+using Sentry;
 using Tetris.Domain;
+using Tetris.Domain.Interfaces;
+using Tetris.Domain.Models;
 
 namespace Tetris.Hubs
 {
@@ -17,10 +22,12 @@ namespace Tetris.Hubs
     public class GameHub : Hub
     {
         private readonly ILogger<GameHub> logger;
+        private readonly IGameRoomRepo gameRoomRepo;
 
-        public GameHub(ILogger<GameHub> logger)
+        public GameHub(ILogger<GameHub> logger, IGameRoomRepo gameRoomRepo)
         {
             this.logger = logger;
+            this.gameRoomRepo = gameRoomRepo;
         }
 
         [Transaction(Web = true)]
@@ -43,10 +50,22 @@ namespace Tetris.Hubs
             if (isOrganizer)
             {
                 if (!isRunning) await Clients.Group(groupId).SendAsync("reset");
+                await gameRoomRepo.AddGameRoom(new GameRoom
+                {
+                    OrganizerId = groupId,
+                    Status = GameRoomStatus.Waiting,
+                    UserScores = new Dictionary<string, UserScore>
+                    {
+                        { groupId, new UserScore { } }
+                    }
+                });
             }
             else
             {
                 await Clients.Group($"{groupId}-organizer").SendAsync("hello", helloMessage.Message);
+                var patch = new JsonPatchDocument<GameRoom>();
+                patch.Add(room => room.UserScores[userId], new UserScore { });
+                await gameRoomRepo.UpdateGameRoom(patch, groupId);
             }
         }
 
@@ -74,6 +93,12 @@ namespace Tetris.Hubs
                     throw new HubException($"Name must be {Domain.Constants.MaxUsernameChars} characters or less.");
                 }
                 Context.Items["name"] = newName;
+
+                var patch = new JsonPatchDocument<GameRoom>();
+                patch.Replace(
+                    room => room.UserScores[Context.Items["userId"] as string],
+                    new UserScore { Username = newName });
+                await gameRoomRepo.UpdateGameRoom(patch, Context.Items["groupId"] as string);
             }
 
             await (isNameChange
@@ -85,12 +110,20 @@ namespace Tetris.Hubs
         public async Task Start(GroupMessage statusMessage)
         {
             await Clients.Group(statusMessage.GroupId).SendAsync("start");
+
+            var patch = new JsonPatchDocument<GameRoom>();
+            patch.Replace(room => room.Status, GameRoomStatus.Running);
+            await gameRoomRepo.UpdateGameRoom(patch, Context.Items["groupId"] as string);
         }
 
         [Transaction(Web = true)]
         public async Task Results(GroupMessage resultsMessage)
         {
             await Clients.Group(resultsMessage.GroupId).SendAsync("results", resultsMessage.Message);
+
+            var patch = new JsonPatchDocument<GameRoom>();
+            patch.Replace(room => room.Status, GameRoomStatus.Waiting);
+            await gameRoomRepo.UpdateGameRoom(patch, Context.Items["groupId"] as string);
         }
 
         [Transaction(Web = true)]
@@ -128,6 +161,7 @@ namespace Tetris.Hubs
                 {
                     notification = $"[{Context.Items["name"] ?? "[Un-named player]"} disconnected]"
                 });
+                await gameRoomRepo.RemoveGameRoom(new GameRoom { OrganizerId = groupId });
             }
 
             if (exception != null) logger.LogError(exception, "Disconnected");
