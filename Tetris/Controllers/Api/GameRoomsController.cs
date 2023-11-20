@@ -17,8 +17,11 @@ public class GameRoomController : Controller
 
     [HttpGet]
     [Route("api/gameRooms")]
-    public async Task<List<GameRoom>> GetGameRooms()
+    public async Task<List<GameRoom>> GetGameRooms(
+        [FromQuery] int start,
+        [FromQuery] int count
+    )
     {
-        return await gameRoomRepo.GetGameRooms(0, 10);
+        return await gameRoomRepo.GetGameRooms(start, count);
     }
 }

@@ -11,7 +11,10 @@ public class InMemoryGameRoomRepo : IGameRoomRepo
 
     public Task AddGameRoom(GameRoom gameRoom)
     {
-        theList.Add(gameRoom);
+        if (!theList.Any(room => room.OrganizerId == gameRoom.OrganizerId))
+        {
+            theList.Add(gameRoom);
+        }
         return Task.FromResult(0);
     }
 

@@ -10,6 +10,8 @@ import { ErrorMessage } from "./components/ErrorMessage";
 import { MultiplayerLinks } from "./MultiplayerLinks";
 import { ReloadRecoveryErrorBoundary } from "./components/ReloadRecoveryErrorBoundary";
 import { Header } from "./Styling";
+import { GameRoomGrid } from "./GameRoomGrid";
+import { GameRooms } from "./GameRooms";
 
 const MultiplayerGameWithContext = React.lazy(() =>
   import("./MultiplayerGameWithContext")
@@ -42,10 +44,13 @@ export const App = ({ shapeProvider }) => {
         <Route
           path="/"
           element={
-            <SinglePlayerGame
-              shapeProvider={selectedShapeProvider}
-              additionalControls={<MultiplayerLinks />}
-              isStartable
+            <GameRoomGrid
+              left={<SinglePlayerGame
+                shapeProvider={selectedShapeProvider}
+                additionalControls={<MultiplayerLinks />}
+                isStartable
+              />}
+              right={<GameRooms />}
             />
           }
         />

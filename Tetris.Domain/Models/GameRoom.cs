@@ -10,7 +10,7 @@ public enum GameRoomStatus
 
 public record GameRoom
 {
-    public Dictionary<string, UserScore> UserScores { get; set; }
+    public Dictionary<string, UserScore> Players { get; set; }
     public GameRoomStatus Status { get; set; }
     public string OrganizerId { get; set; }
 }

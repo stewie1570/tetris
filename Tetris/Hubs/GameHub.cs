@@ -54,7 +54,7 @@ namespace Tetris.Hubs
                 {
                     OrganizerId = groupId,
                     Status = GameRoomStatus.Waiting,
-                    UserScores = new Dictionary<string, UserScore>
+                    Players = new Dictionary<string, UserScore>
                     {
                         { groupId, new UserScore { } }
                     }
@@ -64,7 +64,7 @@ namespace Tetris.Hubs
             {
                 await Clients.Group($"{groupId}-organizer").SendAsync("hello", helloMessage.Message);
                 var patch = new JsonPatchDocument<GameRoom>();
-                patch.Add(room => room.UserScores[userId], new UserScore { });
+                patch.Add(room => room.Players[userId], new UserScore { });
                 await gameRoomRepo.UpdateGameRoom(patch, groupId);
             }
         }
@@ -96,7 +96,7 @@ namespace Tetris.Hubs
 
                 var patch = new JsonPatchDocument<GameRoom>();
                 patch.Replace(
-                    room => room.UserScores[Context.Items["userId"] as string],
+                    room => room.Players[Context.Items["userId"] as string],
                     new UserScore { Username = newName });
                 await gameRoomRepo.UpdateGameRoom(patch, Context.Items["groupId"] as string);
             }
@@ -161,6 +161,12 @@ namespace Tetris.Hubs
                 {
                     notification = $"[{Context.Items["name"] ?? "[Un-named player]"} disconnected]"
                 });
+                var patch = new JsonPatchDocument<GameRoom>();
+                patch.Remove(room => room.Players[userId]);
+                await gameRoomRepo.UpdateGameRoom(patch, Context.Items["groupId"] as string);
+            }
+            else
+            {
                 await gameRoomRepo.RemoveGameRoom(new GameRoom { OrganizerId = groupId });
             }
 
