@@ -18,6 +18,14 @@ import { MultiplayerContext } from "./MultiplayerContext";
 
 const lineShape = shapes[1];
 
+beforeEach(() => {
+  server.use(
+    rest.get("/api/gameRooms", async (req, res, ctx) => {
+      return res(ctx.json([]));
+    })
+  );
+})
+
 test("score a point", async () => {
   const { iterate, container } = getIterableBoard();
 
