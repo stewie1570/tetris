@@ -22,6 +22,27 @@ test('start a multiplayer game', async () => {
   await context2.close();
 });
 
+test('start a multiplayer game via the game rooms table', async () => {
+  test.setTimeout(60000);
+  const { page: browserPage1, context: context1 } = await newBrowserPage();
+  const { page: browserPage2, context: context2 } = await newBrowserPage();
+
+  const gameRoomCode = await hostMultiplayerGameOn({ hostBrowserPage: browserPage1 });
+
+  await browserPage2.goto('https://localhost:5001/');
+  await expect(browserPage2.getByText(gameRoomCode)).toBeVisible({ timeout: 15000 });
+  await browserPage2.getByRole('link', { name: 'Join' }).click();
+  await setUserName(browserPage2, 'browser page 2');
+
+  await expect(browserPage1.getByText('browser page 2')).toBeVisible();
+  await browserPage1.getByRole('button', { name: 'Start Game' }).click();
+  await expect(await browserPage1.getByText("browser page 2")).toBeVisible();
+  await expect(await browserPage2.getByText("browser page 1")).toBeVisible();
+
+  await context1.close();
+  await context2.close();
+});
+
 test("players can chat with each other", async () => {
   test.setTimeout(60000);
   const { page: browserPage1, context: context1 } = await newBrowserPage();
@@ -218,12 +239,13 @@ async function setUserName(guestBrowserPage: any, userName: string) {
 async function hostMultiplayerGameOn({ hostBrowserPage }) {
   await hostBrowserPage.goto('https://localhost:5001/');
   await hostBrowserPage.getByRole('link', { name: 'Host Multiplayer Game' }).click();
-  const gameRoomCode = await hostBrowserPage
+  const gameRoomCode = (await hostBrowserPage
     .getByRole('cell', { name: 'Code', exact: true })
     .locator('..')
     .getByRole('cell')
     .nth(1)
-    .textContent();
+    .textContent())
+    .split(' ')[0];
   await hostBrowserPage.getByRole('button', { name: 'Set User Name' }).click();
   const userNamePromptLabel = hostBrowserPage.getByLabel('What user name would you like?');
   await userNamePromptLabel.fill('browser page 1');
