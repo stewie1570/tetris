@@ -4,8 +4,20 @@ import { useLifeCycle } from "./hooks/useLifeCycle";
 import { QuietRest } from "./services/rest";
 import { Link } from "react-router-dom";
 import { Pager } from "./components/Pager";
+import styled from "styled-components";
 
-const Statuses = ["Playing", "Waiting"];
+const BoldRed = styled.strong`
+  color: red;
+`;
+
+const BoldGreen = styled.strong`
+  color: green;
+`;
+
+const Statuses = [
+  <BoldRed>Playing</BoldRed>,
+  <BoldGreen>Waiting for players</BoldGreen>,
+];
 const ItemsPerPage = 5;
 
 export const GameRooms = () => {
