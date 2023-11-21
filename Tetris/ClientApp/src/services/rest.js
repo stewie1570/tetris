@@ -68,3 +68,8 @@ export const Rest = {
   get: (url) => errorHandled(get(url)),
   post: ({ url, data }) => errorHandled(post(url, data)),
 };
+
+export const QuietRest = {
+  get: (url) => get(url),
+  post: ({ url, data }) => post(url, data),
+};

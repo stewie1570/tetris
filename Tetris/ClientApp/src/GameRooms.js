@@ -1,7 +1,7 @@
 import { useLoadingState, useMountedOnlyState } from "leaf-validator";
 import React, { useRef } from "react";
 import { useLifeCycle } from "./hooks/useLifeCycle";
-import { Rest } from "./services/rest";
+import { QuietRest } from "./services/rest";
 import { Link } from "react-router-dom";
 import { Pager } from "./components/Pager";
 
@@ -19,7 +19,7 @@ export const GameRooms = () => {
       const url = `/api/gameRooms?start=${
         (pageRef.current - 1) * ItemsPerPage
       }&count=${ItemsPerPage}`;
-      await Rest.get(url).then(setGameRooms);
+      await QuietRest.get(url).then(setGameRooms);
     } catch (err) {
       console.warn(err);
     } finally {
