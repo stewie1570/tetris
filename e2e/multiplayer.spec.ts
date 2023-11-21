@@ -30,8 +30,11 @@ test('start a multiplayer game via the game rooms table', async () => {
   const gameRoomCode = await hostMultiplayerGameOn({ hostBrowserPage: browserPage1 });
 
   await browserPage2.goto('https://localhost:5001/');
-  await expect(browserPage2.getByText(gameRoomCode)).toBeVisible({ timeout: 15000 });
-  await browserPage2.getByRole('link', { name: 'Join' }).click();
+  await browserPage2
+    .getByText(gameRoomCode)
+    .locator('..')
+    .getByRole('link', { name: 'Join' })
+    .click({ timeout: 15000 });
   await setUserName(browserPage2, 'browser page 2');
 
   await expect(browserPage1.getByText('browser page 2')).toBeVisible();

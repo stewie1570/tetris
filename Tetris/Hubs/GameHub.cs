@@ -64,8 +64,10 @@ namespace Tetris.Hubs
             }
             else
             {
-                var gameRoom = await gameRoomRepo.GetGameRoom(groupId);
-                await Clients.Group($"{groupId}-organizer").SendAsync("hello", helloMessage.Message);
+                var gettingGameRoom = gameRoomRepo.GetGameRoom(groupId);
+                var sendingHello = Clients.Group($"{groupId}-organizer").SendAsync("hello", helloMessage.Message);
+                await sendingHello;
+                var gameRoom = await gettingGameRoom;
                 var cancellationTokenSource = new CancellationTokenSource();
                 cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(5));
                 var cancellationToken = cancellationTokenSource.Token;
