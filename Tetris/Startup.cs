@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using StackExchange.Redis;
 using Tetris.Domain.Interfaces;
@@ -62,6 +64,8 @@ namespace Tetris
             services.AddSingleton<IMongoClient>(sp => Configuration["MongoConnectionString"] == null
                 ? null
                 : new MongoClient(Configuration["MongoConnectionString"]));
+            var objectSerializer = new ObjectSerializer(type => true);
+            BsonSerializer.RegisterSerializer(objectSerializer);
             services.AddSingleton<InMemoryGameRoomRepo>();
             services.AddScoped<MongoGameRoomRepo>();
             services.AddScoped<IGameRoomRepo>(sp =>

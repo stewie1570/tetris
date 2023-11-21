@@ -24,7 +24,7 @@ public static class JsonPatchExtensions
 
     private static UpdateDefinition<T> ConvertOperationToUpdate<T>(Operation<T> operation) where T : class
     {
-        var field = GetField(operation.path);
+        var field = GetField(operation.path.Trim('/').Replace("/", "."));
         var value = operation.value;
 
         return operation.op switch
