@@ -57,4 +57,10 @@ public class MongoGameRoomRepo : IGameRoomRepo
 
         return page;
     }
+
+    public Task<GameRoom> GetGameRoom(string gameRoomCode)
+    {
+        var filter = Builders<GameRoom>.Filter.Eq(x => x.OrganizerId, gameRoomCode);
+        return _gameRoomsCollection.Find(filter).FirstOrDefaultAsync();
+    }
 }

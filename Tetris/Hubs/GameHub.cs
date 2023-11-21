@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.SignalR;
@@ -52,6 +54,7 @@ namespace Tetris.Hubs
                 await gameRoomRepo.AddGameRoom(new GameRoom
                 {
                     OrganizerId = groupId,
+                    HostConnectionId = Context.ConnectionId,
                     Status = GameRoomStatus.Waiting,
                     Players = new Dictionary<string, UserScore>
                     {
@@ -61,10 +64,24 @@ namespace Tetris.Hubs
             }
             else
             {
+                var gameRoom = await gameRoomRepo.GetGameRoom(groupId);
                 await Clients.Group($"{groupId}-organizer").SendAsync("hello", helloMessage.Message);
-                var patch = new JsonPatchDocument<GameRoom>();
-                patch.Add(room => room.Players[userId], new UserScore { });
-                await gameRoomRepo.UpdateGameRoom(patch, groupId);
+                var cancellationTokenSource = new CancellationTokenSource();
+                cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(5));
+                var cancellationToken = cancellationTokenSource.Token;
+                try
+                {
+                    await Clients
+                        .Client(gameRoom.HostConnectionId)
+                        .InvokeAsync<object>("hello", helloMessage.Message, cancellationToken);
+                    var patch = new JsonPatchDocument<GameRoom>();
+                    patch.Add(room => room.Players[userId], new UserScore { });
+                    await gameRoomRepo.UpdateGameRoom(patch, groupId);
+                }
+                catch (Exception)
+                {
+                    await gameRoomRepo.RemoveGameRoom(new GameRoom { OrganizerId = groupId });
+                }
             }
         }
 

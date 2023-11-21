@@ -13,4 +13,5 @@ public record GameRoom
     public Dictionary<string, UserScore> Players { get; set; }
     public GameRoomStatus Status { get; set; }
     public string OrganizerId { get; set; }
+    public string HostConnectionId { get; set; }
 }

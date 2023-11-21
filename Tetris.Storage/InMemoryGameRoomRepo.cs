@@ -49,4 +49,9 @@ public class InMemoryGameRoomRepo : IGameRoomRepo
         theList = theList.Where(room => room.OrganizerId != gameRoom.OrganizerId).ToList();
         return Task.FromResult(0);
     }
+
+    public Task<GameRoom> GetGameRoom(string gameRoomCode)
+    {
+        return Task.FromResult(theList.FirstOrDefault(room => room.OrganizerId == gameRoomCode));
+    }
 }
