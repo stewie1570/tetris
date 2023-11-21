@@ -1,7 +1,23 @@
 import React from "react";
 import { CommandButton } from "./CommandButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRotate } from "@fortawesome/free-solid-svg-icons";
+import styled, { keyframes } from "styled-components";
 
 const MaxPages = 5;
+
+const rotateAnimation = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const RotatingIcon = styled(FontAwesomeIcon)`
+  animation: ${rotateAnimation} 2s linear infinite;
+`;
 
 export const Pager = ({ page, numPages, onPageChange }) => {
   const minDisplayPage = Math.max(1, page - Math.floor(MaxPages / 2));
@@ -16,6 +32,7 @@ export const Pager = ({ page, numPages, onPageChange }) => {
             disabled={page - 1 < 1}
             onClick={() => onPageChange(page - 1)}
             aria-label="Previous"
+            runningText={<RotatingIcon icon={faRotate} />}
           >
             <span aria-hidden="true">&laquo;</span>
           </CommandButton>
@@ -31,6 +48,7 @@ export const Pager = ({ page, numPages, onPageChange }) => {
               <CommandButton
                 className="page-link"
                 onClick={() => onPageChange(minDisplayPage + i)}
+                runningText={<RotatingIcon icon={faRotate} />}
               >
                 {minDisplayPage + i}
               </CommandButton>
@@ -42,6 +60,7 @@ export const Pager = ({ page, numPages, onPageChange }) => {
             className="page-link"
             disabled={page + 1 > numPages}
             onClick={() => onPageChange(page + 1)}
+            runningText={<RotatingIcon icon={faRotate} />}
             aria-label="Next"
           >
             <span aria-hidden="true">&raquo;</span>
