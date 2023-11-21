@@ -9,6 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Driver;
 using StackExchange.Redis;
 using Tetris.Domain.Interfaces;
 using Tetris.Domain.LeaderBoard;
@@ -58,6 +61,19 @@ namespace Tetris
             services.AddScoped<Func<Task<LeaderBoard>>>(sp => sp.GetService<ILeaderBoardProvider>().GetLeaderBoard);
             services.AddScoped<IUserScoresInteractor, UserScoresInteractor>();
             services.AddSingleton(sp => ConnectionMultiplexer.ConnectAsync(Configuration["RedisConnectionString"]));
+            services.AddSingleton<IMongoClient>(sp => Configuration["MongoConnectionString"] == null
+                ? null
+                : new MongoClient(Configuration["MongoConnectionString"]));
+            var objectSerializer = new ObjectSerializer(type => true);
+            BsonSerializer.RegisterSerializer(objectSerializer);
+            services.AddSingleton<InMemoryGameRoomRepo>();
+            services.AddScoped<MongoGameRoomRepo>();
+            services.AddScoped<IGameRoomRepo>(sp =>
+            {
+                return sp.GetService<IMongoClient>() == null
+                    ? sp.GetService<InMemoryGameRoomRepo>()
+                    : sp.GetService<MongoGameRoomRepo>();
+            });
         }
 
         private bool IsUsingBackplane()
