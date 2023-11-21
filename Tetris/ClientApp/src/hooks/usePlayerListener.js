@@ -56,6 +56,7 @@ export const usePlayerListener = () => {
             groupId: organizerUserId,
             message: externalsRef.current.chatLines,
           });
+          return { status: "active" };
         },
         playersListUpdate: ({ players: updatedPlayersList, isStartable }) => {
           setOtherPlayers((otherPlayers) =>

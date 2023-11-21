@@ -61,6 +61,9 @@ public class MongoGameRoomRepo : IGameRoomRepo
     public Task<GameRoom> GetGameRoom(string gameRoomCode)
     {
         var filter = Builders<GameRoom>.Filter.Eq(x => x.OrganizerId, gameRoomCode);
-        return _gameRoomsCollection.Find(filter).FirstOrDefaultAsync();
+        return _gameRoomsCollection
+            .Find(filter)
+            .Project<GameRoom>(Builders<GameRoom>.Projection.Exclude("_id"))
+            .FirstOrDefaultAsync();
     }
 }

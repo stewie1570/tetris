@@ -11,6 +11,7 @@ using NewRelic.Api.Agent;
 using Sentry;
 using Tetris.Domain.Interfaces;
 using Tetris.Domain.Models;
+using Tetris.Core;
 
 namespace Tetris.Hubs
 {
@@ -93,6 +94,16 @@ namespace Tetris.Hubs
             await Clients
                 .Group($"{playersListUpdateMessage.GroupId}-players")
                 .SendAsync("playersListUpdate", playersListUpdateMessage.Message);
+
+            var playersList = playersListUpdateMessage.Message.To<PlayersList>();
+            var patch = new JsonPatchDocument<GameRoom>();
+            patch.Replace(room => room.Players, playersList
+                .Players
+                .ToDictionary(keySelector: player => player.UserId, elementSelector: player => new UserScore
+                {
+                    Username = player.Name
+                }));
+            await gameRoomRepo.UpdateGameRoom(patch, Context.Items["groupId"] as string);
         }
 
         [Transaction(Web = true)]
