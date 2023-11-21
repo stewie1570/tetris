@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Tetris.Domain.Interfaces;
@@ -17,7 +16,7 @@ public class GameRoomController : Controller
 
     [HttpGet]
     [Route("api/gameRooms")]
-    public async Task<List<GameRoom>> GetGameRooms(
+    public async Task<Page<GameRoom>> GetGameRooms(
         [FromQuery] int start,
         [FromQuery] int count
     )

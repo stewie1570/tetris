@@ -29,9 +29,19 @@ public class InMemoryGameRoomRepo : IGameRoomRepo
         return Task.FromResult(0);
     }
 
-    public Task<List<GameRoom>> GetGameRooms(int start, int count)
+    public Task<Page<GameRoom>> GetGameRooms(int start, int count)
     {
-        return Task.FromResult(theList.Skip(start).Take(count).ToList());
+        var gameRooms = theList.Skip(start).Take(count).ToList();
+
+        return Task.FromResult(new Page<GameRoom>
+        {
+            Items = gameRooms,
+            Total = theList.Count,
+            Start = (start + count) > theList.Count
+                ? theList.Count - gameRooms.Count
+                : start,
+            Count = gameRooms.Count
+        });
     }
 
     public Task RemoveGameRoom(GameRoom gameRoom)

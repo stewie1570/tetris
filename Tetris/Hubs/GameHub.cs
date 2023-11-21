@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using NewRelic.Api.Agent;
 using Sentry;
-using Tetris.Domain;
 using Tetris.Domain.Interfaces;
 using Tetris.Domain.Models;
 

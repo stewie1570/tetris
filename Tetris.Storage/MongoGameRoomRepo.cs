@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 using MongoDB.Driver;
@@ -36,13 +35,25 @@ public class MongoGameRoomRepo : IGameRoomRepo
         await _gameRoomsCollection.DeleteOneAsync(filter);
     }
 
-    public async Task<List<GameRoom>> GetGameRooms(int start, int count)
+    public async Task<Page<GameRoom>> GetGameRooms(int start, int count)
     {
+        var totalGameRooms = await _gameRoomsCollection.CountDocumentsAsync(Builders<GameRoom>.Filter.Empty);
+
         var gameRooms = await _gameRoomsCollection.Find(Builders<GameRoom>.Filter.Empty)
             .Skip(start)
             .Limit(count)
             .ToListAsync();
 
-        return gameRooms;
+        var page = new Page<GameRoom>
+        {
+            Total = (int)totalGameRooms,
+            Start = (start + count) > totalGameRooms
+                ? (int)totalGameRooms - gameRooms.Count
+                : start,
+            Count = gameRooms.Count,
+            Items = gameRooms
+        };
+
+        return page;
     }
 }
