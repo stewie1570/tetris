@@ -66,7 +66,7 @@ namespace Tetris
             services.AddScoped<MongoGameRoomRepo>();
             services.AddScoped<IGameRoomRepo>(sp =>
             {
-                return sp.GetService<MongoClient>() == null
+                return sp.GetService<IMongoClient>() == null
                     ? sp.GetService<InMemoryGameRoomRepo>()
                     : sp.GetService<MongoGameRoomRepo>();
             });

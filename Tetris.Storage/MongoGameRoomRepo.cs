@@ -26,7 +26,7 @@ public class MongoGameRoomRepo : IGameRoomRepo
     {
         var filter = Builders<GameRoom>.Filter.Eq(x => x.OrganizerId, gameRoomCode);
 
-        await _gameRoomsCollection.UpdateOneAsync(filter, patch.ToMongoUpdate<GameRoom>());
+        await _gameRoomsCollection.UpdateOneAsync(filter, patch.ToMongoUpdate());
     }
 
     public async Task RemoveGameRoom(GameRoom gameRoom)
@@ -40,6 +40,7 @@ public class MongoGameRoomRepo : IGameRoomRepo
         var totalGameRooms = await _gameRoomsCollection.CountDocumentsAsync(Builders<GameRoom>.Filter.Empty);
 
         var gameRooms = await _gameRoomsCollection.Find(Builders<GameRoom>.Filter.Empty)
+            .Project<GameRoom>(Builders<GameRoom>.Projection.Exclude("_id"))
             .Skip(start)
             .Limit(count)
             .ToListAsync();
