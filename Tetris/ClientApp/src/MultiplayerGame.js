@@ -2,10 +2,10 @@ import React from "react";
 import { Organizer } from "./Organizer";
 import { useMultiplayerContext } from "./MultiplayerContext";
 import { CommandButton } from "./components/CommandButton";
-import SinglePlayerGame, {
+import LocalPlayerGame, {
   initialGameState,
-  useSinglePlayerGameContext,
-} from "./SinglePlayerGame";
+  useLocalPlayerGameContext,
+} from "./LocalPlayerGame";
 import { StringInput } from "./components/Prompt";
 import { stringFrom } from "./domain/serialization";
 import { TetrisBoard } from "./components/TetrisBoard";
@@ -50,7 +50,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     canGuestStartGame,
   } = useMultiplayerContext();
   const { game, setGame, setUsername, username, prompt } =
-    useSinglePlayerGameContext();
+    useLocalPlayerGameContext();
   const isOrganizer = organizerUserId === currentUserId;
   const timeLeft =
     gameEndTime && Math.max(0, Math.ceil(gameEndTime - timeProvider()));
@@ -281,7 +281,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
           organizerDisconnected?.() ||
           results?.() || (
             <div className="row" style={{ margin: "auto" }}>
-              <SinglePlayerGame
+              <LocalPlayerGame
                 shapeProvider={shapeProvider}
                 header={gameHeader}
                 additionalControls={<>{singlePlayerGameLink}</>}
@@ -313,7 +313,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                     </CommandButton>
                   </div>
                 </LeaderBoard>
-              </SinglePlayerGame>
+              </LocalPlayerGame>
               {game.paused ? (
                 <div className="col-xs-12 col-md-8">
                   {gameContextInfo}

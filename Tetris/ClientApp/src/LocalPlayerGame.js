@@ -22,7 +22,7 @@ export const initialGameState = {
   score: 0,
 };
 
-export const [SinglePlayerGameContextProvider, useSinglePlayerGameContext] =
+export const [SinglePlayerGameContextProvider, useLocalPlayerGameContext] =
   createManagedContext(() => {
     const [game, setGame] = useMountedOnlyState(initialGameState);
     const [username, setUsername] = useSessionStorageState("username");
@@ -112,11 +112,12 @@ export const [SinglePlayerGameContextProvider, useSinglePlayerGameContext] =
     };
   });
 
-export const SinglePlayerGame = ({
+export const LocalPlayerGame = ({
   shapeProvider,
   children: otherPlayers,
   header,
   additionalControls,
+  isOnlyPlayer,
   ...otherProps
 }) => {
   const {
@@ -128,7 +129,7 @@ export const SinglePlayerGame = ({
     isLoadingScoreBoard,
     postableScore,
     postScore,
-  } = useSinglePlayerGameContext();
+  } = useLocalPlayerGameContext();
 
   return (
     <GameMetaFrame
@@ -137,7 +138,7 @@ export const SinglePlayerGame = ({
         <>
           {header}
           <p>
-            {!game.paused &&
+            {(isOnlyPlayer || !game.paused) &&
               `Score: ${game.score}` +
               (game.oldScore ? ` (Previous: ${game.oldScore})` : "")}
           </p>
@@ -184,4 +185,4 @@ export const SinglePlayerGame = ({
   );
 };
 
-export default SinglePlayerGame;
+export default LocalPlayerGame;

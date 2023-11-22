@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useMultiplayerContext } from "../MultiplayerContext";
-import { useSinglePlayerGameContext } from "../SinglePlayerGame";
+import { useLocalPlayerGameContext } from "../LocalPlayerGame";
 import { useAsyncEffect } from './useAsyncEffect';
 import { stringFrom } from '../domain/serialization';
 import { useOrganizerId } from "./useOrganizerId";
@@ -11,7 +11,7 @@ export const useStatusSender = () => {
     const {
         gameHub, isConnected, userId: currentUserId, timeProvider, gameEndTime
     } = useMultiplayerContext();
-    const { game, username } = useSinglePlayerGameContext();
+    const { game, username } = useLocalPlayerGameContext();
     const isOrganizer = organizerUserId === currentUserId;
     const timeLeft = gameEndTime && Math.max(0, Math.ceil(gameEndTime - timeProvider()));
 

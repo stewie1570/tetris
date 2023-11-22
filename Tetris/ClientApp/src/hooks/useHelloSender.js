@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useMultiplayerContext } from "../MultiplayerContext";
-import { useSinglePlayerGameContext } from "../SinglePlayerGame";
+import { useLocalPlayerGameContext } from "../LocalPlayerGame";
 import { useOrganizerId } from "./useOrganizerId";
 
 export const useHelloSender = () => {
@@ -8,7 +8,7 @@ export const useHelloSender = () => {
     const {
         gameHub, isConnected, userId: currentUserId, setOtherPlayers
     } = useMultiplayerContext();
-    const { username, game } = useSinglePlayerGameContext();
+    const { username, game } = useLocalPlayerGameContext();
     const externalsRef = useRef({ isRunning: !game.paused, gameHub });
 
     externalsRef.current = { isRunning: !game.paused, gameHub };

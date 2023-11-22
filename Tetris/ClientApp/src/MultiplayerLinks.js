@@ -1,10 +1,10 @@
 import React from "react";
-import { useSinglePlayerGameContext } from "./SinglePlayerGame";
+import { useLocalPlayerGameContext } from "./LocalPlayerGame";
 import { Link, useNavigate } from "react-router-dom";
 import { StringInput } from "./components/Prompt";
 
 export const MultiplayerLinks = () => {
-  const { prompt, pause, game } = useSinglePlayerGameContext();
+  const { prompt, pause, game } = useLocalPlayerGameContext();
   const navigate = useNavigate();
 
   const goToMultiplayerGame = () => {

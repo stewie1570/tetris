@@ -3,8 +3,8 @@ import { update, process } from "../domain/players";
 import { useMultiplayerContext } from "../MultiplayerContext";
 import {
   initialGameState,
-  useSinglePlayerGameContext,
-} from "../SinglePlayerGame";
+  useLocalPlayerGameContext,
+} from "../LocalPlayerGame";
 import { stringFrom } from "../domain/serialization";
 import { useOrganizerId } from "./useOrganizerId";
 
@@ -26,7 +26,7 @@ export const usePlayerListener = () => {
     chatLines,
     setChatLines,
   } = useMultiplayerContext();
-  const { game, setGame, username } = useSinglePlayerGameContext();
+  const { game, setGame, username } = useLocalPlayerGameContext();
   const isOrganizer = organizerUserId === currentUserId;
   const externalsRef = useRef({
     gameHub,
