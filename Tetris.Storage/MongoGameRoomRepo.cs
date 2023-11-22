@@ -49,6 +49,12 @@ public class MongoGameRoomRepo : IGameRoomRepo
     {
         var totalGameRooms = await _gameRoomsCollection.CountDocumentsAsync(Builders<GameRoom>.Filter.Empty);
 
+        if ((start + count) > totalGameRooms)
+        {
+            long totalPages = (long)Math.Ceiling(totalGameRooms / (double)count) - 1;
+            start = Math.Max((int)(totalPages * count), 0);
+        }
+
         var gameRooms = await _gameRoomsCollection.Find(Builders<GameRoom>.Filter.Empty)
             .Project<GameRoom>(Builders<GameRoom>.Projection.Exclude("_id"))
             .Skip(start)
@@ -58,9 +64,7 @@ public class MongoGameRoomRepo : IGameRoomRepo
         var page = new Page<GameRoom>
         {
             Total = (int)totalGameRooms,
-            Start = (start + count) > totalGameRooms
-                ? (int)totalGameRooms - gameRooms.Count
-                : start,
+            Start = start,
             Count = gameRooms.Count,
             Items = gameRooms
         };
