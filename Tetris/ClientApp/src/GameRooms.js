@@ -78,7 +78,7 @@ export const GameRooms = () => {
                         <td>
                           {Object.values(room.players)
                             .map(
-                              (player) => player.username ?? "[Un-named Player]"
+                              (player) => player.username ?? "[Un-named]"
                             )
                             .join(", ")}
                         </td>
