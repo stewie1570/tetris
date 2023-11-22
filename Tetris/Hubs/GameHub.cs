@@ -70,7 +70,7 @@ namespace Tetris.Hubs
                 await sendingHello;
                 var gameRoom = await gettingGameRoom;
                 var cancellationTokenSource = new CancellationTokenSource();
-                cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(5));
+                cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(10));
                 var cancellationToken = cancellationTokenSource.Token;
                 try
                 {

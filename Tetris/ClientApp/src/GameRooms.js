@@ -50,7 +50,7 @@ export const GameRooms = () => {
   });
 
   return (
-    <div className="card mt-3">
+    <div className="card mt-3 mb-3">
       <div className="card-body">
         <h5 className="card-title">Game Rooms</h5>
         <div className="card-text">
