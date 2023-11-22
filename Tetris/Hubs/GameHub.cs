@@ -55,7 +55,6 @@ namespace Tetris.Hubs
                 await gameRoomRepo.AddGameRoom(new GameRoom
                 {
                     OrganizerId = groupId,
-                    HostConnectionId = Context.ConnectionId,
                     Status = GameRoomStatus.Waiting,
                     Players = new Dictionary<string, UserScore>
                     {
@@ -65,26 +64,7 @@ namespace Tetris.Hubs
             }
             else
             {
-                var gettingGameRoom = gameRoomRepo.GetGameRoom(groupId);
-                var sendingHello = Clients.Group($"{groupId}-organizer").SendAsync("hello", helloMessage.Message);
-                await sendingHello;
-                var gameRoom = await gettingGameRoom;
-                var cancellationTokenSource = new CancellationTokenSource();
-                cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(10));
-                var cancellationToken = cancellationTokenSource.Token;
-                try
-                {
-                    await Clients
-                        .Client(gameRoom.HostConnectionId)
-                        .InvokeAsync<object>("hello", helloMessage.Message, cancellationToken);
-                    var patch = new JsonPatchDocument<GameRoom>();
-                    patch.Add(room => room.Players[userId], new UserScore { });
-                    await gameRoomRepo.UpdateGameRoom(patch, groupId);
-                }
-                catch (Exception)
-                {
-                    await gameRoomRepo.RemoveGameRoom(new GameRoom { OrganizerId = groupId });
-                }
+                await Clients.Group($"{groupId}-organizer").SendAsync("hello", helloMessage.Message);
             }
         }
 
