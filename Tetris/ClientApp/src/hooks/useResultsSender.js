@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { namesAndScoresFrom } from "../domain/players";
 import { useMultiplayerContext } from "../MultiplayerContext";
-import { useSinglePlayerGameContext } from "../SinglePlayerGame";
+import { useLocalPlayerGameContext } from "../LocalPlayerGame";
 import { useOrganizerId } from "./useOrganizerId";
 
 export const useResultsSender = () => {
@@ -9,7 +9,7 @@ export const useResultsSender = () => {
         gameHub, userId: currentUserId, timeProvider, gameEndTime, otherPlayers
     } = useMultiplayerContext();
     const organizerUserId = useOrganizerId();
-    const { username, game } = useSinglePlayerGameContext();
+    const { username, game } = useLocalPlayerGameContext();
     const timeLeft = gameEndTime && Math.max(0, Math.ceil(gameEndTime - timeProvider()));
     const externalsRef = useRef({ gameHub, currentUserId, username, game, otherPlayers });
     externalsRef.current = { gameHub, currentUserId, username, game, otherPlayers };

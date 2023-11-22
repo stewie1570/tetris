@@ -1,8 +1,8 @@
 import React, { Suspense } from "react";
-import SinglePlayerGame, {
+import LocalPlayerGame, {
   SinglePlayerGameContextProvider,
-  useSinglePlayerGameContext,
-} from "./SinglePlayerGame";
+  useLocalPlayerGameContext,
+} from "./LocalPlayerGame";
 import { Routes, Route } from "react-router-dom";
 import { shapes } from "./components/TetrisGame";
 import { Dialog } from "./components/Prompt";
@@ -25,7 +25,7 @@ const defaultShapeProvider = () =>
   shapes[randomNumberGenerator.between({ min: 0, max: shapes.length - 1 })];
 
 const GlobalUI = () => {
-  const { dialogProps } = useSinglePlayerGameContext();
+  const { dialogProps } = useLocalPlayerGameContext();
 
   return (
     <>
@@ -45,9 +45,10 @@ export const App = ({ shapeProvider }) => {
           path="/"
           element={
             <GameRoomGrid
-              left={<SinglePlayerGame
+              left={<LocalPlayerGame
                 shapeProvider={selectedShapeProvider}
                 additionalControls={<MultiplayerLinks />}
+                isOnlyPlayer
               />}
               right={<GameRooms />}
             />
