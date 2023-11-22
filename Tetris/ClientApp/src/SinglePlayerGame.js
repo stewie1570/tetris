@@ -117,7 +117,6 @@ export const SinglePlayerGame = ({
   children: otherPlayers,
   header,
   additionalControls,
-  isStartable,
   ...otherProps
 }) => {
   const {
@@ -138,7 +137,7 @@ export const SinglePlayerGame = ({
         <>
           {header}
           <p>
-            {isStartable &&
+            {!game.paused &&
               `Score: ${game.score}` +
               (game.oldScore ? ` (Previous: ${game.oldScore})` : "")}
           </p>

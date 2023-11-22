@@ -48,7 +48,6 @@ export const App = ({ shapeProvider }) => {
               left={<SinglePlayerGame
                 shapeProvider={selectedShapeProvider}
                 additionalControls={<MultiplayerLinks />}
-                isStartable
               />}
               right={<GameRooms />}
             />
