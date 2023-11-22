@@ -18,7 +18,7 @@ public class InMemoryGameRoomRepo : IGameRoomRepo
         return Task.FromResult(0);
     }
 
-    public Task UpdateGameRoom(JsonPatchDocument<GameRoom> patch, string gameRoomCode)
+    public Task TryUpdateGameRoom(JsonPatchDocument<GameRoom> patch, string gameRoomCode)
     {
         var theGameRoom = theList.FirstOrDefault(room => room.OrganizerId == gameRoomCode);
         if (theGameRoom != null)

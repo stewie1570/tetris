@@ -55,7 +55,6 @@ namespace Tetris.Hubs
                 await gameRoomRepo.AddGameRoom(new GameRoom
                 {
                     OrganizerId = groupId,
-                    HostConnectionId = Context.ConnectionId,
                     Status = GameRoomStatus.Waiting,
                     Players = new Dictionary<string, UserScore>
                     {
@@ -65,26 +64,7 @@ namespace Tetris.Hubs
             }
             else
             {
-                var gettingGameRoom = gameRoomRepo.GetGameRoom(groupId);
-                var sendingHello = Clients.Group($"{groupId}-organizer").SendAsync("hello", helloMessage.Message);
-                await sendingHello;
-                var gameRoom = await gettingGameRoom;
-                var cancellationTokenSource = new CancellationTokenSource();
-                cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(10));
-                var cancellationToken = cancellationTokenSource.Token;
-                try
-                {
-                    await Clients
-                        .Client(gameRoom.HostConnectionId)
-                        .InvokeAsync<object>("hello", helloMessage.Message, cancellationToken);
-                    var patch = new JsonPatchDocument<GameRoom>();
-                    patch.Add(room => room.Players[userId], new UserScore { });
-                    await gameRoomRepo.UpdateGameRoom(patch, groupId);
-                }
-                catch (Exception)
-                {
-                    await gameRoomRepo.RemoveGameRoom(new GameRoom { OrganizerId = groupId });
-                }
+                await Clients.Group($"{groupId}-organizer").SendAsync("hello", helloMessage.Message);
             }
         }
 
@@ -103,7 +83,7 @@ namespace Tetris.Hubs
                 {
                     Username = player.Name
                 }));
-            await gameRoomRepo.UpdateGameRoom(patch, Context.Items["groupId"] as string);
+            await gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
         }
 
         [Transaction(Web = true)]
@@ -127,7 +107,7 @@ namespace Tetris.Hubs
                 patch.Replace(
                     room => room.Players[Context.Items["userId"] as string],
                     new UserScore { Username = newName });
-                await gameRoomRepo.UpdateGameRoom(patch, Context.Items["groupId"] as string);
+                await gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
             }
 
             await (isNameChange
@@ -142,7 +122,7 @@ namespace Tetris.Hubs
 
             var patch = new JsonPatchDocument<GameRoom>();
             patch.Replace(room => room.Status, GameRoomStatus.Running);
-            await gameRoomRepo.UpdateGameRoom(patch, Context.Items["groupId"] as string);
+            await gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
         }
 
         [Transaction(Web = true)]
@@ -152,7 +132,7 @@ namespace Tetris.Hubs
 
             var patch = new JsonPatchDocument<GameRoom>();
             patch.Replace(room => room.Status, GameRoomStatus.Waiting);
-            await gameRoomRepo.UpdateGameRoom(patch, Context.Items["groupId"] as string);
+            await gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
         }
 
         [Transaction(Web = true)]
@@ -192,7 +172,7 @@ namespace Tetris.Hubs
                 });
                 var patch = new JsonPatchDocument<GameRoom>();
                 patch.Remove(room => room.Players[userId]);
-                await gameRoomRepo.UpdateGameRoom(patch, Context.Items["groupId"] as string);
+                await gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
             }
             else
             {

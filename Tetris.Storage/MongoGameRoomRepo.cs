@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 using MongoDB.Driver;
@@ -19,14 +20,23 @@ public class MongoGameRoomRepo : IGameRoomRepo
 
     public async Task AddGameRoom(GameRoom gameRoom)
     {
+        gameRoom.Timestamp = DateTime.UtcNow;
         await _gameRoomsCollection.InsertOneAsync(gameRoom);
     }
 
-    public async Task UpdateGameRoom(JsonPatchDocument<GameRoom> patch, string gameRoomCode)
+    public async Task TryUpdateGameRoom(JsonPatchDocument<GameRoom> patch, string gameRoomCode)
     {
-        var filter = Builders<GameRoom>.Filter.Eq(x => x.OrganizerId, gameRoomCode);
+        try
+        {
+            patch.Replace(room => room.Timestamp, DateTime.UtcNow);
+            var filter = Builders<GameRoom>.Filter.Eq(x => x.OrganizerId, gameRoomCode);
 
-        await _gameRoomsCollection.UpdateOneAsync(filter, patch.ToMongoUpdate());
+            await _gameRoomsCollection.UpdateOneAsync(filter, patch.ToMongoUpdate());
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 
     public async Task RemoveGameRoom(GameRoom gameRoom)

@@ -20,8 +20,9 @@ class Program
 
             var collection = database.GetCollection<BsonDocument>(CollectionName);
 
-            var keys = Builders<BsonDocument>.IndexKeys.Ascending("timestamp");
-            var indexModel = new CreateIndexModel<BsonDocument>(keys);
+            var keys = Builders<BsonDocument>.IndexKeys.Ascending("Timestamp");
+            var indexOptions = new CreateIndexOptions { ExpireAfter = TimeSpan.FromMinutes(5) };
+            var indexModel = new CreateIndexModel<BsonDocument>(keys, indexOptions);
             collection.Indexes.CreateOne(indexModel);
 
             Console.WriteLine($"Index on 'timestamp' property created successfully in '{CollectionName}' collection.");
