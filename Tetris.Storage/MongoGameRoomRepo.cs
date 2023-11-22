@@ -24,12 +24,19 @@ public class MongoGameRoomRepo : IGameRoomRepo
         await _gameRoomsCollection.InsertOneAsync(gameRoom);
     }
 
-    public async Task UpdateGameRoom(JsonPatchDocument<GameRoom> patch, string gameRoomCode)
+    public async Task TryUpdateGameRoom(JsonPatchDocument<GameRoom> patch, string gameRoomCode)
     {
-        patch.Replace(room => room.Timestamp, DateTime.UtcNow);
-        var filter = Builders<GameRoom>.Filter.Eq(x => x.OrganizerId, gameRoomCode);
+        try
+        {
+            patch.Replace(room => room.Timestamp, DateTime.UtcNow);
+            var filter = Builders<GameRoom>.Filter.Eq(x => x.OrganizerId, gameRoomCode);
 
-        await _gameRoomsCollection.UpdateOneAsync(filter, patch.ToMongoUpdate());
+            await _gameRoomsCollection.UpdateOneAsync(filter, patch.ToMongoUpdate());
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 
     public async Task RemoveGameRoom(GameRoom gameRoom)

@@ -83,7 +83,7 @@ namespace Tetris.Hubs
                 {
                     Username = player.Name
                 }));
-            await gameRoomRepo.UpdateGameRoom(patch, Context.Items["groupId"] as string);
+            await gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
         }
 
         [Transaction(Web = true)]
@@ -107,7 +107,7 @@ namespace Tetris.Hubs
                 patch.Replace(
                     room => room.Players[Context.Items["userId"] as string],
                     new UserScore { Username = newName });
-                await gameRoomRepo.UpdateGameRoom(patch, Context.Items["groupId"] as string);
+                await gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
             }
 
             await (isNameChange
@@ -122,7 +122,7 @@ namespace Tetris.Hubs
 
             var patch = new JsonPatchDocument<GameRoom>();
             patch.Replace(room => room.Status, GameRoomStatus.Running);
-            await gameRoomRepo.UpdateGameRoom(patch, Context.Items["groupId"] as string);
+            await gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
         }
 
         [Transaction(Web = true)]
@@ -132,7 +132,7 @@ namespace Tetris.Hubs
 
             var patch = new JsonPatchDocument<GameRoom>();
             patch.Replace(room => room.Status, GameRoomStatus.Waiting);
-            await gameRoomRepo.UpdateGameRoom(patch, Context.Items["groupId"] as string);
+            await gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
         }
 
         [Transaction(Web = true)]
@@ -172,7 +172,7 @@ namespace Tetris.Hubs
                 });
                 var patch = new JsonPatchDocument<GameRoom>();
                 patch.Remove(room => room.Players[userId]);
-                await gameRoomRepo.UpdateGameRoom(patch, Context.Items["groupId"] as string);
+                await gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
             }
             else
             {
