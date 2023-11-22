@@ -28,9 +28,8 @@ export const GameRooms = () => {
 
   const refresh = async () => {
     try {
-      const url = `/api/gameRooms?start=${
-        (pageRef.current - 1) * ItemsPerPage
-      }&count=${ItemsPerPage}`;
+      const url = `/api/gameRooms?start=${(pageRef.current - 1) * ItemsPerPage
+        }&count=${ItemsPerPage}`;
       await QuietRest.get(url).then(setGameRooms);
     } catch (err) {
       console.warn(err);
@@ -47,6 +46,7 @@ export const GameRooms = () => {
 
   useLifeCycle({
     onMount: () => showLoadingWhile(refresh()),
+    onUnMount: () => clearTimeout(timerRef.current)
   });
 
   return (
