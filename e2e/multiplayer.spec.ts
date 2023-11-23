@@ -8,15 +8,25 @@ test('start a multiplayer game', async () => {
   test.setTimeout(60000);
   const { page: browserPage1, context: context1 } = await newBrowserPage();
   const { page: browserPage2, context: context2 } = await newBrowserPage();
+  const { page: browserPage3, context: context3 } = await newBrowserPage();
 
   const gameRoomCode = await hostMultiplayerGameOn({ hostBrowserPage: browserPage1 });
 
   await joinMultiplayerGame({ guestBrowserPage: browserPage2, gameRoomCode });
+  await joinMultiplayerGame({ guestBrowserPage: browserPage3, gameRoomCode }, "browser page 3");
 
   await expect(browserPage1.getByText('browser page 2')).toBeVisible();
   await browserPage1.getByRole('button', { name: 'Start Game' }).click();
   await expect(await browserPage1.getByText("browser page 2")).toBeVisible();
+  await expect(await browserPage1.getByText("browser page 3")).toBeVisible();
   await expect(await browserPage2.getByText("browser page 1")).toBeVisible();
+  await expect(await browserPage2.getByText("browser page 3")).toBeVisible();
+  await expect(await browserPage3.getByText("browser page 1")).toBeVisible();
+  await expect(await browserPage3.getByText("browser page 2")).toBeVisible();
+
+  await expect(await browserPage1.getByText("Score: 0")).toHaveCount(3);
+  await expect(await browserPage1.getByText("Score: 0")).toHaveCount(3);
+  await expect(await browserPage1.getByText("Score: 0")).toHaveCount(3);
 
   await context1.close();
   await context2.close();
@@ -220,7 +230,7 @@ test("can't set user name that is too long", async ({ page }) => {
   await expect(await page.getByText('stewie')).toBeVisible();
 });
 
-async function joinMultiplayerGame({ guestBrowserPage, gameRoomCode }) {
+async function joinMultiplayerGame({ guestBrowserPage, gameRoomCode }, name?: string) {
   await guestBrowserPage.goto('https://localhost:5001/');
   await guestBrowserPage.getByRole('button', { name: 'Join Multiplayer Game' }).click();
   await guestBrowserPage.getByRole('dialog')
@@ -230,7 +240,7 @@ async function joinMultiplayerGame({ guestBrowserPage, gameRoomCode }) {
   await guestBrowserPage.getByLabel('Code:').click();
   await guestBrowserPage.getByLabel('Code:').fill(gameRoomCode ?? '');
   await guestBrowserPage.getByRole('button', { name: 'Ok' }).click();
-  await setUserName(guestBrowserPage, 'browser page 2');
+  await setUserName(guestBrowserPage, name ?? 'browser page 2');
 }
 
 async function setUserName(guestBrowserPage: any, userName: string) {
