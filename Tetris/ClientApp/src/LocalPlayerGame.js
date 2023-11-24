@@ -12,11 +12,11 @@ import {
 } from "leaf-validator";
 import { GameMetaFrame } from "./components/GameMetaFrame";
 import { useSessionStorageState } from './hooks/useSessionStorageState';
+import { useIsMobile } from "./hooks/useIsMobile";
 
 export const initialGameState = {
   board: emptyBoard,
   isOver: false,
-  mobile: false,
   oldScore: 0,
   paused: false,
   score: 0,
@@ -25,6 +25,7 @@ export const initialGameState = {
 export const [SinglePlayerGameContextProvider, useLocalPlayerGameContext] =
   createManagedContext(() => {
     const [game, setGame] = useMountedOnlyState(initialGameState);
+    const isMobile = useIsMobile();
     const [username, setUsername] = useSessionStorageState("username");
     const { dialogProps, prompt } = usePrompt();
 
@@ -96,7 +97,7 @@ export const [SinglePlayerGameContextProvider, useLocalPlayerGameContext] =
     };
 
     return {
-      game,
+      game: { ...game, mobile: isMobile },
       setGame,
       username,
       setUsername,
@@ -173,9 +174,6 @@ export const LocalPlayerGame = ({
             game={game}
             onPause={
               !otherPlayers && (() => pause({ showScoreBoard: !otherPlayers }))
-            }
-            onToggleMobile={() =>
-              setGame((game) => ({ ...game, mobile: !game.mobile }))
             }
           />
           {additionalControls}

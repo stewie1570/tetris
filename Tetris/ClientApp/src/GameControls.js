@@ -9,7 +9,7 @@ const Controls = styled.div`
   width: 100%;
 `;
 
-export function GameControls({ onPause: togglePause, game, onToggleMobile: toggleMobile }) {
+export function GameControls({ onPause: togglePause, game }) {
   return <Controls>
     {togglePause && <CommandButton
       className="btn btn-primary"
@@ -19,9 +19,5 @@ export function GameControls({ onPause: togglePause, game, onToggleMobile: toggl
         ? <><FontAwesomeIcon icon={faPlay} />&nbsp;Continue</>
         : <><FontAwesomeIcon icon={faPause} />&nbsp;Pause</>}</span>
     </CommandButton>}
-    <p />
-    <CommandButton className="btn btn-primary" onClick={toggleMobile}>
-      {game.mobile ? "No Mobile Controls" : "Mobile Controls"}
-    </CommandButton>
   </Controls>;
 }
