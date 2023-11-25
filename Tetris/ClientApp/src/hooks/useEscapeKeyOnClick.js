@@ -1,11 +1,10 @@
-import { useEffect } from "react"
+import { useLifeCycle } from "./useLifeCycle";
 
 export const useEscapeKeyOnClick = ({ onEscapeKeyClick }) => {
-    useEffect(() => {
-        const onEscape = (event) => event.key === "Escape" && onEscapeKeyClick();
+    const onEscape = (event) => event.key === "Escape" && onEscapeKeyClick();
 
-        window.addEventListener("keydown", onEscape);
-
-        return () => window.removeEventListener("keydown", onEscape);
+    useLifeCycle({
+        onMount: () => window.addEventListener("keydown", onEscape),
+        onUnMount: () => window.removeEventListener("keydown", onEscape)
     });
 }
