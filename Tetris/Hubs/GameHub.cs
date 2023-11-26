@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.SignalR;
@@ -51,16 +50,17 @@ namespace Tetris.Hubs
 
             if (isOrganizer)
             {
-                if (!isRunning) await Clients.Group(groupId).SendAsync("reset");
-                await gameRoomRepo.AddGameRoom(new GameRoom
-                {
-                    OrganizerId = groupId,
-                    Status = GameRoomStatus.Waiting,
-                    Players = new Dictionary<string, UserScore>
+                await Task.WhenAll(
+                    isRunning ? Task.FromResult(0) : Clients.Group(groupId).SendAsync("reset"),
+                    gameRoomRepo.AddGameRoom(new GameRoom
                     {
-                        { groupId, new UserScore { } }
-                    }
-                });
+                        OrganizerId = groupId,
+                        Status = GameRoomStatus.Waiting,
+                        Players = new Dictionary<string, UserScore>
+                            {
+                                { groupId, new UserScore { } }
+                            }
+                    }));
             }
             else
             {
@@ -71,7 +71,7 @@ namespace Tetris.Hubs
         [Transaction(Web = true)]
         public async Task PlayersListUpdate(GroupMessage playersListUpdateMessage)
         {
-            await Clients
+            var sendingBroadcast = Clients
                 .Group($"{playersListUpdateMessage.GroupId}-players")
                 .SendAsync("playersListUpdate", playersListUpdateMessage.Message);
 
@@ -83,7 +83,10 @@ namespace Tetris.Hubs
                 {
                     Username = player.Name
                 }));
-            await gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
+            var updatingRoom = gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
+
+            await sendingBroadcast;
+            await updatingRoom;
         }
 
         [Transaction(Web = true)]
@@ -94,7 +97,7 @@ namespace Tetris.Hubs
                 .EnumerateObject()
                 .Any(prop => prop.Name == "name" && prop.Value.ValueKind == JsonValueKind.String);
 
-            if (isNameChange)
+            Func<Task> doNameChange = () =>
             {
                 var newName = statusMessage.Message.GetProperty("name").GetString();
                 if (newName.Length > Domain.Constants.MaxUsernameChars)
@@ -107,32 +110,41 @@ namespace Tetris.Hubs
                 patch.Replace(
                     room => room.Players[Context.Items["userId"] as string],
                     new UserScore { Username = newName });
-                await gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
-            }
+                return gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
+            };
 
-            await (isNameChange
-                ? Clients.Group(statusMessage.GroupId)
-                : Clients.OthersInGroup(statusMessage.GroupId)).SendAsync("status", statusMessage.Message);
+            await Task.WhenAll(
+                isNameChange ? doNameChange() : Task.FromResult(0),
+                (isNameChange
+                    ? Clients.Group(statusMessage.GroupId)
+                    : Clients.OthersInGroup(statusMessage.GroupId)).SendAsync("status", statusMessage.Message)
+            );
         }
 
         [Transaction(Web = true)]
         public async Task Start(GroupMessage statusMessage)
         {
-            await Clients.Group(statusMessage.GroupId).SendAsync("start");
+            var doingBroadcast = Clients.Group(statusMessage.GroupId).SendAsync("start");
 
             var patch = new JsonPatchDocument<GameRoom>();
             patch.Replace(room => room.Status, GameRoomStatus.Running);
-            await gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
+            var updatingRoom = gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
+
+            await doingBroadcast;
+            await updatingRoom;
         }
 
         [Transaction(Web = true)]
         public async Task Results(GroupMessage resultsMessage)
         {
-            await Clients.Group(resultsMessage.GroupId).SendAsync("results", resultsMessage.Message);
+            var doingBroadcast = Clients.Group(resultsMessage.GroupId).SendAsync("results", resultsMessage.Message);
 
             var patch = new JsonPatchDocument<GameRoom>();
             patch.Replace(room => room.Status, GameRoomStatus.Waiting);
-            await gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
+            var updatingRoom = gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
+
+            await doingBroadcast;
+            await updatingRoom;
         }
 
         [Transaction(Web = true)]
@@ -166,13 +178,16 @@ namespace Tetris.Hubs
 
             if (!isOrganizer)
             {
-                await Clients.Group(groupId).SendAsync("addToChat", new
+                var doingBroadcast = Clients.Group(groupId).SendAsync("addToChat", new
                 {
                     notification = $"[{Context.Items["name"] ?? "[Un-named player]"} disconnected]"
                 });
                 var patch = new JsonPatchDocument<GameRoom>();
                 patch.Remove(room => room.Players[userId]);
-                await gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
+                var updatingRoom = gameRoomRepo.TryUpdateGameRoom(patch, Context.Items["groupId"] as string);
+
+                await doingBroadcast;
+                await updatingRoom;
             }
             else
             {

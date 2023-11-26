@@ -4,38 +4,79 @@ import { TextInput } from "./components/TextInput";
 import { CommandButton } from "./components/CommandButton";
 import styled from "styled-components";
 import { useOrganizerId } from "./hooks/useOrganizerId";
+import { useLocalPlayerGameContext } from "./LocalPlayerGame";
+import { StringInput } from "./components/Prompt";
 
 const SendButton = styled(CommandButton)`
   white-space: nowrap;
   margin-left: 1rem;
 `;
 
-export function GameChat() {
+const ChatMessage = styled.div`
+  text-align: left;
+`;
+
+export function GameChat(props) {
   const [messageText, setMessageText] = useState("");
   const organizerId = useOrganizerId();
-  const { chatLines, gameHub, userId, otherPlayers } = useMultiplayerContext();
+  const { chatLines, gameHub, userId, otherPlayers, userId: currentUserId } = useMultiplayerContext();
+  const { prompt, setUsername } = useLocalPlayerGameContext();
   const userHasName = !!otherPlayers[userId]?.name;
 
-  const sendMessage = async (event) => {
+  const promptUserNameAnd = (action) =>
+    prompt((exitModal) => (
+      <StringInput
+        filter={(value) => (value ?? "").trim()}
+        onSubmitString={async (name) => {
+          name
+            ? await gameHub.invoke
+              .status({
+                groupId: organizerId,
+                message: {
+                  userId: currentUserId,
+                  name,
+                },
+              })
+              .then(() => setUsername(name))
+              .then(action)
+              .then(exitModal)
+              .catch(({ message }) =>
+                window.dispatchEvent(
+                  new CustomEvent("user-error", {
+                    detail: trimHubExceptionMessage(message),
+                  })
+                )
+              )
+            : exitModal();
+        }}
+        submittingText="Sending..."
+      >
+        <p>You must have a user name before you send a message.</p>
+        <p>What user name would you like?</p>
+      </StringInput>
+    ));
+
+  const sendMessage = (event) => {
     event?.preventDefault();
 
     const isMessageEmpty = !messageText || messageText === "";
-    const canChat = !isMessageEmpty && userHasName;
+    if (isMessageEmpty) return;
 
-    !userHasName &&
-      window.dispatchEvent(
-        new CustomEvent("user-error", {
-          detail: "You must set a name before sending messages.",
-        })
-      );
+    const sendTheChat = () => gameHub
+      .invoke
+      .sendChat({
+        groupId: organizerId,
+        message: { text: messageText, userId },
+      })
+      .then(() => setMessageText(""))
 
     try {
-      canChat &&
-        (await gameHub.invoke.sendChat({
-          groupId: organizerId,
-          message: { text: messageText, userId },
-        })
-          .then(() => setMessageText("")));
+      if (userHasName) {
+        return sendTheChat();
+      }
+      else {
+        promptUserNameAnd(sendTheChat);
+      }
     } catch (error) {
       window.dispatchEvent(
         new CustomEvent("user-error", {
@@ -54,19 +95,23 @@ export function GameChat() {
   }
 
   return (
-    <div className="card" style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+    <div
+      style={{ marginTop: "1rem", marginBottom: "1rem" }}
+      {...props}
+      className={`card ${props?.className ?? ""}`}
+    >
       <div className="card-header">Chat</div>
       <div className="card-body">
-        <div className="chat-history">
+        <div>
           {chatLines?.filter(hasNameOrNotification).map((chatLine, index) => (
-            <div key={index} className="chat-message">
+            <ChatMessage key={index}>
               <strong>{nameFrom(chatLine)}</strong>
               {chatLine.text ? (
                 `: ${chatLine.text}`
               ) : (
                 <strong>{chatLine.notification}</strong>
               )}
-            </div>
+            </ChatMessage>
           ))}
         </div>
         <form>
