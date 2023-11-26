@@ -12,7 +12,7 @@ const SendButton = styled(CommandButton)`
   margin-left: 1rem;
 `;
 
-const ChatMessage = styled.div`
+const ChatCard = styled.div`
   text-align: left;
 `;
 
@@ -95,7 +95,7 @@ export function GameChat(props) {
   }
 
   return (
-    <div
+    <ChatCard
       style={{ marginTop: "1rem", marginBottom: "1rem" }}
       {...props}
       className={`card ${props?.className ?? ""}`}
@@ -104,14 +104,14 @@ export function GameChat(props) {
       <div className="card-body">
         <div>
           {chatLines?.filter(hasNameOrNotification).map((chatLine, index) => (
-            <ChatMessage key={index}>
+            <div key={index}>
               <strong>{nameFrom(chatLine)}</strong>
               {chatLine.text ? (
                 `: ${chatLine.text}`
               ) : (
                 <strong>{chatLine.notification}</strong>
               )}
-            </ChatMessage>
+            </div>
           ))}
         </div>
         <form>
@@ -134,6 +134,6 @@ export function GameChat(props) {
           </div>
         </form>
       </div>
-    </div>
+    </ChatCard>
   );
 }
