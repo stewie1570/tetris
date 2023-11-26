@@ -162,29 +162,33 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
   const results = gameResults
     ? () => (
-      <>
+      <Centered>
         <Header>Game Over</Header>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.keys(gameResults).map((userId) => (
-              <tr key={userId}>
-                <td>{gameResults[userId].name}</td>
-                <td>{gameResults[userId].score}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <Centered>
-          <div>{singlePlayerGameLink}</div>
-          <div>{resetButton}</div>
-        </Centered>
-      </>
+        <div className="card mb-3" style={{ display: "inline-block", width: "90%", textAlign: "left" }}>
+          <div className="card-header">Results</div>
+          <div className="card-body p-0">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.keys(gameResults).map((userId) => (
+                  <tr key={userId}>
+                    <td>{otherPlayers[userId].name}</td>
+                    <td>{gameResults[userId].score}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <GameChat style={{ width: "90%", display: "inline-block" }} />
+        <div>{singlePlayerGameLink}</div>
+        <div>{resetButton}</div>
+      </Centered>
     )
     : undefined;
 
