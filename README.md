@@ -4,11 +4,7 @@
 
 # A ReactJS SPA with a .NET WebApi/MVC backend
 
-Hosted at:
-
-- <https://stewie1570-tetris.fly.dev>
-- <https://tetris-k2l9.onrender.com>
-- <http://tetris.hopto.org>  (I'm self hosting this one for fun. It might be running)
+Hosted at: <https://brickbattles.io/>
 
 ## Docker Notes
 
