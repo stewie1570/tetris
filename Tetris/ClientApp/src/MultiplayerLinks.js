@@ -25,13 +25,13 @@ export const MultiplayerLinks = () => {
 
   return (
     <>
-      <Link style={{ marginTop: "1rem", display: "block" }} to={`/host`}>
+      <Link className="mt-3" to={`/host`}>
         Host Multiplayer Game
       </Link>
 
       <button
         type="button"
-        className="btn btn-link"
+        className="m-3 btn btn-link"
         onClick={goToMultiplayerGame}
       >
         Join Multiplayer Game
