@@ -12,6 +12,7 @@ import { ReloadRecoveryErrorBoundary } from "./components/ReloadRecoveryErrorBou
 import { Header } from "./Styling";
 import { GameRoomGrid } from "./GameRoomGrid";
 import { GameRooms } from "./GameRooms";
+import { ControlLegend } from "./ControlLegend";
 
 const MultiplayerGameWithContext = React.lazy(() =>
   import("./MultiplayerGameWithContext")
@@ -50,7 +51,10 @@ export const App = ({ shapeProvider }) => {
                 additionalControls={<MultiplayerLinks />}
                 isOnlyPlayer
               />}
-              right={<GameRooms />}
+              right={<>
+                <ControlLegend />
+                <GameRooms />
+              </>}
             />
           }
         />
