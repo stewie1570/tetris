@@ -21,8 +21,13 @@ public class MongoGameRoomRepo : IGameRoomRepo
     public async Task AddGameRoom(GameRoom gameRoom)
     {
         gameRoom.Timestamp = DateTime.UtcNow;
-        await _gameRoomsCollection.InsertOneAsync(gameRoom);
+
+        var filter = Builders<GameRoom>.Filter.Eq(x => x.OrganizerId, gameRoom.OrganizerId);
+        var options = new ReplaceOptions { IsUpsert = true };
+
+        await _gameRoomsCollection.ReplaceOneAsync(filter, gameRoom, options);
     }
+
 
     public async Task TryUpdateGameRoom(JsonPatchDocument<GameRoom> patch, string gameRoomCode)
     {
@@ -72,14 +77,5 @@ public class MongoGameRoomRepo : IGameRoomRepo
         };
 
         return page;
-    }
-
-    public Task<GameRoom> GetGameRoom(string gameRoomCode)
-    {
-        var filter = Builders<GameRoom>.Filter.Eq(x => x.OrganizerId, gameRoomCode);
-        return _gameRoomsCollection
-            .Find(filter)
-            .Project<GameRoom>(Builders<GameRoom>.Projection.Exclude("_id"))
-            .FirstOrDefaultAsync();
     }
 }
