@@ -47,12 +47,6 @@ public class MongoGameRoomRepo : IGameRoomRepo
 
     public async Task<Page<GameRoom>> GetGameRooms(int start, int count)
     {
-        var gettingGameRooms = _gameRoomsCollection.Find(Builders<GameRoom>.Filter.Empty)
-            .Project<GameRoom>(Builders<GameRoom>.Projection.Exclude("_id"))
-            .Skip(start)
-            .Limit(count)
-            .ToListAsync();
-
         var totalGameRooms = await _gameRoomsCollection.CountDocumentsAsync(Builders<GameRoom>.Filter.Empty);
 
         if ((start + count) > totalGameRooms)
@@ -60,6 +54,12 @@ public class MongoGameRoomRepo : IGameRoomRepo
             long totalPages = (long)Math.Ceiling(totalGameRooms / (double)count) - 1;
             start = Math.Max((int)(totalPages * count), 0);
         }
+
+        var gettingGameRooms = _gameRoomsCollection.Find(Builders<GameRoom>.Filter.Empty)
+            .Project<GameRoom>(Builders<GameRoom>.Projection.Exclude("_id"))
+            .Skip(start)
+            .Limit(count)
+            .ToListAsync();
 
         var gameRooms = await gettingGameRooms;
 
