@@ -10,5 +10,4 @@ public interface IGameRoomRepo
     Task TryUpdateGameRoom(JsonPatchDocument<GameRoom> patch, string gameRoomCode);
     Task RemoveGameRoom(GameRoom gameRoom);
     Task<Page<GameRoom>> GetGameRooms(int start, int count);
-    Task<GameRoom> GetGameRoom(string gameRoomCode);
 }
