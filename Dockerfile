@@ -17,9 +17,9 @@ RUN set -uex; \
 RUN npm install -g yarn
 
 COPY . ./
+WORKDIR /Tetris
 # Restore as a distinct layer
 RUN dotnet restore
-WORKDIR /Tetris
 RUN dotnet publish -c Release -o out /property:Version=$RELEASE_VERSION
 
 # Build runtime image
