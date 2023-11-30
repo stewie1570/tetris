@@ -16,10 +16,11 @@ RUN set -uex; \
     apt-get install nodejs -y;
 RUN npm install -g yarn
 
+# Copy everything
 COPY . ./
-WORKDIR /Tetris
-# Restore as a distinct layer
+# Restore as distinct layers
 RUN dotnet restore
+# Build and publish a release
 RUN dotnet publish -c Release -o out /property:Version=$RELEASE_VERSION
 
 # Build runtime image
