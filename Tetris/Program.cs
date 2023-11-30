@@ -16,12 +16,10 @@ namespace Tetris
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-
-                    var port = Environment.GetEnvironmentVariable("PORT");
-                    if (!string.IsNullOrWhiteSpace(port))
-                    {
-                        webBuilder.UseUrls("http://*:" + port);
-                    }
+#if !DEBUG
+                    var port = Environment.GetEnvironmentVariable("PORT") ?? "80";
+                    webBuilder.UseUrls("http://*:" + port);
+#endif
 
                     if (GlobalConfig.IsSentryEnabled())
                     {
