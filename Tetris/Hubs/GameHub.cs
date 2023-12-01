@@ -180,7 +180,7 @@ namespace Tetris.Hubs
             {
                 var doingBroadcast = Clients.Group(groupId).SendAsync("addToChat", new
                 {
-                    notification = $"[{Context.Items["name"] ?? "[Un-named player]"} disconnected]"
+                    notification = $"[{(Context.Items["name"] as string) ?? "[Un-named player]"} disconnected]"
                 });
                 var patch = new JsonPatchDocument<GameRoom>();
                 patch.Remove(room => room.Players[userId]);
