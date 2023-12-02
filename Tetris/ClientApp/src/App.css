@@ -1,8 +1,8 @@
-h1{
+h1 {
   color: white;
 }
 
-h2{
+h2 {
   color: white
 }
 
@@ -10,16 +10,21 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  background: radial-gradient(circle, #e6ffe7, #c7d1ff, #ffd9ff);
 }
 
-.space-top-right{
+.space-top-right {
   margin: 20px 20px 0 0;
 }
 
-.space-top{
+.space-top {
   margin: 20px 0 0 0;
 }
 
-.centered{
+.centered {
   text-align: center;
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.4);
 }
