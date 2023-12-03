@@ -60,15 +60,9 @@ namespace Tetris.Hubs
                         { groupId, new UserScore { } }
                     }
                 });
-                var clearChatLines = SetChatLines(new GroupMessage
-                {
-                    GroupId = groupId,
-                    Message = new List<string> { }.ToJsonElement()
-                });
 
                 await resetting;
                 await addingGameRoom;
-                await clearChatLines;
             }
             else
             {
