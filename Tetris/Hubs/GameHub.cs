@@ -50,17 +50,19 @@ namespace Tetris.Hubs
 
             if (isOrganizer)
             {
-                await Task.WhenAll(
-                    isRunning ? Task.FromResult(0) : Clients.Group(groupId).SendAsync("reset"),
-                    gameRoomRepo.AddGameRoom(new GameRoom
+                var resetting = isRunning ? Task.FromResult(0) : Clients.Group(groupId).SendAsync("reset");
+                var addingGameRoom = gameRoomRepo.AddGameRoom(new GameRoom
+                {
+                    OrganizerId = groupId,
+                    Status = GameRoomStatus.Waiting,
+                    Players = new Dictionary<string, UserScore>
                     {
-                        OrganizerId = groupId,
-                        Status = GameRoomStatus.Waiting,
-                        Players = new Dictionary<string, UserScore>
-                            {
-                                { groupId, new UserScore { } }
-                            }
-                    }));
+                        { groupId, new UserScore { } }
+                    }
+                });
+
+                await resetting;
+                await addingGameRoom;
             }
             else
             {

@@ -121,7 +121,6 @@ export const usePlayerListener = () => {
             mobile,
             paused: true,
           }));
-          setChatLines([]);
           setOtherPlayers((otherPlayers) =>
             [{}, ...Object.keys(otherPlayers)].reduce(
               (currentPlayers, userId) => ({

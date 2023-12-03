@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { HubConnectionBuilder, HttpTransportType } from '@microsoft/signalr';
 import { useUserId } from './hooks/useUserId';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { initialEmptyPlayersList, selectableDurations } from './constants'
 import { createManagedContext, useMountedOnlyState } from "leaf-validator";
 import { useLifeCycle } from "./hooks/useLifeCycle";
@@ -30,6 +30,9 @@ export const [MultiplayerContextProvider, useMultiplayerContext, MultiplayerCont
     receive: {}
   });
   const userId = useUserId();
+  const { organizerUserId: organizerIdParam } = useParams();
+  const organizerId = organizerIdParam.toLowerCase() === "host" ? userId : organizerIdParam;
+  const isOrganizer = organizerId === userId;
   const [gameEndTime, setGameEndTime] = React.useState(null);
   const [canGuestStartGame, setCanGuestStartGame] = React.useState(false);
   const [organizerConnectionStatus, setOrganizerConnectionStatus] = React.useState(null);
@@ -71,6 +74,10 @@ export const [MultiplayerContextProvider, useMultiplayerContext, MultiplayerCont
             gameHub.current.send[signal] = obj => connection.current.send(signal, obj);
           });
           setIsConnected(true);
+          isOrganizer && gameHub.current.invoke.setChatLines({
+            groupId: organizerId,
+            message: []
+          });
         });
     },
     onUnMount: () => connection.current.stop()
