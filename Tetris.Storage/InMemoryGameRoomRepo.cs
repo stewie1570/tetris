@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,11 +21,15 @@ public class InMemoryGameRoomRepo : IGameRoomRepo
 
     public Task TryUpdateGameRoom(JsonPatchDocument<GameRoom> patch, string gameRoomCode)
     {
-        var theGameRoom = theList.FirstOrDefault(room => room.OrganizerId == gameRoomCode);
-        if (theGameRoom != null)
+        try
         {
-            patch.ApplyTo(theGameRoom);
+            var theGameRoom = theList.FirstOrDefault(room => room.OrganizerId == gameRoomCode);
+            if (theGameRoom != null)
+            {
+                patch.ApplyTo(theGameRoom);
+            }
         }
+        catch (Exception) { }
 
         return Task.FromResult(0);
     }
