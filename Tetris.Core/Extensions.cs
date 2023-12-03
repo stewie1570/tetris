@@ -18,5 +18,15 @@ namespace Tetris.Core
                 PropertyNameCaseInsensitive = true
             });
         }
+
+        public static JsonElement ToJsonElement(this object obj)
+        {
+            string jsonString = JsonSerializer.Serialize(obj);
+
+            using (JsonDocument doc = JsonDocument.Parse(jsonString))
+            {
+                return doc.RootElement.Clone();
+            }
+        }
     }
 }
