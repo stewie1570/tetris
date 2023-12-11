@@ -10,7 +10,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  background: linear-gradient(#e0e0e0, #c0c0c0, #e0e0e0);
+  background: radial-gradient(#fdfdfd,#e3e3e3,#fdfdfd);
+  background-attachment: fixed;
 }
 
 .space-top-right {
