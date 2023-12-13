@@ -19,7 +19,7 @@ import { useStatusSender } from "./hooks/useStatusSender";
 import { getDisplayTimeFrom } from "./domain/time";
 import { selectableDurations } from "./constants";
 import { LeaderBoard } from "./ScoreBoard";
-import { Centered, Header, Warning } from "./Styling";
+import { CenterScreen, Centered, Header, Warning } from "./Styling";
 import { useOrganizerId } from "./hooks/useOrganizerId";
 import { useLifeCycle } from "./hooks/useLifeCycle";
 import styled from "styled-components";
@@ -215,38 +215,38 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const waitingForOrganizer =
     !organizerConnectionStatus && !isOrganizer
       ? () => (
-        <>
+        <CenterScreen>
           <Header>Waiting for organizer...</Header>
           <Centered>
             <div>{singlePlayerGameLink}</div>
             <div>{retryButton}</div>
           </Centered>
-        </>
+        </CenterScreen>
       )
       : undefined;
 
   const organizerDisconnected =
     organizerConnectionStatus === "disconnected" && !isOrganizer && game.paused
       ? () => (
-        <>
+        <CenterScreen>
           <Header>Organizer has disconnected.</Header>
           <Centered>
             <div>{singlePlayerGameLink}</div>
             <div>{retryButton}</div>
           </Centered>
-        </>
+        </CenterScreen>
       )
       : undefined;
 
   const userIsDisconnected =
     isConnected === undefined
       ? () => (
-        <>
+        <CenterScreen>
           <Header>Connecting to game server...</Header>
           <Centered>
             <div>{singlePlayerGameLink}</div>
           </Centered>
-        </>
+        </CenterScreen>
       )
       : undefined;
 
