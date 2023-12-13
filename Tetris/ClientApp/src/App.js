@@ -9,7 +9,7 @@ import { Dialog } from "./components/Prompt";
 import { ErrorMessage } from "./components/ErrorMessage";
 import { MultiplayerLinks } from "./MultiplayerLinks";
 import { ReloadRecoveryErrorBoundary } from "./components/ReloadRecoveryErrorBoundary";
-import { Header } from "./Styling";
+import { CenterScreen, Header } from "./Styling";
 import { GameRoomGrid } from "./GameRoomGrid";
 import { GameRooms } from "./GameRooms";
 import { ControlLegend } from "./ControlLegend";
@@ -46,15 +46,19 @@ export const App = ({ shapeProvider }) => {
           path="/"
           element={
             <GameRoomGrid
-              left={<LocalPlayerGame
-                shapeProvider={selectedShapeProvider}
-                additionalControls={<MultiplayerLinks />}
-                isOnlyPlayer
-              />}
-              right={<>
-                <ControlLegend />
-                <GameRooms />
-              </>}
+              left={
+                <LocalPlayerGame
+                  shapeProvider={selectedShapeProvider}
+                  additionalControls={<MultiplayerLinks />}
+                  isOnlyPlayer
+                />
+              }
+              right={
+                <>
+                  <ControlLegend />
+                  <GameRooms />
+                </>
+              }
             />
           }
         />
@@ -62,7 +66,13 @@ export const App = ({ shapeProvider }) => {
           path="/:organizerUserId"
           element={
             <ReloadRecoveryErrorBoundary>
-              <Suspense fallback={<Header>Loading...</Header>}>
+              <Suspense
+                fallback={
+                  <CenterScreen>
+                    <Header>Loading...</Header>
+                  </CenterScreen>
+                }
+              >
                 <MultiplayerGameWithContext
                   shapeProvider={selectedShapeProvider}
                 />
