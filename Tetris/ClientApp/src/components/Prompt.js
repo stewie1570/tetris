@@ -86,14 +86,7 @@ export function StringInput({
           onChange={(str) => setValue(inputFilter?.(str) || str)}
         />
       </label>
-      <div className="d-flex flex-column flex-sm-row align-items-center">
-        <CommandButton
-          style={{ width: "100%" }}
-          className="btn btn-primary space-top mb-2 mb-sm-0"
-          onClick={() => onSubmitString(undefined)}
-        >
-          Cancel
-        </CommandButton>
+      <div className="d-flex flex-column flex-sm-row-reverse align-items-center">
         <CommandButton
           className="btn btn-primary space-top ml-sm-2"
           style={{ width: "100%" }}
@@ -102,6 +95,13 @@ export function StringInput({
           type="submit"
         >
           Ok
+        </CommandButton>
+        <CommandButton
+          style={{ width: "100%" }}
+          className="btn btn-light space-top mb-2 mb-sm-0"
+          onClick={() => onSubmitString(undefined)}
+        >
+          Cancel
         </CommandButton>
       </div>
     </form>
