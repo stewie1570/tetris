@@ -24,6 +24,7 @@ import { useOrganizerId } from "./hooks/useOrganizerId";
 import { useLifeCycle } from "./hooks/useLifeCycle";
 import styled from "styled-components";
 import { CopyButton } from "./components/CopyButton";
+import { BigStartButton } from "./BigStartButton";
 
 const GameDurationSelect = styled.select`
   width: 90%;
@@ -47,14 +48,12 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     gameResults,
     selectedDuration,
     setSelectedDuration,
-    canGuestStartGame,
   } = useMultiplayerContext();
   const { game, setGame, setUsername, username, prompt } =
     useLocalPlayerGameContext();
   const isOrganizer = organizerUserId === currentUserId;
   const timeLeft =
     gameEndTime && Math.max(0, Math.ceil(gameEndTime - timeProvider()));
-  const isStartable = isOrganizer || canGuestStartGame;
 
   useLifeCycle({
     onMount: () => {
@@ -73,22 +72,22 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         onSubmitString={async (name) => {
           name
             ? await gameHub.invoke
-              .status({
-                groupId: organizerUserId,
-                message: {
-                  userId: currentUserId,
-                  name: name,
-                },
-              })
-              .then(() => setUsername(name))
-              .then(exitModal)
-              .catch(({ message }) =>
-                window.dispatchEvent(
-                  new CustomEvent("user-error", {
-                    detail: trimHubExceptionMessage(message),
-                  })
+                .status({
+                  groupId: organizerUserId,
+                  message: {
+                    userId: currentUserId,
+                    name: name,
+                  },
+                })
+                .then(() => setUsername(name))
+                .then(exitModal)
+                .catch(({ message }) =>
+                  window.dispatchEvent(
+                    new CustomEvent("user-error", {
+                      detail: trimHubExceptionMessage(message),
+                    })
+                  )
                 )
-              )
             : exitModal();
         }}
         submittingText="Setting user name..."
@@ -97,8 +96,6 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         What user name would you like?
       </StringInput>
     ));
-
-  const startGame = () => gameHub.send.start({ groupId: organizerUserId });
 
   const Game = isOrganizer ? Organizer : React.Fragment;
   const otherPlayerIds = Object.keys(otherPlayers);
@@ -162,34 +159,37 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
   const results = gameResults
     ? () => (
-      <Centered>
-        <Header>Game Over</Header>
-        <div className="card mb-3" style={{ display: "inline-block", width: "90%", textAlign: "left" }}>
-          <div className="card-header">Results</div>
-          <div className="card-body p-0">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Score</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Object.keys(otherPlayers).map((userId) => (
-                  <tr key={userId}>
-                    <td>{otherPlayers[userId].name}</td>
-                    <td>{gameResults[userId].score}</td>
+        <Centered>
+          <Header>Game Over</Header>
+          <div
+            className="card mb-3"
+            style={{ display: "inline-block", width: "90%", textAlign: "left" }}
+          >
+            <div className="card-header">Results</div>
+            <div className="card-body p-0">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Score</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {Object.keys(otherPlayers).map((userId) => (
+                    <tr key={userId}>
+                      <td>{otherPlayers[userId].name}</td>
+                      <td>{gameResults[userId].score}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-        <GameChat style={{ width: "90%", display: "inline-block" }} />
-        <div>{singlePlayerGameLink}</div>
-        <div>{resetButton}</div>
-      </Centered>
-    )
+          <GameChat style={{ width: "90%", display: "inline-block" }} />
+          <div>{singlePlayerGameLink}</div>
+          <div>{resetButton}</div>
+        </Centered>
+      )
     : undefined;
 
   const retryButton = (
@@ -215,39 +215,39 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const waitingForOrganizer =
     !organizerConnectionStatus && !isOrganizer
       ? () => (
-        <CenterScreen>
-          <Header>Waiting for organizer...</Header>
-          <Centered>
-            <div>{singlePlayerGameLink}</div>
-            <div>{retryButton}</div>
-          </Centered>
-        </CenterScreen>
-      )
+          <CenterScreen>
+            <Header>Waiting for organizer...</Header>
+            <Centered>
+              <div>{singlePlayerGameLink}</div>
+              <div>{retryButton}</div>
+            </Centered>
+          </CenterScreen>
+        )
       : undefined;
 
   const organizerDisconnected =
     organizerConnectionStatus === "disconnected" && !isOrganizer && game.paused
       ? () => (
-        <CenterScreen>
-          <Header>Organizer has disconnected.</Header>
-          <Centered>
-            <div>{singlePlayerGameLink}</div>
-            <div>{retryButton}</div>
-          </Centered>
-        </CenterScreen>
-      )
+          <CenterScreen>
+            <Header>Organizer has disconnected.</Header>
+            <Centered>
+              <div>{singlePlayerGameLink}</div>
+              <div>{retryButton}</div>
+            </Centered>
+          </CenterScreen>
+        )
       : undefined;
 
   const userIsDisconnected =
     isConnected === undefined
       ? () => (
-        <CenterScreen>
-          <Header>Connecting to game server...</Header>
-          <Centered>
-            <div>{singlePlayerGameLink}</div>
-          </Centered>
-        </CenterScreen>
-      )
+          <CenterScreen>
+            <Header>Connecting to game server...</Header>
+            <Centered>
+              <div>{singlePlayerGameLink}</div>
+            </Centered>
+          </CenterScreen>
+        )
       : undefined;
 
   const gameHeader = (
@@ -306,22 +306,13 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                       Set User Name
                     </CommandButton>
                   </div>
-                  <div style={{ marginTop: "1rem" }}>
-                    <CommandButton
-                      disabled={!isStartable}
-                      onClick={startGame}
-                      runningText="Starting..."
-                      className="btn btn-primary"
-                    >
-                      Start Game
-                    </CommandButton>
-                  </div>
                 </LeaderBoard>
               </LocalPlayerGame>
               {game.paused ? (
                 <div className="col-xs-12 col-md-8">
                   {gameContextInfo}
                   <GameChat />
+                  <BigStartButton />
                 </div>
               ) : (
                 otherPlayerIds
