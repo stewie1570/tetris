@@ -10,7 +10,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  background: radial-gradient(#fdfdfd,#e3e3e3,#fdfdfd);
+  background: radial-gradient(#fff,#d3d3e3,#fff);
   background-attachment: fixed;
 }
 

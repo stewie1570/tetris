@@ -10,6 +10,13 @@ import { useOrganizerId } from "./useOrganizerId";
 
 const MaxChatLines = 10;
 
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+
 export const usePlayerListener = () => {
   const organizerUserId = useOrganizerId();
   const {
@@ -92,6 +99,7 @@ export const usePlayerListener = () => {
             mobile,
             paused: false,
           }));
+          scrollToTop();
           setGameResults(null);
           externalsRef.current.isOrganizer &&
             setGameEndTime(
