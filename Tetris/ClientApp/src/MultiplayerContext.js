@@ -41,6 +41,9 @@ export const [MultiplayerContextProvider, useMultiplayerContext, MultiplayerCont
   const [selectedDuration, setSelectedDuration] = React.useState(selectableDurations[0] * 1000);
   const [chatLines, setChatLines] = React.useState([]);
 
+  const instanceRef = useRef({ organizerId });
+  instanceRef.current = { organizerId };
+
   useEffect(() => {
     setGameEndTime(null);
   }, [location]);
@@ -75,7 +78,7 @@ export const [MultiplayerContextProvider, useMultiplayerContext, MultiplayerCont
           });
           setIsConnected(true);
           isOrganizer && gameHub.current.invoke.setChatLines({
-            groupId: organizerId,
+            groupId: instanceRef.current.organizerId,
             message: []
           });
         });
