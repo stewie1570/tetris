@@ -86,7 +86,7 @@ export function StringInput({
           onChange={(str) => setValue(inputFilter?.(str) || str)}
         />
       </label>
-      <div className="d-flex flex-column flex-sm-row-reverse align-items-center">
+      <div className="d-flex flex-column-reverse flex-lg-row-reverse align-items-center">
         <CommandButton
           className="btn btn-primary space-top ml-sm-2"
           style={{ width: "100%" }}
