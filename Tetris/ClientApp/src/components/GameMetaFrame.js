@@ -18,7 +18,7 @@ const Game = styled.div`
 const Container = styled.div`
   text-align: center;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 `;
 
