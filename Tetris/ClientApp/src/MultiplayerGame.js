@@ -35,6 +35,11 @@ const trimHubExceptionMessage = (message) => {
   return message.split(seperator)[1] ?? message;
 };
 
+const BoldRed = styled.span`
+  font-weight: bold;
+  color: red;
+`;
+
 export const MultiplayerGame = ({ shapeProvider }) => {
   const organizerUserId = useOrganizerId();
   const {
@@ -270,10 +275,12 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         </>
       )}
 
-      {gameEndTime &&
-        `Game ends in ${getDisplayTimeFrom(
-          Math.floor(timeLeft / 1000)
-        )} seconds`}
+      {gameEndTime && (
+        <BoldRed>
+          Game ends in {getDisplayTimeFrom(Math.floor(timeLeft / 1000))}{" "}
+          seconds.
+        </BoldRed>
+      )}
     </>
   );
 
