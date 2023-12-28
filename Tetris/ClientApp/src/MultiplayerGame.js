@@ -301,7 +301,10 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 <LeaderBoard style={{ height: "100%" }}>
                   Players:
                   {Object.keys(otherPlayers).map((userId) => (
-                    <div key={userId}>
+                    <div
+                      className={userId === currentUserId ? "bold" : ""}
+                      key={userId}
+                    >
                       {otherPlayers[userId].name ?? "[Un-named player]"}
                     </div>
                   ))}
