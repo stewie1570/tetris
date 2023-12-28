@@ -302,7 +302,13 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                   Players:
                   {Object.keys(otherPlayers).map((userId) => (
                     <div key={userId}>
-                      {otherPlayers[userId].name ?? "[Un-named player]"}
+                      {userId === currentUserId ? (
+                        <b>
+                          {otherPlayers[userId].name ?? "[Un-named player]"}
+                        </b>
+                      ) : (
+                        otherPlayers[userId].name ?? "[Un-named player]"
+                      )}
                     </div>
                   ))}
                   <div>
