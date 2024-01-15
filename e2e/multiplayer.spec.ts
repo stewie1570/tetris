@@ -65,6 +65,9 @@ test("players can chat with each other", async () => {
 
   await joinMultiplayerGame({ guestBrowserPage: browserPage2, gameRoomCode });
 
+  await expect(await browserPage1.getByText("[browser page 2 connected]")).toBeVisible();
+  await expect(await browserPage2.getByText("[browser page 2 connected]")).toBeVisible();
+
   await browserPage1.getByRole('textbox').fill('here is some chat');
   await browserPage1.getByRole('textbox').press('Enter');
   await expect(await browserPage1.getByText('browser page 1: here is some chat')).toBeVisible();
