@@ -333,7 +333,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                     (userId) =>
                       userId !== currentUserId
                       && otherPlayers[userId].board
-                      && !otherPlayerIds[userId].disconnected
+                      && !otherPlayers[userId].disconnected
                   )
                   .map((userId) => (
                     <div className="col-xs-12 col-md-4" key={userId}>
