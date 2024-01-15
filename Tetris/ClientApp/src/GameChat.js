@@ -87,7 +87,7 @@ export function GameChat(props) {
   };
 
   function nameFrom(chatLine) {
-    return otherPlayers[chatLine.userId]?.name;
+    return otherPlayers[chatLine.userId]?.name ?? "Un-named player";
   }
 
   function hasNameOrNotification(chatLine) {
@@ -105,11 +105,10 @@ export function GameChat(props) {
         <div>
           {chatLines?.filter(hasNameOrNotification).map((chatLine, index) => (
             <div key={index}>
-              <strong>{nameFrom(chatLine)}</strong>
               {chatLine.text ? (
-                `: ${chatLine.text}`
+                <><strong>{nameFrom(chatLine)}</strong>: {chatLine.text}</>
               ) : (
-                <strong>{chatLine.notification}</strong>
+                <strong>[{nameFrom(chatLine)} {chatLine.notification}]</strong>
               )}
             </div>
           ))}

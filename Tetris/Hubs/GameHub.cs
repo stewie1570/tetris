@@ -66,6 +66,11 @@ namespace Tetris.Hubs
             }
             else
             {
+                await Clients.Group($"{groupId}-organizer").SendAsync("addToChat", new
+                {
+                    notification = "connected",
+                    userId
+                });
                 await Clients.Group($"{groupId}-organizer").SendAsync("hello", helloMessage.Message);
             }
         }
@@ -176,14 +181,15 @@ namespace Tetris.Hubs
 
             await (isOrganizer
                 ? Clients.Group(groupId).SendAsync("noOrganizer")
-                : Clients.Group($"{groupId}-organizer").SendAsync("disconnect", new { userId }));
+                : Clients.Group(groupId).SendAsync("status", new { userId, disconnected = true }));
 
             if (!isOrganizer)
             {
                 string name = Context.Items["name"].ToString();
                 var doingBroadcast = Clients.Group(groupId).SendAsync("addToChat", new
                 {
-                    notification = $"[{(name?.Length > 0 ? name : "[Un-named player]")} disconnected]"
+                    notification = "disconnected",
+                    userId
                 });
                 var patch = new JsonPatchDocument<GameRoom>();
                 patch.Remove(room => room.Players[userId]);

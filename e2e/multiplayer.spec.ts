@@ -15,14 +15,14 @@ test('start a multiplayer game', async () => {
   await joinMultiplayerGame({ guestBrowserPage: browserPage2, gameRoomCode });
   await joinMultiplayerGame({ guestBrowserPage: browserPage3, gameRoomCode }, "browser page 3");
 
-  await expect(browserPage1.getByText('browser page 2')).toBeVisible();
+  await expect(browserPage1.getByText('browser page 2')).toHaveCount(2);
   await browserPage1.getByRole('button', { name: 'Start Game' }).click();
-  await expect(await browserPage1.getByText("browser page 2")).toBeVisible();
-  await expect(await browserPage1.getByText("browser page 3")).toBeVisible();
-  await expect(await browserPage2.getByText("browser page 1")).toBeVisible();
-  await expect(await browserPage2.getByText("browser page 3")).toBeVisible();
-  await expect(await browserPage3.getByText("browser page 1")).toBeVisible();
-  await expect(await browserPage3.getByText("browser page 2")).toBeVisible();
+  await expect(await browserPage1.getByText(/^browser page 2$/)).toBeVisible();
+  await expect(await browserPage2.getByText(/^browser page 1$/)).toBeVisible();
+  await expect(await browserPage1.getByText(/^browser page 3$/)).toBeVisible();
+  await expect(await browserPage2.getByText(/^browser page 3$/)).toBeVisible();
+  await expect(await browserPage3.getByText(/^browser page 1$/)).toBeVisible();
+  await expect(await browserPage3.getByText(/^browser page 2$/)).toBeVisible();
 
   await expect(await browserPage1.getByText("Score: 0")).toHaveCount(3);
   await expect(await browserPage1.getByText("Score: 0")).toHaveCount(3);
@@ -47,10 +47,10 @@ test('start a multiplayer game via the game rooms table', async () => {
     .click({ timeout: 15000 });
   await setUserName(browserPage2, 'browser page 2');
 
-  await expect(browserPage1.getByText('browser page 2')).toBeVisible();
+  await expect(browserPage1.getByText('browser page 2')).toHaveCount(2);
   await browserPage1.getByRole('button', { name: 'Start Game' }).click();
-  await expect(await browserPage1.getByText("browser page 2")).toBeVisible();
-  await expect(await browserPage2.getByText("browser page 1")).toBeVisible();
+  await expect(await browserPage1.getByText(/^browser page 2$/)).toBeVisible();
+  await expect(await browserPage2.getByText(/^browser page 1$/)).toBeVisible();
 
   await context1.close();
   await context2.close();
@@ -64,6 +64,8 @@ test("players can chat with each other", async () => {
   const gameRoomCode = await hostMultiplayerGameOn({ hostBrowserPage: browserPage1 });
 
   await joinMultiplayerGame({ guestBrowserPage: browserPage2, gameRoomCode });
+
+  await expect(await browserPage1.getByText("[browser page 2 connected]")).toBeVisible();
 
   await browserPage1.getByRole('textbox').fill('here is some chat');
   await browserPage1.getByRole('textbox').press('Enter');
@@ -142,10 +144,10 @@ test('cant start an already in-progress game', async () => {
 
   await joinMultiplayerGame({ guestBrowserPage: browserPage2, gameRoomCode });
 
-  await expect(browserPage1.getByText('browser page 2')).toBeVisible();
+  await expect(browserPage1.getByText('browser page 2')).toHaveCount(2);
   await browserPage1.getByRole('button', { name: 'Start Game' }).click();
-  await expect(await browserPage1.getByText("browser page 2")).toBeVisible();
-  await expect(await browserPage2.getByText("browser page 1")).toBeVisible();
+  await expect(await browserPage1.getByText(/^browser page 2$/)).toBeVisible();
+  await expect(await browserPage2.getByText(/^browser page 1$/)).toBeVisible();
 
   await browserPage2.getByRole('link', { name: 'Single Player Game' }).click();
   await browserPage2.getByRole('button', { name: 'Pause' }).click();
@@ -172,8 +174,8 @@ test('disconnected warning shows when organizer disconnects from a game in-progr
   await joinMultiplayerGame({ guestBrowserPage: browserPage2, gameRoomCode });
 
   await browserPage1.getByRole('button', { name: 'Start Game' }).click();
-  await expect(await browserPage1.getByText("browser page 2")).toBeVisible();
-  await expect(await browserPage2.getByText("browser page 1")).toBeVisible();
+  await expect(await browserPage1.getByText(/^browser page 2$/)).toBeVisible();
+  await expect(await browserPage2.getByText(/^browser page 1$/)).toBeVisible();
 
   await browserPage1.getByRole('link', { name: 'Single Player Game' }).click();
 
