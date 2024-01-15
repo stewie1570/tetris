@@ -28,7 +28,8 @@ export const useStatusSender = () => {
                 board: stringFrom(game.board),
                 score: game.score,
                 name: username,
-                timeLeft: isOrganizer ? timeLeft : undefined
+                timeLeft: isOrganizer ? timeLeft : undefined,
+                disconnected: false
             }
         })
     }, [isConnected, game.paused, game.board]);

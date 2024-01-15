@@ -176,7 +176,7 @@ namespace Tetris.Hubs
 
             await (isOrganizer
                 ? Clients.Group(groupId).SendAsync("noOrganizer")
-                : Clients.Group($"{groupId}-organizer").SendAsync("disconnect", new { userId }));
+                : Clients.Group(groupId).SendAsync("status", new { userId, disconnected = true }));
 
             if (!isOrganizer)
             {

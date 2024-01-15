@@ -25,5 +25,10 @@ export const usePlayerListSender = () => {
                     isStartable: externalsRef.current.isStartable
                 }
             });
-    }, [Object.keys(otherPlayers).join(',')]);
+    }, [
+        Object
+            .keys(otherPlayers)
+            .map(userId => `${userId}:${Boolean(otherPlayers[userId].disconnected)}`)
+            .join(',')
+    ]);
 };

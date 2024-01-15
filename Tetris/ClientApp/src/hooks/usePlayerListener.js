@@ -57,7 +57,7 @@ export const usePlayerListener = () => {
         hello: ({ userId, ...otherProps }) => {
           setOtherPlayers((otherPlayers) => ({
             ...otherPlayers,
-            [userId]: { ...otherPlayers[userId], ...otherProps },
+            [userId]: { ...otherPlayers[userId], ...otherProps, disconnected: false },
           }));
           externalsRef.current.gameHub.invoke.setChatLines({
             groupId: organizerUserId,
@@ -111,12 +111,6 @@ export const usePlayerListener = () => {
           setGameEndTime(null);
           setGame((game) => ({ ...game, paused: true }));
         },
-        disconnect: ({ userId }) =>
-          setOtherPlayers((currentOtherPlayers) => {
-            const { [userId]: removedPlayer, ...otherPlayers } =
-              currentOtherPlayers;
-            return otherPlayers;
-          }),
         noOrganizer: () => {
           setOrganizerConnectionStatus("disconnected");
         },
