@@ -86,6 +86,7 @@ namespace Tetris.Hubs
             var patch = new JsonPatchDocument<GameRoom>();
             patch.Replace(room => room.Players, playersList
                 .Players
+                .Where(player => !player.Disconnected)
                 .ToDictionary(keySelector: player => player.UserId, elementSelector: player => new UserScore
                 {
                     Username = player.Name

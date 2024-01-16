@@ -143,6 +143,7 @@ test("Organizer: hosting a multiplayer game", async () => {
                 {
                   name: undefined,
                   userId: "host",
+                  disconnected: false
                 },
               ],
               isStartable: true,
@@ -178,7 +179,7 @@ test("Organizer: hosting a multiplayer game", async () => {
         playersListUpdate: {
           groupId: "host",
           message: {
-            players: [{ userId: "host" }],
+            players: [{ userId: "host", disconnected: false }],
             isStartable: true,
           },
         },
@@ -192,7 +193,7 @@ test("Organizer: hosting a multiplayer game", async () => {
         playersListUpdate: {
           groupId: "host",
           message: {
-            players: [{ userId: "host" }, { userId: "user1" }],
+            players: [{ userId: "host", disconnected: false }, { userId: "user1", disconnected: false }],
             isStartable: true,
           },
         },
@@ -207,9 +208,9 @@ test("Organizer: hosting a multiplayer game", async () => {
           groupId: "host",
           message: {
             players: [
-              { userId: "host" },
-              { userId: "user1", name: "user one" },
-              { userId: "user2" },
+              { userId: "host", disconnected: false },
+              { userId: "user1", name: "user one", disconnected: false },
+              { userId: "user2", disconnected: false },
             ],
             isStartable: true,
           },
@@ -247,6 +248,7 @@ test("Organizer: setting user name", async () => {
                 {
                   name: undefined,
                   userId: "host",
+                  disconnected: false
                 },
               ],
               isStartable: true,
@@ -287,6 +289,7 @@ test("Organizer: setting user name", async () => {
               {
                 name: undefined,
                 userId: "host",
+                disconnected: false
               },
             ],
             isStartable: true,
