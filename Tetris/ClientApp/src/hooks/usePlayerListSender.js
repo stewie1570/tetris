@@ -21,6 +21,7 @@ export const usePlayerListSender = () => {
                 message: {
                     players: Object
                         .keys(otherPlayers)
+                        .filter(userId => !otherPlayers[userId].disconnected)
                         .map(userId => ({ userId, name: otherPlayers[userId].name })),
                     isStartable: externalsRef.current.isStartable
                 }
