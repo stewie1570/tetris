@@ -182,8 +182,8 @@ export const MultiplayerGame = ({ shapeProvider }) => {
               <tbody>
                 {Object.keys(otherPlayers).map((userId) => (
                   <tr key={userId}>
-                    <td>{otherPlayers[userId].name}</td>
-                    <td>{gameResults[userId].score}</td>
+                    <td>{otherPlayers[userId].name ?? "[Un-named Player]"}</td>
+                    <td>{gameResults[userId]?.score}</td>
                   </tr>
                 ))}
               </tbody>
