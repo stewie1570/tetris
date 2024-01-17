@@ -127,7 +127,11 @@ export const usePlayerListener = () => {
             [{}, ...Object.keys(otherPlayers)].reduce(
               (currentPlayers, userId) => ({
                 ...currentPlayers,
-                [userId]: { name: otherPlayers[userId].name, score: 0 },
+                [userId]: {
+                  name: otherPlayers[userId].name,
+                  score: 0,
+                  disconnected: otherPlayers[userId].disconnected
+                },
               })
             )
           );
