@@ -98,7 +98,7 @@ export function StringInput({
         </CommandButton>
         <CommandButton
           style={{ width: "100%" }}
-          className="btn btn-light space-top mb-2 mb-sm-0"
+          className="btn btn-light space-top ml-sm-2"
           onClick={() => onSubmitString(undefined)}
         >
           Cancel

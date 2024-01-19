@@ -49,7 +49,6 @@ export const App = ({ shapeProvider }) => {
               left={
                 <LocalPlayerGame
                   shapeProvider={selectedShapeProvider}
-                  additionalControls={<MultiplayerLinks />}
                   isOnlyPlayer
                 />
               }
