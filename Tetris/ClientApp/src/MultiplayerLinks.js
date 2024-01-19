@@ -25,17 +25,23 @@ export const MultiplayerLinks = () => {
 
   return (
     <>
-      <Link className="mt-3" to={`/host`}>
-        Host Multiplayer Game
-      </Link>
+      <div className="d-flex flex-column-reverse flex-lg-row-reverse align-items-center">
+        <Link
+          style={{ width: "100%" }}
+          className="btn btn-success space-top ml-sm-2"
+          to={`/host`}>
+          Host Multiplayer Game
+        </Link>
 
-      <button
-        type="button"
-        className="m-3 btn btn-link"
-        onClick={goToMultiplayerGame}
-      >
-        Join Multiplayer Game
-      </button>
+        <button
+          type="button"
+          style={{ width: "100%" }}
+          className="btn btn-success space-top ml-sm-2"
+          onClick={goToMultiplayerGame}
+        >
+          Join Multiplayer Game
+        </button>
+      </div>
     </>
   );
 };

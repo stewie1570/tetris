@@ -9,8 +9,8 @@ const Controls = styled.div`
   width: 100%;
 `;
 
-export function GameControls({ onPause: togglePause, game }) {
-  return <Controls>
+export function GameControls({ onPause: togglePause, game, ...otherProps }) {
+  return <Controls {...otherProps}>
     {togglePause && <CommandButton
       className="btn btn-primary"
       runningText="Loading Score Board..."

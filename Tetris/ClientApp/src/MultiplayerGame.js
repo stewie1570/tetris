@@ -144,7 +144,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const singlePlayerGameLink = (
     <>
       <Link
-        style={{ display: "block", marginTop: "1rem" }}
+        style={{ display: "block" }}
         onClick={() => setGame((game) => ({ ...game, paused: false }))}
         to="/"
       >
