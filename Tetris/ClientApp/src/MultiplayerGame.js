@@ -155,7 +155,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
   const resetButton = (
     <CommandButton
-      className="btn btn-primary"
+      className="btn btn-primary mb-3"
       onClick={() => gameHub.invoke.reset({ groupId: organizerUserId })}
     >
       Reset Game
