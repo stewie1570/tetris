@@ -88,7 +88,7 @@ export function StringInput({
       </label>
       <div className="d-flex flex-column-reverse flex-lg-row-reverse align-items-center">
         <CommandButton
-          className="btn btn-primary space-top ml-sm-2"
+          className="btn btn-primary space-top ml-lg-2"
           style={{ width: "100%" }}
           onClick={() => onSubmitString(filter ? filter(value) : value)}
           runningText={submittingText}
@@ -98,7 +98,7 @@ export function StringInput({
         </CommandButton>
         <CommandButton
           style={{ width: "100%" }}
-          className="btn btn-light space-top ml-sm-2"
+          className="btn btn-light space-top"
           onClick={() => onSubmitString(undefined)}
         >
           Cancel
