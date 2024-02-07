@@ -59,7 +59,7 @@ jobs:
           dotnet-version: 8.*.*
       - name: Publish
         run: |
-          cd .\Tetris\
+          cd Tetris/
           dotnet publish -c Release -o out
       - name: Upload Tetris Build Artifact
         uses: actions/upload-artifact@v2
