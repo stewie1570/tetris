@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { useOrganizerId } from "./hooks/useOrganizerId";
 import { useLocalPlayerGameContext } from "./LocalPlayerGame";
 import { StringInput } from "./components/Prompt";
+import { Spinner } from "./components/Spinner";
 
 const SendButton = styled(CommandButton)`
   white-space: nowrap;
@@ -49,7 +50,7 @@ export function GameChat(props) {
               )
             : exitModal();
         }}
-        submittingText="Sending..."
+        submittingText={<><Spinner /> Sending...</>}
       >
         <p>You must have a user name before you send a message.</p>
         <p>What user name would you like?</p>

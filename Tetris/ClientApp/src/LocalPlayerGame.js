@@ -13,6 +13,7 @@ import {
 import { GameMetaFrame } from "./components/GameMetaFrame";
 import { useSessionStorageState } from './hooks/useSessionStorageState';
 import { useIsMobile } from "./hooks/useIsMobile";
+import { Spinner } from "./components/Spinner";
 
 export const initialGameState = {
   board: emptyBoard,
@@ -67,7 +68,7 @@ export const [SinglePlayerGameContextProvider, useLocalPlayerGameContext] =
                   .then(exitModal, exitModal)
                 : exitModal()
             }
-            submittingText="Posting Your Score..."
+            submittingText={<><Spinner /> Posting Your Score...</>}
           >
             What user name would you like?
           </StringPrompt>
