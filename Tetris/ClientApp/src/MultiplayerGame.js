@@ -25,6 +25,7 @@ import { useLifeCycle } from "./hooks/useLifeCycle";
 import styled from "styled-components";
 import { CopyButton } from "./components/CopyButton";
 import { BigStartButton } from "./BigStartButton";
+import { Spinner } from "./components/Spinner";
 
 const GameDurationSelect = styled.select`
   width: 90%;
@@ -95,7 +96,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
               )
             : exitModal();
         }}
-        submittingText="Setting user name..."
+        submittingText={<><Spinner /> Setting user name...</>}
         initialValue={username}
       >
         What user name would you like?
