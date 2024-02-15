@@ -69,7 +69,7 @@ export function ScoreBoard({ game, postableScore, onPostScore: postScore, isLoad
         Would you like to post your score?
         <PostMyScoreButton
           className="btn btn-primary"
-          runningText={Boolean(username) ? <><Spinner />Posting your score...</> : undefined}
+          runningText={Boolean(username) ? <><Spinner /> Posting your score...</> : undefined}
           onClick={postScore}>
           Post My Score ({postableScore})
         </PostMyScoreButton>
