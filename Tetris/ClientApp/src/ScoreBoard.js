@@ -1,6 +1,7 @@
 import React from "react";
 import { CommandButton } from "./components/CommandButton";
 import styled from 'styled-components';
+import { Spinner } from "./components/Spinner";
 
 export const LeaderBoard = styled.div`
   background-color: rgba(245, 245, 245, 0.8);
@@ -46,7 +47,7 @@ export function ScoreBoard({ game, postableScore, onPostScore: postScore, isLoad
           {isLoading ? (
             <tr>
               <td>
-                <b>Loading...</b>
+                <b><Spinner /> Loading...</b>
               </td>
             </tr>
           ) : (
@@ -68,7 +69,7 @@ export function ScoreBoard({ game, postableScore, onPostScore: postScore, isLoad
         Would you like to post your score?
         <PostMyScoreButton
           className="btn btn-primary"
-          runningText={Boolean(username) ? "Posting your score..." : undefined}
+          runningText={Boolean(username) ? <><Spinner />Posting your score...</> : undefined}
           onClick={postScore}>
           Post My Score ({postableScore})
         </PostMyScoreButton>

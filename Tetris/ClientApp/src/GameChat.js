@@ -125,7 +125,7 @@ export function GameChat(props) {
               <SendButton
                 className="btn btn-primary"
                 onClick={sendMessage}
-                runningText="Sending..."
+                runningText={<><Spinner /> Sending...</>}
                 type="submit"
               >
                 Send

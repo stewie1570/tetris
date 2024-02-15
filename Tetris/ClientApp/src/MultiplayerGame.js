@@ -248,7 +248,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     isConnected === undefined
       ? () => (
         <CenterScreen>
-          <Header>Connecting to game server...</Header>
+          <Header><Spinner /> Connecting to game server...</Header>
           <Centered>
             <div>{singlePlayerGameLink}</div>
           </Centered>

@@ -2,6 +2,7 @@ import React from "react";
 import { CommandButton } from "./CommandButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
+import { Spinner } from "./Spinner";
 
 export const CopyButton = ({ text }) => (
   <CommandButton
@@ -13,7 +14,7 @@ export const CopyButton = ({ text }) => (
         new Promise((resolve) => setTimeout(resolve, 1000)),
       ]);
     }}
-    runningText="Copying..."
+    runningText={<><Spinner /> Copying...</>}
   >
     <FontAwesomeIcon icon={faCopy} />
     &nbsp; Copy
