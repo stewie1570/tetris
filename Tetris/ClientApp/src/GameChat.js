@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { useOrganizerId } from "./hooks/useOrganizerId";
 import { useLocalPlayerGameContext } from "./LocalPlayerGame";
 import { StringInput } from "./components/Prompt";
-import { Spinner } from "./components/Spinner";
+import { Spinner } from "./components/AnimatedIcons";
 
 const SendButton = styled(CommandButton)`
   white-space: nowrap;

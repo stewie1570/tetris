@@ -1,7 +1,7 @@
 import React from "react";
 import { CommandButton } from "./components/CommandButton";
 import styled from 'styled-components';
-import { Spinner } from "./components/Spinner";
+import { Spinner } from "./components/AnimatedIcons";
 
 export const LeaderBoard = styled.div`
   background-color: rgba(245, 245, 245, 0.8);

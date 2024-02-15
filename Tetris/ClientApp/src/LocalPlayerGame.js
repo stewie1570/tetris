@@ -13,7 +13,7 @@ import {
 import { GameMetaFrame } from "./components/GameMetaFrame";
 import { useSessionStorageState } from './hooks/useSessionStorageState';
 import { useIsMobile } from "./hooks/useIsMobile";
-import { Spinner } from "./components/Spinner";
+import { Spinner } from "./components/AnimatedIcons";
 
 export const initialGameState = {
   board: emptyBoard,

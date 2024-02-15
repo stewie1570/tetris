@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { Pager } from "./components/Pager";
 import styled from "styled-components";
 import { MultiplayerLinks } from "./MultiplayerLinks";
-import { Spinner } from "./components/Spinner";
+import { Spinner } from "./components/AnimatedIcons";
 
 const BoldRed = styled.strong`
   color: red;

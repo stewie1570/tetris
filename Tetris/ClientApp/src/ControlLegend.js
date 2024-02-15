@@ -2,6 +2,7 @@ import React from 'react';
 import { useLocalPlayerGameContext } from './LocalPlayerGame';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight, faArrowDown, faRotate, faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { MovingDown, MovingLeft, MovingRight, RotatingIcon } from './components/AnimatedIcons';
 
 export const ControlLegend = () => {
     const { game } = useLocalPlayerGameContext();
@@ -24,7 +25,7 @@ export const ControlLegend = () => {
                                 <FontAwesomeIcon icon={faArrowUp} />
                             </td>
                             <td>
-                                Rotate <FontAwesomeIcon icon={faRotate} />
+                                Rotate <RotatingIcon icon={faRotate} />
                             </td>
                         </tr>
                         <tr>
@@ -32,7 +33,7 @@ export const ControlLegend = () => {
                                 <FontAwesomeIcon icon={faArrowDown} />
                             </td>
                             <td>
-                                Move <FontAwesomeIcon icon={faArrowDown} />
+                                Move <MovingDown icon={faArrowDown} />
                             </td>
                         </tr>
                         <tr>
@@ -40,7 +41,7 @@ export const ControlLegend = () => {
                                 <FontAwesomeIcon icon={faArrowLeft} />
                             </td>
                             <td>
-                                Move <FontAwesomeIcon icon={faArrowLeft} />
+                                Move <MovingLeft icon={faArrowLeft} />
                             </td>
                         </tr>
                         <tr>
@@ -48,7 +49,7 @@ export const ControlLegend = () => {
                                 <FontAwesomeIcon icon={faArrowRight} />
                             </td>
                             <td>
-                                Move <FontAwesomeIcon icon={faArrowRight} />
+                                Move <MovingRight icon={faArrowRight} />
                             </td>
                         </tr>
                         <tr>

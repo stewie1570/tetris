@@ -2,7 +2,7 @@ import React from "react";
 import { CommandButton } from "./components/CommandButton";
 import { useOrganizerId } from "./hooks/useOrganizerId";
 import { useMultiplayerContext } from "./MultiplayerContext";
-import { Spinner } from "./components/Spinner";
+import { Spinner } from "./components/AnimatedIcons";
 
 export const BigStartButton = () => {
   const organizerUserId = useOrganizerId();

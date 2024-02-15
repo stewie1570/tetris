@@ -25,7 +25,7 @@ import { useLifeCycle } from "./hooks/useLifeCycle";
 import styled from "styled-components";
 import { CopyButton } from "./components/CopyButton";
 import { BigStartButton } from "./BigStartButton";
-import { Spinner } from "./components/Spinner";
+import { Spinner } from "./components/AnimatedIcons";
 
 const GameDurationSelect = styled.select`
   width: 90%;

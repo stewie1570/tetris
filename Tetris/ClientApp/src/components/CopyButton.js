@@ -2,7 +2,7 @@ import React from "react";
 import { CommandButton } from "./CommandButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
-import { Spinner } from "./Spinner";
+import { Spinner } from "./AnimatedIcons";
 
 export const CopyButton = ({ text }) => (
   <CommandButton

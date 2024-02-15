@@ -7,7 +7,7 @@ import { Routes, Route } from "react-router-dom";
 import { shapes } from "./components/TetrisGame";
 import { Dialog } from "./components/Prompt";
 import { ErrorMessage } from "./components/ErrorMessage";
-import { Spinner } from './components/Spinner';
+import { Spinner } from './components/AnimatedIcons';
 import { ReloadRecoveryErrorBoundary } from "./components/ReloadRecoveryErrorBoundary";
 import { CenterScreen, Header } from "./Styling";
 import { GameRoomGrid } from "./GameRoomGrid";
