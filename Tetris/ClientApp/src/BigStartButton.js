@@ -2,6 +2,7 @@ import React from "react";
 import { CommandButton } from "./components/CommandButton";
 import { useOrganizerId } from "./hooks/useOrganizerId";
 import { useMultiplayerContext } from "./MultiplayerContext";
+import { Spinner } from "./components/AnimatedIcons";
 
 export const BigStartButton = () => {
   const organizerUserId = useOrganizerId();
@@ -20,7 +21,7 @@ export const BigStartButton = () => {
       style={{ width: "100%" }}
       disabled={!isStartable}
       onClick={startGame}
-      runningText="Starting..."
+      runningText={<><Spinner /> Starting...</>}
       className="btn btn-success btn-lg mb-3"
     >
       Start Game

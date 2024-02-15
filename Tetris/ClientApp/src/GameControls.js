@@ -1,6 +1,6 @@
 import React from "react";
 import { CommandButton } from "./components/CommandButton";
-import { Spinner } from './components/Spinner';
+import { Spinner } from './components/AnimatedIcons';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
