@@ -30,8 +30,9 @@ export const GameRooms = () => {
 
   const refresh = async () => {
     try {
-      const url = `/api/gameRooms?start=${(pageRef.current - 1) * ItemsPerPage
-        }&count=${ItemsPerPage}`;
+      const url = `/api/gameRooms?start=${
+        (pageRef.current - 1) * ItemsPerPage
+      }&count=${ItemsPerPage}`;
       await QuietRest.get(url).then(setGameRooms);
     } catch (err) {
       console.warn(err);
@@ -48,7 +49,7 @@ export const GameRooms = () => {
 
   useLifeCycle({
     onMount: () => showLoadingWhile(refresh()),
-    onUnMount: () => clearTimeout(timerRef.current)
+    onUnMount: () => clearTimeout(timerRef.current),
   });
 
   return (
@@ -56,54 +57,54 @@ export const GameRooms = () => {
       <div className="card-body">
         <h5 className="card-title">Game Rooms</h5>
         <div className="card-text">
-          {isLoading ? (
-            <strong><Spinner /> Loading...</strong>
-          ) : (
-            <>
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th>Status</th>
-                    <th>Players</th>
-                    <th>Code</th>
+          <table className="table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Status</th>
+                <th>Players</th>
+                <th>Code</th>
+              </tr>
+            </thead>
+            <tbody>
+              {isLoading ? (
+                <tr>
+                  <td colSpan={4} className="centered">
+                    <strong>
+                      <Spinner /> Loading...
+                    </strong>
+                  </td>
+                </tr>
+              ) : gameRooms?.items?.length ? (
+                gameRooms?.items?.map((room) => (
+                  <tr key={room.organizerId}>
+                    <td>
+                      <Link to={`/${room.organizerId}`}>Join</Link>
+                    </td>
+                    <td>{Statuses[room.status]}</td>
+                    <td>
+                      {Object.values(room.players)
+                        .map((player) => player.username ?? "[Un-named]")
+                        .join(", ")}
+                    </td>
+                    <td>{room.organizerId}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {gameRooms?.items?.length ? (
-                    gameRooms?.items?.map((room) => (
-                      <tr key={room.organizerId}>
-                        <td>
-                          <Link to={`/${room.organizerId}`}>Join</Link>
-                        </td>
-                        <td>{Statuses[room.status]}</td>
-                        <td>
-                          {Object.values(room.players)
-                            .map(
-                              (player) => player.username ?? "[Un-named]"
-                            )
-                            .join(", ")}
-                        </td>
-                        <td>{room.organizerId}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={4}>
-                        <strong>No one is hosting a game right now</strong>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-              {gameRooms?.items?.length > 0 && (
-                <Pager
-                  page={Math.ceil(gameRooms?.start / ItemsPerPage) + 1}
-                  numPages={Math.ceil(gameRooms?.total / ItemsPerPage)}
-                  onPageChange={requestPage}
-                />
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={4}>
+                    <strong>No one is hosting a game right now</strong>
+                  </td>
+                </tr>
               )}
-            </>
+            </tbody>
+          </table>
+          {gameRooms?.items?.length > 0 && (
+            <Pager
+              page={Math.ceil(gameRooms?.start / ItemsPerPage) + 1}
+              numPages={Math.ceil(gameRooms?.total / ItemsPerPage)}
+              onPageChange={requestPage}
+            />
           )}
           <MultiplayerLinks />
         </div>
