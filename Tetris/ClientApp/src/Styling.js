@@ -5,18 +5,13 @@ const HeaderOne = styled.h1`
   color: black;
 `;
 
-const Card = ({ children, className, ...args }) => (
+export const Header = ({ children, className, ...args }) => (
   <div className={`card mt-3 mb-3 ${className}`} {...args}>
     <div className="card-body">
       <HeaderOne>{children}</HeaderOne>
     </div>
   </div>
 );
-
-export const Header = styled(Card)`
-  text-align: center;
-  color: black;
-`;
 
 export const Centered = styled.div`
   text-align: center;
