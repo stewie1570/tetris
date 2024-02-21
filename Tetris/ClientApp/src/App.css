@@ -10,8 +10,15 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+
+  /* Gradient fallback */
   background: radial-gradient(#fff,#d3d3e3,#fff);
   background-attachment: fixed;
+
+  /* Image background (on top of gradient) */
+  background-image: url("../public/wallpaper.jpg");
+  background-size: cover;
+  background-position: center;
 }
 
 .space-top-right {
@@ -27,7 +34,7 @@ body {
 }
 
 .card {
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.88);
 }
 
 .bold {
