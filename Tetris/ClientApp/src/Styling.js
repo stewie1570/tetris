@@ -1,9 +1,17 @@
 import styled from "styled-components";
 
-export const Header = styled.h1`
+const HeaderOne = styled.h1`
   text-align: center;
   color: black;
 `;
+
+export const Header = ({ children, className, ...args }) => (
+  <div className={`card mt-3 mb-3 ${className}`} {...args}>
+    <div className="card-body">
+      <HeaderOne>{children}</HeaderOne>
+    </div>
+  </div>
+);
 
 export const Centered = styled.div`
   text-align: center;
