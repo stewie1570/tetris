@@ -21,6 +21,10 @@ body {
   background-position: center;
 }
 
+a {
+  color: black;
+}
+
 .space-top-right {
   margin: 20px 20px 0 0;
 }
@@ -34,7 +38,7 @@ body {
 }
 
 .card {
-  background-color: rgba(255, 255, 255, 0.88);
+  background-color: rgba(255, 255, 255, 0.74);
 }
 
 .bold {
