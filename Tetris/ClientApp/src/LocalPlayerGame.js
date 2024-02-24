@@ -172,7 +172,6 @@ export const LocalPlayerGame = ({
       controls={
         <>
           <GameControls
-            className="mb-3"
             game={game}
             onPause={
               !otherPlayers && (() => pause({ showScoreBoard: !otherPlayers }))

@@ -150,6 +150,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     <>
       <Link
         style={{ display: "block" }}
+        className="m-3"
         onClick={() => setGame((game) => ({ ...game, paused: false }))}
         to="/"
       >
@@ -208,7 +209,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
   const retryButton = (
     <CommandButton
-      className="btn btn-primary m-3"
+      className="btn btn-primary"
       onClick={() =>
         gameHub.invoke.status({
           groupId: organizerUserId,
