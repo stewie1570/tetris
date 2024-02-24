@@ -78,22 +78,22 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         onSubmitString={async (name) => {
           name
             ? await gameHub.invoke
-                .status({
-                  groupId: organizerUserId,
-                  message: {
-                    userId: currentUserId,
-                    name: name,
-                  },
-                })
-                .then(() => setUsername(name))
-                .then(exitModal)
-                .catch(({ message }) =>
-                  window.dispatchEvent(
-                    new CustomEvent("user-error", {
-                      detail: trimHubExceptionMessage(message),
-                    })
-                  )
+              .status({
+                groupId: organizerUserId,
+                message: {
+                  userId: currentUserId,
+                  name: name,
+                },
+              })
+              .then(() => setUsername(name))
+              .then(exitModal)
+              .catch(({ message }) =>
+                window.dispatchEvent(
+                  new CustomEvent("user-error", {
+                    detail: trimHubExceptionMessage(message),
+                  })
                 )
+              )
             : exitModal();
         }}
         submittingText={
@@ -150,6 +150,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     <>
       <Link
         style={{ display: "block" }}
+        className="m-3"
         onClick={() => setGame((game) => ({ ...game, paused: false }))}
         to="/"
       >
@@ -169,41 +170,41 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
   const results = gameResults
     ? () => (
-        <Centered>
-          <Header style={{ width: "90%", display: "inline-block" }}>
-            Game Over
-          </Header>
-          <div
-            className="card mb-3"
-            style={{ display: "inline-block", width: "90%", textAlign: "left" }}
-          >
-            <div className="card-header">Results</div>
-            <div className="card-body p-0">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Score</th>
+      <Centered>
+        <Header style={{ width: "90%", display: "inline-block" }}>
+          Game Over
+        </Header>
+        <div
+          className="card mb-3"
+          style={{ display: "inline-block", width: "90%", textAlign: "left" }}
+        >
+          <div className="card-header">Results</div>
+          <div className="card-body p-0">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.keys(otherPlayers).map((userId) => (
+                  <tr key={userId}>
+                    <td>
+                      {otherPlayers[userId].name ?? "[Un-named Player]"}
+                    </td>
+                    <td>{gameResults[userId]?.score}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {Object.keys(otherPlayers).map((userId) => (
-                    <tr key={userId}>
-                      <td>
-                        {otherPlayers[userId].name ?? "[Un-named Player]"}
-                      </td>
-                      <td>{gameResults[userId]?.score}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <GameChat style={{ width: "90%", display: "inline-block" }} />
-          <div>{singlePlayerGameLink}</div>
-          <div>{resetButton}</div>
-        </Centered>
-      )
+        </div>
+        <GameChat style={{ width: "90%", display: "inline-block" }} />
+        <div>{singlePlayerGameLink}</div>
+        <div>{resetButton}</div>
+      </Centered>
+    )
     : undefined;
 
   const retryButton = (
@@ -221,6 +222,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
           },
         })
       }
+      runningText={<><Spinner /> Contacting organizer...</>}
     >
       Retry Contacting Organizer
     </CommandButton>
@@ -229,41 +231,41 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const waitingForOrganizer =
     !organizerConnectionStatus && !isOrganizer
       ? () => (
-          <CenterScreen>
-            <Header>Waiting for organizer...</Header>
-            <Centered>
-              <div>{singlePlayerGameLink}</div>
-              <div>{retryButton}</div>
-            </Centered>
-          </CenterScreen>
-        )
+        <CenterScreen>
+          <Header>Waiting for organizer...</Header>
+          <Centered>
+            <div>{singlePlayerGameLink}</div>
+            <div>{retryButton}</div>
+          </Centered>
+        </CenterScreen>
+      )
       : undefined;
 
   const organizerDisconnected =
     organizerConnectionStatus === "disconnected" && !isOrganizer && game.paused
       ? () => (
-          <CenterScreen>
-            <Header>Organizer has disconnected.</Header>
-            <Centered>
-              <div>{singlePlayerGameLink}</div>
-              <div>{retryButton}</div>
-            </Centered>
-          </CenterScreen>
-        )
+        <CenterScreen>
+          <Header>Organizer has disconnected.</Header>
+          <Centered>
+            <div>{singlePlayerGameLink}</div>
+            <div>{retryButton}</div>
+          </Centered>
+        </CenterScreen>
+      )
       : undefined;
 
   const userIsDisconnected =
     isConnected === undefined
       ? () => (
-          <CenterScreen>
-            <Header>
-              <Spinner /> Connecting to game server...
-            </Header>
-            <Centered>
-              <div>{singlePlayerGameLink}</div>
-            </Centered>
-          </CenterScreen>
-        )
+        <CenterScreen>
+          <Header>
+            <Spinner /> Connecting to game server...
+          </Header>
+          <Centered>
+            <div>{singlePlayerGameLink}</div>
+          </Centered>
+        </CenterScreen>
+      )
       : undefined;
 
   const gameHeader = (

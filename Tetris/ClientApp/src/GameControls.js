@@ -13,7 +13,7 @@ const Controls = styled.div`
 export function GameControls({ onPause: togglePause, game, ...otherProps }) {
   return <Controls {...otherProps}>
     {togglePause && <CommandButton
-      className="btn btn-primary"
+      className="btn btn-primary m-3"
       runningText={<><Spinner /> Loading Score Board...</>}
       onClick={togglePause}>
       <span>{game.paused
