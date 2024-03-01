@@ -7166,10 +7166,10 @@ language-tags@^1.0.5:
   dependencies:
     language-subtag-registry "~0.3.2"
 
-leaf-validator@^7.7.0:
-  version "7.7.0"
-  resolved "https://registry.yarnpkg.com/leaf-validator/-/leaf-validator-7.7.0.tgz#c03b8b5056c7f39a26f5e559b1c1f411d6f9c900"
-  integrity sha512-MvdpwricwZ8lMJWv+GqcvI3biPg/UML6JedQjkRHl762NQfrlwfxOOmSqI3kdUzGCZ2HrQJ65yIybMeg7+5iPQ==
+leaf-validator@^7.8.2:
+  version "7.8.2"
+  resolved "https://registry.yarnpkg.com/leaf-validator/-/leaf-validator-7.8.2.tgz#a069f2f4b7efcd8f3ea7543713c155178cfe5037"
+  integrity sha512-ilu9ts+6IqeYpMURWxOxmuFh8vxDxen5iJA5scYcCtMitSfpRm6nD+8+fzzCzHyqbZk0pZ+uHaMfrDgpibJynw==
 
 leven@^3.1.0:
   version "3.1.0"
