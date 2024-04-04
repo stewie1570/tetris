@@ -100,10 +100,12 @@ namespace Tetris.Hubs
         [Transaction(Web = true)]
         public async Task Status(GroupMessage statusMessage)
         {
-            var isNameChange = statusMessage
+            var messageInludesName = statusMessage
                 .Message
                 .EnumerateObject()
                 .Any(prop => prop.Name == "name" && prop.Value.ValueKind == JsonValueKind.String);
+            var nameHasChanged = Context.Items["name"] as string != statusMessage.Message.GetProperty("name").GetString();
+            var isNameChange = messageInludesName && nameHasChanged;
 
             Func<Task> doNameChange = () =>
             {
