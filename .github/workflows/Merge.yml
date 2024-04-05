@@ -100,6 +100,7 @@ jobs:
           echo "RELEASE_VERSION=$(git describe --tags --abbrev=0 | sed 's/v//').0" >> $GITHUB_ENV
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: deploy
+        if: false # temporarily disabled the deployment
         env:
           RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
         run: flyctl deploy --no-cache --build-arg RELEASE_VERSION=${{ env.RELEASE_VERSION }} --build-arg NEWRELIC_KEY=${{ secrets.NEWRELIC_KEY }}
