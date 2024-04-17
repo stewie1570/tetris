@@ -28,8 +28,8 @@ test('start a multiplayer game', async () => {
   await expect(await browserPage3.getByText(/^browser page 2$/)).toBeVisible();
 
   await expect(await browserPage1.getByText("Score: 0")).toHaveCount(3);
-  await expect(await browserPage1.getByText("Score: 0")).toHaveCount(3);
-  await expect(await browserPage1.getByText("Score: 0")).toHaveCount(3);
+  await expect(await browserPage2.getByText("Score: 0")).toHaveCount(3);
+  await expect(await browserPage3.getByText("Score: 0")).toHaveCount(3);
 
   await context1.close();
   await context2.close();
