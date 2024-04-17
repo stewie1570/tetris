@@ -1,6 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { getTestEnv } from './helpers';
 
+test.use({
+  ignoreHTTPSErrors: true
+});
+
 const { host, isLocalTest } = getTestEnv();
 
 test('username text input is initialized with current user name', async ({ page }) => {
