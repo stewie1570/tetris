@@ -14,6 +14,16 @@ Build the image:
 docker build -t tetris .
 ```
 
+## Playwright Test Reports / Trace Viewer
+
+- Dowload the report zip file from the GH workflow.
+- Extract all
+- Open `index.html` from the root folder
+  - See results & steps
+  - Open a test that you want to see the steps and trace for
+  - Click the **trace** link at the bottom of the page to download the trace zip file
+  - Open the trace zip file at https://trace.playwright.dev/
+
 ## Config Notes
 
 - If you don't want an error when pausing & loading the score board or want to be able to post a score you'll need to provide a Redis connection string for the `RedisConnectionString` configuration key
