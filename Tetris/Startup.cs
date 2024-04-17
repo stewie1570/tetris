@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,7 +37,10 @@ namespace Tetris
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var signalR = services.AddSignalR();
+            var signalR = services.AddSignalR(options =>
+            {
+                options.AddFilter<ExceptionHubFilter>();
+            });
             if (IsUsingBackplane())
             {
                 signalR.AddStackExchangeRedis(Configuration["RedisConnectionString"]);
@@ -74,6 +78,7 @@ namespace Tetris
                     ? sp.GetService<InMemoryGameRoomRepo>()
                     : sp.GetService<MongoGameRoomRepo>();
             });
+            services.AddSingleton<ExceptionHubFilter>();
         }
 
         private bool IsUsingBackplane()
