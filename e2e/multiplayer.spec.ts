@@ -1,14 +1,17 @@
 import { test, chromium, expect } from '@playwright/test';
+import { getTestEnv } from './helpers';
 
 test.use({
   ignoreHTTPSErrors: true
 });
 
+const { host, isLocalTest } = getTestEnv();
+
 test('start a multiplayer game', async () => {
   test.setTimeout(60000);
   const { page: browserPage1, context: context1 } = await newBrowserPage();
   const { page: browserPage2, context: context2 } = await newBrowserPage();
-  const { page: browserPage3, context: context3 } = await newBrowserPage();
+  const { page: browserPage3 } = await newBrowserPage();
 
   const gameRoomCode = await hostMultiplayerGameOn({ hostBrowserPage: browserPage1 });
 
@@ -39,7 +42,7 @@ test('start a multiplayer game via the game rooms table', async () => {
 
   const gameRoomCode = await hostMultiplayerGameOn({ hostBrowserPage: browserPage1 });
 
-  await browserPage2.goto('https://localhost:5001/');
+  await browserPage2.goto(`https://${host}/`);
   await browserPage2
     .getByText(gameRoomCode)
     .locator('..')
@@ -86,19 +89,23 @@ test("players can chat with each other", async () => {
 
   await browserPage2.getByRole('link', { name: 'Single Player Game' }).click();
   await browserPage2.getByRole('button', { name: 'Pause' }).click();
-  await browserPage2.getByRole('dialog')
-    .filter({ hasText: 'Error×An error occurred.' })
-    .getByRole('button', { name: 'Close' })
-    .click();
+  if (isLocalTest) {
+    await browserPage2.getByRole('dialog')
+      .filter({ hasText: 'Error×An error occurred.' })
+      .getByRole('button', { name: 'Close' })
+      .click();
+  }
   await browserPage2.goBack();
   await expect(await browserPage2.getByText("[browser page two disconnected]")).toBeVisible();
 
   await browserPage2.getByRole('link', { name: 'Single Player Game' }).click();
   await browserPage2.getByRole('button', { name: 'Pause' }).click();
-  await browserPage2.getByRole('dialog')
-    .filter({ hasText: 'Error×An error occurred.' })
-    .getByRole('button', { name: 'Close' })
-    .click();
+  if (isLocalTest) {
+    await browserPage2.getByRole('dialog')
+      .filter({ hasText: 'Error×An error occurred.' })
+      .getByRole('button', { name: 'Close' })
+      .click();
+  }
   await browserPage2.goBack();
   await expect(await browserPage2.getByText("[browser page two disconnected]")).toHaveCount(2);
 
@@ -121,10 +128,12 @@ test("chat is reset with the rest of the game context", async () => {
 
   await browserPage1.getByRole('link', { name: 'Single Player Game' }).click();
   await browserPage1.getByRole('button', { name: 'Pause' }).click();
-  await browserPage1.getByRole('dialog')
-    .filter({ hasText: 'Error×An error occurred.' })
-    .getByRole('button', { name: 'Close' })
-    .click();
+  if (isLocalTest) {
+    await browserPage1.getByRole('dialog')
+      .filter({ hasText: 'Error×An error occurred.' })
+      .getByRole('button', { name: 'Close' })
+      .click();
+  }
   await browserPage1.goBack();
   await expect(await browserPage1.getByText("browser page 1")).toBeVisible();
 
@@ -151,10 +160,12 @@ test('cant start an already in-progress game', async () => {
 
   await browserPage2.getByRole('link', { name: 'Single Player Game' }).click();
   await browserPage2.getByRole('button', { name: 'Pause' }).click();
-  await browserPage2.getByRole('dialog')
-    .filter({ hasText: 'Error×An error occurred.' })
-    .getByRole('button', { name: 'Close' })
-    .click();
+  if (isLocalTest) {
+    await browserPage2.getByRole('dialog')
+      .filter({ hasText: 'Error×An error occurred.' })
+      .getByRole('button', { name: 'Close' })
+      .click();
+  }
   await browserPage2.goBack();
   await expect(await browserPage2.getByText("Game ends in")).toBeVisible();
   await expect(await browserPage2.getByRole('button', { name: 'Start Game' })).toBeDisabled();
@@ -213,7 +224,7 @@ test('organizer has disconnected screen appears and replaces all else when organ
 });
 
 test("can't set user name that is too long", async ({ page }) => {
-  await page.goto('http://localhost:5000/');
+  await page.goto(`https://${host}/`);
   await page.getByRole('link', { name: 'Host Multiplayer Game' }).click();
   await page.getByRole('button', { name: 'Set User Name' }).click();
   await page.getByLabel('What user name would you like?').fill('stewart');
@@ -233,12 +244,14 @@ test("can't set user name that is too long", async ({ page }) => {
 });
 
 async function joinMultiplayerGame({ guestBrowserPage, gameRoomCode }, name?: string) {
-  await guestBrowserPage.goto('https://localhost:5001/');
+  await guestBrowserPage.goto(`https://${host}/`);
   await guestBrowserPage.getByRole('button', { name: 'Join Multiplayer Game' }).click();
-  await guestBrowserPage.getByRole('dialog')
-    .filter({ hasText: 'Error×An error occurred.' })
-    .getByRole('button', { name: 'Close' })
-    .click();
+  if (isLocalTest) {
+    await guestBrowserPage.getByRole('dialog')
+      .filter({ hasText: 'Error×An error occurred.' })
+      .getByRole('button', { name: 'Close' })
+      .click();
+  }
   await guestBrowserPage.getByLabel('Code:').click();
   await guestBrowserPage.getByLabel('Code:').fill(gameRoomCode ?? '');
   await guestBrowserPage.getByRole('button', { name: 'Ok' }).click();
@@ -252,7 +265,7 @@ async function setUserName(guestBrowserPage: any, userName: string) {
 }
 
 async function hostMultiplayerGameOn({ hostBrowserPage }) {
-  await hostBrowserPage.goto('https://localhost:5001/');
+  await hostBrowserPage.goto(`https://${host}/`);
   await hostBrowserPage.getByRole('link', { name: 'Host Multiplayer Game' }).click();
   const gameRoomCode = (await hostBrowserPage
     .getByRole('cell', { name: 'Code', exact: true })
