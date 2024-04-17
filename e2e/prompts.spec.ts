@@ -1,7 +1,10 @@
 import { test, expect } from '@playwright/test';
+import { getTestEnv } from './helpers';
+
+const { host, isLocalTest } = getTestEnv();
 
 test('username text input is initialized with current user name', async ({ page }) => {
-  await page.goto('http://localhost:5000/');
+  await page.goto(`https://${host}/`);
   await page.getByRole('link', { name: 'Host Multiplayer Game' }).click();
   await page.getByRole('button', { name: 'Set User Name' }).click();
   await page.getByLabel('What user name would you like?').fill('Stewart');
@@ -12,11 +15,13 @@ test('username text input is initialized with current user name', async ({ page 
 });
 
 test("escape key can be used to close error message and prompt modals", async ({ page }) => {
-  await page.goto('http://localhost:5000/');
-  await page.getByRole('button', { name: 'Pause' }).click();
-  await expect(await page.getByText('Error', { exact: true })).toBeVisible();
-  await page.locator('body').press('Escape');
-  await expect(await page.getByText('Error', { exact: true })).not.toBeVisible();
+  await page.goto(`https://${host}/`);
+  if (isLocalTest) {
+    await page.getByRole('button', { name: 'Pause' }).click();
+    await expect(await page.getByText('Error', { exact: true })).toBeVisible();
+    await page.locator('body').press('Escape');
+    await expect(await page.getByText('Error', { exact: true })).not.toBeVisible();
+  }
   await page.getByRole('button', { name: 'Join Multiplayer Game' }).click();
   await expect(await page.getByText('Code:')).toBeVisible();
   await page.getByLabel('Code:').press('Escape');
