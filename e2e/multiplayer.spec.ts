@@ -42,7 +42,7 @@ test('start a multiplayer game via the game rooms table', async () => {
 
   const gameRoomCode = await hostMultiplayerGameOn({ hostBrowserPage: browserPage1 });
 
-  await browserPage2.goto(`https://${host}/`);
+  await browserPage2.goto(host);
   await browserPage2
     .getByText(gameRoomCode)
     .locator('..')
@@ -224,7 +224,7 @@ test('organizer has disconnected screen appears and replaces all else when organ
 });
 
 test("can't set user name that is too long", async ({ page }) => {
-  await page.goto(`https://${host}/`);
+  await page.goto(host);
   await page.getByRole('link', { name: 'Host Multiplayer Game' }).click();
   await page.getByRole('button', { name: 'Set User Name' }).click();
   await page.getByLabel('What user name would you like?').fill('stewart');
@@ -244,7 +244,7 @@ test("can't set user name that is too long", async ({ page }) => {
 });
 
 async function joinMultiplayerGame({ guestBrowserPage, gameRoomCode }, name?: string) {
-  await guestBrowserPage.goto(`https://${host}/`);
+  await guestBrowserPage.goto(host);
   await guestBrowserPage.getByRole('button', { name: 'Join Multiplayer Game' }).click();
   if (isLocalTest) {
     await guestBrowserPage.getByRole('dialog')
@@ -265,7 +265,7 @@ async function setUserName(guestBrowserPage: any, userName: string) {
 }
 
 async function hostMultiplayerGameOn({ hostBrowserPage }) {
-  await hostBrowserPage.goto(`https://${host}/`);
+  await hostBrowserPage.goto(host);
   await hostBrowserPage.getByRole('link', { name: 'Host Multiplayer Game' }).click();
   const gameRoomCode = (await hostBrowserPage
     .getByRole('cell', { name: 'Code', exact: true })
