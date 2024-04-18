@@ -1,4 +1,4 @@
-name: Manual Trigger Production E2E Test
+name: Manual Trigger Self-Hosted E2E Test
 
 on:
   workflow_dispatch:
