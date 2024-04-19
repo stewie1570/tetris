@@ -5,10 +5,10 @@ test.use({
   ignoreHTTPSErrors: true
 });
 
-const { host, isLocalTest } = getTestEnv();
+const { homePageUrl, isLocalTest } = getTestEnv();
 
 test('username text input is initialized with current user name', async ({ page }) => {
-  await page.goto(host);
+  await page.goto(homePageUrl);
   await page.getByRole('link', { name: 'Host Multiplayer Game' }).click();
   await page.getByRole('button', { name: 'Set User Name' }).click();
   await page.getByLabel('What user name would you like?').fill('Stewart');
@@ -19,7 +19,7 @@ test('username text input is initialized with current user name', async ({ page 
 });
 
 test("escape key can be used to close error message and prompt modals", async ({ page }) => {
-  await page.goto(host);
+  await page.goto(homePageUrl);
   if (isLocalTest) {
     await page.getByRole('button', { name: 'Pause' }).click();
     await expect(await page.getByText('Error', { exact: true })).toBeVisible();

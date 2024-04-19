@@ -1,7 +1,7 @@
 export function getTestEnv() {
     const localhost = 'https://localhost:5001';
-    const host = process.env.host ?? localhost;
-    const isLocalTest = host === localhost;
+    const homePageUrl = process.env.host ?? localhost;
+    const isLocalTest = homePageUrl === localhost;
 
-    return { isLocalTest, host }
+    return { isLocalTest, homePageUrl }
 }
