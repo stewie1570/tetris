@@ -21,7 +21,7 @@ namespace Tetris.Storage.Tests
                 );
         }
 
-        [Theory]
+        [Theory(Skip = "I rarely have the DB running locally")]
         [InlineData(0)]
         public async Task StoresTheScore(int start)
         {
@@ -53,7 +53,7 @@ namespace Tetris.Storage.Tests
                 .Select(userScore => db.SortedSetRemoveAsync("user", userScore.Username)));
         }
 
-        [Fact]
+        [Fact(Skip = "I rarely have the DB up and running")]
         public async Task LoadTest()
         {
             const int count = 5000;
