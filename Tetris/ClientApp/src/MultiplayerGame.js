@@ -163,6 +163,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     <CommandButton
       className="btn btn-primary mb-3"
       onClick={() => gameHub.invoke.reset({ groupId: organizerUserId })}
+      runningText={<><Spinner /> Resetting...</>}
     >
       Reset Game
     </CommandButton>
