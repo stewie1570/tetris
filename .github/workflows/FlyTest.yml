@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-prod:
+  test-fly:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
