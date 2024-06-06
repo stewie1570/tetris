@@ -172,7 +172,6 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         className="m-3"
         onClick={() => setGame((game) => ({ ...game, paused: false }))}
         to="/"
-        disabled
       >
         Single Player Game
       </Link>
