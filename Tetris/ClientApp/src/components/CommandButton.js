@@ -1,7 +1,8 @@
 import React, { forwardRef } from "react";
 import { useLoadingState } from "leaf-validator";
+import { withTemporaryDisable } from "./HOCs/withTemporaryDisable";
 
-export const CommandButton = forwardRef(
+const DefaultCommandButton = forwardRef(
   ({ onClick, runningText, type, children, ...otherProps }, ref) => {
     const [isRunning, showRunningWhile] = useLoadingState();
 
@@ -22,3 +23,5 @@ export const CommandButton = forwardRef(
     );
   }
 );
+
+export const CommandButton = withTemporaryDisable(DefaultCommandButton);
