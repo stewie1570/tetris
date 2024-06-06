@@ -26,10 +26,29 @@ import styled from "styled-components";
 import { CopyButton } from "./components/CopyButton";
 import { BigStartButton } from "./BigStartButton";
 import { Spinner } from "./components/AnimatedIcons";
+import { withTemporaryDisable } from "./components/HOCs/withTemporaryDisable";
+import { ContentSwapWhenDisabled } from "./components/ContentSwapWhenDisabled";
 
 const GameDurationSelect = styled.select`
   width: 90%;
 `;
+
+const SwappableLink = (props) => {
+  return (
+    <ContentSwapWhenDisabled
+      disabled={props.disabled}
+      disabledContent={
+        <p style={props.style} className={props.className}>
+          {props.children}
+        </p>
+      }
+    >
+      <Link {...props} />
+    </ContentSwapWhenDisabled>
+  );
+};
+
+const InitiallyDisabledLink = withTemporaryDisable(SwappableLink);
 
 const trimHubExceptionMessage = (message) => {
   const seperator = "HubException: ";
@@ -78,22 +97,22 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         onSubmitString={async (name) => {
           name
             ? await gameHub.invoke
-              .status({
-                groupId: organizerUserId,
-                message: {
-                  userId: currentUserId,
-                  name: name,
-                },
-              })
-              .then(() => setUsername(name))
-              .then(exitModal)
-              .catch(({ message }) =>
-                window.dispatchEvent(
-                  new CustomEvent("user-error", {
-                    detail: trimHubExceptionMessage(message),
-                  })
+                .status({
+                  groupId: organizerUserId,
+                  message: {
+                    userId: currentUserId,
+                    name: name,
+                  },
+                })
+                .then(() => setUsername(name))
+                .then(exitModal)
+                .catch(({ message }) =>
+                  window.dispatchEvent(
+                    new CustomEvent("user-error", {
+                      detail: trimHubExceptionMessage(message),
+                    })
+                  )
                 )
-              )
             : exitModal();
         }}
         submittingText={
@@ -153,9 +172,24 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         className="m-3"
         onClick={() => setGame((game) => ({ ...game, paused: false }))}
         to="/"
+        disabled
       >
         Single Player Game
       </Link>
+    </>
+  );
+
+  const initiallyDisabledPlayerGameLink = (
+    <>
+      <InitiallyDisabledLink
+        style={{ display: "block" }}
+        className="m-3"
+        onClick={() => setGame((game) => ({ ...game, paused: false }))}
+        to="/"
+        disableForMilliseconds={1500}
+      >
+        Single Player Game
+      </InitiallyDisabledLink>
     </>
   );
 
@@ -163,7 +197,12 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     <CommandButton
       className="btn btn-primary mb-3"
       onClick={() => gameHub.invoke.reset({ groupId: organizerUserId })}
-      runningText={<><Spinner /> Resetting...</>}
+      runningText={
+        <>
+          <Spinner /> Resetting...
+        </>
+      }
+      disableForMilliseconds={1500}
     >
       Reset Game
     </CommandButton>
@@ -171,41 +210,41 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
   const results = gameResults
     ? () => (
-      <Centered>
-        <Header style={{ width: "90%", display: "inline-block" }}>
-          Game Over
-        </Header>
-        <div
-          className="card mb-3"
-          style={{ display: "inline-block", width: "90%", textAlign: "left" }}
-        >
-          <div className="card-header">Results</div>
-          <div className="card-body p-0">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Score</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Object.keys(otherPlayers).map((userId) => (
-                  <tr key={userId}>
-                    <td>
-                      {otherPlayers[userId].name ?? "[Un-named Player]"}
-                    </td>
-                    <td>{gameResults[userId]?.score}</td>
+        <Centered>
+          <Header style={{ width: "90%", display: "inline-block" }}>
+            Game Over
+          </Header>
+          <div
+            className="card mb-3"
+            style={{ display: "inline-block", width: "90%", textAlign: "left" }}
+          >
+            <div className="card-header">Results</div>
+            <div className="card-body p-0">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Score</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {Object.keys(otherPlayers).map((userId) => (
+                    <tr key={userId}>
+                      <td>
+                        {otherPlayers[userId].name ?? "[Un-named Player]"}
+                      </td>
+                      <td>{gameResults[userId]?.score}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-        <GameChat style={{ width: "90%", display: "inline-block" }} />
-        <div>{singlePlayerGameLink}</div>
-        <div>{resetButton}</div>
-      </Centered>
-    )
+          <GameChat style={{ width: "90%", display: "inline-block" }} />
+          <div>{initiallyDisabledPlayerGameLink}</div>
+          <div>{resetButton}</div>
+        </Centered>
+      )
     : undefined;
 
   const retryButton = (
@@ -223,7 +262,11 @@ export const MultiplayerGame = ({ shapeProvider }) => {
           },
         })
       }
-      runningText={<><Spinner /> Contacting organizer...</>}
+      runningText={
+        <>
+          <Spinner /> Contacting organizer...
+        </>
+      }
     >
       Retry Contacting Organizer
     </CommandButton>
@@ -232,41 +275,41 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const waitingForOrganizer =
     !organizerConnectionStatus && !isOrganizer
       ? () => (
-        <CenterScreen>
-          <Header>Waiting for organizer...</Header>
-          <Centered>
-            <div>{singlePlayerGameLink}</div>
-            <div>{retryButton}</div>
-          </Centered>
-        </CenterScreen>
-      )
+          <CenterScreen>
+            <Header>Waiting for organizer...</Header>
+            <Centered>
+              <div>{singlePlayerGameLink}</div>
+              <div>{retryButton}</div>
+            </Centered>
+          </CenterScreen>
+        )
       : undefined;
 
   const organizerDisconnected =
     organizerConnectionStatus === "disconnected" && !isOrganizer && game.paused
       ? () => (
-        <CenterScreen>
-          <Header>Organizer has disconnected.</Header>
-          <Centered>
-            <div>{singlePlayerGameLink}</div>
-            <div>{retryButton}</div>
-          </Centered>
-        </CenterScreen>
-      )
+          <CenterScreen>
+            <Header>Organizer has disconnected.</Header>
+            <Centered>
+              <div>{singlePlayerGameLink}</div>
+              <div>{retryButton}</div>
+            </Centered>
+          </CenterScreen>
+        )
       : undefined;
 
   const userIsDisconnected =
     isConnected === undefined
       ? () => (
-        <CenterScreen>
-          <Header>
-            <Spinner /> Connecting to game server...
-          </Header>
-          <Centered>
-            <div>{singlePlayerGameLink}</div>
-          </Centered>
-        </CenterScreen>
-      )
+          <CenterScreen>
+            <Header>
+              <Spinner /> Connecting to game server...
+            </Header>
+            <Centered>
+              <div>{singlePlayerGameLink}</div>
+            </Centered>
+          </CenterScreen>
+        )
       : undefined;
 
   const gameHeader = (
