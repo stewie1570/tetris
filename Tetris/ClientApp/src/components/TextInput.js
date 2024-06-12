@@ -10,6 +10,7 @@ export const TextInput = ({ value, onChange, autofocus, ...otherProps }) => {
     });
 
     return <input
+        autoComplete='off'
         {...otherProps}
         type="text"
         value={value}
