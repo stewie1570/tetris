@@ -26,7 +26,7 @@ jobs:
         run: npm run test-self-hosted
 
       - name: Upload test report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
