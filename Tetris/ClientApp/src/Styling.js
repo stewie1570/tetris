@@ -17,16 +17,19 @@ export const Centered = styled.div`
   text-align: center;
 `;
 
-export const Warning = styled.div`
+const Well = ({ className, ...props }) => (
+  <div className={`card ${className}`} {...props} />
+);
+
+export const FixedPositionWarningNotification = styled(Well)`
   position: fixed;
-  top: 1rem;
-  width: 100%;
+  top: 1.5rem;
+  right: 1.5rem;
   text-align: center;
   color: red;
   font-weight: bold;
   background-color: rgba(255, 255, 255, 0.7);
-  width: auto;
-  left: 50%;
+  padding: 1rem;
   transform: translateX(-50%);
 `;
 
