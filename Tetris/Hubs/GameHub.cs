@@ -104,7 +104,7 @@ namespace Tetris.Hubs
                 .Message
                 .EnumerateObject()
                 .Any(prop => prop.Name == "name" && prop.Value.ValueKind == JsonValueKind.String);
-            var nameHasChanged = Context.Items["name"] as string != statusMessage.Message.GetProperty("name").GetString();
+            var nameHasChanged = Context.Items["name"] as string != GetNameFrom(statusMessage);
             var isNameChange = messageInludesName && nameHasChanged;
 
             Func<Task> doNameChange = () =>
@@ -208,5 +208,18 @@ namespace Tetris.Hubs
 
             if (exception != null) logger.LogError(exception, "Disconnected");
         }
+
+        #region Helpers
+
+        public string GetNameFrom(GroupMessage groupMessage)
+        {
+            var hasKey = groupMessage
+                .Message
+                .TryGetProperty("name", out var name);
+
+            return hasKey ? name.GetString() : null;
+        }
+
+        #endregion
     }
 }
