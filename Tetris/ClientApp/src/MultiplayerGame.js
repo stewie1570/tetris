@@ -19,7 +19,7 @@ import { useStatusSender } from "./hooks/useStatusSender";
 import { getDisplayTimeFrom } from "./domain/time";
 import { selectableDurations } from "./constants";
 import { LeaderBoard } from "./ScoreBoard";
-import { CenterScreen, Centered, Header, Warning } from "./Styling";
+import { CenterScreen, Centered, Header, FixedPositionWarningNotification } from "./Styling";
 import { useOrganizerId } from "./hooks/useOrganizerId";
 import { useLifeCycle } from "./hooks/useLifeCycle";
 import styled from "styled-components";
@@ -413,9 +413,9 @@ export const MultiplayerGame = ({ shapeProvider }) => {
             </div>
           )}
       </Game>
-      {isConnected === false && <Warning>Reconnecting...</Warning>}
+      {isConnected === false && <FixedPositionWarningNotification>Reconnecting...</FixedPositionWarningNotification>}
       {!game.paused && organizerConnectionStatus === "disconnected" && (
-        <Warning>Organizer is disconnected.</Warning>
+        <FixedPositionWarningNotification>Organizer is disconnected.</FixedPositionWarningNotification>
       )}
     </>
   );

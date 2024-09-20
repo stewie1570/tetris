@@ -47,7 +47,7 @@ jobs:
         run: npx playwright install --with-deps
       - name: Run Playwright tests
         run: npm test
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
@@ -84,7 +84,7 @@ jobs:
           cd Tetris/
           dotnet publish -c Release -o out
       - name: Upload Tetris Build Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Tetris
           path: /home/runner/work/tetris/tetris/Tetris/out
@@ -127,7 +127,7 @@ jobs:
         run: npm run test-fly
 
       - name: Upload test report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
