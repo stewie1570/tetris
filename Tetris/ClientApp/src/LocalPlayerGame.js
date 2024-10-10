@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { TetrisGame, emptyBoard } from "./components/TetrisGame";
 import { StringInput as StringPrompt, usePrompt } from "./components/Prompt";
 import { leaderBoardService } from "./services";
@@ -11,9 +11,11 @@ import {
   useMountedOnlyState,
 } from "leaf-validator";
 import { GameMetaFrame } from "./components/GameMetaFrame";
-import { useSessionStorageState } from './hooks/useSessionStorageState';
+import { useSessionStorageState } from "./hooks/useSessionStorageState";
 import { useIsMobile } from "./hooks/useIsMobile";
 import { Spinner } from "./components/AnimatedIcons";
+import styled from "styled-components";
+import { TetrisBoard } from "./components/TetrisBoard";
 
 export const initialGameState = {
   board: emptyBoard,
@@ -24,8 +26,9 @@ export const initialGameState = {
 };
 
 export const [SinglePlayerGameContextProvider, useLocalPlayerGameContext] =
-  createManagedContext(() => {
+  createManagedContext(({ shapeProvider }) => {
     const [game, setGame] = useMountedOnlyState(initialGameState);
+    const [nextShape, setNextShape] = useState(shapeProvider());
     const isMobile = useIsMobile();
     const [username, setUsername] = useSessionStorageState("username");
     const { dialogProps, prompt } = usePrompt();
@@ -64,11 +67,15 @@ export const [SinglePlayerGameContextProvider, useLocalPlayerGameContext] =
             onSubmitString={(name) =>
               Boolean(name?.length)
                 ? sendCurrentScoreFor(name)
-                  .then(() => setUsername(name))
-                  .then(exitModal, exitModal)
+                    .then(() => setUsername(name))
+                    .then(exitModal, exitModal)
                 : exitModal()
             }
-            submittingText={<><Spinner /> Posting Your Score...</>}
+            submittingText={
+              <>
+                <Spinner /> Posting Your Score...
+              </>
+            }
           >
             What user name would you like?
           </StringPrompt>
@@ -97,6 +104,12 @@ export const [SinglePlayerGameContextProvider, useLocalPlayerGameContext] =
         (await showLoadingScoreBoardWhile(reloadScoreBoard()));
     };
 
+    const nextShapeProvider = () => {
+      const shape = nextShape;
+      setNextShape(shapeProvider());
+      return shape;
+    };
+
     return {
       game: { ...game, mobile: isMobile },
       setGame,
@@ -111,8 +124,20 @@ export const [SinglePlayerGameContextProvider, useLocalPlayerGameContext] =
       postScore,
       reloadScoreBoard,
       pause,
+      nextShape,
+      nextShapeProvider,
     };
   });
+
+const NextShapeContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+`;
+
+const shapeToBoard = (shape) =>
+  shape.map((row) => row.map((cell) => ({ type: cell ? "active" : "empty" })));
 
 export const LocalPlayerGame = ({
   shapeProvider,
@@ -131,56 +156,66 @@ export const LocalPlayerGame = ({
     isLoadingScoreBoard,
     postableScore,
     postScore,
+    nextShape,
+    nextShapeProvider,
   } = useLocalPlayerGameContext();
 
   return (
-    <GameMetaFrame
-      {...otherProps}
-      header={
-        <>
-          {header}
-          <p>
-            {(isOnlyPlayer || !game.paused) &&
-              `Score: ${game.score}` +
-              (game.oldScore ? ` (Previous: ${game.oldScore})` : "")}
-          </p>
-        </>
-      }
-      game={
-        <TetrisGame
-          game={game}
-          onChange={setGame}
-          shapeProvider={shapeProvider}
-          onPause={
-            !otherPlayers && (() => pause({ showScoreBoard: !otherPlayers }))
-          }
-        />
-      }
-      scoreBoard={
-        game.paused &&
-        (otherPlayers || (
-          <ScoreBoard
-            allowScorePost={allowScorePost}
+    <>
+      {!game.paused && (
+        <NextShapeContainer>
+          <TetrisBoard board={shapeToBoard(nextShape)} />
+        </NextShapeContainer>
+      )}
+      <GameMetaFrame
+        {...otherProps}
+        header={
+          <>
+            {header}
+            <p>
+              {(isOnlyPlayer || !game.paused) &&
+                `Score: ${game.score}` +
+                  (game.oldScore ? ` (Previous: ${game.oldScore})` : "")}
+            </p>
+          </>
+        }
+        game={
+          <TetrisGame
             game={game}
-            username={username}
-            isLoading={isLoadingScoreBoard}
-            onPostScore={postScore}
-            postableScore={postableScore}
-          />
-        ))
-      }
-      controls={
-        <>
-          <GameControls
-            game={game}
+            onChange={setGame}
+            shapeProvider={nextShapeProvider}
             onPause={
               !otherPlayers && (() => pause({ showScoreBoard: !otherPlayers }))
             }
           />
-          {additionalControls}
-        </>
-      }
-    />
+        }
+        scoreBoard={
+          game.paused &&
+          (otherPlayers || (
+            <ScoreBoard
+              allowScorePost={allowScorePost}
+              game={game}
+              username={username}
+              isLoading={isLoadingScoreBoard}
+              onPostScore={postScore}
+              postableScore={postableScore}
+            />
+          ))
+        }
+        controls={
+          <>
+            <GameControls
+              game={game}
+              onPause={
+                !otherPlayers &&
+                (() => pause({ showScoreBoard: !otherPlayers }))
+              }
+            />
+            {additionalControls}
+          </>
+        }
+      />
+    </>
   );
 };
 

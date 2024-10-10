@@ -7,7 +7,7 @@ import { Routes, Route } from "react-router-dom";
 import { shapes } from "./components/TetrisGame";
 import { Dialog } from "./components/Prompt";
 import { ErrorMessage } from "./components/ErrorMessage";
-import { Spinner } from './components/AnimatedIcons';
+import { Spinner } from "./components/AnimatedIcons";
 import { ReloadRecoveryErrorBoundary } from "./components/ReloadRecoveryErrorBoundary";
 import { CenterScreen, Header } from "./Styling";
 import { GameRoomGrid } from "./GameRoomGrid";
@@ -40,7 +40,7 @@ export const App = ({ shapeProvider }) => {
   const selectedShapeProvider = shapeProvider ?? defaultShapeProvider;
 
   return (
-    <SinglePlayerGameContextProvider>
+    <SinglePlayerGameContextProvider shapeProvider={selectedShapeProvider}>
       <Routes>
         <Route
           path="/"
@@ -68,7 +68,9 @@ export const App = ({ shapeProvider }) => {
               <Suspense
                 fallback={
                   <CenterScreen>
-                    <Header><Spinner /> Loading...</Header>
+                    <Header>
+                      <Spinner /> Loading...
+                    </Header>
                   </CenterScreen>
                 }
               >
