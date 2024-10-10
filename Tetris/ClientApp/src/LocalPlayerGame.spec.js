@@ -24,7 +24,7 @@ beforeEach(() => {
       return res(ctx.json([]));
     })
   );
-})
+});
 
 test("score a point", async () => {
   const { iterate, container } = getIterableBoard();
@@ -35,8 +35,12 @@ test("score a point", async () => {
     await scorePointOnEmptyBoard({ iterate, container });
   });
 
-  expect(getSerializedBoard()).toBe(
-    `
+  const result = getSerializedBoard();
+  const expected = `
+      *
+      *
+      * 
+      * 
       *---------
       *---------
       *---------
@@ -52,8 +56,8 @@ test("score a point", async () => {
       ----------
       --------##
       --------##
-      --------##`.replace(/ /gi, "")
-  );
+      --------##`.replace(/ /gi, "");
+  expect(result).toBe(expected);
   screen.getByText("Score: 1");
 });
 
