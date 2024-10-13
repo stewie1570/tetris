@@ -86,6 +86,7 @@ export const usePlayerListener = () => {
             });
         },
         status: ({ userId, timeLeft, ...otherUpdates }) => {
+          userId === organizerUserId && setOrganizerConnectionStatus("connected");
           setOtherPlayers((otherPlayers) =>
             process(otherUpdates).on(userId).in(otherPlayers)
           );
