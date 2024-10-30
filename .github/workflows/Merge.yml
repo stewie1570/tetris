@@ -84,6 +84,8 @@ jobs:
           path: /home/runner/work/tetris/tetris/Tetris/out
 
   deploy-to-fly:
+    # Temporarily disabled due to fly.io not being reliable.
+    if: false
     runs-on: ubuntu-latest
     needs: [version]
     steps:
