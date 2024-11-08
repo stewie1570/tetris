@@ -83,52 +83,52 @@ jobs:
           name: Tetris
           path: /home/runner/work/tetris/tetris/Tetris/out
 
-  deploy-to-fly:
-    # Temporarily disabled due to fly.io not being reliable.
-    if: false
-    runs-on: ubuntu-latest
-    needs: [version]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Find Release Version
-        run: |
-          git fetch --prune --unshallow
-          echo "RELEASE_VERSION=$(git describe --tags --abbrev=0 | sed 's/v//').0" >> $GITHUB_ENV
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-      - name: deploy
-        env:
-          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
-        run: flyctl deploy --no-cache --build-arg RELEASE_VERSION=${{ env.RELEASE_VERSION }} --build-arg NEWRELIC_KEY=${{ secrets.NEWRELIC_KEY }}
+  # deploy-to-fly:
+  #   # Temporarily disabled due to fly.io not being reliable.
+  #   if: false
+  #   runs-on: ubuntu-latest
+  #   needs: [version]
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Find Release Version
+  #       run: |
+  #         git fetch --prune --unshallow
+  #         echo "RELEASE_VERSION=$(git describe --tags --abbrev=0 | sed 's/v//').0" >> $GITHUB_ENV
+  #     - uses: superfly/flyctl-actions/setup-flyctl@master
+  #     - name: deploy
+  #       env:
+  #         RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
+  #       run: flyctl deploy --no-cache --build-arg RELEASE_VERSION=${{ env.RELEASE_VERSION }} --build-arg NEWRELIC_KEY=${{ secrets.NEWRELIC_KEY }}
 
-  test-fly:
-    # Temporarily disabled due to fly.io not being reliable.
-    if: false
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
-    needs: [deploy-to-fly]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  # test-fly:
+  #   # Temporarily disabled due to fly.io not being reliable.
+  #   if: false
+  #   timeout-minutes: 60
+  #   runs-on: ubuntu-latest
+  #   needs: [deploy-to-fly]
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 16
 
-      - name: Install dependencies
-        run: npm ci
+  #     - name: Install dependencies
+  #       run: npm ci
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+  #     - name: Install Playwright Browsers
+  #       run: npx playwright install --with-deps
 
-      - name: Run Playwright tests
-        run: npm run test-fly
+  #     - name: Run Playwright tests
+  #       run: npm run test-fly
 
-      - name: Upload test report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
+  #     - name: Upload test report
+  #       uses: actions/upload-artifact@v4
+  #       if: always()
+  #       with:
+  #         name: playwright-report
+  #         path: playwright-report/
+  #         retention-days: 30
 
