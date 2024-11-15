@@ -36,6 +36,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 9.*.*
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright Browsers
