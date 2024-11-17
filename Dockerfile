@@ -1,5 +1,5 @@
 # Build image
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build-env
     ARG RELEASE_VERSION=1.0.0.0
     RUN echo "Version: ${RELEASE_VERSION}"
     WORKDIR /app
@@ -24,7 +24,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
     RUN dotnet publish -c Release -o /app/out /property:Version=$RELEASE_VERSION
 
 # Runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
     WORKDIR /app
     COPY --from=build-env /app/out .
 
