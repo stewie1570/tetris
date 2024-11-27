@@ -11,7 +11,7 @@
   },
   "scripts": {
     "test": "concurrently \"npm run start-server\" \"wait-on https://localhost:5001 && npm run run-tests\"",
-    "test-prod": "cross-env host=https://brickbattles.io playwright test",
+    "test-prod": "cross-env host=https://tetris-18rt.onrender.com playwright test",
     "test-fly": "cross-env host=https://stewie1570-tetris.fly.dev playwright test",
     "test-self-hosted": "cross-env host=http://tetris.hopto.org playwright test",
     "start-server": "dotnet run --project Tetris/Tetris.csproj",
