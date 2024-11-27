@@ -4,7 +4,7 @@
 
 # A ReactJS SPA with a .NET WebApi/MVC backend
 
-Hosted at: <https://brickbattles.io/>
+Hosted at: <[https://brickbattles.io/](https://tetris-18rt.onrender.com/)>
 
 ## Docker Notes
 
