@@ -45,15 +45,10 @@ export const explosionAnimation = keyframes`
     opacity: 1;
     background-color: inherit;
   }
-  50% {
+  100% {
     transform: scale(1.5);
     opacity: 0.9;
     background-color: #ff0000;
-  }
-  100% {
-    transform: scale(0);
-    opacity: 0;
-    background-color: #000000;
   }
 `;
 
