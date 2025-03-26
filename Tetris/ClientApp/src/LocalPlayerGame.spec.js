@@ -36,7 +36,7 @@ test("score a point", async () => {
   });
 
   // Wait for explosion animation to complete
-  await wait();
+  await waitForAnimation();
 
   const result = getSerializedBoard();
   const expected = `
@@ -81,7 +81,7 @@ test("score a point and post score", async () => {
   });
 
   // Wait for explosion animation to complete
-  await wait();
+  await waitForAnimation();
 
   screen.getByText(/Pause/).click();
   (await screen.findByText(/Post My Score/)).click();
@@ -118,7 +118,7 @@ test("score a point and fail to post score", async () => {
   });
 
   // Wait for explosion animation to complete
-  await wait();
+  await waitForAnimation();
 
   screen.getByText(/Pause/).click();
   (await screen.findByText(/Post My Score/)).click();
@@ -156,7 +156,7 @@ test("score a point and post score twice", async () => {
   });
 
   // Wait for explosion animation to complete
-  await wait();
+  await waitForAnimation();
 
   screen.getByText(/Pause/).click();
   (await screen.findByText(/Post My Score/)).click();
@@ -210,7 +210,7 @@ test("posting a score too low to show up on the board displays an error", async 
   });
 
   // Wait for explosion animation to complete
-  await wait();
+  await waitForAnimation();
 
   screen.getByText(/Pause/).click();
   (await screen.findByText(/Post My Score/)).click();
@@ -255,7 +255,7 @@ test("score a point and cancels posting a score", async () => {
   });
 
   // Wait for explosion animation to complete
-  await wait();
+  await waitForAnimation();
 
   screen.getByText(/Pause/).click();
   (await screen.findByText(/Post My Score/)).click();
@@ -293,7 +293,7 @@ test("score a point and entering a blank username cancels posting the score", as
   });
 
   // Wait for explosion animation to complete
-  await wait();
+  await waitForAnimation();
 
   screen.getByText(/Pause/).click();
   (await screen.findByText(/Post My Score/)).click();
@@ -314,8 +314,14 @@ test("score a point and entering a blank username cancels posting the score", as
   await waitFor(() => expect(scorePosts).toEqual([]));
 });
 
+// Wait for a short time in tests
 function wait() {
   return new Promise((resolve) => setTimeout(resolve, 1));
+}
+
+// Wait specifically for the explosion animation to complete (500ms)
+function waitForAnimation() {
+  return new Promise((resolve) => setTimeout(resolve, 600)); // 600ms to be safe
 }
 
 async function scorePointOnEmptyBoard({ iterate, container }) {
