@@ -1,0 +1,19 @@
+@keyframes explode {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+    background-color: #ff4500;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+.exploding {
+  animation: explode 0.5s forwards;
+}
