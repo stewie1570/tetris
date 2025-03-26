@@ -29,12 +29,19 @@ const ExplodingInactive = ({ children, ...props }) => (
   </Exploding>
 );
 
+const ExplodingInactiveEmpty = ({ children, ...props }) => (
+  <Exploding {...props}>
+    <InactiveEmpty data-testid="space" title="-" />
+  </Exploding>
+);
+
 const Squares = {
   'active': <Active data-testid="space" title="*" />,
   'inactive': <Inactive data-testid="space" title="#" />,
   'active-empty': <ActiveEmpty data-testid="space" title="-" />,
   'inactive-empty': <InactiveEmpty data-testid="space" title="-" />,
-  'exploding': <ExplodingInactive data-testid="space" title="X" />
+  'exploding-inactive': <ExplodingInactive data-testid="space" title="#" />,
+  'exploding-inactive-empty': <ExplodingInactiveEmpty data-testid="space" title="-" />
 }
 
 const TabelCell = styled.td`
@@ -44,8 +51,10 @@ const TabelCell = styled.td`
 export function TetrisBoard({ board, explodingRows = [] }) {
   const activeColumnRange = activeColumnRangeFrom({ board });
   const squareFrom = ({ square, x, y }) => {
-    if (explodingRows.includes(y) && square.type === 'inactive') {
-      return Squares['exploding'];
+    if (explodingRows.includes(y)) {
+      return square === empty 
+        ? Squares['exploding-inactive-empty'] 
+        : Squares['exploding-inactive'];
     }
 
     const type = square === empty
