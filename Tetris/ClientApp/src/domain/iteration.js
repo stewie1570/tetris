@@ -26,7 +26,8 @@ export function iterate({ board, shapeProvider, score }) {
         const newShape = flatMap(shapeProvider(), (row, y) => row.map((value, x) => ({ x, y, value })));
         const isFull = row => row.every(square => square === inactive);
         const emptyRowFor = ({ y }) => new Array(board[y].length).fill(empty);
-        const noFullRows = ({ board, score }) => {
+        
+        const noFullRows = ({ board, score, explodingRows = [] }) => {
             const firstFullRowY = board.findIndex(isFull);
 
             return firstFullRowY >= 0
@@ -34,17 +35,20 @@ export function iterate({ board, shapeProvider, score }) {
                     board: [emptyRowFor({ y: 0 })]
                         .concat(board.slice(0, firstFullRowY))
                         .concat(board.slice(firstFullRowY + 1, board.length)),
-                    score: score + 1
+                    score: score + 1,
+                    explodingRows: [...explodingRows, firstFullRowY]
                 })
-                : { board, score };
+                : { board, score, explodingRows };
         };
+        
         const noFullRowsResult = noFullRows({ board, score });
         const boardWithNewShape = board => board.map((row, y) => row.map((square, x) => some(newShape, { x, y, value: true }) ? active : square));
 
         return {
             board: boardWithNewShape(noFullRowsResult.board),
             isOver: noFullRowsResult.board.some((row, y) => row.some((square, x) => square !== empty && some(newShape, { x, y, value: true }))),
-            score: noFullRowsResult.score
+            score: noFullRowsResult.score,
+            explodingRows: noFullRowsResult.explodingRows
         };
     }
 

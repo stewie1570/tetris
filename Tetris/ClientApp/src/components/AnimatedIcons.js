@@ -39,6 +39,21 @@ const moveDownAnimation = keyframes`
   }
 `;
 
+export const explosionAnimation = keyframes`
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    background-color: inherit;
+    border-radius: 50%;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0.9;
+    background-color: #ff0000;
+    border-radius: 50%;
+  }
+`;
+
 export const MovingRight = styled(FontAwesomeIcon)`
   animation: ${moveRightAnimation} 2s none infinite;
 `;

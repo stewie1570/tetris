@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { flushSync } from 'react-dom';
 import { TetrisBoard } from "./TetrisBoard";
 import { tetrisBoardFrom } from "../domain/serialization";
@@ -59,6 +59,8 @@ export const emptyBoard = tetrisBoardFrom(`
 
 export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }) => {
   const { board, mobile, oldScore, paused, score } = gameState;
+  const [explodingRows, setExplodingRows] = useState([]);
+  
   const game = {
     board: emptyBoard,
     score: 0,
@@ -70,6 +72,16 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }
   const instance = useRef({ onChange, shapeProvider, game });
   instance.current = { onChange, shapeProvider, game };
 
+  useEffect(() => {
+    if (explodingRows.length > 0) {
+      const timer = setTimeout(() => {
+        setExplodingRows([]);
+      }, 500);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [explodingRows]);
+
   const cycle = useCallback(() => {
     if (!instance.current.game.paused) {
       flushSync(() => {
@@ -80,6 +92,10 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }
             score,
             shapeProvider: instance.current.shapeProvider
           });
+
+          if (iteratedGame.explodingRows && iteratedGame.explodingRows.length > 0) {
+            setExplodingRows(iteratedGame.explodingRows);
+          }
 
           return iteratedGame.isOver
             ? {
@@ -130,7 +146,7 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }
       {!game.paused && game.mobile && (
         <MobileControls onPause={onPause} onClick={(keyCode) => keyPress({ keyCode })} />
       )}
-      <TetrisBoard board={game.board} />
+      <TetrisBoard board={game.board} explodingRows={explodingRows} />
     </div>
   );
 }

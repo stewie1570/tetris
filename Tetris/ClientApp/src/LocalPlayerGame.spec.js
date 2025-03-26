@@ -35,6 +35,8 @@ test("score a point", async () => {
     await scorePointOnEmptyBoard({ iterate, container });
   });
 
+  await waitForAnimation();
+
   const result = getSerializedBoard();
   const expected = `
       *
@@ -77,6 +79,8 @@ test("score a point and post score", async () => {
     await scorePointOnEmptyBoard({ iterate, container });
   });
 
+  await waitForAnimation();
+
   screen.getByText(/Pause/).click();
   (await screen.findByText(/Post My Score/)).click();
 
@@ -110,6 +114,8 @@ test("score a point and fail to post score", async () => {
   await act(async () => {
     await scorePointOnEmptyBoard({ iterate, container });
   });
+
+  await waitForAnimation();
 
   screen.getByText(/Pause/).click();
   (await screen.findByText(/Post My Score/)).click();
@@ -145,6 +151,8 @@ test("score a point and post score twice", async () => {
   await act(async () => {
     await scorePointOnEmptyBoard({ iterate, container });
   });
+
+  await waitForAnimation();
 
   screen.getByText(/Pause/).click();
   (await screen.findByText(/Post My Score/)).click();
@@ -197,6 +205,8 @@ test("posting a score too low to show up on the board displays an error", async 
     await scorePointOnEmptyBoard({ iterate, container });
   });
 
+  await waitForAnimation();
+
   screen.getByText(/Pause/).click();
   (await screen.findByText(/Post My Score/)).click();
 
@@ -239,6 +249,8 @@ test("score a point and cancels posting a score", async () => {
     await scorePointOnEmptyBoard({ iterate, container });
   });
 
+  await waitForAnimation();
+
   screen.getByText(/Pause/).click();
   (await screen.findByText(/Post My Score/)).click();
 
@@ -274,6 +286,8 @@ test("score a point and entering a blank username cancels posting the score", as
     await scorePointOnEmptyBoard({ iterate, container });
   });
 
+  await waitForAnimation();
+
   screen.getByText(/Pause/).click();
   (await screen.findByText(/Post My Score/)).click();
 
@@ -293,7 +307,13 @@ test("score a point and entering a blank username cancels posting the score", as
   await waitFor(() => expect(scorePosts).toEqual([]));
 });
 
-const wait = () => new Promise((resolve) => setTimeout(resolve, 1));
+function wait() {
+  return new Promise((resolve) => setTimeout(resolve, 1));
+}
+
+function waitForAnimation() {
+  return new Promise((resolve) => setTimeout(resolve, 600));
+}
 
 async function scorePointOnEmptyBoard({ iterate, container }) {
   await wait();
