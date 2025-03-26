@@ -2,7 +2,7 @@ import React from "react";
 import { activeColumnRangeFrom } from "../domain/board";
 import { empty } from "../core/constants";
 import styled from 'styled-components';
-import { Exploding } from "./AnimatedIcons";
+import { Exploding, explosionAnimation } from "./AnimatedIcons";
 
 const Square = styled.div`
   width: 29.3px;
@@ -23,17 +23,13 @@ const InactiveEmpty = styled(Square)`
   background-color: #222;
 `;
 
-const ExplodingInactive = ({ children, ...props }) => (
-  <Exploding {...props}>
-    <Inactive data-testid="space" title="#" />
-  </Exploding>
-);
+const ExplodingInactive = styled(Inactive)`
+  animation: ${explosionAnimation} 0.5s ease-out forwards;
+`;
 
-const ExplodingInactiveEmpty = ({ children, ...props }) => (
-  <Exploding {...props}>
-    <InactiveEmpty data-testid="space" title="-" />
-  </Exploding>
-);
+const ExplodingInactiveEmpty = styled(InactiveEmpty)`
+  animation: ${explosionAnimation} 0.5s ease-out forwards;
+`;
 
 const Squares = {
   'active': <Active data-testid="space" title="*" />,
