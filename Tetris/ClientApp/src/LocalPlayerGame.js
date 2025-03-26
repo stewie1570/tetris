@@ -164,7 +164,7 @@ export const LocalPlayerGame = ({
     <>
       {!game.paused && (
         <NextShapeContainer>
-          <TetrisBoard board={shapeToBoard(nextShape)} />
+          <TetrisBoard board={shapeToBoard(nextShape)} noBackground />
         </NextShapeContainer>
       )}
       <GameMetaFrame

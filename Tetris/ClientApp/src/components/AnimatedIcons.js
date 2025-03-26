@@ -44,11 +44,13 @@ export const explosionAnimation = keyframes`
     transform: scale(1);
     opacity: 1;
     background-color: inherit;
+    border-radius: 50%;
   }
   100% {
     transform: scale(1.5);
     opacity: 0.9;
     background-color: #ff0000;
+    border-radius: 50%;
   }
 `;
 
@@ -66,10 +68,6 @@ export const MovingDown = styled(FontAwesomeIcon)`
 
 export const RotatingIcon = styled(FontAwesomeIcon)`
   animation: ${rotateAnimation} 2s linear infinite;
-`;
-
-export const Exploding = styled.div`
-  animation: ${explosionAnimation} 0.5s ease-out forwards;
 `;
 
 export const Spinner = () => <RotatingIcon icon={faRotate} />

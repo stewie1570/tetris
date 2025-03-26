@@ -1,8 +1,8 @@
 import React from "react";
 import { activeColumnRangeFrom } from "../domain/board";
 import { empty } from "../core/constants";
-import styled from 'styled-components';
-import { Exploding, explosionAnimation } from "./AnimatedIcons";
+import styled from "styled-components";
+import { explosionAnimation } from "./AnimatedIcons";
 
 const Square = styled.div`
   width: 29.3px;
@@ -27,43 +27,39 @@ const ExplodingInactive = styled(Inactive)`
   animation: ${explosionAnimation} 0.5s ease-out forwards;
 `;
 
-const ExplodingInactiveEmpty = styled(InactiveEmpty)`
-  animation: ${explosionAnimation} 0.5s ease-out forwards;
-`;
-
 const Squares = {
-  'active': <Active data-testid="space" title="*" />,
-  'inactive': <Inactive data-testid="space" title="#" />,
-  'active-empty': <ActiveEmpty data-testid="space" title="-" />,
-  'inactive-empty': <InactiveEmpty data-testid="space" title="-" />,
-  'exploding-inactive': <ExplodingInactive data-testid="space" title="#" />,
-  'exploding-inactive-empty': <ExplodingInactiveEmpty data-testid="space" title="-" />
-}
+  active: <Active data-testid="space" title="*" />,
+  inactive: <Inactive data-testid="space" title="#" />,
+  "active-empty": <ActiveEmpty data-testid="space" title="-" />,
+  "inactive-empty": <InactiveEmpty data-testid="space" title="-" />,
+  explosion: <ExplodingInactive data-testid="space" title="#" />,
+};
 
 const TabelCell = styled.td`
   padding: 0;
 `;
 
-export function TetrisBoard({ board, explodingRows = [] }) {
+export function TetrisBoard({
+  board,
+  explodingRows = [],
+  noBackground = false,
+}) {
   const activeColumnRange = activeColumnRangeFrom({ board });
   const squareFrom = ({ square, x, y }) => {
-    if (explodingRows.includes(y)) {
-      return square === empty 
-        ? Squares['exploding-inactive-empty'] 
-        : Squares['exploding-inactive'];
-    }
+    if (explodingRows.includes(y)) return Squares["explosion"];
 
-    const type = square === empty
-      ? x >= activeColumnRange.x1 && x <= activeColumnRange.x2
-        ? "active-empty"
-        : "inactive-empty"
-      : square.type;
+    const type =
+      square === empty
+        ? x >= activeColumnRange.x1 && x <= activeColumnRange.x2
+          ? "active-empty"
+          : "inactive-empty"
+        : square.type;
 
     return Squares[type];
-  }
+  };
 
   return (
-    <table>
+    <table style={noBackground ? undefined : { backgroundColor: "#000" }}>
       <tbody>
         {board.map((row, y) => (
           <tr key={y} data-testid="row">
