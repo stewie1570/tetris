@@ -47,12 +47,14 @@ describe("Iteration", () => {
             [false, true]
         ];
 
-        expect(stringFrom(iterate({ board, shapeProvider }).board)).toEqual(stringFrom(tetrisBoardFrom(`
+        const result = iterate({ board, shapeProvider });
+        expect(stringFrom(result.board)).toEqual(stringFrom(tetrisBoardFrom(`
             **----
             -*----
             ------
             --##--
             ---#--`)));
+        expect(result.explodingRows).toEqual([]);
     });
 
     describe("Iterate Until Inactive", () => {
@@ -95,6 +97,7 @@ describe("Iteration", () => {
                 ---###
                 ---#--`)));
             expect(result.score).toBe(6);
+            expect(result.explodingRows).toEqual([2, 3]);
         });
 
         it("moves rows above it down even when the last row is full", () => {
@@ -107,10 +110,12 @@ describe("Iteration", () => {
                 [false, true]
             ];
 
-            expect(stringFrom(iterate({ board, shapeProvider }).board)).toEqual(stringFrom(tetrisBoardFrom(`
+            const result = iterate({ board, shapeProvider });
+            expect(stringFrom(result.board)).toEqual(stringFrom(tetrisBoardFrom(`
                 **----
                 -*----
                 ---###`)));
+            expect(result.explodingRows).toEqual([2]);
         });
     });
 
@@ -127,7 +132,9 @@ describe("Iteration", () => {
                 [false, true]
             ];
 
-            expect(iterate({ board, shapeProvider }).isOver).toBe(false);
+            const result = iterate({ board, shapeProvider });
+            expect(result.isOver).toBe(false);
+            expect(result.explodingRows).toEqual([]);
         });
 
         it("is true when a new shape can't be placed", () => {
@@ -145,6 +152,7 @@ describe("Iteration", () => {
             expect(stringFrom(result.board)).toEqual(stringFrom(tetrisBoardFrom(`
                 **##--
                 -*-#--`)));
+            expect(result.explodingRows).toEqual([]);
         });
     });
 });
