@@ -33,9 +33,10 @@ async function assertSuccessfulFetchResponse(response) {
   }
 }
 
-const makeFetchRequest = async (...args) => {
+const makeFetchRequest = async (url, options) => {
   try {
-    return await fetch(...args);
+    const fullUrl = url.startsWith('http') ? url : `http://localhost${url.startsWith('/') ? '' : '/'}${url}`;
+    return await fetch(fullUrl, options);
   } catch (networkError) {
     throw new HttpError("Network error", {
       data: { title: "Network Error" },

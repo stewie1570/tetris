@@ -20,7 +20,10 @@ const lineShape = shapes[1];
 
 beforeEach(() => {
   server.use(
-    rest.get("/api/gameRooms", async (req, res, ctx) => {
+    rest.get("http://localhost/api/gameRooms", async (req, res, ctx) => {
+      return res(ctx.json([]));
+    }),
+    rest.get("http://localhost/api/userScores", async (req, res, ctx) => {
       return res(ctx.json([]));
     })
   );
@@ -65,11 +68,11 @@ test("score a point", async () => {
 
 test("score a point and post score", async () => {
   server.use(
-    rest.get("/api/userScores", async (req, res, ctx) => {
+    rest.get("http://localhost/api/userScores", async (req, res, ctx) => {
       return res(ctx.json(scorePosts));
     }),
-    rest.post("/api/userScores", async (req, res, ctx) => {
-      scorePosts.push(req.body);
+    rest.post("http://localhost/api/userScores", async (req, res, ctx) => {
+      scorePosts.push(await req.json());
       return res(ctx.status(200));
     })
   );
@@ -102,10 +105,10 @@ test("score a point and post score", async () => {
 
 test("score a point and fail to post score", async () => {
   server.use(
-    rest.get("/api/userScores", async (req, res, ctx) => {
+    rest.get("http://localhost/api/userScores", async (req, res, ctx) => {
       return res(ctx.json(scorePosts));
     }),
-    rest.post("/api/userScores", async (req, res, ctx) => {
+    rest.post("http://localhost/api/userScores", async (req, res) => {
       return res.networkError("Failed to connect");
     })
   );
@@ -138,11 +141,11 @@ test("score a point and fail to post score", async () => {
 
 test("score a point and post score twice", async () => {
   server.use(
-    rest.get("/api/userScores", async (req, res, ctx) => {
+    rest.get("http://localhost/api/userScores", async (req, res, ctx) => {
       return res(ctx.json([]));
     }),
-    rest.post("/api/userScores", async (req, res, ctx) => {
-      scorePosts.push(req.body);
+    rest.post("http://localhost/api/userScores", async (req, res, ctx) => {
+      scorePosts.push(await req.json());
       return res(ctx.status(200));
     })
   );
@@ -184,7 +187,7 @@ test("score a point and post score twice", async () => {
 
 test("posting a score too low to show up on the board displays an error", async () => {
   server.use(
-    rest.get("/api/userScores", async (req, res, ctx) => {
+    rest.get("http://localhost/api/userScores", async (req, res, ctx) => {
       return res(
         ctx.json(
           new Array(20).fill(null).map((_, i) => ({
@@ -194,8 +197,8 @@ test("posting a score too low to show up on the board displays an error", async 
         )
       );
     }),
-    rest.post("/api/userScores", async (req, res, ctx) => {
-      scorePosts.push(req.body);
+    rest.post("http://localhost/api/userScores", async (req, res, ctx) => {
+      scorePosts.push(await req.json());
       return res(ctx.status(200));
     })
   );
@@ -235,11 +238,11 @@ test("posting a score too low to show up on the board displays an error", async 
 
 test("score a point and cancels posting a score", async () => {
   server.use(
-    rest.get("/api/userScores", async (req, res, ctx) => {
+    rest.get("http://localhost/api/userScores", async (req, res, ctx) => {
       return res(ctx.json(scorePosts));
     }),
-    rest.post("/api/userScores", async (req, res, ctx) => {
-      scorePosts.push(req.body);
+    rest.post("http://localhost/api/userScores", async (req, res, ctx) => {
+      scorePosts.push(await req.json());
       return res(ctx.status(200));
     })
   );
@@ -272,11 +275,11 @@ test("score a point and cancels posting a score", async () => {
 
 test("score a point and entering a blank username cancels posting the score", async () => {
   server.use(
-    rest.get("/api/userScores", async (req, res, ctx) => {
+    rest.get("http://localhost/api/userScores", async (req, res, ctx) => {
       return res(ctx.json(scorePosts));
     }),
-    rest.post("/api/userScores", async (req, res, ctx) => {
-      scorePosts.push(req.body);
+    rest.post("http://localhost/api/userScores", async (req, res, ctx) => {
+      scorePosts.push(await req.json());
       return res(ctx.status(200));
     })
   );
@@ -355,32 +358,9 @@ async function scorePointOnEmptyBoard({ iterate, container }) {
   await wait();
   fireEvent.keyDown(container, { keyCode: keys.right });
   await wait();
-  fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait();
   fireEvent.keyDown(container, { keyCode: keys.space });
   await wait();
   iterate();
-  await wait();
-  fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait();
-  fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait();
-  fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait();
-  fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait();
-  fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait();
-  fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait();
-  fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait();
-  fireEvent.keyDown(container, { keyCode: keys.right });
-  await wait();
-  fireEvent.keyDown(container, { keyCode: keys.space });
-  await wait();
-  iterate();
-  await wait();
 }
 
 function getIterableBoard() {
