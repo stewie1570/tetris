@@ -2,6 +2,7 @@ import { render, within, screen, fireEvent, waitForElementToBeRemoved } from '@t
 import React from 'react'
 import { CommandButton } from './CommandButton';
 import { usePrompt, StringInput, Dialog } from './Prompt';
+import { describe, it, expect } from 'vitest';
 
 function TestApp() {
     const [name, setName] = React.useState();
@@ -22,19 +23,21 @@ function TestApp() {
     </>
 }
 
-test('should prompt user for input', async () => {
-    render(<TestApp />);
+describe('Prompt component', () => {
+    it('should prompt user for input', async () => {
+        render(<TestApp />);
 
-    screen.getByText("Edit Name").click();
+        screen.getByText("Edit Name").click();
 
-    const userNameTextInput = await within(
-        await screen.findByRole("dialog")
-    ).findByLabelText(/What user name would you like/);
-    fireEvent.change(userNameTextInput, {
-        target: { value: "Stewie" },
+        const userNameTextInput = await within(
+            await screen.findByRole("dialog")
+        ).findByLabelText(/What user name would you like/);
+        fireEvent.change(userNameTextInput, {
+            target: { value: "Stewie" },
+        });
+
+        screen.getByText(/Ok/).click();
+        await waitForElementToBeRemoved(() => screen.getByText(/What user name would you like/));
+        await screen.findByText("Name: Stewie");
     });
-
-    screen.getByText(/Ok/).click();
-    await waitForElementToBeRemoved(() => screen.getByText(/What user name would you like/));
-    await screen.findByText("Name: Stewie");
 });
