@@ -20,7 +20,7 @@ afterEach(() => {
 describe('Rest service', () => {
   it("can make a successful get request", async () => {
     server.use(
-      rest.get("/something", (req, res, ctx) =>
+      rest.get("*/something", (req, res, ctx) =>
         res(ctx.json({ prop1: "the expected value" }))
       )
     );
@@ -31,7 +31,7 @@ describe('Rest service', () => {
   });
 
   it("network error is handled", async () => {
-    server.use(rest.get("/something", (req, res) => res.networkError()));
+    server.use(rest.get("*/something", (req, res) => res.networkError()));
 
     let caughtError;
     try {
@@ -46,7 +46,7 @@ describe('Rest service', () => {
 
   it("can make a successful post request", async () => {
     server.use(
-      rest.post("/something", async (req, res, ctx) => {
+      rest.post("*/something", async (req, res, ctx) => {
         const body = await req.json();
         return res(ctx.json(body));
       })
@@ -63,7 +63,7 @@ describe('Rest service', () => {
   });
 
   it("can make a successful post request with no response payload expected", async () => {
-    server.use(rest.post("/something", (req, res, ctx) => res(ctx.status(200))));
+    server.use(rest.post("*/something", (req, res, ctx) => res(ctx.status(200))));
 
     expect(
       await Rest.post({
@@ -75,7 +75,7 @@ describe('Rest service', () => {
 
   it("handles failed post request with title", async () => {
     server.use(
-      rest.post("/something", (req, res, ctx) =>
+      rest.post("*/something", (req, res, ctx) =>
         res(
           ctx.status(500),
           ctx.json({
@@ -107,7 +107,7 @@ describe('Rest service', () => {
 
   it("handles failed post request with message", async () => {
     server.use(
-      rest.post("/something", (req, res, ctx) =>
+      rest.post("*/something", (req, res, ctx) =>
         res(
           ctx.status(500),
           ctx.json({
@@ -137,7 +137,7 @@ describe('Rest service', () => {
   });
 
   it("handles failed post request with status text", async () => {
-    server.use(rest.post("/something", (req, res, ctx) => res(ctx.status(500))));
+    server.use(rest.post("*/something", (req, res, ctx) => res(ctx.status(500))));
 
     let caughtError;
 
@@ -162,7 +162,7 @@ describe('Rest service', () => {
 
   it("handling error with title", async () => {
     server.use(
-      rest.get("/something", (req, res, ctx) =>
+      rest.get("*/something", (req, res, ctx) =>
         res(
           ctx.status(500),
           ctx.json({
@@ -194,7 +194,7 @@ describe('Rest service', () => {
 
   it("handling error with message", async () => {
     server.use(
-      rest.get("/something", (req, res, ctx) =>
+      rest.get("*/something", (req, res, ctx) =>
         res(
           ctx.status(500),
           ctx.json({
@@ -224,7 +224,7 @@ describe('Rest service', () => {
   });
 
   it("handling error with status text", async () => {
-    server.use(rest.get("/something", (req, res, ctx) => res(ctx.status(500))));
+    server.use(rest.get("*/something", (req, res, ctx) => res(ctx.status(500))));
 
     let caughtError;
 

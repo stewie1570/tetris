@@ -21,7 +21,7 @@ const lineShape = shapes[1];
 
 beforeEach(() => {
   server.use(
-    rest.get("/api/gameRooms", async (req, res, ctx) => {
+    rest.get("*/api/gameRooms", async (req, res, ctx) => {
       return res(ctx.json([]));
     })
   );
@@ -67,10 +67,10 @@ describe('LocalPlayerGame', () => {
 
   it("score a point and post score", async () => {
     server.use(
-      rest.get("/api/userScores", async (req, res, ctx) => {
+      rest.get("*/api/userScores", async (req, res, ctx) => {
         return res(ctx.json(scorePosts));
       }),
-      rest.post("/api/userScores", async (req, res, ctx) => {
+      rest.post("*/api/userScores", async (req, res, ctx) => {
         scorePosts.push(req.body);
         return res(ctx.status(200));
       })
@@ -104,10 +104,10 @@ describe('LocalPlayerGame', () => {
 
   it("score a point and fail to post score", async () => {
     server.use(
-      rest.get("/api/userScores", async (req, res, ctx) => {
+      rest.get("*/api/userScores", async (req, res, ctx) => {
         return res(ctx.json(scorePosts));
       }),
-      rest.post("/api/userScores", async (req, res, ctx) => {
+      rest.post("*/api/userScores", async (req, res, ctx) => {
         return res.networkError("Failed to connect");
       })
     );
@@ -140,10 +140,10 @@ describe('LocalPlayerGame', () => {
 
   it("score a point and post score twice", async () => {
     server.use(
-      rest.get("/api/userScores", async (req, res, ctx) => {
+      rest.get("*/api/userScores", async (req, res, ctx) => {
         return res(ctx.json([]));
       }),
-      rest.post("/api/userScores", async (req, res, ctx) => {
+      rest.post("*/api/userScores", async (req, res, ctx) => {
         scorePosts.push(req.body);
         return res(ctx.status(200));
       })
@@ -186,7 +186,7 @@ describe('LocalPlayerGame', () => {
 
   it("posting a score too low to show up on the board displays an error", async () => {
     server.use(
-      rest.get("/api/userScores", async (req, res, ctx) => {
+      rest.get("*/api/userScores", async (req, res, ctx) => {
         return res(
           ctx.json(
             new Array(20).fill(null).map((_, i) => ({
@@ -196,7 +196,7 @@ describe('LocalPlayerGame', () => {
           )
         );
       }),
-      rest.post("/api/userScores", async (req, res, ctx) => {
+      rest.post("*/api/userScores", async (req, res, ctx) => {
         scorePosts.push(req.body);
         return res(ctx.status(200));
       })
@@ -237,10 +237,10 @@ describe('LocalPlayerGame', () => {
 
   it("score a point and cancels posting a score", async () => {
     server.use(
-      rest.get("/api/userScores", async (req, res, ctx) => {
+      rest.get("*/api/userScores", async (req, res, ctx) => {
         return res(ctx.json(scorePosts));
       }),
-      rest.post("/api/userScores", async (req, res, ctx) => {
+      rest.post("*/api/userScores", async (req, res, ctx) => {
         scorePosts.push(req.body);
         return res(ctx.status(200));
       })
@@ -274,10 +274,10 @@ describe('LocalPlayerGame', () => {
 
   it("score a point and entering a blank username cancels posting the score", async () => {
     server.use(
-      rest.get("/api/userScores", async (req, res, ctx) => {
+      rest.get("*/api/userScores", async (req, res, ctx) => {
         return res(ctx.json(scorePosts));
       }),
-      rest.post("/api/userScores", async (req, res, ctx) => {
+      rest.post("*/api/userScores", async (req, res, ctx) => {
         scorePosts.push(req.body);
         return res(ctx.status(200));
       })
