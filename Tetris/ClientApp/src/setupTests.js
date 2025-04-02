@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
+import { afterAll, afterEach, beforeAll } from 'vitest';
 
 const methods = [rest.delete, rest.get, rest.post, rest.put];
 const handler = async (req, res, ctx) => {
