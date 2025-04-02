@@ -3,19 +3,6 @@ import { setupServer } from "msw/node";
 import { rest } from "msw";
 import { afterAll, afterEach, beforeAll } from 'vitest';
 
-// Create a global fetch mock to handle all network requests
-global.fetch = async (url, options) => {
-  // This will be overridden by MSW handlers
-  console.error(`Fetch called with ${url} but no handler was defined`);
-  return {
-    ok: false,
-    status: 400,
-    json: async () => ({}),
-    text: async () => "",
-    headers: new Headers({ 'content-type': 'application/json' }),
-  };
-};
-
 // Define handlers for different HTTP methods
 const methods = [rest.delete, rest.get, rest.post, rest.put];
 
@@ -33,7 +20,7 @@ export const server = setupServer(
 // Start server before all tests
 beforeAll(() => {
   server.listen({ 
-    onUnhandledRequest: 'bypass' // Allow unhandled requests without failing tests
+    onUnhandledRequest: 'error' // Make unhandled requests fail the test
   });
 });
 
