@@ -12,6 +12,7 @@ const errorHandled = async (request) => {
     const error = caughtError?.response?.data;
     const message =
       error?.title ||
+      error?.message ||
       caughtError?.response?.data?.message ||
       "An unknown error occurred.";
 
@@ -25,7 +26,9 @@ async function assertSuccessfulFetchResponse(response) {
     let data;
     try {
       data = await response.json();
-    } catch (error) {}
+    } catch (error) {
+      data = {};
+    }
     throw new HttpError(`Request failed with status code ${response.status}`, {
       ...response,
       data,
