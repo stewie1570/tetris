@@ -137,12 +137,17 @@ export const usePlayerListener = () => {
             )
           );
         },
-        addToChat: (chatLine) =>
+        addToChat: (chatLine) => {
+          if (chatLine.userId !== currentUserId) {
+            const audio = new Audio('/chat-notification.mp3');
+            audio.play();
+          }
           setChatLines((chatLines) =>
             [...chatLines, chatLine].slice(
               Math.max((chatLines?.length ?? 0) - (MaxChatLines - 1), 0)
             )
-          ),
+          );
+        },
         setChatLines: (chatLines) => setChatLines(chatLines),
       });
   }, [isConnected, currentUserId]);
