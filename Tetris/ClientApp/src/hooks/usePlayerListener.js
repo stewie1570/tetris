@@ -9,6 +9,7 @@ import { stringFrom } from "../domain/serialization";
 import { useOrganizerId } from "./useOrganizerId";
 
 const MaxChatLines = 10;
+const audio = new Audio('/chat-notification.mp3');
 
 function scrollToTop() {
   window.scrollTo({
@@ -143,7 +144,6 @@ export const usePlayerListener = () => {
         },
         addToChat: (chatLine) => {
           if (chatLine.userId !== currentUserId && externalsRef.current.soundEnabled) {
-            const audio = new Audio('/chat-notification.mp3');
             audio.play();
           }
           setChatLines((chatLines) =>
