@@ -41,6 +41,8 @@ export const usePlayerListener = () => {
     isOrganizer,
     username,
     selectedDuration,
+    chatLines,
+    soundEnabled,
   });
   externalsRef.current = {
     gameHub,
@@ -48,6 +50,7 @@ export const usePlayerListener = () => {
     username,
     selectedDuration,
     chatLines,
+    soundEnabled,
   };
 
   useEffect(() => {
@@ -139,7 +142,7 @@ export const usePlayerListener = () => {
           );
         },
         addToChat: (chatLine) => {
-          if (chatLine.userId !== currentUserId && soundEnabled) {
+          if (chatLine.userId !== currentUserId && externalsRef.current.soundEnabled) {
             const audio = new Audio('/chat-notification.mp3');
             audio.play();
           }
@@ -151,5 +154,5 @@ export const usePlayerListener = () => {
         },
         setChatLines: (chatLines) => setChatLines(chatLines),
       });
-  }, [isConnected, currentUserId, soundEnabled]);
+  }, [isConnected, currentUserId]);
 };
