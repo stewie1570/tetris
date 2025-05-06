@@ -32,6 +32,7 @@ export const usePlayerListener = () => {
     setCanGuestStartGame,
     chatLines,
     setChatLines,
+    soundEnabled
   } = useMultiplayerContext();
   const { game, setGame, username } = useLocalPlayerGameContext();
   const isOrganizer = organizerUserId === currentUserId;
@@ -138,7 +139,7 @@ export const usePlayerListener = () => {
           );
         },
         addToChat: (chatLine) => {
-          if (chatLine.userId !== currentUserId) {
+          if (chatLine.userId !== currentUserId && soundEnabled) {
             const audio = new Audio('/chat-notification.mp3');
             audio.play();
           }
@@ -150,5 +151,5 @@ export const usePlayerListener = () => {
         },
         setChatLines: (chatLines) => setChatLines(chatLines),
       });
-  }, [isConnected, currentUserId]);
+  }, [isConnected, currentUserId, soundEnabled]);
 };
