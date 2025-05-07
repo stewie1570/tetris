@@ -17,10 +17,26 @@ const ChatCard = styled.div`
   text-align: left;
 `;
 
+const SoundToggle = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  input[type="checkbox"] {
+    margin: 0;
+    vertical-align: middle;
+  }
+
+  label {
+    margin: 0;
+    line-height: 1;
+  }
+`;
+
 export function GameChat(props) {
   const [messageText, setMessageText] = useState("");
   const organizerId = useOrganizerId();
-  const { chatLines, gameHub, userId, otherPlayers, userId: currentUserId } = useMultiplayerContext();
+  const { chatLines, gameHub, userId, otherPlayers, userId: currentUserId, soundEnabled, setSoundEnabled } = useMultiplayerContext();
   const { prompt, setUsername } = useLocalPlayerGameContext();
   const userHasName = !!otherPlayers[userId]?.name;
 
@@ -101,7 +117,18 @@ export function GameChat(props) {
       {...props}
       className={`card ${props?.className ?? ""}`}
     >
-      <div className="card-header">Chat</div>
+      <div className="card-header d-flex justify-content-between align-items-center">
+        <span>Chat</span>
+        <SoundToggle>
+          <label htmlFor="sound-toggle">Sound</label>
+          <input
+            type="checkbox"
+            id="sound-toggle"
+            checked={soundEnabled}
+            onChange={(e) => setSoundEnabled(e.target.checked)}
+          />
+        </SoundToggle>
+      </div>
       <div className="card-body">
         <div>
           {chatLines?.filter(hasNameOrNotification).map((chatLine, index) => (

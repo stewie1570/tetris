@@ -40,6 +40,7 @@ export const [MultiplayerContextProvider, useMultiplayerContext, MultiplayerCont
   const [gameResults, setGameResults] = React.useState(null);
   const [selectedDuration, setSelectedDuration] = React.useState(selectableDurations[0] * 1000);
   const [chatLines, setChatLines] = React.useState([]);
+  const [soundEnabled, setSoundEnabled] = React.useState(true);
 
   const instanceRef = useRef({ organizerId });
   instanceRef.current = { organizerId };
@@ -104,7 +105,9 @@ export const [MultiplayerContextProvider, useMultiplayerContext, MultiplayerCont
     canGuestStartGame,
     setCanGuestStartGame,
     chatLines,
-    setChatLines
+    setChatLines,
+    soundEnabled,
+    setSoundEnabled
   };
 });
 

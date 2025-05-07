@@ -9,6 +9,7 @@ import { stringFrom } from "../domain/serialization";
 import { useOrganizerId } from "./useOrganizerId";
 
 const MaxChatLines = 10;
+const audio = new Audio('/chat-notification.mp3');
 
 function scrollToTop() {
   window.scrollTo({
@@ -32,6 +33,7 @@ export const usePlayerListener = () => {
     setCanGuestStartGame,
     chatLines,
     setChatLines,
+    soundEnabled
   } = useMultiplayerContext();
   const { game, setGame, username } = useLocalPlayerGameContext();
   const isOrganizer = organizerUserId === currentUserId;
@@ -40,6 +42,8 @@ export const usePlayerListener = () => {
     isOrganizer,
     username,
     selectedDuration,
+    chatLines,
+    soundEnabled,
   });
   externalsRef.current = {
     gameHub,
@@ -47,6 +51,7 @@ export const usePlayerListener = () => {
     username,
     selectedDuration,
     chatLines,
+    soundEnabled,
   };
 
   useEffect(() => {
@@ -137,12 +142,16 @@ export const usePlayerListener = () => {
             )
           );
         },
-        addToChat: (chatLine) =>
+        addToChat: (chatLine) => {
+          if (chatLine.userId !== currentUserId && externalsRef.current.soundEnabled) {
+            audio.play();
+          }
           setChatLines((chatLines) =>
             [...chatLines, chatLine].slice(
               Math.max((chatLines?.length ?? 0) - (MaxChatLines - 1), 0)
             )
-          ),
+          );
+        },
         setChatLines: (chatLines) => setChatLines(chatLines),
       });
   }, [isConnected, currentUserId]);
