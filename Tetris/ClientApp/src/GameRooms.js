@@ -107,16 +107,16 @@ export const GameRooms = () => {
                 ) : gameRooms?.items?.length ? (
                   gameRooms?.items?.map((room) => (
                     <tr key={room.organizerId}>
-                      <td>
+                      <td style={{ verticalAlign: 'middle' }}>
                         <JoinLink to={`/${room.organizerId}`}>Join</JoinLink>
                       </td>
-                      <td style={{ whiteSpace: 'nowrap' }}>{Statuses[room.status]}</td>
-                      <td>
+                      <td style={{ whiteSpace: 'nowrap', verticalAlign: 'middle' }}>{Statuses[room.status]}</td>
+                      <td style={{ verticalAlign: 'middle' }}>
                         {Object.values(room.players)
                           .map((player) => player.username ?? "[Un-named]")
                           .join(", ")}
                       </td>
-                      <td>{room.organizerId}</td>
+                      <td style={{ verticalAlign: 'middle' }}>{room.organizerId}</td>
                     </tr>
                   ))
                 ) : (
@@ -145,19 +145,26 @@ export const GameRooms = () => {
                   borderRadius: '12px',
                   padding: '16px',
                   marginBottom: '12px',
-                  border: '1px solid rgba(255, 255, 255, 0.2)'
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '16px'
                 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <div style={{ fontWeight: '600', color: '#2d3748' }}>Room {room.organizerId}</div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: '600', color: '#2d3748', marginBottom: '4px' }}>
+                      Room {room.organizerId}
+                    </div>
+                    <div style={{ marginBottom: '2px', fontSize: '0.9rem' }}>
+                      <strong style={{ color: '#4a5568' }}>Status:</strong> {Statuses[room.status]}
+                    </div>
+                    <div style={{ fontSize: '0.9rem' }}>
+                      <strong style={{ color: '#4a5568' }}>Players:</strong> {Object.values(room.players)
+                        .map((player) => player.username ?? "[Un-named]")
+                        .join(", ")}
+                    </div>
+                  </div>
+                  <div style={{ flexShrink: 0 }}>
                     <JoinLink to={`/${room.organizerId}`}>Join</JoinLink>
-                  </div>
-                  <div style={{ marginBottom: '4px' }}>
-                    <strong style={{ color: '#4a5568' }}>Status:</strong> {Statuses[room.status]}
-                  </div>
-                  <div>
-                    <strong style={{ color: '#4a5568' }}>Players:</strong> {Object.values(room.players)
-                      .map((player) => player.username ?? "[Un-named]")
-                      .join(", ")}
                   </div>
                 </div>
               ))
