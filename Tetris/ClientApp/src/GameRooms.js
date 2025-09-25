@@ -84,48 +84,89 @@ export const GameRooms = () => {
       <div className="card-body" style={{ overflow: 'hidden' }}>
         <h5 className="card-title">Game Rooms</h5>
         <div className="card-text">
-          <table className="table" style={{ tableLayout: 'fixed' }}>
-            <thead>
-              <tr>
-                <th style={{ width: '80px' }}></th>
-                <th style={{ width: '140px' }}>Status</th>
-                <th style={{ width: '120px' }}>Players</th>
-                <th style={{ width: '80px' }}>Code</th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading ? (
+          {/* Desktop Table View */}
+          <div className="d-none d-md-block">
+            <table className="table" style={{ tableLayout: 'fixed' }}>
+              <thead>
                 <tr>
-                  <td colSpan={4} className="centered">
-                    <strong>
-                      <Spinner /> Loading...
-                    </strong>
-                  </td>
+                  <th style={{ width: '80px' }}></th>
+                  <th style={{ width: '140px' }}>Status</th>
+                  <th style={{ width: '120px' }}>Players</th>
+                  <th style={{ width: '80px' }}>Code</th>
                 </tr>
-              ) : gameRooms?.items?.length ? (
-                gameRooms?.items?.map((room) => (
-                  <tr key={room.organizerId}>
-                    <td>
-                      <JoinLink to={`/${room.organizerId}`}>Join</JoinLink>
+              </thead>
+              <tbody>
+                {isLoading ? (
+                  <tr>
+                    <td colSpan={4} className="centered">
+                      <strong>
+                        <Spinner /> Loading...
+                      </strong>
                     </td>
-                    <td style={{ whiteSpace: 'nowrap' }}>{Statuses[room.status]}</td>
-                    <td>
-                      {Object.values(room.players)
-                        .map((player) => player.username ?? "[Un-named]")
-                        .join(", ")}
-                    </td>
-                    <td>{room.organizerId}</td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={4}>
-                    <strong>No one is hosting a game right now</strong>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                ) : gameRooms?.items?.length ? (
+                  gameRooms?.items?.map((room) => (
+                    <tr key={room.organizerId}>
+                      <td>
+                        <JoinLink to={`/${room.organizerId}`}>Join</JoinLink>
+                      </td>
+                      <td style={{ whiteSpace: 'nowrap' }}>{Statuses[room.status]}</td>
+                      <td>
+                        {Object.values(room.players)
+                          .map((player) => player.username ?? "[Un-named]")
+                          .join(", ")}
+                      </td>
+                      <td>{room.organizerId}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={4}>
+                      <strong>No one is hosting a game right now</strong>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="d-block d-md-none">
+            {isLoading ? (
+              <div className="text-center p-3">
+                <strong>
+                  <Spinner /> Loading...
+                </strong>
+              </div>
+            ) : gameRooms?.items?.length ? (
+              gameRooms?.items?.map((room) => (
+                <div key={room.organizerId} style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  borderRadius: '12px',
+                  padding: '16px',
+                  marginBottom: '12px',
+                  border: '1px solid rgba(255, 255, 255, 0.2)'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <div style={{ fontWeight: '600', color: '#2d3748' }}>Room {room.organizerId}</div>
+                    <JoinLink to={`/${room.organizerId}`}>Join</JoinLink>
+                  </div>
+                  <div style={{ marginBottom: '4px' }}>
+                    <strong style={{ color: '#4a5568' }}>Status:</strong> {Statuses[room.status]}
+                  </div>
+                  <div>
+                    <strong style={{ color: '#4a5568' }}>Players:</strong> {Object.values(room.players)
+                      .map((player) => player.username ?? "[Un-named]")
+                      .join(", ")}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center p-3">
+                <strong>No one is hosting a game right now</strong>
+              </div>
+            )}
+          </div>
           {gameRooms?.items?.length > 0 && (
             <Pager
               page={Math.ceil(gameRooms?.start / ItemsPerPage) + 1}
