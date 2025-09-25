@@ -139,6 +139,7 @@ const NextShapeContainer = styled.div`
   padding: 8px;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1000;
 `;
 
 const shapeToBoard = (shape) =>
@@ -167,6 +168,11 @@ export const LocalPlayerGame = ({
 
   return (
     <>
+      {!game.paused && (
+        <NextShapeContainer>
+          <TetrisBoard board={shapeToBoard(nextShape)} noBackground />
+        </NextShapeContainer>
+      )}
       <GameMetaFrame
         {...otherProps}
         header={
@@ -221,11 +227,6 @@ export const LocalPlayerGame = ({
           </>
         }
       />
-      {!game.paused && (
-        <NextShapeContainer>
-          <TetrisBoard board={shapeToBoard(nextShape)} noBackground />
-        </NextShapeContainer>
-      )}
     </>
   );
 };
