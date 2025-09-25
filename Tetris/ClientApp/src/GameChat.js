@@ -54,27 +54,25 @@ const SoundToggle = styled.div`
 `;
 
 const StyledTextInput = styled(TextInput)`
-  background: rgba(255, 255, 255, 0.2) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  border-radius: 12px !important;
-  padding: 12px 16px !important;
-  color: #2d3748 !important;
-  font-weight: 500 !important;
-  transition: all 0.3s ease !important;
-  height: 48px !important;
-  min-width: 200px !important;
-  width: auto !important;
-  flex: 1 !important;
+  display: inherit;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #2d3748;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-color: #667eea;
 
   &:focus {
-    background: rgba(255, 255, 255, 0.3) !important;
-    border-color: #667eea !important;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1) !important;
-    outline: none !important;
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    outline: none;
   }
 
   &::placeholder {
-    color: rgba(45, 55, 72, 0.6) !important;
+    color: rgba(45, 55, 72, 0.6);
   }
 `;
 

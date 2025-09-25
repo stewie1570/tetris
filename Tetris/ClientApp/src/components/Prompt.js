@@ -14,6 +14,7 @@ const StyledTextInput = styled(TextInput)`
   color: #2d3748;
   font-weight: 500;
   transition: all 0.3s ease;
+  border-color: #667eea;
 
   &:focus {
     background: rgba(255, 255, 255, 0.2);
@@ -61,7 +62,7 @@ const ModalShade = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(253, 253, 253, 0.75);
   backdrop-filter: blur(8px);
   z-index: 1040;
 `;

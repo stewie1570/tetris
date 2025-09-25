@@ -136,7 +136,7 @@ const NextShapeContainer = styled.div`
   top: 20px;
   left: 20px;
   opacity: 0.7;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   padding: 8px;
   backdrop-filter: blur(10px);
