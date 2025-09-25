@@ -22,24 +22,35 @@ const StyledNav = styled.nav`
 
   .page-link {
     background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    padding: 8px 12px;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
     color: #2d3748;
-    font-weight: 600;
+    font-weight: 600 !important;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease !important;
     min-width: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    outline: none !important;
 
     &:hover:not(:disabled) {
       background: rgba(255, 255, 255, 0.2);
-      border-color: rgba(255, 255, 255, 0.3);
-      transform: translateY(-1px);
+      transform: translateY(-2px) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
       color: #2d3748;
       text-decoration: none;
+    }
+
+    &:active {
+      transform: translateY(0) !important;
+    }
+
+    &:focus {
+      outline: none !important;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5) !important;
     }
 
     &:disabled {
@@ -51,10 +62,21 @@ const StyledNav = styled.nav`
   }
 
   .page-item.active .page-link {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-color: #667eea;
-    color: white;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border: none !important;
+    color: white !important;
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3) !important;
+  }
+
+  /* Additional focus styling for CommandButton components */
+  button.page-link:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5) !important;
+  }
+
+  .page-item.active button.page-link:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5) !important;
   }
 `;
 

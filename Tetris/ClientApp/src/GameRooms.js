@@ -23,24 +23,37 @@ const BoldGreen = styled.strong`
   padding: 4px 8px;
   border-radius: 6px;
   font-weight: 600;
+  font-size: 0.9rem;
   border: 1px solid rgba(45, 125, 50, 0.3);
 `;
 
 const JoinLink = styled(Link)`
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 12px 24px !important;
+  font-weight: 600 !important;
   color: white !important;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3) !important;
+  transition: all 0.3s ease !important;
   text-decoration: none !important;
-  transition: all 0.3s ease;
   display: inline-block;
+  outline: none !important;
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4) !important;
     color: white !important;
     text-decoration: none !important;
+  }
+
+  &:active {
+    transform: translateY(0) !important;
+  }
+
+  &:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5) !important;
   }
 `;
 

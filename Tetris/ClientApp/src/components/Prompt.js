@@ -28,6 +28,58 @@ const StyledTextInput = styled(TextInput)`
   }
 `;
 
+const OkButton = styled(CommandButton)`
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 12px 24px !important;
+  font-weight: 600 !important;
+  color: white !important;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3) !important;
+  transition: all 0.3s ease !important;
+  outline: none !important;
+
+  &:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4) !important;
+  }
+
+  &:active {
+    transform: translateY(0) !important;
+  }
+
+  &:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5) !important;
+  }
+`;
+
+const CancelButton = styled(CommandButton)`
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 12px !important;
+  padding: 12px 24px !important;
+  font-weight: 600 !important;
+  color: #2d3748 !important;
+  transition: all 0.3s ease !important;
+  outline: none !important;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  &:active {
+    transform: translateY(0) !important;
+  }
+
+  &:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5) !important;
+  }
+`;
+
 export const usePrompt = () => {
   const [isVisible, setVisible] = useMountedOnlyState(false);
   const resolver = useRef(undefined);
@@ -176,41 +228,22 @@ export function StringInput({
         />
       </label>
       <div className="d-flex flex-column-reverse flex-lg-row-reverse align-items-center" style={{ gap: "12px", marginTop: "20px" }}>
-        <CommandButton
+        <OkButton
           className="btn btn-primary space-top ml-lg-2"
-          style={{ 
-            width: "100%",
-            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-            border: "none",
-            borderRadius: "12px",
-            padding: "12px 24px",
-            fontWeight: "600",
-            color: "white",
-            boxShadow: "0 4px 16px rgba(102, 126, 234, 0.3)",
-            transition: "all 0.3s ease"
-          }}
+          style={{ width: "100%" }}
           onClick={() => onSubmitString(filter ? filter(value) : value)}
           runningText={submittingText}
           type="submit"
         >
           Ok
-        </CommandButton>
-        <CommandButton
-          style={{ 
-            width: "100%",
-            background: "rgba(255, 255, 255, 0.2)",
-            border: "1px solid rgba(255, 255, 255, 0.3)",
-            borderRadius: "12px",
-            padding: "12px 24px",
-            fontWeight: "600",
-            color: "#2d3748",
-            transition: "all 0.3s ease"
-          }}
+        </OkButton>
+        <CancelButton
           className="btn btn-light space-top"
+          style={{ width: "100%" }}
           onClick={() => onSubmitString(undefined)}
         >
           Cancel
-        </CommandButton>
+        </CancelButton>
       </div>
     </form>
   );

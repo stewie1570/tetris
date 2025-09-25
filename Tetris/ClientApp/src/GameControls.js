@@ -30,6 +30,10 @@ const ModernButton = styled(CommandButton)`
   &:active {
     transform: translateY(0) !important;
   }
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5) !important;
+  }
 `;
 
 export function GameControls({ onPause: togglePause, game, ...otherProps }) {

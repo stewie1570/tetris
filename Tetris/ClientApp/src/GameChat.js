@@ -22,6 +22,7 @@ const SendButton = styled(CommandButton)`
   min-width: 80px !important;
   height: 48px !important;
   width: auto !important;
+  outline: none !important;
   
   &:hover {
     transform: translateY(-2px) !important;
@@ -30,6 +31,11 @@ const SendButton = styled(CommandButton)`
   
   &:active {
     transform: translateY(0) !important;
+  }
+
+  &:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5) !important;
   }
 `;
 
