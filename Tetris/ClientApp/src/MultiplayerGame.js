@@ -459,7 +459,6 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 header={gameHeader}
                 additionalControls={<>{singlePlayerGameLink}</>}
                 className="col-xs-12 col-md-4"
-                style={{ paddingLeft: "120px" }}
               >
                 <LeaderBoard style={{ height: "100%" }}>
                   Players:
@@ -484,7 +483,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 </LeaderBoard>
               </LocalPlayerGame>
               {game.paused ? (
-                <div className="col-xs-12  offset-md-1 col-md-7">
+                <div className="col-xs-12 col-md-8">
                   {gameContextInfo}
                   <GameChat />
                   <BigStartButton />
