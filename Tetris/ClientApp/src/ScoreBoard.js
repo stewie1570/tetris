@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Spinner } from "./components/AnimatedIcons";
 
 export const LeaderBoard = styled.div`
-  background-color: rgba(245, 245, 245, 0.8);
+  background-color: rgb(156 143 187 / 27%);
   position: absolute;
   top: 0px;
   height: 80%;
@@ -13,7 +13,7 @@ export const LeaderBoard = styled.div`
 `;
 
 const PostMyScore = styled.div`
-  background-color: rgba(245, 245, 245, 0.8);
+  background-color: rgb(156 143 187 / 27%);
   position: absolute;
   bottom: 0px;
   height: 20%;

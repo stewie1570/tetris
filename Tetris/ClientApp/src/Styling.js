@@ -2,7 +2,11 @@ import styled from "styled-components";
 
 const HeaderOne = styled.h1`
   text-align: center;
-  color: black;
+  color: #2d3748;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 export const Header = ({ children, className, ...args }) => (
@@ -26,11 +30,15 @@ export const FixedPositionWarningNotification = styled(Well)`
   top: 1.5rem;
   right: 1.5rem;
   text-align: center;
-  color: red;
-  font-weight: bold;
-  background-color: rgba(255, 255, 255, 0.7);
+  color: #e53e3e;
+  font-weight: 600;
+  background: rgba(229, 62, 62, 0.15);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(229, 62, 62, 0.3);
   padding: 1rem;
   transform: translateX(-50%);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px 0 rgba(229, 62, 62, 0.3);
 `;
 
 export const CenterScreen = styled.div`

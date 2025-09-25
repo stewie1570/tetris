@@ -8,7 +8,7 @@ const LeftButton = styled.button`
     position: fixed;
     left: 0px;
     top: 0px;
-    width: 15%;
+    width: 50%;
     height: 100%;
     opacity: 0.5;
 `;
@@ -35,7 +35,7 @@ const RighButton = styled.button`
     position: fixed;
     top: 0px;
     right: 0px;
-    width: 15%;
+    width: 50%;
     height: 100%;
     opacity: 0.5;
 `;

@@ -31,7 +31,12 @@ export const GameMetaFrame = ({
 }) => {
   return (
     <Container {...otherProps}>
-      <App className="card">
+      <App className="card" style={{
+        background: 'rgba(255, 255, 255, 0.25)',
+        backdropFilter: 'blur(25px)',
+        border: '1px solid rgba(255, 255, 255, 0.3)',
+        boxShadow: '0 12px 40px 0 rgba(31, 38, 135, 0.4)'
+      }}>
         {header}
         <Game className="game">
           {game}

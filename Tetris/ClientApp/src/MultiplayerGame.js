@@ -102,22 +102,22 @@ export const MultiplayerGame = ({ shapeProvider }) => {
         onSubmitString={async (name) => {
           name
             ? await gameHub.invoke
-                .status({
-                  groupId: organizerUserId,
-                  message: {
-                    userId: currentUserId,
-                    name: name,
-                  },
-                })
-                .then(() => setUsername(name))
-                .then(exitModal)
-                .catch(({ message }) =>
-                  window.dispatchEvent(
-                    new CustomEvent("user-error", {
-                      detail: trimHubExceptionMessage(message),
-                    })
-                  )
+              .status({
+                groupId: organizerUserId,
+                message: {
+                  userId: currentUserId,
+                  name: name,
+                },
+              })
+              .then(() => setUsername(name))
+              .then(exitModal)
+              .catch(({ message }) =>
+                window.dispatchEvent(
+                  new CustomEvent("user-error", {
+                    detail: trimHubExceptionMessage(message),
+                  })
                 )
+              )
             : exitModal();
         }}
         submittingText={
@@ -136,29 +136,80 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const otherPlayersLink = `${window.location.protocol}//${window.location.host}/${organizerUserId}`;
 
   const gameContextInfo = (
-    <div className="card" style={{ marginTop: "1rem" }}>
-      <div className="card-header">Connectivity</div>
-      <div className="card-body" style={{ padding: 0 }}>
-        <table className="table" style={{ marginBottom: 0 }}>
+    <div className="card" style={{
+      marginTop: "1rem",
+      overflow: "hidden"
+    }}>
+      <div className="card-header" style={{
+        background: "rgba(255, 255, 255, 0.2)",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
+        fontWeight: "600",
+        color: "#2d3748",
+        borderRadius: "16px 16px 0 0"
+      }}>
+        Connectivity
+      </div>
+      <div className="card-body" style={{
+        padding: 0,
+        overflow: "hidden"
+      }}>
+        <table className="table" style={{
+          marginBottom: 0,
+          border: "none",
+          borderRadius: "0 0 16px 16px",
+          overflow: "hidden"
+        }}>
           <thead>
             <tr>
-              <th colSpan={2}>
+              <th colSpan={2} style={{
+                border: "none",
+                background: "rgba(255, 255, 255, 0.1)",
+                color: "#2d3748",
+                fontWeight: "600",
+                padding: "16px",
+                borderRadius: "0"
+              }}>
                 Other players can join via the Code or URL below:
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th>Code</th>
-              <td>
+              <th style={{
+                border: "none",
+                background: "rgba(255, 255, 255, 0.1)",
+                color: "#4a5568",
+                fontWeight: "600",
+                padding: "12px 16px",
+                width: "20%",
+                borderRadius: "0"
+              }}>Code</th>
+              <td style={{
+                border: "none",
+                padding: "12px 16px",
+                color: "#2d3748",
+                borderRadius: "0"
+              }}>
                 {organizerUserId}
                 <br />
                 <CopyButton text={organizerUserId} />
               </td>
             </tr>
             <tr>
-              <th>URL</th>
-              <td>
+              <th style={{
+                border: "none",
+                background: "rgba(255, 255, 255, 0.1)",
+                color: "#4a5568",
+                fontWeight: "600",
+                padding: "12px 16px",
+                borderRadius: "0 0 0 16px"
+              }}>URL</th>
+              <td style={{
+                border: "none",
+                padding: "12px 16px",
+                color: "#2d3748",
+                borderRadius: "0 0 16px 0"
+              }}>
                 {otherPlayersLink}
                 <br />
                 <CopyButton text={otherPlayersLink} />
@@ -173,10 +224,38 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const singlePlayerGameLink = (
     <>
       <Link
-        style={{ display: "block" }}
+        style={{
+          display: "inline-block",
+          color: "#2d3748",
+          fontWeight: "700",
+          textDecoration: "none",
+          padding: "12px 24px",
+          background: "rgba(255, 255, 255, 0.25)",
+          borderRadius: "12px",
+          border: "1px solid rgba(255, 255, 255, 0.3)",
+          backdropFilter: "blur(20px)",
+          transition: "all 0.3s ease",
+          margin: "1rem auto",
+          textAlign: "center",
+          minWidth: "200px",
+          maxWidth: "300px",
+          boxShadow: "0 4px 16px rgba(31, 38, 135, 0.2)"
+        }}
         className="m-3"
         onClick={() => setGame((game) => ({ ...game, paused: false }))}
         to="/"
+        onMouseEnter={(e) => {
+          e.target.style.background = "rgba(255, 255, 255, 0.35)";
+          e.target.style.transform = "translateY(-2px)";
+          e.target.style.boxShadow = "0 8px 32px rgba(31, 38, 135, 0.4)";
+          e.target.style.color = "#1a202c";
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = "rgba(255, 255, 255, 0.25)";
+          e.target.style.transform = "translateY(0)";
+          e.target.style.boxShadow = "0 4px 16px rgba(31, 38, 135, 0.2)";
+          e.target.style.color = "#2d3748";
+        }}
       >
         Single Player Game
       </Link>
@@ -186,7 +265,23 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const initiallyDisabledPlayerGameLink = (
     <>
       <InitiallyDisabledLink
-        style={{ display: "block" }}
+        style={{
+          display: "inline-block",
+          color: "#2d3748",
+          fontWeight: "700",
+          textDecoration: "none",
+          padding: "12px 24px",
+          background: "rgba(255, 255, 255, 0.25)",
+          borderRadius: "12px",
+          border: "1px solid rgba(255, 255, 255, 0.3)",
+          backdropFilter: "blur(20px)",
+          transition: "all 0.3s ease",
+          margin: "1rem auto",
+          textAlign: "center",
+          minWidth: "200px",
+          maxWidth: "300px",
+          boxShadow: "0 4px 16px rgba(31, 38, 135, 0.2)"
+        }}
         className="m-3"
         onClick={() => setGame((game) => ({ ...game, paused: false }))}
         to="/"
@@ -214,47 +309,47 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
   const results = gameResults
     ? () => (
-        <Centered>
-          <Header style={{ width: "90%", display: "inline-block" }}>
-            Game Over
-          </Header>
-          <div
-            className="card mb-3"
-            style={{ display: "inline-block", width: "90%", textAlign: "left" }}
-          >
-            <div className="card-header">Results</div>
-            <div className="card-body p-0">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Score</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Object.keys(otherPlayers)
-                    .filter(
-                      (userId) =>
-                        !otherPlayers[userId].disconnected ||
-                        otherPlayers[userId].score
-                    )
-                    .map((userId) => (
-                      <tr key={userId}>
-                        <td>
-                          {otherPlayers[userId].name ?? "[Un-named Player]"}
-                        </td>
-                        <td>{gameResults[userId].score}</td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
+      <Centered>
+        <Header style={{ width: "90%", display: "inline-block" }}>
+          Game Over
+        </Header>
+        <div
+          className="card mb-3"
+          style={{ display: "inline-block", width: "90%", textAlign: "left" }}
+        >
+          <div className="card-header">Results</div>
+          <div className="card-body p-0">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.keys(otherPlayers)
+                  .filter(
+                    (userId) =>
+                      !otherPlayers[userId].disconnected ||
+                      otherPlayers[userId].score
+                  )
+                  .map((userId) => (
+                    <tr key={userId}>
+                      <td>
+                        {otherPlayers[userId].name ?? "[Un-named Player]"}
+                      </td>
+                      <td>{gameResults[userId].score}</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
           </div>
-          <GameChat style={{ width: "90%", display: "inline-block" }} />
-          <div>{initiallyDisabledPlayerGameLink}</div>
-          <div>{resetButton}</div>
-        </Centered>
-      )
+        </div>
+        <GameChat style={{ width: "90%", display: "inline-block" }} />
+        <div>{initiallyDisabledPlayerGameLink}</div>
+        <div>{resetButton}</div>
+      </Centered>
+    )
     : undefined;
 
   const retryButton = (
@@ -285,41 +380,41 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const waitingForOrganizer =
     !organizerConnectionStatus && !isOrganizer
       ? () => (
-          <CenterScreen>
-            <Header>Waiting for organizer...</Header>
-            <Centered>
-              <div>{singlePlayerGameLink}</div>
-              <div>{retryButton}</div>
-            </Centered>
-          </CenterScreen>
-        )
+        <CenterScreen>
+          <Header>Waiting for organizer...</Header>
+          <Centered>
+            <div>{singlePlayerGameLink}</div>
+            <div>{retryButton}</div>
+          </Centered>
+        </CenterScreen>
+      )
       : undefined;
 
   const organizerDisconnected =
     organizerConnectionStatus === "disconnected" && !isOrganizer && game.paused
       ? () => (
-          <CenterScreen>
-            <Header>Organizer has disconnected.</Header>
-            <Centered>
-              <div>{singlePlayerGameLink}</div>
-              <div>{retryButton}</div>
-            </Centered>
-          </CenterScreen>
-        )
+        <CenterScreen>
+          <Header>Organizer has disconnected.</Header>
+          <Centered>
+            <div>{singlePlayerGameLink}</div>
+            <div>{retryButton}</div>
+          </Centered>
+        </CenterScreen>
+      )
       : undefined;
 
   const userIsDisconnected =
     isConnected === undefined
       ? () => (
-          <CenterScreen>
-            <Header>
-              <Spinner /> Connecting to game server...
-            </Header>
-            <Centered>
-              <div>{singlePlayerGameLink}</div>
-            </Centered>
-          </CenterScreen>
-        )
+        <CenterScreen>
+          <Header>
+            <Spinner /> Connecting to game server...
+          </Header>
+          <Centered>
+            <div>{singlePlayerGameLink}</div>
+          </Centered>
+        </CenterScreen>
+      )
       : undefined;
 
   const gameHeader = (

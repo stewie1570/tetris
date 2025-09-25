@@ -1,35 +1,46 @@
 h1 {
-  color: white;
+  color: #2d3748;
+  font-weight: 700;
+  letter-spacing: -0.025em;
 }
 
 h2 {
-  color: white
+  color: #2d3748;
+  font-weight: 600;
+  letter-spacing: -0.025em;
 }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
-
-  /* Gradient fallback */
-  background: radial-gradient(#fff,#d3d3e3,#fff);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  
+  /* Modern gradient background */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   background-attachment: fixed;
-
-  /* Image background (on top of gradient) */
-  background-image: url("../public/wallpaper.jpg");
-  background-size: cover;
-  background-position: center;
+  min-height: 100vh;
 }
 
 a {
-  color: black;
-  font-weight: bold;
+  color: #667eea;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #764ba2;
   text-decoration: underline;
 }
 
 .btn {
   font-weight: inherit;
   text-decoration: inherit;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
 }
 
 .space-top-right {
@@ -45,9 +56,84 @@ a {
 }
 
 .card {
-  background-color: rgba(255, 255, 255, 0.74);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
 }
 
 .bold {
   font-weight: bold;
+}
+
+/* Modern table styling */
+.table {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  border: none;
+  min-width: 100%;
+}
+
+@media (max-width: 767px) {
+  .table {
+    font-size: 0.9rem;
+  }
+}
+
+.table thead th {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #2d3748;
+  font-weight: 600;
+  padding: 16px;
+}
+
+.table tbody td {
+  border: none;
+  padding: 12px 16px;
+  color: #2d3748;
+}
+
+.table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Container improvements */
+.container {
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 2rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    padding: 2rem;
+    max-width: 1400px;
+  }
+}
+
+/* Enhanced spacing */
+.mt-3 {
+  margin-top: 2rem !important;
+}
+
+.mb-3 {
+  margin-bottom: 2rem !important;
 }
