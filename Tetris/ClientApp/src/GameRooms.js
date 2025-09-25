@@ -61,6 +61,12 @@ const Statuses = [
   <BoldRed>Playing</BoldRed>,
   <BoldGreen>Waiting for players</BoldGreen>,
 ];
+
+const Status = props =>
+  props.status === 0
+    ? <BoldRed {...props}>Playing</BoldRed>
+    : <BoldGreen {...props}>Waiting for players</BoldGreen>;
+
 const ItemsPerPage = 5;
 
 export const GameRooms = () => {
@@ -123,7 +129,9 @@ export const GameRooms = () => {
                       <td style={{ verticalAlign: 'middle' }}>
                         <JoinLink to={`/${room.organizerId}`}>Join</JoinLink>
                       </td>
-                      <td style={{ whiteSpace: 'nowrap', verticalAlign: 'middle' }}>{Statuses[room.status]}</td>
+                      <td style={{ whiteSpace: 'nowrap', verticalAlign: 'middle' }}>
+                        <Status status={room.status} />
+                      </td>
                       <td style={{ verticalAlign: 'middle' }}>
                         {Object.values(room.players)
                           .map((player) => player.username ?? "[Un-named]")
@@ -168,7 +176,8 @@ export const GameRooms = () => {
                       Room {room.organizerId}
                     </div>
                     <div style={{ marginBottom: '2px', fontSize: '0.9rem' }}>
-                      <strong style={{ color: '#4a5568' }}>Status:</strong> {Statuses[room.status]}
+                      <strong style={{ color: '#4a5568' }}>Status:</strong>
+                      <Status status={room.status} style={{ display: 'block' }} />
                     </div>
                     <div style={{ fontSize: '0.9rem' }}>
                       <strong style={{ color: '#4a5568' }}>Players:</strong> {Object.values(room.players)
