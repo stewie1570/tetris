@@ -16,6 +16,8 @@ import { useIsMobile } from "./hooks/useIsMobile";
 import { Spinner } from "./components/AnimatedIcons";
 import styled from "styled-components";
 import { TetrisBoard } from "./components/TetrisBoard";
+import { MobileControls } from "./components/MobileControls";
+import { useKeyPress } from "./hooks/useKeyPress";
 
 export const initialGameState = {
   board: emptyBoard,
@@ -166,8 +168,16 @@ export const LocalPlayerGame = ({
     nextShapeProvider,
   } = useLocalPlayerGameContext();
 
+  const keyPress = useKeyPress(game, setGame);
+
   return (
     <>
+      {!game.paused && game.mobile && (
+        <MobileControls 
+          onPause={!otherPlayers && (() => pause({ showScoreBoard: !otherPlayers }))} 
+          onClick={(keyCode) => keyPress({ keyCode })} 
+        />
+      )}
       {!game.paused && (
         <NextShapeContainer>
           <TetrisBoard board={shapeToBoard(nextShape)} noBackground />
