@@ -8,7 +8,7 @@ export const ControlLegend = () => {
     const { game } = useLocalPlayerGameContext();
     const isMobile = game?.mobile;
 
-    return !isMobile && <div className="card mt-3 mb-3">
+    return !isMobile && <div className="card mb-3">
         <div className="card-body">
             <h5 className="card-title" style={{ 
                 color: '#2d3748', 

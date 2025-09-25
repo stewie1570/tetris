@@ -137,7 +137,6 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
   const gameContextInfo = (
     <div className="card" style={{
-      marginTop: "1rem",
       overflow: "hidden"
     }}>
       <div className="card-header" style={{
@@ -453,7 +452,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
           waitingForOrganizer?.() ||
           organizerDisconnected?.() ||
           results?.() || (
-            <div className="row" style={{ margin: "auto" }}>
+            <div className="row" style={{ margin: "1rem auto auto auto" }}>
               <LocalPlayerGame
                 shapeProvider={shapeProvider}
                 header={gameHeader}
