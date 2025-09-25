@@ -211,30 +211,36 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     <>
       <Link
         style={{ 
-          display: "block",
-          color: "#667eea",
-          fontWeight: "600",
+          display: "inline-block",
+          color: "#2d3748",
+          fontWeight: "700",
           textDecoration: "none",
           padding: "12px 24px",
-          background: "rgba(255, 255, 255, 0.15)",
+          background: "rgba(255, 255, 255, 0.25)",
           borderRadius: "12px",
-          border: "1px solid rgba(255, 255, 255, 0.2)",
+          border: "1px solid rgba(255, 255, 255, 0.3)",
           backdropFilter: "blur(20px)",
           transition: "all 0.3s ease",
-          margin: "1rem"
+          margin: "1rem auto",
+          textAlign: "center",
+          minWidth: "200px",
+          maxWidth: "300px",
+          boxShadow: "0 4px 16px rgba(31, 38, 135, 0.2)"
         }}
         className="m-3"
         onClick={() => setGame((game) => ({ ...game, paused: false }))}
         to="/"
         onMouseEnter={(e) => {
-          e.target.style.background = "rgba(255, 255, 255, 0.2)";
+          e.target.style.background = "rgba(255, 255, 255, 0.35)";
           e.target.style.transform = "translateY(-2px)";
-          e.target.style.boxShadow = "0 8px 32px rgba(102, 126, 234, 0.3)";
+          e.target.style.boxShadow = "0 8px 32px rgba(31, 38, 135, 0.4)";
+          e.target.style.color = "#1a202c";
         }}
         onMouseLeave={(e) => {
-          e.target.style.background = "rgba(255, 255, 255, 0.15)";
+          e.target.style.background = "rgba(255, 255, 255, 0.25)";
           e.target.style.transform = "translateY(0)";
-          e.target.style.boxShadow = "none";
+          e.target.style.boxShadow = "0 4px 16px rgba(31, 38, 135, 0.2)";
+          e.target.style.color = "#2d3748";
         }}
       >
         Single Player Game
@@ -246,17 +252,21 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     <>
       <InitiallyDisabledLink
         style={{ 
-          display: "block",
-          color: "#667eea",
-          fontWeight: "600",
+          display: "inline-block",
+          color: "#2d3748",
+          fontWeight: "700",
           textDecoration: "none",
           padding: "12px 24px",
-          background: "rgba(255, 255, 255, 0.15)",
+          background: "rgba(255, 255, 255, 0.25)",
           borderRadius: "12px",
-          border: "1px solid rgba(255, 255, 255, 0.2)",
+          border: "1px solid rgba(255, 255, 255, 0.3)",
           backdropFilter: "blur(20px)",
           transition: "all 0.3s ease",
-          margin: "1rem"
+          margin: "1rem auto",
+          textAlign: "center",
+          minWidth: "200px",
+          maxWidth: "300px",
+          boxShadow: "0 4px 16px rgba(31, 38, 135, 0.2)"
         }}
         className="m-3"
         onClick={() => setGame((game) => ({ ...game, paused: false }))}
