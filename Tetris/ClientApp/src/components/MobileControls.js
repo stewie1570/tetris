@@ -10,7 +10,7 @@ const LeftButton = styled.button`
     top: 0px;
     width: 50%;
     height: 100%;
-    opacity: 0.5;
+    opacity: 0.25;
 `;
 
 const TopButton = styled.button`
@@ -19,7 +19,7 @@ const TopButton = styled.button`
     top: 0px;
     width: 70%;
     height: 15%;
-    opacity: 0.5;
+    opacity: 0.25;
 `;
 
 const TopStackedButton = styled.button`
@@ -28,7 +28,7 @@ const TopStackedButton = styled.button`
     top: 15%;
     width: 70%;
     height: 15%;
-    opacity: 0.5;
+    opacity: 0.25;
 `;
 
 const RighButton = styled.button`
@@ -37,7 +37,7 @@ const RighButton = styled.button`
     right: 0px;
     width: 50%;
     height: 100%;
-    opacity: 0.5;
+    opacity: 0.25;
 `;
 
 const BottomStackedButton = styled.button`
@@ -46,7 +46,7 @@ const BottomStackedButton = styled.button`
     bottom: 15%;
     width: 70%;
     height: 15%;
-    opacity: 0.5;
+    opacity: 0.25;
 `;
 
 const BottomButton = styled.button`
@@ -55,7 +55,7 @@ const BottomButton = styled.button`
     bottom: 0px;
     width: 70%;
     height: 15%;
-    opacity: 0.5;
+    opacity: 0.25;
 `;
 
 export function MobileControls(props) {

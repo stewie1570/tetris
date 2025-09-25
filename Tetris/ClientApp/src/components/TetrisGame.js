@@ -2,10 +2,8 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { flushSync } from 'react-dom';
 import { TetrisBoard } from "./TetrisBoard";
 import { tetrisBoardFrom } from "../domain/serialization";
-import { move, rotate } from "../domain/motion";
-import { iterate, iterateUntilInactive } from "../domain/iteration";
-import { keys } from "../core/constants";
-import { MobileControls } from "./MobileControls";
+import { iterate } from "../domain/iteration";
+import { useKeyPress } from "../hooks/useKeyPress";
 
 export const shapes = [
   [
@@ -110,26 +108,7 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }
     }
   }, []);
 
-  const keyPress = useCallback((event) => {
-    const { keyCode } = event;
-    const processKeyCommand = ({ keyCode }) => {
-      const { board } = instance.current.game;
-      const moves = {
-        [keys.left]: () => move({ board, to: { x: -1 } }),
-        [keys.right]: () => move({ board, to: { x: 1 } }),
-        [keys.down]: () => move({ board, to: { y: 1 } }),
-        [keys.space]: () => iterateUntilInactive({ board }),
-        [keys.up]: () => rotate({ board }),
-      };
-      const selectedMove = moves[keyCode];
-      selectedMove && event.preventDefault?.();
-      selectedMove && flushSync(() => {
-        instance.current.onChange(game => ({ ...game, board: selectedMove() }));
-      });
-    };
-
-    return !instance.current.game.paused && processKeyCommand({ keyCode });
-  }, []);
+  const keyPress = useKeyPress(instance.current.game, instance.current.onChange);
 
   useEffect(() => {
     window.addEventListener("keydown", keyPress, false);
@@ -143,9 +122,6 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }
 
   return (
     <div>
-      {!game.paused && game.mobile && (
-        <MobileControls onPause={onPause} onClick={(keyCode) => keyPress({ keyCode })} />
-      )}
       <TetrisBoard board={game.board} explodingRows={explodingRows} />
     </div>
   );
