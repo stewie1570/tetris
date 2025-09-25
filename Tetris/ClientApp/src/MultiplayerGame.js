@@ -136,19 +136,28 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const otherPlayersLink = `${window.location.protocol}//${window.location.host}/${organizerUserId}`;
 
   const gameContextInfo = (
-    <div className="card" style={{ marginTop: "1rem" }}>
+    <div className="card" style={{ 
+      marginTop: "1rem",
+      overflow: "hidden"
+    }}>
       <div className="card-header" style={{ 
         background: "rgba(255, 255, 255, 0.2)", 
         borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
         fontWeight: "600",
-        color: "#2d3748"
+        color: "#2d3748",
+        borderRadius: "16px 16px 0 0"
       }}>
         Connectivity
       </div>
-      <div className="card-body" style={{ padding: 0 }}>
+      <div className="card-body" style={{ 
+        padding: 0,
+        overflow: "hidden"
+      }}>
         <table className="table" style={{ 
           marginBottom: 0,
-          border: "none"
+          border: "none",
+          borderRadius: "0 0 16px 16px",
+          overflow: "hidden"
         }}>
           <thead>
             <tr>
@@ -157,7 +166,8 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 background: "rgba(255, 255, 255, 0.1)",
                 color: "#2d3748",
                 fontWeight: "600",
-                padding: "16px"
+                padding: "16px",
+                borderRadius: "0"
               }}>
                 Other players can join via the Code or URL below:
               </th>
@@ -171,12 +181,14 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 color: "#4a5568",
                 fontWeight: "600",
                 padding: "12px 16px",
-                width: "20%"
+                width: "20%",
+                borderRadius: "0"
               }}>Code</th>
               <td style={{ 
                 border: "none",
                 padding: "12px 16px",
-                color: "#2d3748"
+                color: "#2d3748",
+                borderRadius: "0"
               }}>
                 {organizerUserId}
                 <br />
@@ -189,12 +201,14 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 background: "rgba(255, 255, 255, 0.1)",
                 color: "#4a5568",
                 fontWeight: "600",
-                padding: "12px 16px"
+                padding: "12px 16px",
+                borderRadius: "0 0 0 16px"
               }}>URL</th>
               <td style={{ 
                 border: "none",
                 padding: "12px 16px",
-                color: "#2d3748"
+                color: "#2d3748",
+                borderRadius: "0 0 16px 0"
               }}>
                 {otherPlayersLink}
                 <br />
