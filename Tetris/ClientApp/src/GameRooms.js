@@ -9,11 +9,39 @@ import { MultiplayerLinks } from "./MultiplayerLinks";
 import { Spinner } from "./components/AnimatedIcons";
 
 const BoldRed = styled.strong`
-  color: red;
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.2);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  border: 1px solid rgba(255, 107, 107, 0.3);
 `;
 
 const BoldGreen = styled.strong`
-  color: green;
+  color: #2d7d32;
+  background: rgba(45, 125, 50, 0.2);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  border: 1px solid rgba(45, 125, 50, 0.3);
+`;
+
+const JoinLink = styled(Link)`
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white !important;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: all 0.3s ease;
+  display: inline-block;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    color: white !important;
+    text-decoration: none !important;
+  }
 `;
 
 const Statuses = [
@@ -57,13 +85,13 @@ export const GameRooms = () => {
       <div className="card-body">
         <h5 className="card-title">Game Rooms</h5>
         <div className="card-text">
-          <table className="table">
+          <table className="table" style={{ tableLayout: 'fixed' }}>
             <thead>
               <tr>
-                <th></th>
-                <th>Status</th>
-                <th>Players</th>
-                <th>Code</th>
+                <th style={{ width: '80px' }}></th>
+                <th style={{ width: '140px' }}>Status</th>
+                <th style={{ width: '120px' }}>Players</th>
+                <th style={{ width: '80px' }}>Code</th>
               </tr>
             </thead>
             <tbody>
@@ -79,9 +107,9 @@ export const GameRooms = () => {
                 gameRooms?.items?.map((room) => (
                   <tr key={room.organizerId}>
                     <td>
-                      <Link to={`/${room.organizerId}`}>Join</Link>
+                      <JoinLink to={`/${room.organizerId}`}>Join</JoinLink>
                     </td>
-                    <td>{Statuses[room.status]}</td>
+                    <td style={{ whiteSpace: 'nowrap' }}>{Statuses[room.status]}</td>
                     <td>
                       {Object.values(room.players)
                         .map((player) => player.username ?? "[Un-named]")

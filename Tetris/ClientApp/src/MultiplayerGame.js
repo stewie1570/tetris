@@ -137,28 +137,65 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
   const gameContextInfo = (
     <div className="card" style={{ marginTop: "1rem" }}>
-      <div className="card-header">Connectivity</div>
+      <div className="card-header" style={{ 
+        background: "rgba(255, 255, 255, 0.2)", 
+        borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
+        fontWeight: "600",
+        color: "#2d3748"
+      }}>
+        Connectivity
+      </div>
       <div className="card-body" style={{ padding: 0 }}>
-        <table className="table" style={{ marginBottom: 0 }}>
+        <table className="table" style={{ 
+          marginBottom: 0,
+          border: "none"
+        }}>
           <thead>
             <tr>
-              <th colSpan={2}>
+              <th colSpan={2} style={{ 
+                border: "none",
+                background: "rgba(255, 255, 255, 0.1)",
+                color: "#2d3748",
+                fontWeight: "600",
+                padding: "16px"
+              }}>
                 Other players can join via the Code or URL below:
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th>Code</th>
-              <td>
+              <th style={{ 
+                border: "none",
+                background: "rgba(255, 255, 255, 0.1)",
+                color: "#4a5568",
+                fontWeight: "600",
+                padding: "12px 16px",
+                width: "20%"
+              }}>Code</th>
+              <td style={{ 
+                border: "none",
+                padding: "12px 16px",
+                color: "#2d3748"
+              }}>
                 {organizerUserId}
                 <br />
                 <CopyButton text={organizerUserId} />
               </td>
             </tr>
             <tr>
-              <th>URL</th>
-              <td>
+              <th style={{ 
+                border: "none",
+                background: "rgba(255, 255, 255, 0.1)",
+                color: "#4a5568",
+                fontWeight: "600",
+                padding: "12px 16px"
+              }}>URL</th>
+              <td style={{ 
+                border: "none",
+                padding: "12px 16px",
+                color: "#2d3748"
+              }}>
                 {otherPlayersLink}
                 <br />
                 <CopyButton text={otherPlayersLink} />
@@ -173,10 +210,32 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const singlePlayerGameLink = (
     <>
       <Link
-        style={{ display: "block" }}
+        style={{ 
+          display: "block",
+          color: "#667eea",
+          fontWeight: "600",
+          textDecoration: "none",
+          padding: "12px 24px",
+          background: "rgba(255, 255, 255, 0.15)",
+          borderRadius: "12px",
+          border: "1px solid rgba(255, 255, 255, 0.2)",
+          backdropFilter: "blur(20px)",
+          transition: "all 0.3s ease",
+          margin: "1rem"
+        }}
         className="m-3"
         onClick={() => setGame((game) => ({ ...game, paused: false }))}
         to="/"
+        onMouseEnter={(e) => {
+          e.target.style.background = "rgba(255, 255, 255, 0.2)";
+          e.target.style.transform = "translateY(-2px)";
+          e.target.style.boxShadow = "0 8px 32px rgba(102, 126, 234, 0.3)";
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = "rgba(255, 255, 255, 0.15)";
+          e.target.style.transform = "translateY(0)";
+          e.target.style.boxShadow = "none";
+        }}
       >
         Single Player Game
       </Link>
@@ -186,7 +245,19 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const initiallyDisabledPlayerGameLink = (
     <>
       <InitiallyDisabledLink
-        style={{ display: "block" }}
+        style={{ 
+          display: "block",
+          color: "#667eea",
+          fontWeight: "600",
+          textDecoration: "none",
+          padding: "12px 24px",
+          background: "rgba(255, 255, 255, 0.15)",
+          borderRadius: "12px",
+          border: "1px solid rgba(255, 255, 255, 0.2)",
+          backdropFilter: "blur(20px)",
+          transition: "all 0.3s ease",
+          margin: "1rem"
+        }}
         className="m-3"
         onClick={() => setGame((game) => ({ ...game, paused: false }))}
         to="/"

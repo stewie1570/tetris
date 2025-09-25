@@ -8,19 +8,26 @@ const Square = styled.div`
   width: 29.3px;
   height: 29.3px;
   margin: 0;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
 `;
 
 const Active = styled(Square)`
-  background-color: #00ff00;
+  background: linear-gradient(145deg, #00ff88, #00cc6a);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.4), inset 0 1px 3px rgba(0, 0, 0, 0.3);
 `;
 const Inactive = styled(Square)`
-  background-color: #22f;
+  background: linear-gradient(145deg, #667eea, #764ba2);
+  box-shadow: 0 0 8px rgba(102, 126, 234, 0.3), inset 0 1px 3px rgba(0, 0, 0, 0.3);
 `;
 const ActiveEmpty = styled(Square)`
-  background-color: #111;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
 `;
 const InactiveEmpty = styled(Square)`
-  background-color: #222;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 `;
 
 const ExplodingInactive = styled(Inactive)`
@@ -37,6 +44,15 @@ const Squares = {
 
 const TabelCell = styled.td`
   padding: 0;
+`;
+
+const GameBoard = styled.table`
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 `;
 
 export function TetrisBoard({
@@ -59,7 +75,7 @@ export function TetrisBoard({
   };
 
   return (
-    <table style={noBackground ? undefined : { backgroundColor: "#000" }}>
+    <GameBoard style={noBackground ? { background: 'transparent', boxShadow: 'none', border: 'none', padding: 0 } : undefined}>
       <tbody>
         {board.map((row, y) => (
           <tr key={y} data-testid="row">
@@ -71,6 +87,6 @@ export function TetrisBoard({
           </tr>
         ))}
       </tbody>
-    </table>
+    </GameBoard>
   );
 }

@@ -131,9 +131,14 @@ export const [SinglePlayerGameContextProvider, useLocalPlayerGameContext] =
 
 const NextShapeContainer = styled.div`
   position: fixed;
-  top: 0;
-  left: 0;
-  opacity: 0.5;
+  top: 20px;
+  left: 20px;
+  opacity: 0.7;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 8px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 `;
 
 const shapeToBoard = (shape) =>
@@ -172,7 +177,13 @@ export const LocalPlayerGame = ({
         header={
           <>
             {header}
-            <p>
+            <p style={{ 
+              fontSize: '1.2rem', 
+              fontWeight: '600', 
+              color: '#2d3748',
+              margin: '8px 0',
+              textAlign: 'center'
+            }}>
               {(isOnlyPlayer || !game.paused) &&
                 `Score: ${game.score}` +
                   (game.oldScore ? ` (Previous: ${game.oldScore})` : "")}

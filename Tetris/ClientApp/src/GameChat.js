@@ -9,8 +9,28 @@ import { StringInput } from "./components/Prompt";
 import { Spinner } from "./components/AnimatedIcons";
 
 const SendButton = styled(CommandButton)`
-  white-space: nowrap;
-  margin-left: 1rem;
+  white-space: nowrap !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 12px 20px !important;
+  font-weight: 600 !important;
+  color: white !important;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3) !important;
+  transition: all 0.3s ease !important;
+  flex-shrink: 0 !important;
+  min-width: 80px !important;
+  height: 48px !important;
+  width: auto !important;
+  
+  &:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4) !important;
+  }
+  
+  &:active {
+    transform: translateY(0) !important;
+  }
 `;
 
 const ChatCard = styled.div`
@@ -30,6 +50,31 @@ const SoundToggle = styled.div`
   label {
     margin: 0;
     line-height: 1;
+  }
+`;
+
+const StyledTextInput = styled(TextInput)`
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 12px !important;
+  padding: 12px 16px !important;
+  color: #2d3748 !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+  height: 48px !important;
+  min-width: 200px !important;
+  width: auto !important;
+  flex: 1 !important;
+
+  &:focus {
+    background: rgba(255, 255, 255, 0.3) !important;
+    border-color: #667eea !important;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1) !important;
+    outline: none !important;
+  }
+
+  &::placeholder {
+    color: rgba(45, 55, 72, 0.6) !important;
   }
 `;
 
@@ -142,22 +187,35 @@ export function GameChat(props) {
           ))}
         </div>
         <form>
-          <div className="input-group mb-3 pt-1">
-            <TextInput
-              className="form-control"
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '12px',
+            marginBottom: '1rem',
+            paddingTop: '0.5rem'
+          }}>
+            <StyledTextInput
               value={messageText}
               onChange={setMessageText}
+              placeholder="Type your message..."
+              style={{ 
+                flex: 1,
+                height: '48px',
+                minWidth: '200px'
+              }}
             />
-            <div>
-              <SendButton
-                className="btn btn-primary"
-                onClick={sendMessage}
-                runningText={<><Spinner /> Sending...</>}
-                type="submit"
-              >
-                Send
-              </SendButton>
-            </div>
+            <SendButton
+              onClick={sendMessage}
+              runningText={<><Spinner /> Sending...</>}
+              type="submit"
+              style={{
+                height: '48px',
+                minWidth: '80px',
+                padding: '12px 20px'
+              }}
+            >
+              Send
+            </SendButton>
           </div>
         </form>
       </div>
