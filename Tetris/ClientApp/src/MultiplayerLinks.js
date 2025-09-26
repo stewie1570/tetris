@@ -1,7 +1,9 @@
 import React from "react";
 import { useLocalPlayerGameContext } from "./LocalPlayerGame";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { StringInput } from "./components/Prompt";
+import { CommandButton } from "./components/CommandButton";
+import { LinkButton } from "./components/LinkButton";
 
 export const MultiplayerLinks = () => {
   const { prompt, pause, game } = useLocalPlayerGameContext();
@@ -26,21 +28,18 @@ export const MultiplayerLinks = () => {
   return (
     <>
       <div className="d-flex flex-column-reverse flex-lg-row-reverse align-items-center">
-        <Link
-          style={{ width: "100%" }}
+        <LinkButton
           className="btn btn-success space-top ml-sm-2"
           to={`/host`}>
           Host Multiplayer Game
-        </Link>
+        </LinkButton>
 
-        <button
-          type="button"
-          style={{ width: "100%" }}
+        <CommandButton
           className="btn btn-success space-top ml-sm-2"
           onClick={goToMultiplayerGame}
         >
           Join Multiplayer Game
-        </button>
+        </CommandButton>
       </div>
     </>
   );
