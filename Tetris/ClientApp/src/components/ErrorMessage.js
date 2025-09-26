@@ -58,6 +58,7 @@ export const ErrorMessage = () => {
         className="modal-dialog"
         ref={errorContainer}
         role="document"
+        style={{ paddingTop: "2rem" }}
       >
         <div className="modal-content">
           <ErrorModalHeader className="modal-header">
