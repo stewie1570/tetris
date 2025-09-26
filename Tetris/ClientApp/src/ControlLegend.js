@@ -17,7 +17,7 @@ export const ControlLegend = () => {
                 marginBottom: '1rem'
             }}>🎮 Controls</h5>
             <div className="card-text">
-                <table className="table">
+                <table className="table" style={{ borderSpacing: '0 8px', borderCollapse: 'separate' }}>
                     <thead>
                         <tr>
                             <th style={{ color: '#4a5568', fontWeight: '600' }}>Key</th>

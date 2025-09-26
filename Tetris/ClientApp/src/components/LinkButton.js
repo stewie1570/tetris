@@ -1,10 +1,12 @@
-import React, { forwardRef } from "react";
-import { useLoadingState } from "leaf-validator";
-import { withTemporaryDisable } from "./HOCs/withTemporaryDisable";
+import React from "react";
+import { Link } from "react-router-dom";
 import styled from 'styled-components';
 
-const StyledCommandButton = styled.button`
+const StyledLink = styled(Link)`
   width: ${props => props.style?.width || '90%'};
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
   
   /* Apply modern styling only for btn-primary and btn-success, not btn-link */
   ${props => !props.className?.includes('btn-link') && `
@@ -32,6 +34,8 @@ const StyledCommandButton = styled.button`
   /* Hover effects only for non-link buttons */
   ${props => !props.className?.includes('btn-link') && `
     &:hover {
+      color: white !important;
+      text-decoration: none !important;
       transform: translateY(-2px) !important;
       box-shadow: ${props.className?.includes('btn-success') 
         ? '0 6px 20px rgba(72, 187, 120, 0.4)'
@@ -52,25 +56,4 @@ const StyledCommandButton = styled.button`
   `}
 `;
 
-const DefaultCommandButton = forwardRef(
-  ({ onClick, runningText, type, children, ...otherProps }, ref) => {
-    const [isRunning, showRunningWhile] = useLoadingState();
-
-    const click = async (source) => {
-      (await onClick) && !isRunning && showRunningWhile(onClick(source));
-    };
-
-    return (
-      <StyledCommandButton
-        {...otherProps}
-        ref={ref}
-        onClick={click}
-        type={type || "button"}
-      >
-        {isRunning && runningText ? runningText : children}
-      </StyledCommandButton>
-    );
-  }
-);
-
-export const CommandButton = withTemporaryDisable(DefaultCommandButton);
+export const LinkButton = StyledLink;
