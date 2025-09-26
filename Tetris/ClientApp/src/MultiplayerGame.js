@@ -224,7 +224,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     <>
       <Link
         style={{
-          display: "inline-block",
+          display: "block",
           color: "#2d3748",
           fontWeight: "700",
           textDecoration: "none",
@@ -236,8 +236,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
           transition: "all 0.3s ease",
           margin: "1rem auto",
           textAlign: "center",
-          minWidth: "200px",
-          maxWidth: "300px",
+          width: "90%",
           boxShadow: "0 4px 16px rgba(31, 38, 135, 0.2)"
         }}
         className="m-3"
@@ -277,8 +276,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
           transition: "all 0.3s ease",
           margin: "1rem auto",
           textAlign: "center",
-          minWidth: "200px",
-          maxWidth: "300px",
+          width: "90%",
           boxShadow: "0 4px 16px rgba(31, 38, 135, 0.2)"
         }}
         className="m-3"
