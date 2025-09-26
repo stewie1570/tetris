@@ -8,36 +8,6 @@ import { useLocalPlayerGameContext } from "./LocalPlayerGame";
 import { StringInput } from "./components/Prompt";
 import { Spinner } from "./components/AnimatedIcons";
 
-const SendButton = styled(CommandButton)`
-  white-space: nowrap !important;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  border: none !important;
-  border-radius: 12px !important;
-  padding: 12px 20px !important;
-  font-weight: 600 !important;
-  color: white !important;
-  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3) !important;
-  transition: all 0.3s ease !important;
-  flex-shrink: 0 !important;
-  min-width: 80px !important;
-  height: 48px !important;
-  width: auto !important;
-  outline: none !important;
-  
-  &:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4) !important;
-  }
-  
-  &:active {
-    transform: translateY(0) !important;
-  }
-
-  &:focus {
-    outline: none !important;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5) !important;
-  }
-`;
 
 const ChatCard = styled.div`
   text-align: left;
@@ -208,18 +178,22 @@ export function GameChat(props) {
                 minWidth: '200px'
               }}
             />
-            <SendButton
+            <CommandButton
               onClick={sendMessage}
               runningText={<><Spinner /> Sending...</>}
               type="submit"
+              className="btn btn-primary"
               style={{
                 height: '48px',
                 minWidth: '80px',
-                padding: '12px 20px'
+                padding: '12px 20px',
+                width: 'auto',
+                whiteSpace: 'nowrap',
+                flexShrink: 0
               }}
             >
               Send
-            </SendButton>
+            </CommandButton>
           </div>
         </form>
       </div>
