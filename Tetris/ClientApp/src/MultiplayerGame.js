@@ -239,7 +239,6 @@ export const MultiplayerGame = ({ shapeProvider }) => {
           width: "90%",
           boxShadow: "0 4px 16px rgba(31, 38, 135, 0.2)"
         }}
-        className="m-3"
         onClick={() => setGame((game) => ({ ...game, paused: false }))}
         to="/"
         onMouseEnter={(e) => {
@@ -279,7 +278,6 @@ export const MultiplayerGame = ({ shapeProvider }) => {
           width: "90%",
           boxShadow: "0 4px 16px rgba(31, 38, 135, 0.2)"
         }}
-        className="m-3"
         onClick={() => setGame((game) => ({ ...game, paused: false }))}
         to="/"
         disableForMilliseconds={1500}
