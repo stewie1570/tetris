@@ -69,8 +69,8 @@ export const [SinglePlayerGameContextProvider, useLocalPlayerGameContext] =
             onSubmitString={(name) =>
               Boolean(name?.length)
                 ? sendCurrentScoreFor(name)
-                    .then(() => setUsername(name))
-                    .then(exitModal, exitModal)
+                  .then(() => setUsername(name))
+                  .then(exitModal, exitModal)
                 : exitModal()
             }
             submittingText={
@@ -153,6 +153,7 @@ export const LocalPlayerGame = ({
   header,
   additionalControls,
   isOnlyPlayer,
+  nextShapeStyle,
   ...otherProps
 }) => {
   const {
@@ -173,13 +174,13 @@ export const LocalPlayerGame = ({
   return (
     <>
       {!game.paused && game.mobile && (
-        <MobileControls 
-          onPause={!otherPlayers && (() => pause({ showScoreBoard: !otherPlayers }))} 
-          onClick={(keyCode) => keyPress({ keyCode })} 
+        <MobileControls
+          onPause={!otherPlayers && (() => pause({ showScoreBoard: !otherPlayers }))}
+          onClick={(keyCode) => keyPress({ keyCode })}
         />
       )}
       {!game.paused && (
-        <NextShapeContainer>
+        <NextShapeContainer style={nextShapeStyle}>
           <TetrisBoard board={shapeToBoard(nextShape)} noBackground />
         </NextShapeContainer>
       )}
@@ -188,16 +189,16 @@ export const LocalPlayerGame = ({
         header={
           <>
             {header}
-            <p style={{ 
-              fontSize: '1.2rem', 
-              fontWeight: '600', 
+            <p style={{
+              fontSize: '1.2rem',
+              fontWeight: '600',
               color: '#2d3748',
               margin: '8px 0',
               textAlign: 'center'
             }}>
               {(isOnlyPlayer || !game.paused) &&
                 `Score: ${game.score}` +
-                  (game.oldScore ? ` (Previous: ${game.oldScore})` : "")}
+                (game.oldScore ? ` (Previous: ${game.oldScore})` : "")}
             </p>
           </>
         }
