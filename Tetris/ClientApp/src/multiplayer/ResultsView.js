@@ -1,0 +1,51 @@
+import React from "react";
+import { Centered, Header } from "../Styling";
+import { GameChat } from "../GameChat";
+import { CommandButton } from "../components/CommandButton";
+import { Spinner } from "../components/AnimatedIcons";
+
+export const ResultsView = ({
+  otherPlayers,
+  gameResults,
+  initiallyDisabledPlayerGameLink,
+  resetButton,
+}) => {
+  return (
+    <Centered>
+      <Header style={{ width: "90%", display: "inline-block" }}>Game Over</Header>
+      <div
+        className="card mb-3"
+        style={{ display: "inline-block", width: "90%", textAlign: "left" }}
+      >
+        <div className="card-header">Results</div>
+        <div className="card-body p-0">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.keys(otherPlayers)
+                .filter(
+                  (userId) =>
+                    !otherPlayers[userId].disconnected || otherPlayers[userId].score
+                )
+                .map((userId) => (
+                  <tr key={userId}>
+                    <td>{otherPlayers[userId].name ?? "[Un-named Player]"}</td>
+                    <td>{gameResults[userId].score}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <GameChat style={{ width: "90%", display: "inline-block" }} />
+      <div>{initiallyDisabledPlayerGameLink}</div>
+      <div>{resetButton}</div>
+    </Centered>
+  );
+};
