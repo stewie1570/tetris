@@ -28,3 +28,5 @@ export const BigStartButton = () => {
     </CommandButton>
   );
 };
+
+export default BigStartButton;
