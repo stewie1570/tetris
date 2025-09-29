@@ -6,64 +6,29 @@ import LocalPlayerGame, {
   initialGameState,
   useLocalPlayerGameContext,
 } from "./LocalPlayerGame";
-import { StringInput } from "./components/Prompt";
-import { stringFrom } from "./domain/serialization";
-import { TetrisBoard } from "./components/TetrisBoard";
-import { GameMetaFrame } from "./components/GameMetaFrame";
-import { Link } from "react-router-dom";
 import { GameChat } from "./GameChat";
-import { emptyBoard } from "./components/TetrisGame";
 import { usePlayerListener } from "./hooks/usePlayerListener";
 import { useHelloSender } from "./hooks/useHelloSender";
 import { useStatusSender } from "./hooks/useStatusSender";
-import { getDisplayTimeFrom } from "./domain/time";
-import { selectableDurations } from "./constants";
-import { LeaderBoard } from "./ScoreBoard";
-import {
-  CenterScreen,
-  Centered,
-  Header,
-  FixedPositionWarningNotification,
-} from "./Styling";
 import { useOrganizerId } from "./hooks/useOrganizerId";
 import { useLifeCycle } from "./hooks/useLifeCycle";
-import styled from "styled-components";
-import { CopyButton } from "./components/CopyButton";
 import { BigStartButton } from "./BigStartButton";
 import { Spinner } from "./components/AnimatedIcons";
-import { withTemporaryDisable } from "./components/HOCs/withTemporaryDisable";
-import { ContentSwapWhenDisabled } from "./components/ContentSwapWhenDisabled";
+import { ConnectivityInfo } from "./components/ConnectivityInfo";
+import { SinglePlayerGameLink, InitiallyDisabledPlayerGameLink } from "./components/GameLinks";
+import { GameResults } from "./components/GameResults";
+import { 
+  UserDisconnected, 
+  WaitingForOrganizer, 
+  OrganizerDisconnected, 
+  ConnectionWarning 
+} from "./components/ConnectionStates";
+import { GameHeader } from "./components/GameHeader";
+import { PlayerList } from "./components/PlayerList";
+import { OtherPlayersGrid } from "./components/OtherPlayersGrid";
+import { useGameActions } from "./hooks/useGameActions";
+import { useUserNameManagement } from "./hooks/useUserNameManagement";
 
-const GameDurationSelect = styled.select`
-  width: 90%;
-`;
-
-const SwappableLink = (props) => {
-  return (
-    <ContentSwapWhenDisabled
-      disabled={props.disabled}
-      disabledContent={
-        <p style={props.style} className={props.className}>
-          {props.children}
-        </p>
-      }
-    >
-      <Link {...props} />
-    </ContentSwapWhenDisabled>
-  );
-};
-
-const InitiallyDisabledLink = withTemporaryDisable(SwappableLink);
-
-const trimHubExceptionMessage = (message) => {
-  const seperator = "HubException: ";
-  return message.split(seperator)[1] ?? message;
-};
-
-const BoldRed = styled.span`
-  font-weight: bold;
-  color: red;
-`;
 
 export const MultiplayerGame = ({ shapeProvider }) => {
   const organizerUserId = useOrganizerId();
@@ -95,202 +60,50 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   useHelloSender();
   useStatusSender();
 
-  const promptUserName = () =>
-    prompt((exitModal) => (
-      <StringInput
-        filter={(value) => (value ?? "").trim()}
-        onSubmitString={async (name) => {
-          name
-            ? await gameHub.invoke
-              .status({
-                groupId: organizerUserId,
-                message: {
-                  userId: currentUserId,
-                  name: name,
-                },
-              })
-              .then(() => setUsername(name))
-              .then(exitModal)
-              .catch(({ message }) =>
-                window.dispatchEvent(
-                  new CustomEvent("user-error", {
-                    detail: trimHubExceptionMessage(message),
-                  })
-                )
-              )
-            : exitModal();
-        }}
-        submittingText={
-          <>
-            <Spinner /> Setting user name...
-          </>
-        }
-        initialValue={username}
-      >
-        What user name would you like?
-      </StringInput>
-    ));
+  // Custom hooks
+  const { handleGameStart, handleReset, handleRetryContact } = useGameActions({
+    gameHub,
+    organizerUserId,
+    currentUserId,
+    game,
+    username,
+    timeLeft,
+    isOrganizer,
+    setGame
+  });
+
+  const { promptUserName } = useUserNameManagement({
+    prompt,
+    gameHub,
+    organizerUserId,
+    currentUserId,
+    setUsername,
+    username
+  });
 
   const Game = isOrganizer ? Organizer : React.Fragment;
-  const otherPlayerIds = Object.keys(otherPlayers);
   const otherPlayersLink = `${window.location.protocol}//${window.location.host}/${organizerUserId}`;
 
-  const gameContextInfo = (
-    <div className="card" style={{
-      overflow: "hidden"
-    }}>
-      <div className="card-header" style={{
-        background: "rgba(255, 255, 255, 0.2)",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
-        fontWeight: "600",
-        color: "#2d3748",
-        borderRadius: "16px 16px 0 0"
-      }}>
-        Connectivity
-      </div>
-      <div className="card-body" style={{
-        padding: 0,
-        overflow: "hidden"
-      }}>
-        <table className="table" style={{
-          marginBottom: 0,
-          border: "none",
-          borderRadius: "0 0 16px 16px",
-          overflow: "hidden"
-        }}>
-          <thead>
-            <tr>
-              <th colSpan={2} style={{
-                border: "none",
-                background: "rgba(255, 255, 255, 0.1)",
-                color: "#2d3748",
-                fontWeight: "600",
-                padding: "16px",
-                borderRadius: "0"
-              }}>
-                Other players can join via the Code or URL below:
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th style={{
-                border: "none",
-                background: "rgba(255, 255, 255, 0.1)",
-                color: "#4a5568",
-                fontWeight: "600",
-                padding: "12px 16px",
-                width: "20%",
-                borderRadius: "0"
-              }}>Code</th>
-              <td style={{
-                border: "none",
-                padding: "12px 16px",
-                color: "#2d3748",
-                borderRadius: "0"
-              }}>
-                {organizerUserId}
-                <br />
-                <CopyButton text={organizerUserId} />
-              </td>
-            </tr>
-            <tr>
-              <th style={{
-                border: "none",
-                background: "rgba(255, 255, 255, 0.1)",
-                color: "#4a5568",
-                fontWeight: "600",
-                padding: "12px 16px",
-                borderRadius: "0 0 0 16px"
-              }}>URL</th>
-              <td style={{
-                border: "none",
-                padding: "12px 16px",
-                color: "#2d3748",
-                borderRadius: "0 0 16px 0"
-              }}>
-                {otherPlayersLink}
-                <br />
-                <CopyButton text={otherPlayersLink} />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+  // Component instances
+  const connectivityInfo = (
+    <ConnectivityInfo 
+      organizerUserId={organizerUserId} 
+      otherPlayersLink={otherPlayersLink} 
+    />
   );
 
   const singlePlayerGameLink = (
-    <>
-      <Link
-        style={{
-          display: "block",
-          color: "#2d3748",
-          fontWeight: "700",
-          textDecoration: "none",
-          padding: "12px 24px",
-          background: "rgba(255, 255, 255, 0.25)",
-          borderRadius: "12px",
-          border: "1px solid rgba(255, 255, 255, 0.3)",
-          backdropFilter: "blur(20px)",
-          transition: "all 0.3s ease",
-          margin: "1rem auto",
-          textAlign: "center",
-          width: "90%",
-          boxShadow: "0 4px 16px rgba(31, 38, 135, 0.2)"
-        }}
-        onClick={() => setGame((game) => ({ ...game, paused: false }))}
-        to="/"
-        onMouseEnter={(e) => {
-          e.target.style.background = "rgba(255, 255, 255, 0.35)";
-          e.target.style.transform = "translateY(-2px)";
-          e.target.style.boxShadow = "0 8px 32px rgba(31, 38, 135, 0.4)";
-          e.target.style.color = "#1a202c";
-        }}
-        onMouseLeave={(e) => {
-          e.target.style.background = "rgba(255, 255, 255, 0.25)";
-          e.target.style.transform = "translateY(0)";
-          e.target.style.boxShadow = "0 4px 16px rgba(31, 38, 135, 0.2)";
-          e.target.style.color = "#2d3748";
-        }}
-      >
-        Single Player Game
-      </Link>
-    </>
+    <SinglePlayerGameLink onGameStart={handleGameStart} />
   );
 
   const initiallyDisabledPlayerGameLink = (
-    <>
-      <InitiallyDisabledLink
-        style={{
-          display: "inline-block",
-          color: "#2d3748",
-          fontWeight: "700",
-          textDecoration: "none",
-          padding: "12px 24px",
-          background: "rgba(255, 255, 255, 0.25)",
-          borderRadius: "12px",
-          border: "1px solid rgba(255, 255, 255, 0.3)",
-          backdropFilter: "blur(20px)",
-          transition: "all 0.3s ease",
-          margin: "1rem auto",
-          textAlign: "center",
-          width: "90%",
-          boxShadow: "0 4px 16px rgba(31, 38, 135, 0.2)"
-        }}
-        onClick={() => setGame((game) => ({ ...game, paused: false }))}
-        to="/"
-        disableForMilliseconds={1500}
-      >
-        Single Player Game
-      </InitiallyDisabledLink>
-    </>
+    <InitiallyDisabledPlayerGameLink onGameStart={handleGameStart} />
   );
 
   const resetButton = (
     <CommandButton
       className="btn btn-primary mb-3"
-      onClick={() => gameHub.invoke.reset({ groupId: organizerUserId })}
+      onClick={handleReset}
       runningText={
         <>
           <Spinner /> Resetting...
@@ -302,66 +115,19 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     </CommandButton>
   );
 
-  const results = gameResults
-    ? () => (
-      <Centered>
-        <Header style={{ width: "90%", display: "inline-block" }}>
-          Game Over
-        </Header>
-        <div
-          className="card mb-3"
-          style={{ display: "inline-block", width: "90%", textAlign: "left" }}
-        >
-          <div className="card-header">Results</div>
-          <div className="card-body p-0">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Score</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Object.keys(otherPlayers)
-                  .filter(
-                    (userId) =>
-                      !otherPlayers[userId].disconnected ||
-                      otherPlayers[userId].score
-                  )
-                  .map((userId) => (
-                    <tr key={userId}>
-                      <td>
-                        {otherPlayers[userId].name ?? "[Un-named Player]"}
-                      </td>
-                      <td>{gameResults[userId].score}</td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <GameChat style={{ width: "90%", display: "inline-block" }} />
-        <div>{initiallyDisabledPlayerGameLink}</div>
-        <div>{resetButton}</div>
-      </Centered>
-    )
-    : undefined;
+  const results = gameResults ? (
+    <GameResults
+      gameResults={gameResults}
+      otherPlayers={otherPlayers}
+      onGameStart={handleGameStart}
+      onReset={resetButton}
+    />
+  ) : null;
 
   const retryButton = (
     <CommandButton
       className="btn btn-primary"
-      onClick={() =>
-        gameHub.invoke.status({
-          groupId: organizerUserId,
-          message: {
-            userId: currentUserId,
-            board: stringFrom(game.board),
-            score: game.score,
-            name: username,
-            timeLeft: isOrganizer ? timeLeft : undefined,
-          },
-        })
-      }
+      onClick={handleRetryContact}
       runningText={
         <>
           <Spinner /> Contacting organizer...
@@ -372,82 +138,43 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     </CommandButton>
   );
 
-  const waitingForOrganizer =
-    !organizerConnectionStatus && !isOrganizer
-      ? () => (
-        <CenterScreen>
-          <Header>Waiting for organizer...</Header>
-          <Centered>
-            <div>{singlePlayerGameLink}</div>
-            <div>{retryButton}</div>
-          </Centered>
-        </CenterScreen>
-      )
-      : undefined;
+  const waitingForOrganizer = !organizerConnectionStatus && !isOrganizer ? (
+    <WaitingForOrganizer 
+      onGameStart={handleGameStart} 
+      onRetry={retryButton} 
+    />
+  ) : null;
 
-  const organizerDisconnected =
-    organizerConnectionStatus === "disconnected" && !isOrganizer && game.paused
-      ? () => (
-        <CenterScreen>
-          <Header>Organizer has disconnected.</Header>
-          <Centered>
-            <div>{singlePlayerGameLink}</div>
-            <div>{retryButton}</div>
-          </Centered>
-        </CenterScreen>
-      )
-      : undefined;
+  const organizerDisconnected = 
+    organizerConnectionStatus === "disconnected" && !isOrganizer && game.paused ? (
+      <OrganizerDisconnected 
+        onGameStart={handleGameStart} 
+        onRetry={retryButton} 
+      />
+    ) : null;
 
-  const userIsDisconnected =
-    isConnected === undefined
-      ? () => (
-        <CenterScreen>
-          <Header>
-            <Spinner /> Connecting to game server...
-          </Header>
-          <Centered>
-            <div>{singlePlayerGameLink}</div>
-          </Centered>
-        </CenterScreen>
-      )
-      : undefined;
+  const userIsDisconnected = isConnected === undefined ? (
+    <UserDisconnected onGameStart={handleGameStart} />
+  ) : null;
 
   const gameHeader = (
-    <>
-      {isOrganizer && game.paused && (
-        <>
-          <label htmlFor="duration">Duration:</label>
-          <GameDurationSelect
-            name="duration"
-            className="form-control"
-            value={selectedDuration}
-            onChange={(e) => setSelectedDuration(parseInt(e.target.value))}
-          >
-            {selectableDurations.map((duration) => (
-              <option key={duration} value={duration * 1000}>
-                {getDisplayTimeFrom(duration)}
-              </option>
-            ))}
-          </GameDurationSelect>
-        </>
-      )}
-
-      {gameEndTime && (
-        <BoldRed>
-          Game ends in {getDisplayTimeFrom(Math.floor(timeLeft / 1000))}{" "}
-          seconds.
-        </BoldRed>
-      )}
-    </>
+    <GameHeader
+      isOrganizer={isOrganizer}
+      gamePaused={game.paused}
+      selectedDuration={selectedDuration}
+      onDurationChange={setSelectedDuration}
+      gameEndTime={gameEndTime}
+      timeLeft={timeLeft}
+    />
   );
 
   return (
     <>
       <Game>
-        {userIsDisconnected?.() ||
-          waitingForOrganizer?.() ||
-          organizerDisconnected?.() ||
-          results?.() || (
+        {userIsDisconnected ||
+          waitingForOrganizer ||
+          organizerDisconnected ||
+          results || (
             <div className="row" style={{ margin: "1rem auto auto auto" }}>
               <LocalPlayerGame
                 shapeProvider={shapeProvider}
@@ -456,75 +183,32 @@ export const MultiplayerGame = ({ shapeProvider }) => {
                 className="col-xs-12 col-md-4"
                 nextShapeStyle={{ transform: "scale(0.5)", transformOrigin: "0 0" }}
               >
-                <LeaderBoard style={{ height: "100%" }}>
-                  Players:
-                  {Object.keys(otherPlayers)
-                    .filter((userId) => !otherPlayers[userId].disconnected)
-                    .map((userId) => (
-                      <div
-                        className={userId === currentUserId ? "bold" : ""}
-                        key={userId}
-                      >
-                        {otherPlayers[userId].name ?? "[Un-named player]"}
-                      </div>
-                    ))}
-                  <div>
-                    <CommandButton
-                      onClick={promptUserName}
-                      className="btn btn-primary"
-                    >
-                      Set User Name
-                    </CommandButton>
-                  </div>
-                </LeaderBoard>
+                <PlayerList
+                  otherPlayers={otherPlayers}
+                  currentUserId={currentUserId}
+                  onSetUserName={promptUserName}
+                />
               </LocalPlayerGame>
               {game.paused ? (
                 <div className="col-xs-12 col-md-8">
-                  {gameContextInfo}
+                  {connectivityInfo}
                   <GameChat />
                   <BigStartButton />
                 </div>
               ) : (
-                otherPlayerIds
-                  .filter(
-                    (userId) =>
-                      userId !== currentUserId &&
-                      otherPlayers[userId].board &&
-                      !otherPlayers[userId].disconnected
-                  )
-                  .map((userId) => (
-                    <div className="col-xs-12 col-md-4" key={userId}>
-                      <GameMetaFrame
-                        game={
-                          <TetrisBoard
-                            board={otherPlayers[userId].board ?? emptyBoard}
-                          />
-                        }
-                        header={
-                          <>
-                            <p>
-                              {otherPlayers[userId].name ?? "[Un-named player]"}
-                            </p>
-                            <p>Score: {otherPlayers[userId].score ?? 0}</p>
-                          </>
-                        }
-                      />
-                    </div>
-                  ))
+                <OtherPlayersGrid
+                  otherPlayers={otherPlayers}
+                  currentUserId={currentUserId}
+                />
               )}
             </div>
           )}
       </Game>
-      {isConnected === false && (
-        <FixedPositionWarningNotification>
-          Reconnecting...
-        </FixedPositionWarningNotification>
-      )}
-      {!game.paused && organizerConnectionStatus === "disconnected" && (
-        <FixedPositionWarningNotification>
-          Organizer is disconnected.
-        </FixedPositionWarningNotification>
-      )}
+      <ConnectionWarning
+        isConnected={isConnected}
+        organizerConnectionStatus={organizerConnectionStatus}
+        gamePaused={game.paused}
+      />
     </>
   );
 };
