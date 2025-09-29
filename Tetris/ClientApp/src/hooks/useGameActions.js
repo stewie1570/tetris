@@ -33,8 +33,8 @@ export const useGameActions = ({
   }, [gameHub, organizerUserId, currentUserId, game, username, timeLeft, isOrganizer]);
 
   return {
-    handleGameStart,
-    handleReset,
-    handleRetryContact
+    startGame: handleGameStart,
+    resetGame: handleReset,
+    retryContact: handleRetryContact
   };
 };

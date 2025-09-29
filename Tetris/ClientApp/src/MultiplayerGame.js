@@ -59,7 +59,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   useHelloSender();
   useStatusSender();
 
-  const { handleGameStart, handleReset, handleRetryContact } = useGameActions({
+  const { startGame, resetGame, retryContact } = useGameActions({
     gameHub,
     organizerUserId,
     currentUserId,
@@ -91,13 +91,13 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   );
 
   const singlePlayerGameLink = (
-    <SinglePlayerGameLink onGameStart={handleGameStart} />
+    <SinglePlayerGameLink onGameStart={startGame} />
   );
 
   const resetButton = (
     <CommandButton
       className="btn btn-primary mb-3"
-      onClick={handleReset}
+      onClick={resetGame}
       runningText={
         <>
           <Spinner /> Resetting...
@@ -113,7 +113,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     <GameResults
       gameResults={gameResults}
       otherPlayers={otherPlayers}
-      onGameStart={handleGameStart}
+      onGameStart={startGame}
       onReset={resetButton}
     />
   ) : null;
@@ -121,7 +121,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const retryButton = (
     <CommandButton
       className="btn btn-primary"
-      onClick={handleRetryContact}
+      onClick={retryContact}
       runningText={
         <>
           <Spinner /> Contacting organizer...
@@ -134,7 +134,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
   const waitingForOrganizer = !organizerConnectionStatus && !isOrganizer ? (
     <WaitingForOrganizer
-      onGameStart={handleGameStart}
+      onGameStart={startGame}
       onRetry={retryButton}
     />
   ) : null;
@@ -142,13 +142,13 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const organizerDisconnected =
     organizerConnectionStatus === "disconnected" && !isOrganizer && game.paused ? (
       <OrganizerDisconnected
-        onGameStart={handleGameStart}
+        onGameStart={startGame}
         onRetry={retryButton}
       />
     ) : null;
 
   const userIsDisconnected = isConnected === undefined ? (
-    <UserDisconnected onGameStart={handleGameStart} />
+    <UserDisconnected onGameStart={startGame} />
   ) : null;
 
   const gameHeader = (
