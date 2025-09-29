@@ -2,13 +2,12 @@ import React from "react";
 import { Centered, Header } from "../Styling";
 import { GameChat } from "../GameChat";
 import { InitiallyDisabledPlayerGameLink } from "./GameLinks";
-import { CommandButton } from "./CommandButton";
 
-export const GameResults = ({ 
-  gameResults, 
-  otherPlayers, 
-  onGameStart, 
-  onReset 
+export const GameResults = ({
+  gameResults,
+  otherPlayers,
+  onGameStart,
+  onReset
 }) => {
   if (!gameResults) return null;
 

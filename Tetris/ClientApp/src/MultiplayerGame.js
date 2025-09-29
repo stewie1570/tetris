@@ -15,20 +15,19 @@ import { useLifeCycle } from "./hooks/useLifeCycle";
 import { BigStartButton } from "./BigStartButton";
 import { Spinner } from "./components/AnimatedIcons";
 import { ConnectivityInfo } from "./components/ConnectivityInfo";
-import { SinglePlayerGameLink, InitiallyDisabledPlayerGameLink } from "./components/GameLinks";
+import { SinglePlayerGameLink } from "./components/GameLinks";
 import { GameResults } from "./components/GameResults";
-import { 
-  UserDisconnected, 
-  WaitingForOrganizer, 
-  OrganizerDisconnected, 
-  ConnectionWarning 
+import {
+  UserDisconnected,
+  WaitingForOrganizer,
+  OrganizerDisconnected,
+  ConnectionWarning
 } from "./components/ConnectionStates";
 import { GameHeader } from "./components/GameHeader";
 import { PlayerList } from "./components/PlayerList";
 import { OtherPlayersGrid } from "./components/OtherPlayersGrid";
 import { useGameActions } from "./hooks/useGameActions";
 import { useUserNameManagement } from "./hooks/useUserNameManagement";
-
 
 export const MultiplayerGame = ({ shapeProvider }) => {
   const organizerUserId = useOrganizerId();
@@ -60,7 +59,6 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   useHelloSender();
   useStatusSender();
 
-  // Custom hooks
   const { handleGameStart, handleReset, handleRetryContact } = useGameActions({
     gameHub,
     organizerUserId,
@@ -86,18 +84,14 @@ export const MultiplayerGame = ({ shapeProvider }) => {
 
   // Component instances
   const connectivityInfo = (
-    <ConnectivityInfo 
-      organizerUserId={organizerUserId} 
-      otherPlayersLink={otherPlayersLink} 
+    <ConnectivityInfo
+      organizerUserId={organizerUserId}
+      otherPlayersLink={otherPlayersLink}
     />
   );
 
   const singlePlayerGameLink = (
     <SinglePlayerGameLink onGameStart={handleGameStart} />
-  );
-
-  const initiallyDisabledPlayerGameLink = (
-    <InitiallyDisabledPlayerGameLink onGameStart={handleGameStart} />
   );
 
   const resetButton = (
@@ -139,17 +133,17 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   );
 
   const waitingForOrganizer = !organizerConnectionStatus && !isOrganizer ? (
-    <WaitingForOrganizer 
-      onGameStart={handleGameStart} 
-      onRetry={retryButton} 
+    <WaitingForOrganizer
+      onGameStart={handleGameStart}
+      onRetry={retryButton}
     />
   ) : null;
 
-  const organizerDisconnected = 
+  const organizerDisconnected =
     organizerConnectionStatus === "disconnected" && !isOrganizer && game.paused ? (
-      <OrganizerDisconnected 
-        onGameStart={handleGameStart} 
-        onRetry={retryButton} 
+      <OrganizerDisconnected
+        onGameStart={handleGameStart}
+        onRetry={retryButton}
       />
     ) : null;
 
