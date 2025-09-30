@@ -21,11 +21,16 @@ const SoundToggle = styled.div`
   input[type="checkbox"] {
     margin: 0;
     vertical-align: middle;
+    accent-color: #667eea;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
   }
 
   label {
     margin: 0;
     line-height: 1;
+    cursor: pointer;
   }
 `;
 
