@@ -18,13 +18,19 @@ const BoldRed = styled.strong`
 `;
 
 const BoldGreen = styled.strong`
-  color: #2d7d32;
-  background: rgba(45, 125, 50, 0.2);
+  color: #51cf66;
+  background: rgba(81, 207, 102, 0.2);
   padding: 4px 8px;
   border-radius: 6px;
   font-weight: 600;
   font-size: 0.9rem;
-  border: 1px solid rgba(45, 125, 50, 0.3);
+  border: 1px solid rgba(81, 207, 102, 0.3);
+  
+  @media (prefers-color-scheme: dark) {
+    color: #69db7c;
+    background: rgba(105, 219, 124, 0.2);
+    border: 1px solid rgba(105, 219, 124, 0.3);
+  }
 `;
 
 const JoinLink = styled(Link)`
@@ -101,7 +107,7 @@ export const GameRooms = () => {
   return (
     <div className="card mt-3 mb-3">
       <div className="card-body" style={{ overflow: 'hidden' }}>
-        <h5 className="card-title">Game Rooms</h5>
+        <h5 className="card-title" style={{ color: 'var(--color-text-primary)' }}>Game Rooms</h5>
         <div className="card-text">
           {/* Desktop Table View */}
           <div className="d-none d-md-block">
@@ -162,25 +168,25 @@ export const GameRooms = () => {
             ) : gameRooms?.items?.length ? (
               gameRooms?.items?.map((room) => (
                 <div key={room.organizerId} style={{
-                  background: 'rgba(255, 255, 255, 0.1)',
+                  background: 'var(--color-table-bg)',
                   borderRadius: '12px',
                   padding: '16px',
                   marginBottom: '12px',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  border: '1px solid var(--color-card-border)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '16px'
                 }}>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: '600', color: '#2d3748', marginBottom: '4px' }}>
+                    <div style={{ fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '4px' }}>
                       Room {room.organizerId}
                     </div>
                     <div style={{ marginBottom: '2px', fontSize: '0.9rem' }}>
-                      <strong style={{ color: '#4a5568' }}>Status:</strong>
+                      <strong style={{ color: 'var(--color-text-secondary)' }}>Status:</strong>
                       <Status status={room.status} style={{ display: 'block' }} />
                     </div>
                     <div style={{ fontSize: '0.9rem' }}>
-                      <strong style={{ color: '#4a5568' }}>Players:</strong> {Object.values(room.players)
+                      <strong style={{ color: 'var(--color-text-secondary)' }}>Players:</strong> {Object.values(room.players)
                         .map((player) => player.username ?? "[Un-named]")
                         .join(", ")}
                     </div>

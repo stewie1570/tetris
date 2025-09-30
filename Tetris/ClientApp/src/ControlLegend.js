@@ -11,7 +11,7 @@ export const ControlLegend = () => {
     return !isMobile && <div className="card mb-3">
         <div className="card-body">
             <h5 className="card-title" style={{ 
-                color: '#2d3748', 
+                color: 'var(--color-text-primary)', 
                 fontWeight: '700', 
                 fontSize: '1.25rem',
                 marginBottom: '1rem'
@@ -20,8 +20,8 @@ export const ControlLegend = () => {
                 <table className="table" style={{ borderSpacing: '0 8px', borderCollapse: 'separate' }}>
                     <thead>
                         <tr>
-                            <th style={{ color: '#4a5568', fontWeight: '600' }}>Key</th>
-                            <th style={{ color: '#4a5568', fontWeight: '600' }}>Command</th>
+                            <th style={{ color: 'var(--color-text-secondary)', fontWeight: '600' }}>Key</th>
+                            <th style={{ color: 'var(--color-text-secondary)', fontWeight: '600' }}>Command</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -34,7 +34,7 @@ export const ControlLegend = () => {
                                 textAlign: 'center',
                                 width: '60px'
                             }}>
-                                <FontAwesomeIcon icon={faArrowUp} style={{ color: '#4c63d2' }} />
+                                <FontAwesomeIcon icon={faArrowUp} style={{ color: 'var(--color-accent)' }} />
                             </td>
                             <td>
                                 Rotate <RotatingIcon icon={faRotate} />
@@ -49,7 +49,7 @@ export const ControlLegend = () => {
                                 textAlign: 'center',
                                 width: '60px'
                             }}>
-                                <FontAwesomeIcon icon={faArrowDown} style={{ color: '#4c63d2' }} />
+                                <FontAwesomeIcon icon={faArrowDown} style={{ color: 'var(--color-accent)' }} />
                             </td>
                             <td>
                                 Move <MovingDown icon={faArrowDown} />
@@ -64,7 +64,7 @@ export const ControlLegend = () => {
                                 textAlign: 'center',
                                 width: '60px'
                             }}>
-                                <FontAwesomeIcon icon={faArrowLeft} style={{ color: '#4c63d2' }} />
+                                <FontAwesomeIcon icon={faArrowLeft} style={{ color: 'var(--color-accent)' }} />
                             </td>
                             <td>
                                 Move <MovingLeft icon={faArrowLeft} />
@@ -79,7 +79,7 @@ export const ControlLegend = () => {
                                 textAlign: 'center',
                                 width: '60px'
                             }}>
-                                <FontAwesomeIcon icon={faArrowRight} style={{ color: '#4c63d2' }} />
+                                <FontAwesomeIcon icon={faArrowRight} style={{ color: 'var(--color-accent)' }} />
                             </td>
                             <td>
                                 Move <MovingRight icon={faArrowRight} />
@@ -89,7 +89,7 @@ export const ControlLegend = () => {
                             <td style={{ 
                                 fontSize: '1rem', 
                                 fontWeight: '600',
-                                color: '#4c63d2',
+                                color: 'var(--color-accent)',
                                 backgroundColor: 'rgba(102, 126, 234, 0.15)',
                                 borderRadius: '8px',
                                 padding: '8px',

@@ -1,11 +1,71 @@
+:root {
+  /* Light theme colors */
+  --color-text-primary: #2d3748;
+  --color-text-secondary: rgba(45, 55, 72, 0.6);
+  --color-link: #667eea;
+  --color-link-hover: #764ba2;
+  --color-accent: #4c63d2;
+  --color-bg-gradient-start: #ffffff;
+  --color-bg-gradient-end: #f3f4f6;
+  --color-card-bg: rgba(255, 255, 255, 0.15);
+  --color-card-bg-hover: rgba(255, 255, 255, 0.2);
+  --color-card-border: rgba(255, 255, 255, 0.2);
+  --color-card-shadow: rgba(31, 38, 135, 0.37);
+  --color-card-shadow-hover: rgba(31, 38, 135, 0.5);
+  --color-table-bg: rgba(255, 255, 255, 0.1);
+  --color-table-header-bg: rgba(255, 255, 255, 0.2);
+  --color-table-hover: rgba(255, 255, 255, 0.1);
+  --color-modal-shade: rgba(253, 253, 253, 0.75);
+  --color-input-bg: rgba(255, 255, 255, 0.1);
+  --color-input-bg-focus: rgba(255, 255, 255, 0.2);
+  --color-input-border: rgba(255, 255, 255, 0.2);
+  --color-button-cancel-bg: rgba(255, 255, 255, 0.2);
+  --color-button-cancel-bg-hover: rgba(255, 255, 255, 0.3);
+  --color-board-bg: rgba(0, 0, 0, 0.3);
+  --color-board-border: rgba(255, 255, 255, 0.1);
+  --color-square-empty-active: rgba(255, 255, 255, 0.1);
+  --color-square-empty-inactive: rgba(255, 255, 255, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark theme colors */
+    --color-text-primary: #e2e8f0;
+    --color-text-secondary: rgba(226, 232, 240, 0.6);
+    --color-link: #7c3aed;
+    --color-link-hover: #a855f7;
+    --color-accent: #8b5cf6;
+    --color-bg-gradient-start: #0f172a;
+    --color-bg-gradient-end: #1e293b;
+    --color-card-bg: rgba(30, 41, 59, 0.5);
+    --color-card-bg-hover: rgba(30, 41, 59, 0.7);
+    --color-card-border: rgba(100, 116, 139, 0.3);
+    --color-card-shadow: rgba(0, 0, 0, 0.5);
+    --color-card-shadow-hover: rgba(0, 0, 0, 0.7);
+    --color-table-bg: rgba(30, 41, 59, 0.3);
+    --color-table-header-bg: rgba(30, 41, 59, 0.5);
+    --color-table-hover: rgba(51, 65, 85, 0.4);
+    --color-modal-shade: rgba(15, 23, 42, 0.85);
+    --color-input-bg: rgba(30, 41, 59, 0.5);
+    --color-input-bg-focus: rgba(30, 41, 59, 0.7);
+    --color-input-border: rgba(100, 116, 139, 0.4);
+    --color-button-cancel-bg: rgba(51, 65, 85, 0.5);
+    --color-button-cancel-bg-hover: rgba(51, 65, 85, 0.7);
+    --color-board-bg: rgba(0, 0, 0, 0.5);
+    --color-board-border: rgba(100, 116, 139, 0.3);
+    --color-square-empty-active: rgba(100, 116, 139, 0.3);
+    --color-square-empty-inactive: rgba(100, 116, 139, 0.15);
+  }
+}
+
 h1 {
-  color: #2d3748;
+  color: var(--color-text-primary);
   font-weight: 700;
   letter-spacing: -0.025em;
 }
 
 h2 {
-  color: #2d3748;
+  color: var(--color-text-primary);
   font-weight: 600;
   letter-spacing: -0.025em;
 }
@@ -16,20 +76,20 @@ body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
   
   /* Modern gradient background */
-  background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+  background: linear-gradient(135deg, var(--color-bg-gradient-start) 0%, var(--color-bg-gradient-end) 100%);
   background-attachment: fixed;
   min-height: 100vh;
 }
 
 a {
-  color: #667eea;
+  color: var(--color-link);
   font-weight: 600;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 a:hover {
-  color: #764ba2;
+  color: var(--color-link-hover);
   text-decoration: underline;
 }
 
@@ -56,18 +116,18 @@ a:hover {
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--color-card-bg);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--color-card-border);
   border-radius: 16px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  box-shadow: 0 8px 32px 0 var(--color-card-shadow);
   transition: all 0.3s ease;
 }
 
 .card:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--color-card-bg-hover);
   transform: translateY(-2px);
-  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
+  box-shadow: 0 12px 40px 0 var(--color-card-shadow-hover);
 }
 
 .bold {
@@ -76,7 +136,7 @@ a:hover {
 
 /* Modern table styling */
 .table {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-table-bg);
   border-radius: 12px;
   overflow: hidden;
   border: none;
@@ -90,9 +150,9 @@ a:hover {
 }
 
 .table thead th {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--color-table-header-bg);
   border: none;
-  color: #2d3748;
+  color: var(--color-text-primary);
   font-weight: 600;
   padding: 16px;
 }
@@ -100,7 +160,7 @@ a:hover {
 .table tbody td {
   border: none;
   padding: 12px 16px;
-  color: #2d3748;
+  color: var(--color-text-primary);
 }
 
 .table tbody tr {
@@ -108,7 +168,7 @@ a:hover {
 }
 
 .table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-table-hover);
 }
 
 /* Container improvements */

@@ -22,11 +22,11 @@ const Inactive = styled(Square)`
   box-shadow: 0 0 8px rgba(102, 126, 234, 0.3), inset 0 1px 3px rgba(0, 0, 0, 0.3);
 `;
 const ActiveEmpty = styled(Square)`
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-square-empty-active);
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
 `;
 const InactiveEmpty = styled(Square)`
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-square-empty-inactive);
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 `;
 
@@ -47,12 +47,12 @@ const TabelCell = styled.td`
 `;
 
 const GameBoard = styled.table`
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--color-board-bg);
   border-radius: 12px;
   padding: 16px;
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-board-border);
 `;
 
 export function TetrisBoard({

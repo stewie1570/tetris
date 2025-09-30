@@ -21,11 +21,11 @@ const StyledNav = styled.nav`
   }
 
   .page-link {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--color-table-bg);
     border: none !important;
     border-radius: 12px !important;
     padding: 12px 16px !important;
-    color: #2d3748;
+    color: var(--color-text-primary);
     font-weight: 600 !important;
     text-decoration: none;
     transition: all 0.3s ease !important;
@@ -37,10 +37,10 @@ const StyledNav = styled.nav`
     outline: none !important;
 
     &:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.2);
+      background: var(--color-table-header-bg);
       transform: translateY(-2px) !important;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-      color: #2d3748;
+      color: var(--color-text-primary);
       text-decoration: none;
     }
 
@@ -56,8 +56,8 @@ const StyledNav = styled.nav`
     &:disabled {
       opacity: 0.5;
       cursor: not-allowed;
-      background: rgba(255, 255, 255, 0.05);
-      color: rgba(45, 55, 72, 0.5);
+      background: var(--color-square-empty-inactive);
+      color: var(--color-text-secondary);
     }
   }
 
