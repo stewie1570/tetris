@@ -50,6 +50,12 @@ const StyledTextInput = styled(TextInput)`
   &::placeholder {
     color: var(--color-text-secondary);
   }
+
+  @media (prefers-color-scheme: dark) {
+    color: #ffffff !important;
+    font-weight: 600;
+    -webkit-text-fill-color: #ffffff !important;
+  }
 `;
 
 export function GameChat(props) {
@@ -149,7 +155,7 @@ export function GameChat(props) {
         </SoundToggle>
       </div>
       <div className="card-body">
-        <div>
+        <div style={{ color: 'var(--color-text-primary)' }}>
           {chatLines?.filter(hasNameOrNotification).map((chatLine, index) => (
             <div key={index}>
               {chatLine.text ? (

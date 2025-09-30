@@ -26,6 +26,12 @@ const StyledTextInput = styled(TextInput)`
   &::placeholder {
     color: var(--color-text-secondary);
   }
+
+  @media (prefers-color-scheme: dark) {
+    color: #ffffff !important;
+    font-weight: 600;
+    -webkit-text-fill-color: #ffffff !important;
+  }
 `;
 
 const OkButton = styled(CommandButton)`
