@@ -192,7 +192,7 @@ export const LocalPlayerGame = ({
             <p style={{
               fontSize: '1.2rem',
               fontWeight: '600',
-              color: '#2d3748',
+              color: 'var(--color-text-primary)',
               margin: '8px 0',
               textAlign: 'center'
             }}>

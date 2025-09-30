@@ -22,33 +22,33 @@ const InitiallyDisabledLink = withTemporaryDisable(SwappableLink);
 
 const linkStyles = {
   display: "block",
-  color: "#2d3748",
+  color: "var(--color-text-primary)",
   fontWeight: "700",
   textDecoration: "none",
   padding: "12px 24px",
-  background: "rgba(255, 255, 255, 0.25)",
+  background: "var(--color-card-bg-hover)",
   borderRadius: "12px",
-  border: "1px solid rgba(255, 255, 255, 0.3)",
+  border: "1px solid var(--color-card-border)",
   backdropFilter: "blur(20px)",
   transition: "all 0.3s ease",
   margin: "1rem auto",
   textAlign: "center",
   width: "90%",
-  boxShadow: "0 4px 16px rgba(31, 38, 135, 0.2)"
+  boxShadow: "0 4px 16px var(--color-card-shadow)"
 };
 
 const handleMouseEnter = (e) => {
-  e.target.style.background = "rgba(255, 255, 255, 0.35)";
+  e.target.style.background = "var(--color-button-cancel-bg-hover)";
   e.target.style.transform = "translateY(-2px)";
-  e.target.style.boxShadow = "0 8px 32px rgba(31, 38, 135, 0.4)";
-  e.target.style.color = "#1a202c";
+  e.target.style.boxShadow = "0 8px 32px var(--color-card-shadow-hover)";
+  e.target.style.color = "var(--color-text-primary)";
 };
 
 const handleMouseLeave = (e) => {
-  e.target.style.background = "rgba(255, 255, 255, 0.25)";
+  e.target.style.background = "var(--color-card-bg-hover)";
   e.target.style.transform = "translateY(0)";
-  e.target.style.boxShadow = "0 4px 16px rgba(31, 38, 135, 0.2)";
-  e.target.style.color = "#2d3748";
+  e.target.style.boxShadow = "0 4px 16px var(--color-card-shadow)";
+  e.target.style.color = "var(--color-text-primary)";
 };
 
 export const SinglePlayerGameLink = ({ onGameStart }) => (

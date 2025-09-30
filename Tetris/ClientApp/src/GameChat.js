@@ -21,34 +21,45 @@ const SoundToggle = styled.div`
   input[type="checkbox"] {
     margin: 0;
     vertical-align: middle;
+    accent-color: #667eea;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
   }
 
   label {
     margin: 0;
     line-height: 1;
+    cursor: pointer;
   }
 `;
 
 const StyledTextInput = styled(TextInput)`
   display: inherit;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--color-input-bg);
+  border: 1px solid var(--color-input-border);
   border-radius: 8px;
   padding: 12px 16px;
-  color: #2d3748;
+  color: var(--color-text-primary);
   font-weight: 500;
   transition: all 0.3s ease;
-  border-color: #667eea;
+  border-color: var(--color-link);
 
   &:focus {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: #667eea;
+    background: var(--color-input-bg-focus);
+    border-color: var(--color-link);
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
     outline: none;
   }
 
   &::placeholder {
-    color: rgba(45, 55, 72, 0.6);
+    color: var(--color-text-secondary);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: #ffffff !important;
+    font-weight: 600;
+    -webkit-text-fill-color: #ffffff !important;
   }
 `;
 
@@ -136,10 +147,10 @@ export function GameChat(props) {
       {...props}
       className={`card ${props?.className ?? ""}`}
     >
-      <div className="card-header d-flex justify-content-between align-items-center">
+      <div className="card-header d-flex justify-content-between align-items-center" style={{ color: 'var(--color-text-primary)' }}>
         <span>Chat</span>
         <SoundToggle>
-          <label htmlFor="sound-toggle">Sound</label>
+          <label htmlFor="sound-toggle" style={{ color: 'var(--color-text-primary)' }}>Sound</label>
           <input
             type="checkbox"
             id="sound-toggle"
@@ -149,7 +160,7 @@ export function GameChat(props) {
         </SoundToggle>
       </div>
       <div className="card-body">
-        <div>
+        <div style={{ color: 'var(--color-text-primary)' }}>
           {chatLines?.filter(hasNameOrNotification).map((chatLine, index) => (
             <div key={index}>
               {chatLine.text ? (

@@ -7,10 +7,10 @@ export const ConnectivityInfo = ({ organizerUserId, otherPlayersLink }) => {
       overflow: "hidden"
     }}>
       <div className="card-header" style={{
-        background: "rgba(255, 255, 255, 0.2)",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
+        background: "var(--color-table-header-bg)",
+        borderBottom: "1px solid var(--color-card-border)",
         fontWeight: "600",
-        color: "#2d3748",
+        color: "var(--color-text-primary)",
         borderRadius: "16px 16px 0 0"
       }}>
         Connectivity
@@ -29,8 +29,8 @@ export const ConnectivityInfo = ({ organizerUserId, otherPlayersLink }) => {
             <tr>
               <th colSpan={2} style={{
                 border: "none",
-                background: "rgba(255, 255, 255, 0.1)",
-                color: "#2d3748",
+                background: "var(--color-table-bg)",
+                color: "var(--color-text-primary)",
                 fontWeight: "600",
                 padding: "16px",
                 borderRadius: "0"
@@ -43,8 +43,8 @@ export const ConnectivityInfo = ({ organizerUserId, otherPlayersLink }) => {
             <tr>
               <th style={{
                 border: "none",
-                background: "rgba(255, 255, 255, 0.1)",
-                color: "#4a5568",
+                background: "var(--color-table-bg)",
+                color: "var(--color-text-secondary)",
                 fontWeight: "600",
                 padding: "12px 16px",
                 width: "20%",
@@ -53,7 +53,7 @@ export const ConnectivityInfo = ({ organizerUserId, otherPlayersLink }) => {
               <td style={{
                 border: "none",
                 padding: "12px 16px",
-                color: "#2d3748",
+                color: "var(--color-text-primary)",
                 borderRadius: "0"
               }}>
                 {organizerUserId}
@@ -64,8 +64,8 @@ export const ConnectivityInfo = ({ organizerUserId, otherPlayersLink }) => {
             <tr>
               <th style={{
                 border: "none",
-                background: "rgba(255, 255, 255, 0.1)",
-                color: "#4a5568",
+                background: "var(--color-table-bg)",
+                color: "var(--color-text-secondary)",
                 fontWeight: "600",
                 padding: "12px 16px",
                 borderRadius: "0 0 0 16px"
@@ -73,7 +73,7 @@ export const ConnectivityInfo = ({ organizerUserId, otherPlayersLink }) => {
               <td style={{
                 border: "none",
                 padding: "12px 16px",
-                color: "#2d3748",
+                color: "var(--color-text-primary)",
                 borderRadius: "0 0 16px 0"
               }}>
                 {otherPlayersLink}

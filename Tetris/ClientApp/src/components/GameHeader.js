@@ -9,7 +9,11 @@ const GameDurationSelect = styled.select`
 
 const BoldRed = styled.span`
   font-weight: bold;
-  color: red;
+  color: #dc2626;
+  
+  @media (prefers-color-scheme: dark) {
+    color: #fca5a5;
+  }
 `;
 
 export const GameHeader = ({ 

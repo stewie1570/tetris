@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const HeaderOne = styled.h1`
   text-align: center;
-  color: #2d3748;
+  color: var(--color-text-primary);
   font-size: 2.5rem;
   font-weight: 800;
   margin: 0;
@@ -39,6 +39,11 @@ export const FixedPositionWarningNotification = styled(Well)`
   transform: translateX(-50%);
   border-radius: 12px;
   box-shadow: 0 8px 32px 0 rgba(229, 62, 62, 0.3);
+  
+  @media (prefers-color-scheme: dark) {
+    background: rgba(248, 113, 113, 0.2);
+    border: 1px solid rgba(248, 113, 113, 0.4);
+  }
 `;
 
 export const CenterScreen = styled.div`
