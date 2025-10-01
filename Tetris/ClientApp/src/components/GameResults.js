@@ -7,7 +7,7 @@ export const GameResults = ({
   gameResults,
   otherPlayers,
   onGameStart,
-  onReset
+  resetButton
 }) => {
   if (!gameResults) return null;
 
@@ -52,7 +52,7 @@ export const GameResults = ({
       <div>
         <InitiallyDisabledPlayerGameLink onGameStart={onGameStart} />
       </div>
-      <div>{onReset}</div>
+      <div>{resetButton}</div>
     </Centered>
   );
 };
