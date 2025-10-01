@@ -45,7 +45,7 @@ const TopButton = styled(ControlButton)`
     top: 0px;
     width: 70%;
     height: 15%;
-    font-size: 1rem;
+    font-size: 1.5rem;
 `;
 
 const TopStackedButton = styled(ControlButton)`
@@ -53,7 +53,7 @@ const TopStackedButton = styled(ControlButton)`
     top: 15%;
     width: 70%;
     height: 15%;
-    font-size: 1rem;
+    font-size: 1.1rem;
 `;
 
 const BottomStackedButton = styled(ControlButton)`
@@ -82,7 +82,6 @@ export function MobileControls(props) {
         </RightButton>
         <TopButton style={{ pointerEvents: "auto" }} onMouseDown={() => props.onClick && props.onClick(keys.up)}>
             <FontAwesomeIcon icon={faRotate} />
-            &nbsp;
         </TopButton>
         {props.onPause && <TopStackedButton style={{ pointerEvents: "auto" }} onMouseDown={props.onPause}>
             <FontAwesomeIcon icon={faPause} />
