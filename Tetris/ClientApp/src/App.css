@@ -136,7 +136,6 @@ a:hover {
 
 /* Modern table styling */
 .table {
-  background: var(--color-table-bg);
   border-radius: 12px;
   overflow: hidden;
   border: none;

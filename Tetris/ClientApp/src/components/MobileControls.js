@@ -4,83 +4,96 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight, faArrowDown, faPause, faRotate } from '@fortawesome/free-solid-svg-icons';
 
-const LeftButton = styled.button`
+const ControlButton = styled.div`
     position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    color: white;
+    font-size: 1.2rem;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 1),
+                 0 0 8px rgba(0, 0, 0, 1),
+                 0 0 12px rgba(0, 0, 0, 1),
+                 0 2px 16px rgba(0, 0, 0, 1);
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 1));
+    
+    &:active {
+        opacity: 0.6;
+    }
+`;
+
+const LeftButton = styled(ControlButton)`
     left: 0px;
     top: 0px;
     width: 50%;
     height: 100%;
-    opacity: 0.25;
+    font-size: 2rem;
 `;
 
-const TopButton = styled.button`
-    position: fixed;
+const RightButton = styled(ControlButton)`
+    right: 0px;
+    top: 0px;
+    width: 50%;
+    height: 100%;
+    font-size: 2rem;
+`;
+
+const TopButton = styled(ControlButton)`
     left: 15%;
     top: 0px;
     width: 70%;
     height: 15%;
-    opacity: 0.25;
+    font-size: 1rem;
 `;
 
-const TopStackedButton = styled.button`
-    position: fixed;
+const TopStackedButton = styled(ControlButton)`
     left: 15%;
     top: 15%;
     width: 70%;
     height: 15%;
-    opacity: 0.25;
+    font-size: 1rem;
 `;
 
-const RighButton = styled.button`
-    position: fixed;
-    top: 0px;
-    right: 0px;
-    width: 50%;
-    height: 100%;
-    opacity: 0.25;
-`;
-
-const BottomStackedButton = styled.button`
-    position: fixed;
+const BottomStackedButton = styled(ControlButton)`
     left: 15%;
     bottom: 15%;
     width: 70%;
     height: 15%;
-    opacity: 0.25;
+    font-size: 2rem;
 `;
 
-const BottomButton = styled.button`
-    position: fixed;
+const BottomButton = styled(ControlButton)`
     left: 15%;
     bottom: 0px;
     width: 70%;
     height: 15%;
-    opacity: 0.25;
+    font-size: 1.2rem;
 `;
 
 export function MobileControls(props) {
-    return <div style={{ position: "fixed", zIndex: 1 }}>
-        <LeftButton className="btn btn-primary" onClick={() => props.onClick && props.onClick(keys.left)}>
+    return <div style={{ position: "fixed", inset: 0, zIndex: 1, pointerEvents: "none" }}>
+        <LeftButton style={{ pointerEvents: "auto" }} onMouseDown={() => props.onClick && props.onClick(keys.left)}>
             <FontAwesomeIcon icon={faArrowLeft} />
         </LeftButton>
-        <RighButton className="btn btn-primary" onClick={() => props.onClick && props.onClick(keys.right)}>
+        <RightButton style={{ pointerEvents: "auto" }} onMouseDown={() => props.onClick && props.onClick(keys.right)}>
             <FontAwesomeIcon icon={faArrowRight} />
-        </RighButton>
-        <TopButton className="btn btn-primary" onClick={() => props.onClick && props.onClick(keys.up)}>
+        </RightButton>
+        <TopButton style={{ pointerEvents: "auto" }} onMouseDown={() => props.onClick && props.onClick(keys.up)}>
             <FontAwesomeIcon icon={faRotate} />
             &nbsp;
-            <b>Rotate</b>
         </TopButton>
-        {props.onPause && <TopStackedButton className="btn btn-primary" onClick={props.onPause}>
+        {props.onPause && <TopStackedButton style={{ pointerEvents: "auto" }} onMouseDown={props.onPause}>
             <FontAwesomeIcon icon={faPause} />
             &nbsp;
             <b>Pause</b>
         </TopStackedButton>}
-        <BottomStackedButton className="btn btn-primary" onClick={() => props.onClick && props.onClick(keys.down)}>
+        <BottomStackedButton style={{ pointerEvents: "auto" }} onMouseDown={() => props.onClick && props.onClick(keys.down)}>
             <FontAwesomeIcon icon={faArrowDown} />
         </BottomStackedButton>
-        <BottomButton className="btn btn-primary" onClick={() => props.onClick && props.onClick(keys.space)}>
-            <b>Commit</b>
+        <BottomButton style={{ pointerEvents: "auto" }} onMouseDown={() => props.onClick && props.onClick(keys.space)}>
+            <b>Drop</b>
         </BottomButton>
     </div>;
 }

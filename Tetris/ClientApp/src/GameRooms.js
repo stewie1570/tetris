@@ -158,7 +158,7 @@ export const GameRooms = () => {
           </div>
 
           {/* Mobile Card View */}
-          <div className="d-block d-md-none">
+          <div className="d-block d-md-none" style={{ color: 'var(--color-text-primary)' }}>
             {isLoading ? (
               <div className="text-center p-3">
                 <strong>
@@ -178,7 +178,7 @@ export const GameRooms = () => {
                   gap: '16px'
                 }}>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '4px' }}>
+                    <div style={{ fontWeight: '600', marginBottom: '4px' }}>
                       Room {room.organizerId}
                     </div>
                     <div style={{ marginBottom: '2px', fontSize: '0.9rem' }}>

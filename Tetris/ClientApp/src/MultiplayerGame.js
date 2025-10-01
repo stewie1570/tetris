@@ -114,7 +114,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
       gameResults={gameResults}
       otherPlayers={otherPlayers}
       onGameStart={startGame}
-      onReset={resetButton}
+      resetButton={resetButton}
     />
   ) : null;
 
@@ -135,7 +135,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
   const waitingForOrganizer = !organizerConnectionStatus && !isOrganizer ? (
     <WaitingForOrganizer
       onGameStart={startGame}
-      onRetry={retryButton}
+      retryButton={retryButton}
     />
   ) : null;
 
@@ -143,7 +143,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     organizerConnectionStatus === "disconnected" && !isOrganizer && game.paused ? (
       <OrganizerDisconnected
         onGameStart={startGame}
-        onRetry={retryButton}
+        retryButton={retryButton}
       />
     ) : null;
 
