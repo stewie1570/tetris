@@ -7,6 +7,7 @@ import { Pager } from "./components/Pager";
 import styled from "styled-components";
 import { MultiplayerLinks } from "./MultiplayerLinks";
 import { Spinner } from "./components/AnimatedIcons";
+import { useLocalPlayerGameContext } from "./LocalPlayerGame";
 
 const BoldRed = styled.strong`
   color: #ff6b6b;
@@ -78,6 +79,7 @@ const ItemsPerPage = 5;
 export const GameRooms = () => {
   const [gameRooms, setGameRooms] = useMountedOnlyState();
   const [isLoading, showLoadingWhile] = useLoadingState();
+  const { game } = useLocalPlayerGameContext();
   const pageRef = useRef(1);
   const timerRef = useRef();
 
@@ -105,113 +107,114 @@ export const GameRooms = () => {
   });
 
   return (
-    <div className="card mt-3 mb-3">
-      <div className="card-body" style={{ overflow: 'hidden' }}>
-        <h5 className="card-title" style={{ color: 'var(--color-text-primary)' }}>Game Rooms</h5>
-        <div className="card-text">
-          {/* Desktop Table View */}
-          <div className="d-none d-md-block">
-            <table className="table" style={{ tableLayout: 'fixed' }}>
-              <thead>
-                <tr>
-                  <th style={{ width: '80px' }}></th>
-                  <th style={{ width: '140px' }}>Status</th>
-                  <th style={{ width: '120px' }}>Players</th>
-                  <th style={{ width: '80px' }}>Code</th>
-                </tr>
-              </thead>
-              <tbody>
-                {isLoading ? (
+    game.mobile && !game.paused ? null :
+      <div className="card mt-3 mb-3">
+        <div className="card-body" style={{ overflow: 'hidden' }}>
+          <h5 className="card-title" style={{ color: 'var(--color-text-primary)' }}>Game Rooms</h5>
+          <div className="card-text">
+            {/* Desktop Table View */}
+            <div className="d-none d-md-block">
+              <table className="table" style={{ tableLayout: 'fixed' }}>
+                <thead>
                   <tr>
-                    <td colSpan={4} className="centered">
-                      <strong>
-                        <Spinner /> Loading...
-                      </strong>
-                    </td>
+                    <th style={{ width: '80px' }}></th>
+                    <th style={{ width: '140px' }}>Status</th>
+                    <th style={{ width: '120px' }}>Players</th>
+                    <th style={{ width: '80px' }}>Code</th>
                   </tr>
-                ) : gameRooms?.items?.length ? (
-                  gameRooms?.items?.map((room) => (
-                    <tr key={room.organizerId}>
-                      <td style={{ verticalAlign: 'middle' }}>
-                        <JoinLink to={`/${room.organizerId}`}>Join</JoinLink>
+                </thead>
+                <tbody>
+                  {isLoading ? (
+                    <tr>
+                      <td colSpan={4} className="centered">
+                        <strong>
+                          <Spinner /> Loading...
+                        </strong>
                       </td>
-                      <td style={{ whiteSpace: 'nowrap', verticalAlign: 'middle' }}>
-                        <Status status={room.status} />
+                    </tr>
+                  ) : gameRooms?.items?.length ? (
+                    gameRooms?.items?.map((room) => (
+                      <tr key={room.organizerId}>
+                        <td style={{ verticalAlign: 'middle' }}>
+                          <JoinLink to={`/${room.organizerId}`}>Join</JoinLink>
+                        </td>
+                        <td style={{ whiteSpace: 'nowrap', verticalAlign: 'middle' }}>
+                          <Status status={room.status} />
+                        </td>
+                        <td style={{ verticalAlign: 'middle' }}>
+                          {Object.values(room.players)
+                            .map((player) => player.username ?? "[Un-named]")
+                            .join(", ")}
+                        </td>
+                        <td style={{ verticalAlign: 'middle' }}>{room.organizerId}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={4}>
+                        <strong>No one is hosting a game right now</strong>
                       </td>
-                      <td style={{ verticalAlign: 'middle' }}>
-                        {Object.values(room.players)
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="d-block d-md-none" style={{ color: 'var(--color-text-primary)' }}>
+              {isLoading ? (
+                <div className="text-center p-3">
+                  <strong>
+                    <Spinner /> Loading...
+                  </strong>
+                </div>
+              ) : gameRooms?.items?.length ? (
+                gameRooms?.items?.map((room) => (
+                  <div key={room.organizerId} style={{
+                    background: 'var(--color-table-bg)',
+                    borderRadius: '12px',
+                    padding: '16px',
+                    marginBottom: '12px',
+                    border: '1px solid var(--color-card-border)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '16px'
+                  }}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: '600', marginBottom: '4px' }}>
+                        Room {room.organizerId}
+                      </div>
+                      <div style={{ marginBottom: '2px', fontSize: '0.9rem' }}>
+                        <strong style={{ color: 'var(--color-text-secondary)' }}>Status:</strong>
+                        <Status status={room.status} style={{ display: 'block' }} />
+                      </div>
+                      <div style={{ fontSize: '0.9rem' }}>
+                        <strong style={{ color: 'var(--color-text-secondary)' }}>Players:</strong> {Object.values(room.players)
                           .map((player) => player.username ?? "[Un-named]")
                           .join(", ")}
-                      </td>
-                      <td style={{ verticalAlign: 'middle' }}>{room.organizerId}</td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={4}>
-                      <strong>No one is hosting a game right now</strong>
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Mobile Card View */}
-          <div className="d-block d-md-none" style={{ color: 'var(--color-text-primary)' }}>
-            {isLoading ? (
-              <div className="text-center p-3">
-                <strong>
-                  <Spinner /> Loading...
-                </strong>
-              </div>
-            ) : gameRooms?.items?.length ? (
-              gameRooms?.items?.map((room) => (
-                <div key={room.organizerId} style={{
-                  background: 'var(--color-table-bg)',
-                  borderRadius: '12px',
-                  padding: '16px',
-                  marginBottom: '12px',
-                  border: '1px solid var(--color-card-border)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '16px'
-                }}>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: '600', marginBottom: '4px' }}>
-                      Room {room.organizerId}
+                      </div>
                     </div>
-                    <div style={{ marginBottom: '2px', fontSize: '0.9rem' }}>
-                      <strong style={{ color: 'var(--color-text-secondary)' }}>Status:</strong>
-                      <Status status={room.status} style={{ display: 'block' }} />
-                    </div>
-                    <div style={{ fontSize: '0.9rem' }}>
-                      <strong style={{ color: 'var(--color-text-secondary)' }}>Players:</strong> {Object.values(room.players)
-                        .map((player) => player.username ?? "[Un-named]")
-                        .join(", ")}
+                    <div style={{ flexShrink: 0 }}>
+                      <JoinLink to={`/${room.organizerId}`}>Join</JoinLink>
                     </div>
                   </div>
-                  <div style={{ flexShrink: 0 }}>
-                    <JoinLink to={`/${room.organizerId}`}>Join</JoinLink>
-                  </div>
+                ))
+              ) : (
+                <div className="text-center p-3">
+                  <strong>No one is hosting a game right now</strong>
                 </div>
-              ))
-            ) : (
-              <div className="text-center p-3">
-                <strong>No one is hosting a game right now</strong>
-              </div>
+              )}
+            </div>
+            {gameRooms?.items?.length > 0 && (
+              <Pager
+                page={Math.ceil(gameRooms?.start / ItemsPerPage) + 1}
+                numPages={Math.ceil(gameRooms?.total / ItemsPerPage)}
+                onPageChange={requestPage}
+              />
             )}
+            <MultiplayerLinks />
           </div>
-          {gameRooms?.items?.length > 0 && (
-            <Pager
-              page={Math.ceil(gameRooms?.start / ItemsPerPage) + 1}
-              numPages={Math.ceil(gameRooms?.total / ItemsPerPage)}
-              onPageChange={requestPage}
-            />
-          )}
-          <MultiplayerLinks />
         </div>
       </div>
-    </div>
   );
 };
