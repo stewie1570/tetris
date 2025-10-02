@@ -226,7 +226,7 @@ export const LocalPlayerGame = ({
           ))
         }
         controls={
-          <>
+          game.mobile && !game.paused ? null : <>
             <GameControls
               game={game}
               onPause={
@@ -235,8 +235,7 @@ export const LocalPlayerGame = ({
               }
             />
             {additionalControls}
-          </>
-        }
+          </>}
       />
     </>
   );
