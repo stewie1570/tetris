@@ -42,7 +42,7 @@ export const useUserNameManagement = ({
         }}
         submittingText={
           <>
-            <Spinner /> Setting user name...
+            <Spinner /> Processing...
           </>
         }
         initialValue={username}
