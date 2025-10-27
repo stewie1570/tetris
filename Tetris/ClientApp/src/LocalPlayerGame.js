@@ -75,7 +75,7 @@ export const [SinglePlayerGameContextProvider, useLocalPlayerGameContext] =
             }
             submittingText={
               <>
-                <Spinner /> Posting Your Score...
+                <Spinner /> Posting...
               </>
             }
           >
