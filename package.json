@@ -4,7 +4,7 @@
   "description": "[![Build](https://github.com/stewie1570/tetris/actions/workflows/Merge.yml/badge.svg)](https://github.com/stewie1570/tetris/actions/workflows/Merge.yml)\r [![Build (PR)](https://github.com/stewie1570/tetris/actions/workflows/PR.yml/badge.svg)](https://github.com/stewie1570/tetris/actions/workflows/PR.yml)\r ======",
   "main": "index.js",
   "devDependencies": {
-    "@playwright/test": "^1.49.1",
+    "@playwright/test": "^1.56.1",
     "concurrently": "^8.2.0",
     "cross-env": "^7.0.3",
     "wait-on": "^7.2.0"

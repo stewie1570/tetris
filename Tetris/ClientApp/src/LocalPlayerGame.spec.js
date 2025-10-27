@@ -171,9 +171,9 @@ test("score a point and post score twice", async () => {
   );
 
   (await screen.findByText(/Post My Score/)).click();
-  await screen.findByText("Posting your score...");
+  await screen.findByText("Posting...");
   await waitForElementToBeRemoved(() =>
-    screen.queryByText("Posting your score...")
+    screen.queryByText("Posting...")
   );
 
   expect(scorePosts).toEqual([
@@ -224,9 +224,9 @@ test("posting a score too low to show up on the board displays an error", async 
   );
 
   (await screen.findByText(/Post My Score/)).click();
-  await screen.findByText("Posting your score...");
+  await screen.findByText("Posting...");
   await waitForElementToBeRemoved(() =>
-    screen.queryByText("Posting your score...")
+    screen.queryByText("Posting...")
   );
   await screen.findByText(
     "Your score was recorded but didn't make the top 20."
