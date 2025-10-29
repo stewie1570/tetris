@@ -1,11 +1,10 @@
-import { useCallback } from "react";
 import { flushSync } from 'react-dom';
 import { keys } from "../core/constants";
 import { move, rotate } from "../domain/motion";
 import { iterateUntilInactive } from "../domain/iteration";
 
 export const useKeyPress = (game, onChange) => {
-  const keyPress = useCallback((event) => {
+  const keyPress = (event) => {
     const { keyCode } = event;
     const processKeyCommand = ({ keyCode }) => {
       const { board } = game;
@@ -24,7 +23,7 @@ export const useKeyPress = (game, onChange) => {
     };
 
     return !game.paused && processKeyCommand({ keyCode });
-  }, [game, onChange]);
+  };
 
   return keyPress;
 };
