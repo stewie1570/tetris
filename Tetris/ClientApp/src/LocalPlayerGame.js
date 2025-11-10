@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { TetrisGame, emptyBoard } from "./components/TetrisGame";
 import { StringInput as StringPrompt, usePrompt } from "./components/Prompt";
 import { leaderBoardService } from "./services";
@@ -171,6 +171,8 @@ export const LocalPlayerGame = ({
 
   const keyPress = useKeyPress(game, setGame);
 
+  const nextShapeBoard = useMemo(() => shapeToBoard(nextShape), [nextShape]);
+
   return (
     <>
       {!game.paused && game.mobile && (
@@ -181,7 +183,7 @@ export const LocalPlayerGame = ({
       )}
       {!game.paused && (
         <NextShapeContainer style={nextShapeStyle}>
-          <TetrisBoard board={shapeToBoard(nextShape)} noBackground />
+          <TetrisBoard board={nextShapeBoard} noBackground />
         </NextShapeContainer>
       )}
       <GameMetaFrame
