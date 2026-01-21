@@ -10,7 +10,7 @@
     "@microsoft/signalr": "^7.0.11",
     "bootstrap-css-only": "4.4.1",
     "leaf-validator": "^7.8.2",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "^6.16.0",
