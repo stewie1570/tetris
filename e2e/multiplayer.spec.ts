@@ -1,5 +1,5 @@
 import { test, chromium, expect } from '@playwright/test';
-import { getTestEnv } from './helpers';
+import { getTestEnv, getGameRoomCodeFrom } from './helpers';
 
 test.use({
   ignoreHTTPSErrors: true
@@ -267,12 +267,7 @@ async function setUserName(guestBrowserPage: any, userName: string) {
 async function hostMultiplayerGameOn({ hostBrowserPage }) {
   await hostBrowserPage.goto(homePageUrl);
   await hostBrowserPage.getByRole('link', { name: 'Host Multiplayer Game' }).click();
-  const gameRoomCode = (await hostBrowserPage
-    .getByRole('row', { name: /Code/ })
-    .getByRole('cell')
-    .first()
-    .textContent())
-    .split(/\s/)[0];
+  const gameRoomCode = await getGameRoomCodeFrom(hostBrowserPage);
   await hostBrowserPage.getByRole('button', { name: 'Set User Name' }).click();
   const userNamePromptLabel = hostBrowserPage.getByLabel('What user name would you like?');
   await userNamePromptLabel.fill('browser page 1');
