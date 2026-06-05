@@ -177,7 +177,6 @@ export const LocalPlayerGame = ({
     <>
       {!game.paused && game.mobile && (
         <MobileControls
-          compact={Boolean(otherPlayers)}
           onPause={!otherPlayers && (() => pause({ showScoreBoard: !otherPlayers }))}
           onClick={(keyCode) => keyPress({ keyCode })}
         />

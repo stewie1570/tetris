@@ -41,7 +41,6 @@ export const [MultiplayerContextProvider, useMultiplayerContext, MultiplayerCont
   const [selectedDuration, setSelectedDuration] = React.useState(selectableDurations[0] * 1000);
   const [chatLines, setChatLines] = React.useState([]);
   const [soundEnabled, setSoundEnabled] = React.useState(true);
-  const [fullscreenEnabled, setFullscreenEnabled] = React.useState(false);
 
   const instanceRef = useRef({ organizerId });
   instanceRef.current = { organizerId };
@@ -108,9 +107,7 @@ export const [MultiplayerContextProvider, useMultiplayerContext, MultiplayerCont
     chatLines,
     setChatLines,
     soundEnabled,
-    setSoundEnabled,
-    fullscreenEnabled,
-    setFullscreenEnabled
+    setSoundEnabled
   };
 });
 
