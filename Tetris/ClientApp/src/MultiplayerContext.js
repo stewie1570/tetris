@@ -4,7 +4,6 @@ import { useUserId } from './hooks/useUserId';
 import { useLocation, useParams } from 'react-router-dom';
 import { initialEmptyPlayersList, selectableDurations } from './constants'
 import { createManagedContext, useMountedOnlyState } from "leaf-validator";
-import { useLifeCycle } from "./hooks/useLifeCycle";
 
 const signals = [
   'hello',
@@ -50,43 +49,57 @@ export const [MultiplayerContextProvider, useMultiplayerContext, MultiplayerCont
     setGameEndTime(null);
   }, [location]);
 
-  useLifeCycle({
-    onMount: () => {
-      connection.current = new HubConnectionBuilder()
-        .withUrl("/gameHub", { transport: HttpTransportType.WebSockets })
-        .withAutomaticReconnect()
-        .build();
+  useEffect(() => {
+    let isActive = true;
 
-      gameHub.current.receive.setHandlers = handlers => Object
-        .keys(handlers)
-        .forEach(key => {
-          connection.current.off(key);
-          connection.current.on(key, handlers[key]);
-        });
+    const conn = new HubConnectionBuilder()
+      .withUrl("/gameHub", { transport: HttpTransportType.WebSockets })
+      .withAutomaticReconnect()
+      .build();
 
-      connection.current.onclose(() => setIsConnected(false));
-      connection.current.onreconnecting(() => setIsConnected(false));
-      connection.current.onreconnected(() => {
-        setIsConnected(true);
+    connection.current = conn;
+
+    gameHub.current.receive.setHandlers = handlers => Object
+      .keys(handlers)
+      .forEach(key => {
+        conn.off(key);
+        conn.on(key, handlers[key]);
       });
 
-      connection
-        .current
-        .start()
-        .then(() => {
-          signals.forEach(signal => {
-            gameHub.current.invoke[signal] = obj => connection.current.invoke(signal, obj);
-            gameHub.current.send[signal] = obj => connection.current.send(signal, obj);
-          });
-          setIsConnected(true);
-          isOrganizer && gameHub.current.invoke.setChatLines({
-            groupId: instanceRef.current.organizerId,
-            message: []
-          });
+    conn.onclose(() => isActive && setIsConnected(false));
+    conn.onreconnecting(() => isActive && setIsConnected(false));
+    conn.onreconnected(() => isActive && setIsConnected(true));
+
+    conn
+      .start()
+      .then(() => {
+        if (!isActive) {
+          return;
+        }
+
+        signals.forEach(signal => {
+          gameHub.current.invoke[signal] = obj => conn.invoke(signal, obj);
+          gameHub.current.send[signal] = obj => conn.send(signal, obj);
         });
-    },
-    onUnMount: () => connection.current.stop()
-  });
+        setIsConnected(true);
+        isOrganizer && gameHub.current.invoke.setChatLines({
+          groupId: instanceRef.current.organizerId,
+          message: []
+        });
+      })
+      .catch(() => {
+        if (!isActive) {
+          return;
+        }
+
+        setIsConnected(false);
+      });
+
+    return () => {
+      isActive = false;
+      conn.stop().catch(() => {});
+    };
+  }, []);
 
   return {
     gameHub: gameHub.current,
