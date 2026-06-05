@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "anysphere.csharp"
+    ],
+    "unwantedRecommendations": [
+        "ms-dotnettools.csdevkit"
+    ]
+}

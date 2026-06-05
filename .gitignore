@@ -274,3 +274,6 @@ Tetris.Storage.Tests/appsettings.json
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+# Local debugger binary (install via scripts/setup-netcoredbg.sh)
+.tools/
