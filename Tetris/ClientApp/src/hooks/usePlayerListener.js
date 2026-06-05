@@ -12,8 +12,7 @@ const MaxChatLines = 10;
 const audio = new Audio('/chat-notification.mp3');
 
 function scrollToTop() {
-  const scrollTarget = document.fullscreenElement ?? document.scrollingElement;
-  scrollTarget?.scrollTo({
+  window.scrollTo({
     top: 0,
     behavior: 'smooth'
   });

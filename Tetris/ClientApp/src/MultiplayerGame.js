@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { Organizer } from "./Organizer";
 import { useMultiplayerContext } from "./MultiplayerContext";
 import { CommandButton } from "./components/CommandButton";
@@ -7,8 +7,6 @@ import LocalPlayerGame, {
   useLocalPlayerGameContext,
 } from "./LocalPlayerGame";
 import { GameChat } from "./GameChat";
-import { GameOptions } from "./GameOptions";
-import { useMultiplayerFullscreen } from "./hooks/useMultiplayerFullscreen";
 import { usePlayerListener } from "./hooks/usePlayerListener";
 import { useHelloSender } from "./hooks/useHelloSender";
 import { useStatusSender } from "./hooks/useStatusSender";
@@ -44,7 +42,6 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     gameResults,
     selectedDuration,
     setSelectedDuration,
-    fullscreenEnabled,
   } = useMultiplayerContext();
   const { game, setGame, setUsername, username, prompt } =
     useLocalPlayerGameContext();
@@ -154,15 +151,6 @@ export const MultiplayerGame = ({ shapeProvider }) => {
     <UserDisconnected onGameStart={startGame} />
   ) : null;
 
-  const isFullscreenLayout = fullscreenEnabled && !game.paused;
-  const gameContainerRef = useRef(null);
-
-  useMultiplayerFullscreen({
-    containerRef: gameContainerRef,
-    enabled: fullscreenEnabled,
-    active: !game.paused,
-  });
-
   const gameHeader = (
     <GameHeader
       isOrganizer={isOrganizer}
@@ -181,41 +169,24 @@ export const MultiplayerGame = ({ shapeProvider }) => {
           waitingForOrganizer ||
           organizerDisconnected ||
           results || (
-            <div
-              ref={gameContainerRef}
-              className={`row${isFullscreenLayout ? " multiplayer-fullscreen-layout" : ""}`}
-              style={{
-                margin: "1rem auto auto auto",
-                ...(isFullscreenLayout && {
-                  background: "var(--color-page-bg, #1a1a2e)",
-                  minHeight: "100vh",
-                  padding: "1rem",
-                }),
-              }}
-            >
-              <div
-                className={
-                  isFullscreenLayout ? "col-xs-12 col-md-8" : "col-xs-12 col-md-4"
-                }
+            <div className="row" style={{ margin: "1rem auto auto auto" }}>
+              <LocalPlayerGame
+                shapeProvider={shapeProvider}
+                header={gameHeader}
+                additionalControls={<>{singlePlayerGameLink}</>}
+                className="col-xs-12 col-md-4"
+                nextShapeStyle={{ transform: "scale(0.5)", transformOrigin: "0 0" }}
               >
-                <LocalPlayerGame
-                  shapeProvider={shapeProvider}
-                  header={gameHeader}
-                  additionalControls={<>{singlePlayerGameLink}</>}
-                  nextShapeStyle={{ transform: "scale(0.5)", transformOrigin: "0 0" }}
-                >
-                  <PlayerList
-                    otherPlayers={otherPlayers}
-                    currentUserId={currentUserId}
-                    onSetUserName={promptUserName}
-                  />
-                </LocalPlayerGame>
-              </div>
+                <PlayerList
+                  otherPlayers={otherPlayers}
+                  currentUserId={currentUserId}
+                  onSetUserName={promptUserName}
+                />
+              </LocalPlayerGame>
               {game.paused ? (
                 <div className="col-xs-12 col-md-8">
                   {connectivityInfo}
                   <GameChat />
-                  <GameOptions />
                   <BigStartButton />
                 </div>
               ) : (
