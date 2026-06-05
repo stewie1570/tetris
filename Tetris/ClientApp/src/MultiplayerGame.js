@@ -183,7 +183,7 @@ export const MultiplayerGame = ({ shapeProvider }) => {
           results || (
             <div
               ref={gameContainerRef}
-              className="row"
+              className={`row${isFullscreenLayout ? " multiplayer-fullscreen-layout" : ""}`}
               style={{
                 margin: "1rem auto auto auto",
                 ...(isFullscreenLayout && {

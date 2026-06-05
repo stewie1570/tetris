@@ -24,74 +24,72 @@ const ControlButton = styled.div`
     }
 `;
 
+const compactControlHeight = '40%';
+
 const LeftButton = styled(ControlButton)`
     left: 0px;
-    top: 0px;
-    width: 50%;
-    height: 100%;
     font-size: 2rem;
+    ${({ $compact }) => $compact
+        ? `bottom: 0; width: 25%; height: ${compactControlHeight};`
+        : 'top: 0px; width: 50%; height: 100%;'}
 `;
 
 const RightButton = styled(ControlButton)`
     right: 0px;
-    top: 0px;
-    width: 50%;
-    height: 100%;
     font-size: 2rem;
+    ${({ $compact }) => $compact
+        ? `bottom: 0; width: 25%; height: ${compactControlHeight};`
+        : 'top: 0px; width: 50%; height: 100%;'}
 `;
 
 const TopButton = styled(ControlButton)`
-    left: 15%;
-    top: 0px;
-    width: 70%;
-    height: 15%;
     font-size: 1.5rem;
+    ${({ $compact }) => $compact
+        ? 'left: 25%; bottom: 28%; width: 50%; height: 12%;'
+        : 'left: 15%; top: 0px; width: 70%; height: 15%;'}
 `;
 
 const TopStackedButton = styled(ControlButton)`
-    left: 15%;
-    top: 15%;
-    width: 70%;
-    height: 15%;
     font-size: 1.1rem;
+    ${({ $compact }) => $compact
+        ? 'left: 25%; bottom: 28%; width: 50%; height: 12%;'
+        : 'left: 15%; top: 15%; width: 70%; height: 15%;'}
 `;
 
 const BottomStackedButton = styled(ControlButton)`
-    left: 15%;
-    bottom: 15%;
-    width: 70%;
-    height: 15%;
     font-size: 2rem;
+    ${({ $compact }) => $compact
+        ? 'left: 25%; bottom: 14%; width: 50%; height: 14%;'
+        : 'left: 15%; bottom: 15%; width: 70%; height: 15%;'}
 `;
 
 const BottomButton = styled(ControlButton)`
-    left: 15%;
-    bottom: 0px;
-    width: 70%;
-    height: 15%;
     font-size: 1.2rem;
+    ${({ $compact }) => $compact
+        ? 'left: 25%; bottom: 0; width: 50%; height: 14%;'
+        : 'left: 15%; bottom: 0px; width: 70%; height: 15%;'}
 `;
 
-export function MobileControls(props) {
+export function MobileControls({ compact, onClick, onPause }) {
     return <div style={{ position: "fixed", inset: 0, zIndex: 1, pointerEvents: "none" }}>
-        <LeftButton style={{ pointerEvents: "auto" }} onMouseDown={() => props.onClick && props.onClick(keys.left)}>
+        <LeftButton $compact={compact} style={{ pointerEvents: "auto" }} onMouseDown={() => onClick && onClick(keys.left)}>
             <FontAwesomeIcon icon={faArrowLeft} />
         </LeftButton>
-        <RightButton style={{ pointerEvents: "auto" }} onMouseDown={() => props.onClick && props.onClick(keys.right)}>
+        <RightButton $compact={compact} style={{ pointerEvents: "auto" }} onMouseDown={() => onClick && onClick(keys.right)}>
             <FontAwesomeIcon icon={faArrowRight} />
         </RightButton>
-        <TopButton style={{ pointerEvents: "auto" }} onMouseDown={() => props.onClick && props.onClick(keys.up)}>
+        <TopButton $compact={compact} style={{ pointerEvents: "auto" }} onMouseDown={() => onClick && onClick(keys.up)}>
             <FontAwesomeIcon icon={faRotate} />
         </TopButton>
-        {props.onPause && <TopStackedButton style={{ pointerEvents: "auto" }} onMouseDown={props.onPause}>
+        {onPause && <TopStackedButton $compact={compact} style={{ pointerEvents: "auto" }} onMouseDown={onPause}>
             <FontAwesomeIcon icon={faPause} />
             &nbsp;
             <b>Pause</b>
         </TopStackedButton>}
-        <BottomStackedButton style={{ pointerEvents: "auto" }} onMouseDown={() => props.onClick && props.onClick(keys.down)}>
+        <BottomStackedButton $compact={compact} style={{ pointerEvents: "auto" }} onMouseDown={() => onClick && onClick(keys.down)}>
             <FontAwesomeIcon icon={faArrowDown} />
         </BottomStackedButton>
-        <BottomButton style={{ pointerEvents: "auto" }} onMouseDown={() => props.onClick && props.onClick(keys.space)}>
+        <BottomButton $compact={compact} style={{ pointerEvents: "auto" }} onMouseDown={() => onClick && onClick(keys.space)}>
             <b>Drop</b>
         </BottomButton>
     </div>;
