@@ -268,10 +268,9 @@ async function hostMultiplayerGameOn({ hostBrowserPage }) {
   await hostBrowserPage.goto(homePageUrl);
   await hostBrowserPage.getByRole('link', { name: 'Host Multiplayer Game' }).click();
   const gameRoomCode = (await hostBrowserPage
-    .getByRole('row', { name: /^Code / })
-    .getByRole('cell')
+    .locator('xpath=//tr[th[normalize-space()="Code"]]/td')
     .first()
-    .textContent())
+    .textContent({ timeout: 15000 }))
     .split(' ')[0];
   await hostBrowserPage.getByRole('button', { name: 'Set User Name' }).click();
   const userNamePromptLabel = hostBrowserPage.getByLabel('What user name would you like?');
