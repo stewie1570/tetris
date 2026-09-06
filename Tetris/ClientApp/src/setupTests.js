@@ -1,16 +1,18 @@
-import "@testing-library/jest-dom";
+import "@testing-library/jest-dom/vitest";
 import { setupServer } from "msw/node";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
+import { vi } from "vitest";
 
-const methods = [rest.delete, rest.get, rest.post, rest.put];
-const handler = async (req, res, ctx) => {
-  console.error(`${req.method} ${req.url} is not mocked.`);
-  return res(ctx.status(400), ctx.json({}));
-};
+globalThis.jest = vi;
+window.scrollTo = () => {};
+
 export const server = setupServer(
-  ...methods.map((method) => method(/(.*)/, handler))
+  http.all("*", ({ request }) => {
+    console.error(`${request.method} ${request.url} is not mocked.`);
+    return HttpResponse.json({}, { status: 400 });
+  })
 );
-beforeAll(() => server.listen());
+beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 afterEach(() => {
   server.resetHandlers();
   window.sessionStorage.clear();
