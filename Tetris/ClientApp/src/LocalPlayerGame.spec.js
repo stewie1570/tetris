@@ -10,7 +10,7 @@ import {
 } from "@testing-library/react";
 import { shapes } from "./components/TetrisGame";
 import { keys } from "./core/constants";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { server } from "./setupTests";
 import { MemoryRouter } from "react-router";
 import { App } from "./App";
@@ -20,9 +20,7 @@ const lineShape = shapes[1];
 
 beforeEach(() => {
   server.use(
-    rest.get("/api/gameRooms", async (req, res, ctx) => {
-      return res(ctx.json([]));
-    })
+    http.get("/api/gameRooms", () => HttpResponse.json([]))
   );
 });
 
@@ -65,12 +63,10 @@ test("score a point", async () => {
 
 test("score a point and post score", async () => {
   server.use(
-    rest.get("/api/userScores", async (req, res, ctx) => {
-      return res(ctx.json(scorePosts));
-    }),
-    rest.post("/api/userScores", async (req, res, ctx) => {
-      scorePosts.push(req.body);
-      return res(ctx.status(200));
+    http.get("/api/userScores", () => HttpResponse.json(scorePosts)),
+    http.post("/api/userScores", async ({ request }) => {
+      scorePosts.push(await request.json());
+      return new HttpResponse(null, { status: 200 });
     })
   );
   const { iterate, container } = getIterableBoard();
@@ -102,12 +98,8 @@ test("score a point and post score", async () => {
 
 test("score a point and fail to post score", async () => {
   server.use(
-    rest.get("/api/userScores", async (req, res, ctx) => {
-      return res(ctx.json(scorePosts));
-    }),
-    rest.post("/api/userScores", async (req, res, ctx) => {
-      return res.networkError("Failed to connect");
-    })
+    http.get("/api/userScores", () => HttpResponse.json(scorePosts)),
+    http.post("/api/userScores", () => HttpResponse.error())
   );
   const { iterate, container } = getIterableBoard();
 
@@ -138,12 +130,10 @@ test("score a point and fail to post score", async () => {
 
 test("score a point and post score twice", async () => {
   server.use(
-    rest.get("/api/userScores", async (req, res, ctx) => {
-      return res(ctx.json([]));
-    }),
-    rest.post("/api/userScores", async (req, res, ctx) => {
-      scorePosts.push(req.body);
-      return res(ctx.status(200));
+    http.get("/api/userScores", () => HttpResponse.json([])),
+    http.post("/api/userScores", async ({ request }) => {
+      scorePosts.push(await request.json());
+      return new HttpResponse(null, { status: 200 });
     })
   );
   const { iterate, container } = getIterableBoard();
@@ -172,9 +162,9 @@ test("score a point and post score twice", async () => {
 
   (await screen.findByText(/Post My Score/)).click();
   await screen.findByText("Posting...");
-  await waitForElementToBeRemoved(() =>
-    screen.queryByText("Posting...")
-  );
+  await waitFor(() => {
+    expect(screen.queryByText("Posting...")).not.toBeInTheDocument();
+  });
 
   expect(scorePosts).toEqual([
     { username: "Stewie", score: 1 },
@@ -184,19 +174,17 @@ test("score a point and post score twice", async () => {
 
 test("posting a score too low to show up on the board displays an error", async () => {
   server.use(
-    rest.get("/api/userScores", async (req, res, ctx) => {
-      return res(
-        ctx.json(
-          new Array(20).fill(null).map((_, i) => ({
-            username: "user" + i,
-            score: i,
-          }))
-        )
-      );
-    }),
-    rest.post("/api/userScores", async (req, res, ctx) => {
-      scorePosts.push(req.body);
-      return res(ctx.status(200));
+    http.get("/api/userScores", () =>
+      HttpResponse.json(
+        new Array(20).fill(null).map((_, i) => ({
+          username: "user" + i,
+          score: i,
+        }))
+      )
+    ),
+    http.post("/api/userScores", async ({ request }) => {
+      scorePosts.push(await request.json());
+      return new HttpResponse(null, { status: 200 });
     })
   );
   const { iterate, container } = getIterableBoard();
@@ -225,9 +213,9 @@ test("posting a score too low to show up on the board displays an error", async 
 
   (await screen.findByText(/Post My Score/)).click();
   await screen.findByText("Posting...");
-  await waitForElementToBeRemoved(() =>
-    screen.queryByText("Posting...")
-  );
+  await waitFor(() => {
+    expect(screen.queryByText("Posting...")).not.toBeInTheDocument();
+  });
   await screen.findByText(
     "Your score was recorded but didn't make the top 20."
   );
@@ -235,12 +223,10 @@ test("posting a score too low to show up on the board displays an error", async 
 
 test("score a point and cancels posting a score", async () => {
   server.use(
-    rest.get("/api/userScores", async (req, res, ctx) => {
-      return res(ctx.json(scorePosts));
-    }),
-    rest.post("/api/userScores", async (req, res, ctx) => {
-      scorePosts.push(req.body);
-      return res(ctx.status(200));
+    http.get("/api/userScores", () => HttpResponse.json(scorePosts)),
+    http.post("/api/userScores", async ({ request }) => {
+      scorePosts.push(await request.json());
+      return new HttpResponse(null, { status: 200 });
     })
   );
   const { iterate, container } = getIterableBoard();
@@ -272,12 +258,10 @@ test("score a point and cancels posting a score", async () => {
 
 test("score a point and entering a blank username cancels posting the score", async () => {
   server.use(
-    rest.get("/api/userScores", async (req, res, ctx) => {
-      return res(ctx.json(scorePosts));
-    }),
-    rest.post("/api/userScores", async (req, res, ctx) => {
-      scorePosts.push(req.body);
-      return res(ctx.status(200));
+    http.get("/api/userScores", () => HttpResponse.json(scorePosts)),
+    http.post("/api/userScores", async ({ request }) => {
+      scorePosts.push(await request.json());
+      return new HttpResponse(null, { status: 200 });
     })
   );
   const { iterate, container } = getIterableBoard();

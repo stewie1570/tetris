@@ -27,7 +27,7 @@ async function assertSuccessfulFetchResponse(response) {
       data = await response.json();
     } catch (error) {}
     throw new HttpError(`Request failed with status code ${response.status}`, {
-      ...response,
+      status: response.status,
       data,
     });
   }

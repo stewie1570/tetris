@@ -1,4 +1,4 @@
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { Rest } from "./rest";
 import { server } from "../setupTests";
 
@@ -16,8 +16,8 @@ afterEach(() => {
 
 test("can make a successful get request", async () => {
   server.use(
-    rest.get("/something", (req, res, ctx) =>
-      res(ctx.json({ prop1: "the expected value" }))
+    http.get("/something", () =>
+      HttpResponse.json({ prop1: "the expected value" })
     )
   );
 
@@ -27,7 +27,7 @@ test("can make a successful get request", async () => {
 });
 
 test("network error is handled", async () => {
-  server.use(rest.get("/something", (req, res, ctx) => res.networkError()));
+  server.use(http.get("/something", () => HttpResponse.error()));
 
   let caughtError;
   try {
@@ -42,7 +42,9 @@ test("network error is handled", async () => {
 
 test("can make a successful post request", async () => {
   server.use(
-    rest.post("/something", (req, res, ctx) => res(ctx.json(req.body)))
+    http.post("/something", async ({ request }) =>
+      HttpResponse.json(await request.json())
+    )
   );
 
   expect(
@@ -56,7 +58,7 @@ test("can make a successful post request", async () => {
 });
 
 test("can make a successful post request with no response payload expected", async () => {
-  server.use(rest.post("/something", (req, res, ctx) => res(ctx.status(200))));
+  server.use(http.post("/something", () => new HttpResponse(null, { status: 200 })));
 
   expect(
     await Rest.post({
@@ -68,13 +70,13 @@ test("can make a successful post request with no response payload expected", asy
 
 test("handles failed post request with title", async () => {
   server.use(
-    rest.post("/something", (req, res, ctx) =>
-      res(
-        ctx.status(500),
-        ctx.json({
+    http.post("/something", () =>
+      HttpResponse.json(
+        {
           title: "the response title",
           message: "the response message",
-        })
+        },
+        { status: 500 }
       )
     )
   );
@@ -100,12 +102,12 @@ test("handles failed post request with title", async () => {
 
 test("handles failed post request with message", async () => {
   server.use(
-    rest.post("/something", (req, res, ctx) =>
-      res(
-        ctx.status(500),
-        ctx.json({
+    http.post("/something", () =>
+      HttpResponse.json(
+        {
           message: "the response message",
-        })
+        },
+        { status: 500 }
       )
     )
   );
@@ -130,7 +132,7 @@ test("handles failed post request with message", async () => {
 });
 
 test("handles failed post request with status text", async () => {
-  server.use(rest.post("/something", (req, res, ctx) => res(ctx.status(500))));
+  server.use(http.post("/something", () => new HttpResponse(null, { status: 500 })));
 
   let caughtError;
 
@@ -155,13 +157,13 @@ test("handles failed post request with status text", async () => {
 
 test("handling error with title", async () => {
   server.use(
-    rest.get("/something", (req, res, ctx) =>
-      res(
-        ctx.status(500),
-        ctx.json({
+    http.get("/something", () =>
+      HttpResponse.json(
+        {
           title: "the response title",
           message: "the response message",
-        })
+        },
+        { status: 500 }
       )
     )
   );
@@ -187,12 +189,12 @@ test("handling error with title", async () => {
 
 test("handling error with message", async () => {
   server.use(
-    rest.get("/something", (req, res, ctx) =>
-      res(
-        ctx.status(500),
-        ctx.json({
+    http.get("/something", () =>
+      HttpResponse.json(
+        {
           message: "the response message",
-        })
+        },
+        { status: 500 }
       )
     )
   );
@@ -217,7 +219,7 @@ test("handling error with message", async () => {
 });
 
 test("handling error with status text", async () => {
-  server.use(rest.get("/something", (req, res, ctx) => res(ctx.status(500))));
+  server.use(http.get("/something", () => new HttpResponse(null, { status: 500 })));
 
   let caughtError;
 
