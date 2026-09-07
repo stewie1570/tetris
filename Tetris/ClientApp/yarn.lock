@@ -1743,10 +1743,10 @@ json5@^2.2.3:
   resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.3.tgz#78cd6f1a19bdc12b73db5ad0c61efd66c1e29283"
   integrity sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==
 
-leaf-validator@^7.8.2:
-  version "7.10.4"
-  resolved "https://registry.yarnpkg.com/leaf-validator/-/leaf-validator-7.10.4.tgz#926d239d2bccecaf92c14d3204b08814c12f930c"
-  integrity sha512-qPCApV3vPaC2A6mR6QEt3B3XH8AgMB5NYd9JO03tZEA4X25c3BUPJhyqTeelFlyZZ+6IrLjKdbZ0FvUxd+34Zw==
+leaf-validator@^7.10.6:
+  version "7.10.6"
+  resolved "https://registry.yarnpkg.com/leaf-validator/-/leaf-validator-7.10.6.tgz#f99dbcc4335697782a97d6e515b694924e0a2b5a"
+  integrity sha512-k1PF5EZxAls/g+X8Up41+fQkXySFuHPA8bbt49364WpQf5cGBE+xIXq7KzT6Or43kJb7cyhYHc6JVVL3hsqU0g==
 
 lodash@^4.17.20, lodash@^4.17.21:
   version "4.18.1"
@@ -1860,7 +1860,7 @@ ms@^2.1.3:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
-msw@^2:
+msw@^2.15.0:
   version "2.15.0"
   resolved "https://registry.yarnpkg.com/msw/-/msw-2.15.0.tgz#4028ba3d887af8c166d45aa3bf37116f73f21cec"
   integrity sha512-2wQAmKkQKxRuXvYJxVhPGG0wZNBQyD06oJvxqw90XqLvptdqxdlHrFUfEteKkpaNORX3Xzc+HtEl/q0nfmN2wQ==
