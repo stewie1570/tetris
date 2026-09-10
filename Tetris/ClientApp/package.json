@@ -27,7 +27,7 @@
     "msw": "^2.15.0",
     "source-map-explorer": "^2.5.3",
     "vite": "^6.3.5",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.11"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/assets/*.js' --json",
