@@ -43,8 +43,6 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "./src/setupTests.js",
-    // One jsdom per worker. A fresh document per file was most of the runtime.
-    isolate: false,
     css: true,
     coverage: {
       provider: "v8",
