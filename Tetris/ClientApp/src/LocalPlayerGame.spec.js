@@ -8,7 +8,9 @@ import {
   act,
   waitForElementToBeRemoved,
 } from "@testing-library/react";
-import { shapes } from "./components/TetrisGame";
+import * as tetrisGame from "./components/TetrisGame";
+
+const { shapes } = tetrisGame;
 import { keys } from "./core/constants";
 import { http, HttpResponse } from "msw";
 import { server } from "./setupTests";
@@ -19,9 +21,14 @@ import { MultiplayerContext } from "./MultiplayerContext";
 const lineShape = shapes[1];
 
 beforeEach(() => {
+  tetrisGame.rowClearAnimation.ms = 0;
   server.use(
     http.get("/api/gameRooms", () => HttpResponse.json([]))
   );
+});
+
+afterEach(() => {
+  tetrisGame.rowClearAnimation.ms = 500;
 });
 
 test("score a point", async () => {
@@ -66,6 +73,7 @@ test("score a point and post score", async () => {
     http.get("/api/userScores", () => HttpResponse.json(scorePosts)),
     http.post("/api/userScores", async ({ request }) => {
       scorePosts.push(await request.json());
+      await new Promise((resolve) => setTimeout(resolve, 50));
       return new HttpResponse(null, { status: 200 });
     })
   );
@@ -133,6 +141,7 @@ test("score a point and post score twice", async () => {
     http.get("/api/userScores", () => HttpResponse.json([])),
     http.post("/api/userScores", async ({ request }) => {
       scorePosts.push(await request.json());
+      await new Promise((resolve) => setTimeout(resolve, 50));
       return new HttpResponse(null, { status: 200 });
     })
   );
@@ -184,6 +193,7 @@ test("posting a score too low to show up on the board displays an error", async 
     ),
     http.post("/api/userScores", async ({ request }) => {
       scorePosts.push(await request.json());
+      await new Promise((resolve) => setTimeout(resolve, 50));
       return new HttpResponse(null, { status: 200 });
     })
   );
@@ -226,6 +236,7 @@ test("score a point and cancels posting a score", async () => {
     http.get("/api/userScores", () => HttpResponse.json(scorePosts)),
     http.post("/api/userScores", async ({ request }) => {
       scorePosts.push(await request.json());
+      await new Promise((resolve) => setTimeout(resolve, 50));
       return new HttpResponse(null, { status: 200 });
     })
   );
@@ -261,6 +272,7 @@ test("score a point and entering a blank username cancels posting the score", as
     http.get("/api/userScores", () => HttpResponse.json(scorePosts)),
     http.post("/api/userScores", async ({ request }) => {
       scorePosts.push(await request.json());
+      await new Promise((resolve) => setTimeout(resolve, 50));
       return new HttpResponse(null, { status: 200 });
     })
   );
@@ -296,7 +308,9 @@ function wait() {
 }
 
 function waitForAnimation() {
-  return new Promise((resolve) => setTimeout(resolve, 600));
+  return act(async () => {
+    await Promise.resolve();
+  });
 }
 
 async function scorePointOnEmptyBoard({ iterate, container }) {

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { render, screen, waitFor } from "@testing-library/react";
 import { useSessionStorageState } from './useSessionStorageState';
 import { flushSync } from 'react-dom';
-import { act } from 'react-dom/test-utils';
+import { act } from 'react';
 
 let storage = {};
 let getterCallCount = 0;

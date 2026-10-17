@@ -4,10 +4,10 @@
   "description": "[![Build](https://github.com/stewie1570/tetris/actions/workflows/Merge.yml/badge.svg)](https://github.com/stewie1570/tetris/actions/workflows/Merge.yml)\r [![Build (PR)](https://github.com/stewie1570/tetris/actions/workflows/PR.yml/badge.svg)](https://github.com/stewie1570/tetris/actions/workflows/PR.yml)\r ======",
   "main": "index.js",
   "devDependencies": {
-    "@playwright/test": "^1.63.0",
-    "concurrently": "^10.0.5",
+    "@playwright/test": "^1.64.1",
+    "concurrently": "^10.0.6",
     "cross-env": "^10.1.0",
-    "wait-on": "^9.1.0"
+    "wait-on": "^9.5.1"
   },
   "scripts": {
     "test": "concurrently \"npm run start-server\" \"wait-on https://localhost:5001 && npm run run-tests\"",

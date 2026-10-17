@@ -6,8 +6,8 @@ jobs:
   test-backend:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-dotnet@v3
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 9.*.*
       - name: Test Backend
@@ -21,10 +21,10 @@ jobs:
   test-frontend:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 24
       - name: Test Frontend
         run: |
           cd Tetris/ClientApp
@@ -35,11 +35,11 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          node-version: 20
-      - uses: actions/setup-dotnet@v3
+          node-version: 24
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 9.*.*
       - name: Install dependencies
@@ -48,7 +48,7 @@ jobs:
         run: npx playwright install --with-deps
       - name: Run Playwright tests
         run: npm test
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: playwright-report
@@ -59,16 +59,19 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test-frontend, test-backend, test-e2e]
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-dotnet@v3
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 9.*.*
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
       - name: Publish
         run: |
           cd Tetris/
           dotnet publish -c Release -o out
       - name: Upload Tetris Build Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Tetris
           path: /home/runner/work/tetris/tetris/Tetris/out
@@ -77,10 +80,10 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [24.x]
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
       - name: Test Frontend (via Mac)

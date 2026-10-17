@@ -2,7 +2,7 @@ import { useLoadingState, useMountedOnlyState } from "leaf-validator";
 import React, { useRef } from "react";
 import { useLifeCycle } from "./hooks/useLifeCycle";
 import { QuietRest } from "./services/rest";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { Pager } from "./components/Pager";
 import styled from "styled-components";
 import { MultiplayerLinks } from "./MultiplayerLinks";

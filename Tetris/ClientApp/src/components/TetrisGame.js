@@ -55,6 +55,9 @@ export const emptyBoard = tetrisBoardFrom(`
     ----------
     ----------`);
 
+// Tests set ms to 0 so a cleared row does not wait out the animation.
+export const rowClearAnimation = { ms: 500 };
+
 export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }) => {
   const { board, mobile, oldScore, paused, score } = gameState;
   const [explodingRows, setExplodingRows] = useState([]);
@@ -71,17 +74,22 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }
   instance.current = { onChange, shapeProvider, game };
 
   useEffect(() => {
-    if (explodingRows.length > 0) {
-      const timer = setTimeout(() => {
-        setExplodingRows([]);
-      }, 500);
-      
-      return () => clearTimeout(timer);
+    if (explodingRows.length === 0) {
+      return;
     }
+    if (rowClearAnimation.ms === 0) {
+      setExplodingRows([]);
+      return;
+    }
+    const timer = setTimeout(() => {
+      setExplodingRows([]);
+    }, rowClearAnimation.ms);
+    return () => clearTimeout(timer);
   }, [explodingRows]);
 
   const cycle = useCallback(() => {
     if (!instance.current.game.paused) {
+      let rowsToExplode = [];
       flushSync(() => {
         instance.current.onChange(game => {
           const { board, score } = game;
@@ -92,7 +100,7 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }
           });
 
           if (iteratedGame.explodingRows && iteratedGame.explodingRows.length > 0) {
-            setExplodingRows(iteratedGame.explodingRows);
+            rowsToExplode = iteratedGame.explodingRows;
           }
 
           return iteratedGame.isOver
@@ -105,6 +113,9 @@ export const TetrisGame = ({ game: gameState, onChange, shapeProvider, onPause }
             : { ...game, ...iteratedGame };
         });
       });
+      if (rowsToExplode.length > 0) {
+        setExplodingRows(rowsToExplode);
+      }
     }
   }, []);
 

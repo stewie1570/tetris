@@ -3,7 +3,7 @@ import LocalPlayerGame, {
   SinglePlayerGameContextProvider,
   useLocalPlayerGameContext,
 } from "./LocalPlayerGame";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router";
 import { shapes } from "./components/TetrisGame";
 import { Dialog } from "./components/Prompt";
 import { ErrorMessage } from "./components/ErrorMessage";
