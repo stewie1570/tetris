@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { HubConnectionBuilder, HttpTransportType } from '@microsoft/signalr';
 import { useUserId } from './hooks/useUserId';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams } from "react-router";
 import { initialEmptyPlayersList, selectableDurations } from './constants'
 import { createManagedContext, useMountedOnlyState } from "leaf-validator";
 import { useLifeCycle } from "./hooks/useLifeCycle";

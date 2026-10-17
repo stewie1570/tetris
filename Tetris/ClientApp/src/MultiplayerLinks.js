@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocalPlayerGameContext } from "./LocalPlayerGame";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { StringInput } from "./components/Prompt";
 import { CommandButton } from "./components/CommandButton";
 import { LinkButton } from "./components/LinkButton";

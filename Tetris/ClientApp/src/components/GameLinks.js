@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { withTemporaryDisable } from "./HOCs/withTemporaryDisable";
 import { ContentSwapWhenDisabled } from "./ContentSwapWhenDisabled";
 
