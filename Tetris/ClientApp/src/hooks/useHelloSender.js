@@ -23,10 +23,21 @@ export const useHelloSender = () => {
                 isRunning: externalsRef.current.isRunning
             }
         }).then(() => {
-            !externalsRef.current.isRunning && setOtherPlayers(otherPlayers => ({
-                ...otherPlayers,
-                [currentUserId]: { name: username, score: 0 }
-            }));
+            if (externalsRef.current.isRunning) {
+                return;
+            }
+
+            setOtherPlayers(otherPlayers => {
+                const existing = otherPlayers[currentUserId] ?? {};
+                return {
+                    ...otherPlayers,
+                    [currentUserId]: {
+                        ...existing,
+                        name: username ?? existing.name,
+                        score: 0
+                    }
+                };
+            });
         });
     }, [isConnected, currentUserId]);
 };
