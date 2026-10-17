@@ -38,7 +38,7 @@ const createTestGameHub = () => {
       ...acc,
       [signal]: (obj) => {
         context.sentMessages.push({ [signal]: obj });
-        return new Promise((resolve) => setTimeout(resolve, 100));
+        return new Promise((resolve) => setTimeout(resolve, 50));
       },
     }),
     {}
@@ -71,7 +71,7 @@ const MultiplayerTestContext = ({ children, gameHub, userIdGenerator }) => {
   const [canGuestStartGame, setCanGuestStartGame] = React.useState(false);
 
   useLifeCycle({
-    onMount: () => setTimeout(() => setIsConnected(true), 1000)
+    onMount: () => setIsConnected(true)
   })
 
   const timeProvider = () => 1000;

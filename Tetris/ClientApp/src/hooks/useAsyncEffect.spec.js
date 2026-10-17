@@ -2,7 +2,7 @@ import React from 'react';
 import { flushSync } from 'react-dom';
 import { render, screen } from "@testing-library/react";
 import { useAsyncEffect } from './useAsyncEffect';
-import { act } from 'react-dom/test-utils';
+import { act } from 'react';
 
 const TestApp = ({ effectCallback }) => {
     const [count, setCount] = React.useState(0);

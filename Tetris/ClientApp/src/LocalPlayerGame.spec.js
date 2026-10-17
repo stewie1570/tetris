@@ -8,7 +8,9 @@ import {
   act,
   waitForElementToBeRemoved,
 } from "@testing-library/react";
-import { shapes } from "./components/TetrisGame";
+import * as tetrisGame from "./components/TetrisGame";
+
+const { shapes } = tetrisGame;
 import { keys } from "./core/constants";
 import { http, HttpResponse } from "msw";
 import { server } from "./setupTests";
@@ -19,9 +21,14 @@ import { MultiplayerContext } from "./MultiplayerContext";
 const lineShape = shapes[1];
 
 beforeEach(() => {
+  tetrisGame.rowClearAnimation.ms = 0;
   server.use(
     http.get("/api/gameRooms", () => HttpResponse.json([]))
   );
+});
+
+afterEach(() => {
+  tetrisGame.rowClearAnimation.ms = 500;
 });
 
 test("score a point", async () => {
@@ -301,7 +308,9 @@ function wait() {
 }
 
 function waitForAnimation() {
-  return new Promise((resolve) => setTimeout(resolve, 600));
+  return act(async () => {
+    await Promise.resolve();
+  });
 }
 
 async function scorePointOnEmptyBoard({ iterate, container }) {
